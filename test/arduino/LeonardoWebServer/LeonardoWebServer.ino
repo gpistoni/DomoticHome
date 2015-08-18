@@ -1,18 +1,17 @@
 // web server di interfaccia
 // uso:
-// http://172.31.11.175/@set%281,1=0%29@get%284,23%29
+// http://172.31.11.175/@set(1,12=0)@get(4,23)
 
-
+//#include <SoftwareSerial.h>
 #include <SPI.h>
+//#include <SD.h>
 #include <Ethernet.h>
 
-// assign a MAC address for the ethernet controller.
-// fill in your address here:
-byte mac[] = {
-  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEE
-};
 
-// assign an IP address for the controller:
+// MAC address for the ethernet controller.  -----------------------------
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEE };
+
+// IP address for the controller:  -----------------------------
 IPAddress ip(172, 31, 11, 175);                       //<<-- IP
 IPAddress gateway(172, 31, 8, 1);                     //<<-- GATEWAY
 IPAddress subnet(255, 255, 255, 0);                   //<<-- SUBNET
@@ -22,11 +21,20 @@ IPAddress subnet(255, 255, 255, 0);                   //<<-- SUBNET
 // (port 80 is default for HTTP):
 EthernetServer server(80);
 
+//SD      -----------------------------
+#define SD_SELECT 4
+const char *filename = "/net.ini";
+
+//TRACING -----------------------------
+#define TRACE(x) Serial.println(x)
+//#define TRACE(x)
+
+//-----------------------------
 void setup()
 {
   Serial.begin(9600);
   while (!Serial);
-  Serial.println("start!");
+  TRACE("start!");
 
   // start the Ethernet connection and the server:
   Ethernet.begin(mac, ip);
@@ -35,11 +43,44 @@ void setup()
   // give the sensor and Ethernet shield time to set up:
   delay(1000);
 
-  Serial.print("server is at ");
-  Serial.println(Ethernet.localIP());
-}
-int t0 = millis();
+  TRACE("server is at ");
+  TRACE(Ethernet.localIP());
 
+  //inifile ************************************************************
+  /*
+  TRACE("Initializing SD card...");
+  if (!SD.begin(4))
+  {
+    Serial.println("initialization failed!");
+    return;
+  }
+  TRACE("initialization done.");
+
+  //write......
+  File myFile;
+  myFile = SD.open("test.txt", FILE_WRITE );
+  if (myFile)
+  {
+    myFile.seek(0);
+    myFile.write("var1=0");
+    myFile.write("var2=1");
+  }
+  myFile.close();
+
+  //read......
+  myFile = SD.open("test.txt");
+  if (myFile)
+  {
+    while (myFile.available()) {
+      Serial.write(myFile.read());
+    }
+  }
+  myFile.close();
+*/
+}
+
+
+//-----------------------------
 void loop()
 {
   delay(10);
@@ -48,7 +89,7 @@ void loop()
   listenForEthernetClients();
 }
 
-String readString = String(50);
+String readString;
 
 void listenForEthernetClients()
 {
@@ -56,7 +97,7 @@ void listenForEthernetClients()
   EthernetClient client = server.available();
   if (client)
   {
-    Serial.println("Got a client");
+    TRACE("Got a client");
 
     // an http request ends with a blank line
     boolean currentLineIsBlank = true;
@@ -66,7 +107,7 @@ void listenForEthernetClients()
       {
         // Read the received command sent from client
         char c = client.read();
-        if (readString.length() < 50 ) 
+        if (readString.length() < 50 )
         {
           readString = readString + c;
         }
@@ -76,8 +117,16 @@ void listenForEthernetClients()
         // so you can send a reply
         if (c == '\n')
         {
-          Serial.print( readString.c_str() );
-
+          TRACE( readString.c_str() );
+          //*************************************
+          // comandi speciali
+          int idx = readString.indexOf("@debug");
+          if (idx > 0)
+          {
+            client.println("ALL CLIENT");
+            break;
+          }
+          //*************************************
           int idxGET = readString.indexOf("@get(");
           int idxGET2 = readString.indexOf(",", idxGET);
           int idxGET3 = readString.indexOf(")", idxGET2);
@@ -96,30 +145,31 @@ void listenForEthernetClients()
           SetParam[1] = readString.substring(idxSET2 + 1, idxSET3).toInt();
           SetParam[2] = readString.substring(idxSET3 + 1, idxSET4).toInt();
 
-          Serial.println( "Get:" + String(GetParam[0]) + "," + String(GetParam[1]) );
-          Serial.println( "Set:" + String(SetParam[0]) + "," + String(SetParam[1]) + "=" + String(SetParam[2]) );
+          TRACE( "Get:" + String(GetParam[0]) + "," + String(GetParam[1]) );
+          TRACE( "Set:" + String(SetParam[0]) + "," + String(SetParam[1]) + "=" + String(SetParam[2]) );
 
           //*************************************
-         // client.println("HTTP/1.1 200 OK");
-         // client.println("Content-Type: text/html");
-         // client.println("Connection: close");        // the connection will be closed after completion of the response
-         // client.println("Refresh: 1");               // refresh the page automatically every 5 sec
-  
+          // client.println("HTTP/1.1 200 OK");
+          // client.println("Content-Type: text/html");
+          // client.println("Connection: close");        // the connection will be closed after completion of the response
+          // client.println("Refresh: 1");               // refresh the page automatically every 5 sec
+
           client.println("100");
-          
-          //***************************************           
+
+          //***************************************
           break;
         }
       }
     }
-    
+
     // give the web browser time to receive the data
     delay(1);
-        
+
     // close the connection:
     readString = "";
     client.stop();
-    Serial.println("client disconnected");
+    TRACE("client disconnected");
   }
 }
+
 
