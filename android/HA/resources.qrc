@@ -1,0 +1,161 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/add189.svg</file>
+        <file>icons/alarm52.svg</file>
+        <file>icons/armchair4.svg</file>
+        <file>icons/basic14.svg</file>
+        <file>icons/basic15.svg</file>
+        <file>icons/basic16.svg</file>
+        <file>icons/basic17.svg</file>
+        <file>icons/behance13.svg</file>
+        <file>icons/bell70.svg</file>
+        <file>icons/blank38.svg</file>
+        <file>icons/bookmark49.svg</file>
+        <file>icons/briefcase69.svg</file>
+        <file>icons/camera119.svg</file>
+        <file>icons/camera120.svg</file>
+        <file>icons/center13.svg</file>
+        <file>icons/chart55.svg</file>
+        <file>icons/chat118.svg</file>
+        <file>icons/checkbox6.svg</file>
+        <file>icons/chronometer.svg</file>
+        <file>icons/clasic.svg</file>
+        <file>icons/clipboard.svg</file>
+        <file>icons/coffee128.svg</file>
+        <file>icons/compact disc5.svg</file>
+        <file>icons/delete85.svg</file>
+        <file>icons/directional sign10.svg</file>
+        <file>icons/document6.svg</file>
+        <file>icons/dollar178.svg</file>
+        <file>icons/door24.svg</file>
+        <file>icons/down124.svg</file>
+        <file>icons/download168.svg</file>
+        <file>icons/downloading.svg</file>
+        <file>icons/dribbble.svg</file>
+        <file>icons/expand42.svg</file>
+        <file>icons/expand43.svg</file>
+        <file>icons/eye106.svg</file>
+        <file>icons/eye127.svg</file>
+        <file>icons/facebook2.svg</file>
+        <file>icons/film63.svg</file>
+        <file>icons/flag97.svg</file>
+        <file>icons/flask.svg</file>
+        <file>icons/folded map.svg</file>
+        <file>icons/globe35.svg</file>
+        <file>icons/google plus.svg</file>
+        <file>icons/happy mac.svg</file>
+        <file>icons/heart rate.svg</file>
+        <file>icons/heart297.svg</file>
+        <file>icons/hearts34.svg</file>
+        <file>icons/home153.svg</file>
+        <file>icons/house180.svg</file>
+        <file>icons/inbox39.svg</file>
+        <file>icons/inbox40.svg</file>
+        <file>icons/instagram19.svg</file>
+        <file>icons/jar21.svg</file>
+        <file>icons/laptop130.svg</file>
+        <file>icons/layers.svg</file>
+        <file>icons/left arrow.svg</file>
+        <file>icons/left224.svg</file>
+        <file>icons/left225.svg</file>
+        <file>icons/light bulb4.svg</file>
+        <file>icons/lightning31.svg</file>
+        <file>icons/linkedin.svg</file>
+        <file>icons/location44.svg</file>
+        <file>icons/locked61.svg</file>
+        <file>icons/mail80.svg</file>
+        <file>icons/microphone3.svg</file>
+        <file>icons/navigation12.svg</file>
+        <file>icons/notebook91.svg</file>
+        <file>icons/nut4.svg</file>
+        <file>icons/pause46.svg</file>
+        <file>icons/pin66.svg</file>
+        <file>icons/plug.svg</file>
+        <file>icons/power5.svg</file>
+        <file>icons/present33.svg</file>
+        <file>icons/presentation22.svg</file>
+        <file>icons/print45.svg</file>
+        <file>icons/purse10.svg</file>
+        <file>icons/pyre.svg</file>
+        <file>icons/quaver3.svg</file>
+        <file>icons/refresh62.svg</file>
+        <file>icons/remove22.svg</file>
+        <file>icons/right arrow.svg</file>
+        <file>icons/right247.svg</file>
+        <file>icons/rocket74.svg</file>
+        <file>icons/rocket77.svg</file>
+        <file>icons/round75.svg</file>
+        <file>icons/round77.svg</file>
+        <file>icons/screen84.svg</file>
+        <file>icons/share46.svg</file>
+        <file>icons/shopping cart7.svg</file>
+        <file>icons/smartphone24.svg</file>
+        <file>icons/speaker111.svg</file>
+        <file>icons/speaker112.svg</file>
+        <file>icons/speaker113.svg</file>
+        <file>icons/speech bubble20.svg</file>
+        <file>icons/star174.svg</file>
+        <file>icons/star207.svg</file>
+        <file>icons/switch33.svg</file>
+        <file>icons/telephone120.svg</file>
+        <file>icons/thumbtack1.svg</file>
+        <file>icons/timer42.svg</file>
+        <file>icons/truck69.svg</file>
+        <file>icons/tumblr1.svg</file>
+        <file>icons/twitter.svg</file>
+        <file>icons/umbrella1.svg</file>
+        <file>icons/unlocked46.svg</file>
+        <file>icons/uploading2.svg</file>
+        <file>icons/user7.svg</file>
+        <file>icons/video player.svg</file>
+        <file>icons/warning39.svg</file>
+        <file>icons/widescreen9.svg</file>
+        <file>icons/window58.svg</file>
+        <file>icons/wrench73.svg</file>
+        <file>icons/zoom71.svg</file>
+        <file>icons/zoom72.svg</file>
+        <file>icons/archive4.svg</file>
+        <file>icons/bars-graphic1.svg</file>
+        <file>icons/binary10.svg</file>
+        <file>icons/binary11.svg</file>
+        <file>icons/camera131.svg</file>
+        <file>icons/charging1.svg</file>
+        <file>icons/chart59.svg</file>
+        <file>icons/clapperboard6.svg</file>
+        <file>icons/cloud381.svg</file>
+        <file>icons/cloud383.svg</file>
+        <file>icons/cloud392.svg</file>
+        <file>icons/computers13.svg</file>
+        <file>icons/control16.svg</file>
+        <file>icons/data2.svg</file>
+        <file>icons/down.svg</file>
+        <file>icons/dvd9.svg</file>
+        <file>icons/earth1.svg</file>
+        <file>icons/folder275.svg</file>
+        <file>icons/folder283.svg</file>
+        <file>icons/funnel2.svg</file>
+        <file>icons/global45.svg</file>
+        <file>icons/globe39.svg</file>
+        <file>icons/headphones50.svg</file>
+        <file>icons/image6.svg</file>
+        <file>icons/left.svg</file>
+        <file>icons/load.svg</file>
+        <file>icons/magnifying glass1.svg</file>
+        <file>icons/magnifying-glass40.svg</file>
+        <file>icons/mail 1.svg</file>
+        <file>icons/microphone110.svg</file>
+        <file>icons/microphone111.svg</file>
+        <file>icons/monitor2.svg</file>
+        <file>icons/newspaper20.svg</file>
+        <file>icons/play-button4.svg</file>
+        <file>icons/right.svg</file>
+        <file>icons/servers1.svg</file>
+        <file>icons/smartphone66.svg</file>
+        <file>icons/sound waves.svg</file>
+        <file>icons/speaker126.svg</file>
+        <file>icons/storage33.svg</file>
+        <file>icons/technology7.svg</file>
+        <file>icons/up.svg</file>
+        <file>icons/webcam.svg</file>
+    </qresource>
+</RCC>
