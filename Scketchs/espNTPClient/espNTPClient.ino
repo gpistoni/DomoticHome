@@ -1,19 +1,51 @@
-#ifndef dhwifi_h
-#define dhwifi_h
+/*
+
+ Udp NTP Client
+
+ Get the time from a Network Time Protocol (NTP) time server
+ Demonstrates use of UDP sendPacket and ReceivePacket
+ For more on NTP time servers and the messages needed to communicate with them,
+ see http://en.wikipedia.org/wiki/Network_Time_Protocol
+
+ created 4 Sep 2010
+ by Michael Margolis
+ modified 9 Apr 2012
+ by Tom Igoe
+ updated for the ESP8266 12 Apr 2015 
+ by Ivan Grokhotkov
+
+ This code is in the public domain.
+
+ */
 
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 
-class DHwifi
-{
-private:
+char ssid[] = "PistoniHomeT";  //  your network SSID (name)
+char pass[] = "giaco.iren.dario";       // your network password
+
+
+unsigned int localPort = 2390;      // local port to listen for UDP packets
+
+/* Don't hardwire the IP address or we won't get the benefits of the pool.
+ *  Lookup the IP address for the host name instead */
+//IPAddress timeServer(129, 6, 15, 28); // time.nist.gov NTP server
+IPAddress timeServerIP; // time.nist.gov NTP server address
+const char* ntpServerName = "time.nist.gov";
+
+const int NTP_PACKET_SIZE = 48; // NTP time stamp is in the first 48 bytes of the message
+
+byte packetBuffer[ NTP_PACKET_SIZE]; //buffer to hold incoming and outgoing packets
+
 // A UDP instance to let us send and receive packets over UDP
 WiFiUDP udp;
-public:
-DHwifi(){};
 
 void setup()
 {
+  Serial.begin(115200);
+  Serial.println();
+  Serial.println();
+
   // We start by connecting to a WiFi network
   Serial.print("Connecting to ");
   Serial.println(ssid);
