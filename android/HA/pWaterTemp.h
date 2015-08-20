@@ -23,6 +23,7 @@ class WorkerThread;
 //*************************************************************************************************************
 class pWaterTempData
 {
+   public:
     std::vector<double> values;
 };
 
@@ -43,7 +44,8 @@ class WorkerThread : public QThread
 
     pWaterTempData sendRequest( )
     {
-        qDebug() << "sendRequest";
+        pWaterTempData data;
+
         QString str;
          // create custom temporary event loop on stack
         QEventLoop eventLoop;
@@ -64,8 +66,6 @@ class WorkerThread : public QThread
             qDebug() << str;
 
             QStringList list = str.split(".", QString::SkipEmptyParts);
-
-            pWaterTempData data;
             for ( auto sti : list)
             {
                 data.values.push_back( sti.toDouble() );

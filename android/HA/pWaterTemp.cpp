@@ -62,15 +62,15 @@ pWaterTemp::~pWaterTemp()
 }
 
 
-void pWaterTemp::onValueChagned(std::vector<double> &values)
+void pWaterTemp::onValueChagned(pWaterTempData data)
 {
     int i=0;
     for (auto lcd: m_LcdNumber)
     {
-        lcd->display( values[i]  );
+        lcd->display( data.values[i]  );
         i++;
-        i = i % values.size();
+        i = i % data.values.size();
     }
 
-    ui->label_footer->setText( QString::number(values[0]) );
+    ui->label_footer->setText( QString::number(data.values[0]) );
 }
