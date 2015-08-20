@@ -6,3 +6,4 @@
 
 #define CSS_HEADER  "background-color: rgb(235, 235, 107);"
 
+#define CSS_LCDDISPLAY  "background-color: rgb(10, 10, 10);"

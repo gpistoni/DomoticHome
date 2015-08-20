@@ -38,6 +38,9 @@
          <iconset resource="resources.qrc">
           <normaloff>:/icons/left.svg</normaloff>:/icons/left.svg</iconset>
         </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -62,6 +65,12 @@
           <normaloff>:/icons/home153.svg</normaloff>:/icons/home153.svg</iconset>
         </property>
         <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="default">
+         <bool>false</bool>
+        </property>
+        <property name="flat">
          <bool>false</bool>
         </property>
        </widget>
@@ -148,6 +157,9 @@
          <bool>false</bool>
         </property>
         <property name="default">
+         <bool>false</bool>
+        </property>
+        <property name="flat">
          <bool>false</bool>
         </property>
        </widget>
