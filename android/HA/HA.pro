@@ -13,11 +13,23 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    pAirTemp.cpp \
+    pWaterTemp.cpp \
+    pMenu.cpp \
+    pWork.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    pAirTemp.h \
+    pWaterTemp.h \
+    pMenu.h \
+    pWork.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    pWaterTemp.ui \
+    pAirTemp.ui \
+    pMenu.ui \
+    pWork.ui
 
 CONFIG += mobility
 MOBILITY = 
