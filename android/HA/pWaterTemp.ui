@@ -14,7 +14,7 @@
    <string>ScrollArea</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">font: 75 9pt &quot;Arial&quot;;</string>
+   <string notr="true"/>
   </property>
   <property name="widgetResizable">
    <bool>true</bool>
@@ -31,13 +31,20 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QLabel" name="label_header">
+      <property name="baseSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 155,155);
-background-color: rgb(219, 228, 255);
-gridline-color: rgb(85, 255, 0);</string>
+       <string notr="true"/>
       </property>
       <property name="text">
        <string>TextLabel</string>
+      </property>
+      <property name="margin">
+       <number>5</number>
       </property>
      </widget>
     </item>
@@ -59,8 +66,26 @@ gridline-color: rgb(85, 255, 0);</string>
     </item>
     <item>
      <widget class="QLabel" name="label_footer">
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>2</number>
+      </property>
       <property name="text">
        <string>TextLabel</string>
+      </property>
+      <property name="margin">
+       <number>5</number>
       </property>
      </widget>
     </item>

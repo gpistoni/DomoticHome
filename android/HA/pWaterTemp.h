@@ -5,12 +5,13 @@
 #include <QScrollArea>
 #include <QLabel>
 #include <QLCDNumber>
+#include <QThread>
 
 namespace Ui {
 class WaterTemp;
 }
 
-class pWaterTemp : public QScrollArea
+class pWaterTemp : public QScrollArea, QThread
 {
     Q_OBJECT
 

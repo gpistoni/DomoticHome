@@ -38,10 +38,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_commandLinkButton_Home_clicked()
-{
-}
-
 void MainWindow::on_pushButton_Next_clicked()
 {
    int p = ui->stackedWidget->currentIndex();
@@ -58,7 +54,6 @@ void MainWindow::on_pushButton_Home_clicked()
 {
    ui->stackedWidget->setCurrentIndex( 0 );
 }
-
 
 void MainWindow::on_stackedWidget_currentChanged(int idx )
 {

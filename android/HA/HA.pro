@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = HA
+TARGET = HA_1.00
 TEMPLATE = app
 
 

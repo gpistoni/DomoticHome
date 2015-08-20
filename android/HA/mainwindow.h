@@ -23,7 +23,6 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_commandLinkButton_Home_clicked();
     void on_pushButton_Next_clicked();
     void on_pushButton_Home_clicked();
     void on_pushButton_Prev_clicked();
