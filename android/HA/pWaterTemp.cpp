@@ -49,7 +49,7 @@ pWaterTemp::pWaterTemp(QWidget *parent) :
 
     //worker
     // Connect our signal and slot
-    connect(&m_work, SIGNAL(valueChanged(std::vector<double> &values)),    SLOT(onValueChagned(std::vector<double> &values)));
+    connect(&m_work, SIGNAL(valueChanged(pWaterTempData data)),    SLOT(onValueChagned(pWaterTempData data)));
     // Setup callback for cleanup when it finishes
     connect(&m_work, SIGNAL(finished()), &m_work, SLOT(deleteLater()));
 
@@ -64,6 +64,8 @@ pWaterTemp::~pWaterTemp()
 
 void pWaterTemp::onValueChagned(pWaterTempData data)
 {
+    qDebug() << "onValueChagned";
+
     int i=0;
     for (auto lcd: m_LcdNumber)
     {
