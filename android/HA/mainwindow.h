@@ -1,5 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+#include <iostream>
+#include <memory>
 
 #include <QPushButton>
 #include <QMainWindow>
@@ -32,10 +34,10 @@ private slots:
 
 private:
     int num_pages;
-    pMenu       *m_pMenu;
-    pAirTemp    *m_pAirTemp;
-    pWaterTemp  *m_pWaterTemp;
-    pWork       *m_pWork;
+    std::shared_ptr<pMenu>       m_pMenu;
+    std::shared_ptr<pAirTemp>    m_pAirTemp;
+    std::shared_ptr<pWaterTemp>  m_pWaterTemp;
+    std::shared_ptr<pWork>       m_pWork;
 
     Ui::MainWindow *ui;
 };

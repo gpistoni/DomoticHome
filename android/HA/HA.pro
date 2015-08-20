@@ -23,7 +23,9 @@ HEADERS  += mainwindow.h \
     pAirTemp.h \
     pWaterTemp.h \
     pMenu.h \
-    pWork.h
+    pWork.h \
+    css.h \
+    css.h
 
 FORMS    += mainwindow.ui \
     pWaterTemp.ui \

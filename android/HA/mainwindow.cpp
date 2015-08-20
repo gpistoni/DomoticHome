@@ -9,14 +9,24 @@ MainWindow::MainWindow(QWidget *parent) :
     num_pages = 0;
 
     //********** main **********************
-    m_pMenu = new pMenu( ui->stackedWidget );
-    ui->stackedWidget->addWidget( m_pMenu );
+    m_pMenu = std::make_shared<pMenu>(ui->stackedWidget);
+    ui->stackedWidget->addWidget( m_pMenu.get() );
     num_pages++;
 
-    //********** main **********************
-    //m_pMain = new pMain( ui->stackedWidget );
-    //ui->stackedWidget->addWidget( m_pMain );
-    //num_pages++;
+    //********** AirTemp **********************
+    m_pAirTemp = std::make_shared<pAirTemp>(ui->stackedWidget);
+    ui->stackedWidget->addWidget( m_pAirTemp.get() );
+    num_pages++;
+
+    //********** WaterTemp **********************
+    m_pWaterTemp = std::make_shared<pWaterTemp>(ui->stackedWidget);
+    ui->stackedWidget->addWidget( m_pWaterTemp.get() );
+    num_pages++;
+
+    //********** Work **********************
+    m_pWork = std::make_shared<pWork>(ui->stackedWidget);
+    ui->stackedWidget->addWidget( m_pWork.get() );
+    num_pages++;
 
     //*****************************************
     ui->pageIndexBar->setMaximum( num_pages - 1 );
