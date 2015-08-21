@@ -1,14 +1,15 @@
 #include <DHT.h>
 #include <OneWire.h>
 #include <SoftwareSerial.h>
+#include <SD.h>
 #include <SPI.h>
 #include <Ethernet.h>
-#include <SD.h>
 
-#include <IniFile.h>
 #include <dhprotocol.h>
 #include "webserver.h"
+#include "sddb.h"
 
+// terminali
 DHProtocol T[8];
 
 SoftwareSerial mySerial(8, 9, TRUE);  //RX, TX, inverse logic (signal=5v)
@@ -21,11 +22,14 @@ IPAddress ip(172, 31, 11, 175);                         //<<-- IP
 //IPAddress gateway(172, 31, 8, 1);                     //<<-- GATEWAY
 //IPAddress subnet(255, 255, 255, 0);                   //<<-- SUBNET
 
-
  // Pins 10, 11, 12 and 13 are reserved for interfacing with the Ethernet module and should not be used otherwise
  // Pin 10 is reserved for the Wiznet interface, SS for the SD card is on Pin 4. 
  // There is a built-in LED connected to digital pin 9.
  EthernetServer server(80);
+
+//SELECT (ON OFF) pins
+#define SD_SELECT 4
+#define ETHERNET_SELECT 10
 
 void setup()
 { 
@@ -40,7 +44,27 @@ void setup()
   Serial.begin(9600);
   Serial.println("System Start");
 
- //ethernet ************************************************************
+ //inifile ************************************************************
+  pinMode(SD_SELECT, OUTPUT);
+  digitalWrite(SD_SELECT, HIGH); // disable SD card
+  
+  pinMode(ETHERNET_SELECT, OUTPUT);
+  digitalWrite(ETHERNET_SELECT, HIGH); // disable Ethernet
+  
+  Serial.print("Initializing SD card...");
+  if (!SD.begin(4))
+  {
+    Serial.println("initialization failed!");
+    return;
+  }
+  Serial.print("initialization done.");
+
+//sample
+  SDDB::WriteValue("pinco", "pallino", "100");
+
+  Serial.print( SDDB::ReadValue("pinco", "pallino") );
+ 
+//ethernet ************************************************************
   Ethernet.begin(mac, ip);
   server.begin();
 
@@ -49,38 +73,8 @@ void setup()
  
   Serial.print("server is at ");
   Serial.println(Ethernet.localIP());
- 
- //inifile ************************************************************
-  /*
-  TRACE("Initializing SD card...");
-  if (!SD.begin(4))
-  {
-    Serial.println("initialization failed!");
-    return;
-  }
-  TRACE("initialization done.");
 
-  //write......
-  File myFile;
-  myFile = SD.open("test.txt", FILE_WRITE );
-  if (myFile)
-  {
-    myFile.seek(0);
-    myFile.write("var1=0");
-    myFile.write("var2=1");
-  }
-  myFile.close();
-
-  //read......
-  myFile = SD.open("test.txt");
-  if (myFile)
-  {
-    while (myFile.available()) {
-      Serial.write(myFile.read());
-    }
-  }
-  myFile.close();
-*/ 
+  digitalWrite(10,HIGH);
 }
 
 int count = 0;

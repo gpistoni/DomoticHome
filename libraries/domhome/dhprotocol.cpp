@@ -27,7 +27,6 @@ void DHProtocol::setup( int myId, int otherId, int nsensors, SoftwareSerial *mys
 	  memset( sensor, 0, sizeof(sensor) );
 
       relay.val_16 = 0;	  
-      pinMode(13, OUTPUT);
 
 	  swSerial = myserial;
       swSerial->begin( 9600 );
@@ -91,7 +90,6 @@ void DHProtocol::setup( int myId, int otherId, int nsensors, SoftwareSerial *mys
     //********************************************************************************/
     void DHProtocol::sendRequest( )
     {
-      digitalWrite(13, HIGH);
       _writeHeader();
 
       Serial.println( "");
@@ -109,8 +107,7 @@ void DHProtocol::setup( int myId, int otherId, int nsensors, SoftwareSerial *mys
       _writeChar('$');
       Serial.write('$');
 
-      digitalWrite(13, LOW);
-	   m_lastsend = millis();
+	  m_lastsend = millis();
     }
 
     //********************************************************************************/
@@ -121,8 +118,7 @@ void DHProtocol::setup( int myId, int otherId, int nsensors, SoftwareSerial *mys
       while ( _waitData( timeout ) )
       {
         if ( _readChar() == '#')
-        {
-          digitalWrite(13, HIGH);          
+        {    
           Serial.write("\nRequest: #");
 
           char sendId = _readChar();
@@ -156,14 +152,12 @@ void DHProtocol::setup( int myId, int otherId, int nsensors, SoftwareSerial *mys
           }
         }
       }
-      digitalWrite(13, LOW);
       return r;
     }
 
     //********************************************************************************/
     void DHProtocol::sendData( )
     {
-      digitalWrite(13, HIGH);
       _writeHeader();
 
       Serial.println( "");
@@ -185,7 +179,6 @@ void DHProtocol::setup( int myId, int otherId, int nsensors, SoftwareSerial *mys
       _writeChar('$');
       Serial.write('$');
 
-      digitalWrite(13, LOW);
 	  m_lastsend = millis();
     }
 
@@ -198,7 +191,6 @@ void DHProtocol::setup( int myId, int otherId, int nsensors, SoftwareSerial *mys
       { 
         if (_readChar() == '#')
         {
-          digitalWrite(13, HIGH);
 		  Serial.write("\nRecived: #");
 		  
           unsigned char sendId = _readChar();
@@ -239,8 +231,6 @@ void DHProtocol::setup( int myId, int otherId, int nsensors, SoftwareSerial *mys
           }
         }
       }
-
-      digitalWrite(13, LOW);
       return r;
     }
 
