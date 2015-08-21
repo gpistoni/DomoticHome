@@ -1,18 +1,17 @@
-#include <DHT.h>
-#include <OneWire.h>
 #include <SoftwareSerial.h>
 #include <SD.h>
 #include <SPI.h>
 #include <Ethernet.h>
 
 #include <dhprotocol.h>
+#include <sddb.h>
 #include "webserver.h"
-#include "sddb.h"
+
 
 // terminali
 DHProtocol T[8];
 
-SoftwareSerial mySerial(8, 9, TRUE);  //RX, TX, inverse logic (signal=5v)
+SoftwareSerial mySerial(8, 9, 1);  //RX, TX, inverse logic (signal=5v)
 
 // MAC address for the ethernet controller.  -----------------------------
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEE };
@@ -61,7 +60,6 @@ void setup()
 
 //sample
   SDDB::WriteValue("pinco", "pallino", "100");
-
   Serial.print( SDDB::ReadValue("pinco", "pallino") );
  
 //ethernet ************************************************************
