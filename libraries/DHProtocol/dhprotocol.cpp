@@ -2,10 +2,10 @@
 #include "SoftwareSerial.h"
 
 //versione 0006
-    void DHProtocol::setup( int myId, int otherId, SoftwareSerial *myserial, int baud)
+    void DHProtocol::setup( int myId, int otherId, SoftwareSerial *myserial)
     {
       swSerial = myserial;
-      swSerial->begin(baud);
+      swSerial->begin(9600);
 
       id = myId;
       otherid = otherId;

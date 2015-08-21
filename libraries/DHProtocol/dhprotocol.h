@@ -4,6 +4,14 @@
 /*   For Arduino 1.0 and newer, do this:   */
 #include "Arduino.h"
 
+#ifndef DISABLE_TRACE
+	#define OUT(x)   Serial.print(x)
+	#define OUTLN(x) Serial.println(x)
+#else
+	#define OUT(x) 
+	#define OUTLN(x)  
+#endif
+
 class SoftwareSerial;
 
 class DHProtocol
@@ -20,7 +28,7 @@ class DHProtocol
     short relay[16];
 
     DHProtocol(){};
-    void setup( int myId, int otherId, SoftwareSerial *myserial, int baud);
+    void setup( int myId, int otherId, SoftwareSerial *myserial);
 
   private:
     bool _waitData( int msec );
