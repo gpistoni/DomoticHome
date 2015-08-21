@@ -1,95 +1,139 @@
-#include <FileIO.h>
 #include <DHT.h>
 #include <OneWire.h>
 #include <SoftwareSerial.h>
 #include <SPI.h>
 #include <Ethernet.h>
+#include <SD.h>
 
+#include <IniFile.h>
 #include <dhprotocol.h>
+#include "webserver.h"
 
-DHProtocol T2;
-DHProtocol T3;
-DHProtocol T4;
-DHProtocol T5;
+DHProtocol T[8];
 
-SoftwareSerial mySerial(10, 12, TRUE);  //RX, TX, inverse logic
+SoftwareSerial mySerial(8, 9, TRUE);  //RX, TX, inverse logic (signal=5v)
+
+// MAC address for the ethernet controller.  -----------------------------
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEE };
+
+// IP address for the controller:  -----------------------------
+IPAddress ip(172, 31, 11, 175);                         //<<-- IP
+//IPAddress gateway(172, 31, 8, 1);                     //<<-- GATEWAY
+//IPAddress subnet(255, 255, 255, 0);                   //<<-- SUBNET
 
 
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(192, 168, 1, 177);
-EthernetServer server(80);
+ // Pins 10, 11, 12 and 13 are reserved for interfacing with the Ethernet module and should not be used otherwise
+ // Pin 10 is reserved for the Wiznet interface, SS for the SD card is on Pin 4. 
+ // There is a built-in LED connected to digital pin 9.
+ EthernetServer server(80);
 
 void setup()
 { 
-  T2.setup(0, 2, &mySerial, 9600);  // nc
-  T3.setup(0, 3, &mySerial, 9600);  // rele pdc
-  T4.setup(0, 4, &mySerial, 9600);  // temp caldaie
-  T5.setup(0, 5, &mySerial, 9600);  // rele pavimento
+  T[1].setup(0, 1, 16, &mySerial );  // -
+  T[2].setup(0, 2, 16, &mySerial );  // --
+  T[3].setup(0, 3, 0, &mySerial );   // rele' pdc
+  T[4].setup(0, 4, 16, &mySerial );  // temp caldaie
+  T[5].setup(0, 5, 0, &mySerial );   // rele pavimento
+  T[6].setup(0, 6, 16, &mySerial );  // --
+  T[7].setup(0, 7, 16, &mySerial );  // --
 
   Serial.begin(9600);
   Serial.println("System Start");
 
-  /*
-   Ethernet.begin(mac, ip);
+ //ethernet ************************************************************
+  Ethernet.begin(mac, ip);
+  server.begin();
+
+  // give the sensor and Ethernet shield time to set up:
+  delay(1000);
+ 
   Serial.print("server is at ");
   Serial.println(Ethernet.localIP());
-  */
-    
+ 
+ //inifile ************************************************************
+  /*
+  TRACE("Initializing SD card...");
+  if (!SD.begin(4))
+  {
+    Serial.println("initialization failed!");
+    return;
+  }
+  TRACE("initialization done.");
+
+  //write......
+  File myFile;
+  myFile = SD.open("test.txt", FILE_WRITE );
+  if (myFile)
+  {
+    myFile.seek(0);
+    myFile.write("var1=0");
+    myFile.write("var2=1");
+  }
+  myFile.close();
+
+  //read......
+  myFile = SD.open("test.txt");
+  if (myFile)
+  {
+    while (myFile.available()) {
+      Serial.write(myFile.read());
+    }
+  }
+  myFile.close();
+*/ 
 }
 
-unsigned long old_Update[10] = {-1000, -1000, -1000, 0, 0, 0, 0, 0, 0, 0};
 int count = 0;
 
 void loop()
 {
-  unsigned long now = millis();
+  listenForEthernetClients();
+    
   count++;
-  Serial.println("");
-  Serial.print(now);
-  if ( now - old_Update[3] >= 5000)
+  if ( T[3].checkTiming(5000) )
   {
-    old_Update[3] = now;
-
-    T3.relay[0] = 0;
-    T3.relay[1] = 0;
-    T3.relay[2] = 1;
-    T3.relay[3] = 1;
-    T3.relay[4] = 0;
-    T3.relay[5] = 0;
-    T3.relay[6] = 0;
-    T3.relay[7] = 0;
-    T3.sendRequest();
-    T3.waitData( 100 );
+    T[3].relay.bits.b1 = 0;
+    T[3].relay.bits.b2 = 0;
+    T[3].relay.bits.b3 = 1;
+    T[3].relay.bits.b4 = 0;
+    T[3].relay.bits.b5 = 0;
+    T[3].relay.bits.b6 = 0;
+    T[3].relay.bits.b7 = 0;
+    T[3].relay.bits.b8 = 0;
+    
+    T[3].sendRequest();
+    T[3].waitData( 100 );
+    return;
   };
-  if ( now - old_Update[4] >= 4000)
+  if ( T[4].checkTiming(5000) )
   {
-    old_Update[4] = now;
-
-    T4.relay[0] = 0;
-    T4.relay[1] = 0;
-    T4.relay[2] = 0;
-    T4.relay[3] = 0;
-    T4.relay[4] = 0;
-    T4.relay[5] = 0;
-    T4.relay[6] = 0;
-    T4.relay[7] = 0;
-    T4.sendRequest();
-    T4.waitData( 100 );
+    T[4].relay.bits.b1 = 0;
+    T[4].relay.bits.b2 = 1;
+    T[4].relay.bits.b3 = 0;
+    T[4].relay.bits.b4 = 0;
+    T[4].relay.bits.b5 = 0;
+    T[4].relay.bits.b6 = 1;
+    T[4].relay.bits.b7 = 0;
+    T[4].relay.bits.b8 = 0;
+    
+    T[4].sendRequest();
+    T[4].waitData( 100 );
+    return;
   };
-  if ( now - old_Update[5] >= 10000)
+  if ( T[5].checkTiming(15000) )
   {
-    old_Update[5] = now;
-
-    T5.relay[0] = 0;
-    T5.relay[1] = 0;
-    T5.relay[2] = 1;
-    T5.relay[3] = 0;
-    T5.relay[4] = 0;
-    T5.relay[5] = 0;
-    T5.relay[6] = 0;
-    T5.relay[7] = 0;
-    T5.sendRequest();
-    T5.waitData( 100 );
+    T[5].relay.bits.b1 = 0;
+    T[5].relay.bits.b2 = 0;
+    T[5].relay.bits.b3 = 0;
+    T[5].relay.bits.b4 = 0;
+    T[5].relay.bits.b5 = 0;
+    T[5].relay.bits.b6 = 0;
+    T[5].relay.bits.b7 = 0;
+    T[5].relay.bits.b8 = 0;
+    
+    T[5].sendRequest();
+    T[5].waitData( 100 );
+    return;
   };
 /*
   // listen for incoming clients
@@ -143,7 +187,10 @@ void loop()
     Serial.println("client disconnected");
   }
 */
-
+  Serial.println("");
+  Serial.print( millis());
+  Serial.print(" freeMemory()=");
+  Serial.print(freeMemory());
   delay(200);
 }
 

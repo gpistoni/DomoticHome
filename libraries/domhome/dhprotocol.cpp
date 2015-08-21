@@ -1,26 +1,38 @@
 #include "dhprotocol.h"
 #include "SoftwareSerial.h"
 
-//versione 0006
-    void DHProtocol::setup( int myId, int otherId, SoftwareSerial *myserial, int baud)
+extern unsigned int __bss_end;
+extern unsigned int __heap_start;
+extern void *__brkval;
+
+int freeMemory()
+ {
+  int free_memory;
+
+  if((int)__brkval == 0)
+     free_memory = ((int)&free_memory) - ((int)&__bss_end);
+  else
+    free_memory = ((int)&free_memory) - ((int)__brkval);
+
+  return free_memory;
+}
+
+void DHProtocol::setup( int myId, int otherId, int nsensors, SoftwareSerial *myserial)
     {
-      swSerial = myserial;
-      swSerial->begin(baud);
+      m_id = myId;
+      m_otherid = otherId;
 
-      id = myId;
-      otherid = otherId;
+	  m_nsensors = nsensors;
+	  sensor = (uint16_t*) calloc( m_nsensors, sizeof(uint16_t) );
+	  memset( sensor, 0, sizeof(sensor) );
 
-      for (int i = 0; i < 28; i++)
-      {
-        sensor[i] = 0;
-      }
-      for (int i = 0; i < 16; i++)
-      {
-        relay[i] = 0;
-      }
+      relay.val_16 = 0;	  
       pinMode(13, OUTPUT);
 
+	  swSerial = myserial;
+      swSerial->begin( 9600 );
       swSerial->listen();
+	  m_lastsend = 0;
     }
 
 
@@ -31,15 +43,15 @@
       return swSerial->available();
     }
 
-    char DHProtocol::_writeChar(char value )
-    {
-      return swSerial->write( value );
-    }
+  char DHProtocol::_writeChar(char value )
+   {
+     return swSerial->write( value );
+   }
 
-    char DHProtocol::_readChar()
-    {
+   char DHProtocol::_readChar()
+   {
       if ( _waitData (20) )   // 20 msec
-      {
+     {
         return swSerial->read();
       }
       return 0;
@@ -70,9 +82,9 @@
     void DHProtocol::_writeHeader()
     {
       swSerial->write('#');
-      swSerial->write( id);
+      swSerial->write( m_id);
       swSerial->write('@');
-      swSerial->write( otherid);
+      swSerial->write( m_otherid);
       swSerial->write('#');
     }
 
@@ -85,22 +97,20 @@
       Serial.println( "");
       Serial.print( "sendData: " );
       Serial.write('#');
-      Serial.write('0' + id);
+      Serial.write('0' + m_id);
       Serial.write('@');
-      Serial.write('0' + otherid);
+      Serial.write('0' + m_otherid);
       Serial.write('#');
 
       //send the data -- relay value
-      for (int i = 0; i < 16; i++ )
-      {
-        _writeChar(relay[i] );
-        Serial.write( '0' + relay[i] );
-      }
+      _writeShort( relay.val_16 );
+      Serial.print( relay.val_16  );
 
       _writeChar('$');
       Serial.write('$');
 
       digitalWrite(13, LOW);
+	   m_lastsend = millis();
     }
 
     //********************************************************************************/
@@ -112,8 +122,7 @@
       {
         if ( _readChar() == '#')
         {
-          digitalWrite(13, HIGH);
-          
+          digitalWrite(13, HIGH);          
           Serial.write("\nRequest: #");
 
           char sendId = _readChar();
@@ -129,31 +138,24 @@
             if (_readChar() == '#')
             {
               Serial.write("#");
-              if ( targetId == id )
+              if ( targetId == m_id )
               {
-                short temp[16];
-                for (int i = 0; i < 16 ; i++)
-                {
-                  temp[i] = _readChar();
-                  Serial.write('0' +  temp[i] );
-                }
+                uint16_t request;
+                request = _readShort();
+				Serial.print( request );
 
                 // copio da temp a relay
                 if (_readChar() == '$')
                 {
                   Serial.write("$");
                   r = true;
-                  for (int i = 0; i < 16 ; i++)
-                  {
-                    relay[i] = temp[i];
-                  }
+				  relay.val_16 = request;
                 }
               }
             }
           }
         }
       }
-
       digitalWrite(13, LOW);
       return r;
     }
@@ -167,13 +169,13 @@
       Serial.println( "");
       Serial.print( "sendData: " );
       Serial.write('#');
-      Serial.write('0' + id);
+      Serial.write('0' + m_id);
       Serial.write('@');
-      Serial.write('0' + otherid);
+      Serial.write('0' + m_otherid);
       Serial.write('#');
 
       //send the data -- sensor value
-      for (int i = 0; i < 28; i++ )
+      for (int i = 0; i < 24; i++ )
       {
         _writeShort( sensor[i] );
         Serial.print( sensor[i] );
@@ -184,6 +186,7 @@
       Serial.write('$');
 
       digitalWrite(13, LOW);
+	  m_lastsend = millis();
     }
 
   //********************************************************************************/
@@ -196,12 +199,12 @@
         if (_readChar() == '#')
         {
           digitalWrite(13, HIGH);
-         
-	  Serial.write("\nRecived: #");
+		  Serial.write("\nRecived: #");
+		  
           unsigned char sendId = _readChar();
           Serial.write('0' + sendId);
 
-          if ( sendId == otherid )
+          if ( sendId == m_otherid )
           {
             if ( _readChar() == '@')
             {
@@ -214,9 +217,9 @@
               {
                 Serial.write("#");
 
-                if ( targetId == id )
+                if ( targetId == m_id )
                 {
-                  for (int i = 0; i < 28 ; i++)
+                  for (int i = 0; i < 24 ; i++)
                   {
                     sensor[i] = _readShort();
 
