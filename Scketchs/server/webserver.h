@@ -12,7 +12,6 @@ void listenForEthernetClients()
     Serial.println("Got a client");
 
     // an http request ends with a blank line
-    boolean currentLineIsBlank = true;
     while (client.connected())
     {
       if (client.available())
@@ -22,69 +21,53 @@ void listenForEthernetClients()
         if (readString.length() < 50 )
         {
           readString = readString + c;
-          Serial.write(c);
         }
-        else
+
+        // if you've gotten to the end of the line (received a newline
+        // character) and the line is blank, the http request has ended,
+        // so you can send a reply
+        if (c == '\n')
         {
-          Serial.println( readString.c_str() );
+          OUTLN( readString.c_str() );
           //*************************************
           // comandi speciali
-          if ( readString.indexOf("@debug") >= 0)
+          int idx = readString.indexOf("@debug");
+          if (idx > 0)
           {
-            // stampo info di debug in formato umano
             client.println("ALL CLIENT");
-            for ( int t = 1; t < 8; t++)
-            {
-              client.println("");
-              client.print("Terminal");
-              client.println(t);
-              client.print("Relay");
-              client.print( '0' + T[t].relay.bits.b1 );
-              client.print( '0' + T[t].relay.bits.b2 );
-              client.print( '0' + T[t].relay.bits.b3 );
-              client.print( '0' + T[t].relay.bits.b4 );
-              client.print( '0' + T[t].relay.bits.b5 );
-              client.print( '0' + T[t].relay.bits.b6 );
-              client.print( '0' + T[t].relay.bits.b7 );
-              client.print( '0' + T[t].relay.bits.b8 );
-              client.print("Sensors");
-              for ( int s = 0; s < T[t].m_nsensors; s++)
-              {
-                if (s != 0)  client.print( ',');
-                client.print( T[t].sensor[s] );
-              }
-            }
             break;
           }
           //*************************************
-          else if ( readString.indexOf("@set(") >= 0)
-          {
-            int idxSET = readString.indexOf("@set(");
-            int idxSET2 = readString.indexOf(",", idxSET);
-            int idxSET3 = readString.indexOf("=", idxSET2);
-            int idxSET4 = readString.indexOf(")", idxSET3);
+          int idxGET = readString.indexOf("@get(");
+          int idxGET2 = readString.indexOf(",", idxGET);
+          int idxGET3 = readString.indexOf(")", idxGET2);
 
-            int SetParam[3] = {0, 0, 0};
-            SetParam[0] = readString.substring(idxSET + 5, idxSET2).toInt();
-            SetParam[1] = readString.substring(idxSET2 + 1, idxSET3).toInt();
-            SetParam[2] = readString.substring(idxSET3 + 1, idxSET4).toInt();
-            
-            Serial.println( "Set:" + String(SetParam[0]) + "," + String(SetParam[1]) + "=" + String(SetParam[2]) );
-          }
-          //*************************************
-          else if ( readString.indexOf("@get(") >= 0)
-          {
-            int idxGET = readString.indexOf("@get(");
-            int idxGET2 = readString.indexOf(",", idxGET);
-            int idxGET3 = readString.indexOf(")", idxGET2);
+          int GetParam[2] = {0, 0};
+          GetParam[0] = readString.substring(idxGET + 5, idxGET2).toInt();
+          GetParam[1] = readString.substring(idxGET2 + 1, idxGET3).toInt();
 
-            int GetParam[2] = {0, 0};
-            GetParam[0] = readString.substring(idxGET + 5, idxGET2).toInt();
-            GetParam[1] = readString.substring(idxGET2 + 1, idxGET3).toInt();
-            
-            Serial.println( "Get:" + String(GetParam[0]) + "," + String(GetParam[1]) );
-          }
+          int idxSET = readString.indexOf("@set(");
+          int idxSET2 = readString.indexOf(",", idxSET);
+          int idxSET3 = readString.indexOf("=", idxSET2);
+          int idxSET4 = readString.indexOf(")", idxSET3);
+
+          int SetParam[3] = {0, 0, 0};
+          SetParam[0] = readString.substring(idxSET + 5, idxSET2).toInt();
+          SetParam[1] = readString.substring(idxSET2 + 1, idxSET3).toInt();
+          SetParam[2] = readString.substring(idxSET3 + 1, idxSET4).toInt();
+
+          OUTLN( "Get:" + String(GetParam[0]) + "," + String(GetParam[1]) );
+          OUTLN( "Set:" + String(SetParam[0]) + "," + String(SetParam[1]) + "=" + String(SetParam[2]) );
+
           //*************************************
+          // client.println("HTTP/1.1 200 OK");
+          // client.println("Content-Type: text/html");
+          // client.println("Connection: close");        // the connection will be closed after completion of the response
+          // client.println("Refresh: 1");               // refresh the page automatically every 5 sec
+
+          client.println("100");
+
+          //***************************************
           break;
         }
       }
