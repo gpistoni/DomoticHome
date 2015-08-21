@@ -41,7 +41,7 @@ class DHProtocol
 	unsigned long m_lastsend;
  
     //dati
-	int m_nsensors;
+	unsigned char m_nsensors;
     uint16_t *sensor;		// nsensors valori short 
     tBit 	 relay;			// 16 bit
 
