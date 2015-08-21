@@ -1,7 +1,22 @@
 #include "dhprotocol.h"
 #include "SoftwareSerial.h"
 
-//versione 0006
+extern unsigned int __bss_end;
+extern unsigned int __heap_start;
+extern void *__brkval;
+
+int freeMemory()
+ {
+  int free_memory;
+
+  if((int)__brkval == 0)
+     free_memory = ((int)&free_memory) - ((int)&__bss_end);
+  else
+    free_memory = ((int)&free_memory) - ((int)__brkval);
+
+  return free_memory;
+}
+
     void DHProtocol::setup( int myId, int otherId, SoftwareSerial *myserial)
     {
       swSerial = myserial;
@@ -21,7 +36,7 @@
       pinMode(13, OUTPUT);
 
       swSerial->listen();
-    }
+     }
 
 
     bool DHProtocol::_waitData( int msec )
@@ -79,11 +94,10 @@
     //********************************************************************************/
     void DHProtocol::sendRequest( )
     {
-      digitalWrite(13, HIGH);
       _writeHeader();
 
       Serial.println( "");
-      Serial.print( "sendData: " );
+      Serial.print( "sendRequest: " );
       Serial.write('#');
       Serial.write('0' + id);
       Serial.write('@');
@@ -98,9 +112,8 @@
       }
 
       _writeChar('$');
-      Serial.write('$');
-
-      digitalWrite(13, LOW);
+      Serial.println('$');
+   lastsend=millis();
     }
 
     //********************************************************************************/
@@ -112,8 +125,7 @@
       {
         if ( _readChar() == '#')
         {
-          digitalWrite(13, HIGH);
-          
+        
           Serial.write("\nRequest: #");
 
           char sendId = _readChar();
@@ -141,7 +153,7 @@
                 // copio da temp a relay
                 if (_readChar() == '$')
                 {
-                  Serial.write("$");
+                  Serial.println("$");
                   r = true;
                   for (int i = 0; i < 16 ; i++)
                   {
@@ -154,14 +166,12 @@
         }
       }
 
-      digitalWrite(13, LOW);
       return r;
     }
 
     //********************************************************************************/
     void DHProtocol::sendData( )
     {
-      digitalWrite(13, HIGH);
       _writeHeader();
 
       Serial.println( "");
@@ -181,9 +191,10 @@
       }
 
       _writeChar('$');
-      Serial.write('$');
+      Serial.println('$');
 
-      digitalWrite(13, LOW);
+	lastsend=millis();
+
     }
 
   //********************************************************************************/
@@ -195,9 +206,8 @@
       { 
         if (_readChar() == '#')
         {
-          digitalWrite(13, HIGH);
          
-	  Serial.write("\nRecived: #");
+	  Serial.write("Recived: #");
           unsigned char sendId = _readChar();
           Serial.write('0' + sendId);
 
@@ -227,7 +237,7 @@
                   // verifico il finale
                   if ( _readChar() == '$')
                   {
-                    Serial.write("$");
+                    Serial.println("$");
                     r = true;
                   }
                 }
@@ -237,7 +247,6 @@
         }
       }
 
-      digitalWrite(13, LOW);
       return r;
     }
 

@@ -23,6 +23,8 @@ class DHProtocol
     unsigned char id;
     unsigned char otherid;
  
+    unsigned long lastsend;
+
     //dati
     short sensor[28];
     short relay[16];
@@ -47,5 +49,11 @@ class DHProtocol
     void sendData( );
     bool waitData( int timeout );
 
+bool checkTiming( int interval )
+	{
+		return ( millis() - lastsend >= interval );
+	};
 };
+
+int freeMemory();
 #endif
