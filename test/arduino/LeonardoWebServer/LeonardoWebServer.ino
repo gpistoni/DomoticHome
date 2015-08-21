@@ -12,9 +12,9 @@
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEE };
 
 // IP address for the controller:  -----------------------------
-IPAddress ip(172, 31, 11, 175);                       //<<-- IP
-IPAddress gateway(172, 31, 8, 1);                     //<<-- GATEWAY
-IPAddress subnet(255, 255, 255, 0);                   //<<-- SUBNET
+IPAddress ip(192, 168, 1, 175);                       //<<-- IP
+//IPAddress gateway(192, 31, 8, 1);                     //<<-- GATEWAY
+//IPAddress subnet(255, 255, 255, 0);                   //<<-- SUBNET
 
 // Initialize the Ethernet server library
 // with the IP address and port you want to use
