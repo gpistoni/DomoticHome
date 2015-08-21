@@ -149,6 +149,9 @@ int freeMemory()
                   temp[i] = _readByte();
                   Serial.write('0' +  temp[i] );
                 }
+		Serial.write('-');
+		Serial.print( _readByte() );
+
                 // copio da temp a relay
                 if (_readByte() == '$')
                 {

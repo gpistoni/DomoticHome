@@ -10,7 +10,6 @@
 
 #include <DHT.h>
 #include <OneWire.h>
-#include <SoftEasyTransfer.h>
 #include <SoftwareSerial.h>
 
 
@@ -22,9 +21,9 @@ SoftwareSerial mySerial(10, 12, TRUE);          // RX 10, TX 12 Serial, inverse 
 
 void setup()
 {
-  Slave.setup(4, 0, &mySerial, 9600);     // Terminal ID
+  Slave.setup(4, 0, &mySerial);     // Terminal ID
 
-  Probes.setup(2,3,4,5);                        // 4 temp
+  Probes.setup(2,3,4,5,6,7,8,9);                        // 4 temp
  
   Serial.begin(9600);                     // disabilito le seriali 
   while (!Serial); //wait
@@ -38,10 +37,17 @@ unsigned long old_Read = 0;
 
 void loop()
 {
-  unsigned long now = millis();               // Terminal ID
-  bool HaveTosend = false;
-
+ 
+  
+  if ( Slave.waitRequest( 50 ) )
+  {
+     Serial.print( "Pack:" );
+     Slave.sendData();
+     return;
+  }
+  
 /*******************************************************************************/
+  unsigned long now = millis();               // Terminal ID
   if ( now - old_Read >= 2000)  //leggo probe ogni 2 secondi
   {
     old_Read = now;
@@ -56,14 +62,7 @@ void loop()
       Serial.print( "Probe:" );
       Serial.print( Slave.sensor[i] );
      }
-    HaveTosend = true;
   }
   /*****************************************************************************/
-
-  if ( Slave.waitRequest( 50 ) )
-  {
-     Slave.sendData();
-  }
-  delay(10);
 };
 

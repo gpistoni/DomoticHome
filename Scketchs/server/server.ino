@@ -1,5 +1,7 @@
 //#define DISABLE_TRACE
 
+
+
 #include <dhprotocol.h>
 #include <DHSdDb.h>
 
@@ -86,15 +88,15 @@ void loop()
   count++;
   if ( T[3].checkTiming(3000) )
   {
-    T[3].relay.bits.b0 = 0;
-    T[3].relay.bits.b1 = 0;
-    T[3].relay.bits.b2 = 0;
-    T[3].relay.bits.b3 = 0;
-    T[3].relay.bits.b4 = 0;
-    T[3].relay.bits.b5 = 0;
-    T[3].relay.bits.b6 = 0;
-    T[3].relay.bits.b7 = 0;
-    T[3].relay.bits.b8 = 0;
+    T[3].relay[0] = 0;
+    T[3].relay[1] = 0;
+    T[3].relay[2] = 0;
+    T[3].relay[3] = 0;
+    T[3].relay[4] = 0;
+    T[3].relay[5] = 0;
+    T[3].relay[6] = 0;
+    T[3].relay[7] = 0;
+    T[3].relay[8] = 0;
     
     T[3].sendRequest();
     T[3].waitData( 100 );
@@ -102,15 +104,15 @@ void loop()
   };
   if ( T[4].checkTiming(5000) )
   {
-    T[4].relay.bits.b0 = 0;
-    T[4].relay.bits.b1 = 0;
-    T[4].relay.bits.b2 = 1;
-    T[4].relay.bits.b3 = 0;
-    T[4].relay.bits.b4 = 0;
-    T[4].relay.bits.b5 = 0;
-    T[4].relay.bits.b6 = 1;
-    T[4].relay.bits.b7 = 0;
-    T[4].relay.bits.b8 = 0;
+    T[4].relay[0] = 0;
+    T[4].relay[1] = 0;
+    T[4].relay[2] = 0;
+    T[4].relay[3] = 0;
+    T[4].relay[4] = 0;
+    T[4].relay[5] = 0;
+    T[4].relay[6] = 0;
+    T[4].relay[7] = 0;
+    T[4].relay[8] = 0;
     
     T[4].sendRequest();
     T[4].waitData( 100 );
@@ -118,7 +120,7 @@ void loop()
   };
   if ( T[5].checkTiming(15000) )
   {
-    T[5].relay.val_16 = 0;
+    T[5].relay[0] = 0;
     
     T[5].sendRequest();
     T[5].waitData( 100 );

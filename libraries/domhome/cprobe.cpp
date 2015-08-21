@@ -68,12 +68,11 @@ float CProbe::_getTemp(int n) {
   ds[n].select(addr);
   ds[n].write(0x44, 1); // start conversion, with parasite power on at the end
 
-  delay(750);  //maybe 1000?
+  delay(400);  //maybe ?
 
   byte present = ds[n].reset();
   ds[n].select(addr);
   ds[n].write(0xBE); // Read Scratchpad
-
 
   Serial.print("  Data = ");
   Serial.print(present, HEX);
