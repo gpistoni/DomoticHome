@@ -20,8 +20,8 @@ class DHProtocol
     SoftwareSerial *swSerial;
 
  public:
-    unsigned char id;
-    unsigned char otherid;
+    unsigned char m_id;
+    unsigned char m_otherid;
  
     unsigned long lastsend;
 
@@ -33,7 +33,8 @@ class DHProtocol
     void setup( int myId, int otherId, SoftwareSerial *myserial);
 
   private:
-    bool _waitData( int msec );
+    bool _waitData( int msec ); 
+    bool _waitHeaderAndData( int msec );
     bool _writeByte(byte value );
     byte _readByte();
     void _writeShort(short value);

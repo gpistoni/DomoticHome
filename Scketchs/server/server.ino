@@ -1,6 +1,5 @@
-//#define DISABLE_TRACE
-
-
+#define DISABLE_TRACE
+#define DISABLE_SD
 
 #include <dhprotocol.h>
 #include <DHSdDb.h>
@@ -25,17 +24,19 @@ IPAddress ip(192, 168, 1, 175);                         //<<-- IP
 //IPAddress gateway(172, 31, 8, 1);                     //<<-- GATEWAY
 //IPAddress subnet(255, 255, 255, 0);                   //<<-- SUBNET
 
- // Pins 10, 11, 12 and 13 are reserved for interfacing with the Ethernet module and should not be used otherwise
- // Pin 10 is reserved for the Wiznet interface, SS for the SD card is on Pin 4. 
- // There is a built-in LED connected to digital pin 9.
- EthernetServer server(80);
+// Pins 10, 11, 12 and 13 are reserved for interfacing with the Ethernet module and should not be used otherwise
+// Pin 10 is reserved for the Wiznet interface, SS for the SD card is on Pin 4.
+// There is a built-in LED connected to digital pin 9.
+EthernetServer server(80);
 
 //SELECT (ON OFF) pins
 #define SD_SELECT 4
 #define ETHERNET_SELECT 10
 
+DHSdDb db;
+
 void setup()
-{ 
+{
   T[1].setup(0, 1, &mySerial );  // -
   T[2].setup(0, 2, &mySerial );  // --
   T[3].setup(0, 3, &mySerial );   // rele' pdc
@@ -47,13 +48,14 @@ void setup()
   Serial.begin(9600);
   OUTLN("System Start");
 
- //inifile ************************************************************
+  //inifile ************************************************************
   pinMode(SD_SELECT, OUTPUT);
   digitalWrite(SD_SELECT, HIGH); // disable SD card
-  
+
   pinMode(ETHERNET_SELECT, OUTPUT);
   digitalWrite(ETHERNET_SELECT, HIGH); // disable Ethernet
-  
+
+#ifndef DISABLE_SD
   OUTLN("Initializing SD card...");
   if (!SD.begin(4))
   {
@@ -62,58 +64,49 @@ void setup()
   }
   OUTLN("initialization done.");
 
-//sample
-//  SDDB::WriteValue("pinco", "pallino", "100");
-//  Serial.print( SDDB::ReadValue("pinco", "pallino") );
- 
-//ethernet ************************************************************
+  //sample
+  //db.WriteValue("pinco", "pallino", "100");
+  //Serial.print( db.ReadValue("pinco", "pallino") );
+#endif
+
+  //ethernet ************************************************************
   Ethernet.begin(mac, ip);
   server.begin();
 
   // give the sensor and Ethernet shield time to set up:
   delay(1000);
- 
+
   OUTLN("server is at ");
   OUTLN(Ethernet.localIP());
-
-  digitalWrite(10,HIGH);
 }
 
 int count = 0;
 
 void loop()
 {
-  listenForEthernetClients();
-    
+   listenForEthernetClients();
+
   count++;
   if ( T[3].checkTiming(3000) )
   {
     T[3].relay[0] = 0;
     T[3].relay[1] = 0;
-    T[3].relay[2] = 0;
+    T[3].relay[2] = 1;
     T[3].relay[3] = 0;
     T[3].relay[4] = 0;
-    T[3].relay[5] = 0;
+    T[3].relay[5] = 1;
     T[3].relay[6] = 0;
     T[3].relay[7] = 0;
     T[3].relay[8] = 0;
-    
+
     T[3].sendRequest();
     T[3].waitData( 100 );
     return;
   };
   if ( T[4].checkTiming(5000) )
   {
-    T[4].relay[0] = 0;
-    T[4].relay[1] = 0;
-    T[4].relay[2] = 0;
-    T[4].relay[3] = 0;
-    T[4].relay[4] = 0;
-    T[4].relay[5] = 0;
-    T[4].relay[6] = 0;
-    T[4].relay[7] = 0;
-    T[4].relay[8] = 0;
-    
+    T[4].relay[1] = 1;
+
     T[4].sendRequest();
     T[4].waitData( 100 );
     return;
@@ -121,7 +114,7 @@ void loop()
   if ( T[5].checkTiming(15000) )
   {
     T[5].relay[0] = 0;
-    
+
     T[5].sendRequest();
     T[5].waitData( 100 );
     return;
@@ -132,5 +125,6 @@ void loop()
   OUTLN( freeMemory() );
   delay(1000);
 }
+
 
 

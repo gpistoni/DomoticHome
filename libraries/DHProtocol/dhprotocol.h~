@@ -27,15 +27,16 @@ class DHProtocol
 
     //dati
     short sensor[24];
-    short relay[12];
+    byte relay[12];
 
     DHProtocol(){};
     void setup( int myId, int otherId, SoftwareSerial *myserial);
 
   private:
-    bool _waitData( int msec );
-    char _writeChar(char value );
-    char _readChar();
+    bool _waitData( int msec ); 
+    bool _waitHeaderAndData( int msec );
+    bool _writeByte(byte value );
+    byte _readByte();
     void _writeShort(short value);
     short _readShort();
     void _writeHeader();

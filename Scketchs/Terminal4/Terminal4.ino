@@ -29,7 +29,7 @@ void setup()
   while (!Serial); //wait
 
   Serial.print( "Setup-- SLAVE ID: " );
-  Serial.print( Slave.id );
+  Serial.print( Slave.m_id );
 
 }
 
@@ -41,7 +41,6 @@ void loop()
   
   if ( Slave.waitRequest( 50 ) )
   {
-     Serial.print( "Pack:" );
      Slave.sendData();
      return;
   }

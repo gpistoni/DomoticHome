@@ -36,7 +36,7 @@ float CProbe::_getTemp(int n) {
   if ( !ds[n].search(addr)) {
     //no more sensors on chain, reset search
     ds[n].reset_search();
-    delay(250);
+    delay(10);
     return -1000;
   }
 
@@ -68,7 +68,7 @@ float CProbe::_getTemp(int n) {
   ds[n].select(addr);
   ds[n].write(0x44, 1); // start conversion, with parasite power on at the end
 
-  delay(400);  //maybe ?
+  delay(40);  //maybe ?
 
   byte present = ds[n].reset();
   ds[n].select(addr);
