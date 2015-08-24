@@ -4,12 +4,11 @@
 // nessun dato di risposta
 // rev: 13 ago 2015
 
+#include <dhprotocol.h>
 
-#include <DHT.h>
 #include <OneWire.h>
 #include <SoftwareSerial.h>
 
-#include <dhprotocol.h>
 
 DHProtocol Slave;
 SoftwareSerial mySerial(11, 12, TRUE);     // 11,12 Serial
@@ -17,7 +16,8 @@ SoftwareSerial mySerial(11, 12, TRUE);     // 11,12 Serial
 
 void setup()
 {
-  Slave.setup(3, 0, &mySerial, 9600);     // Terminal ID
+  Slave.setup(3, 0, &mySerial);     // Terminal ID
+  
 /*
   Serial.begin(9600);
   while (!Serial); //wait
@@ -44,14 +44,20 @@ void loop()
   unsigned long now = millis();               // Terminal ID
   bool HaveTosend = false;
 
-  int id = Slave.id;
+  //int id = Slave.m_id;
 
   /*******************************************************************************/
   if ( Slave.waitRequest(20) )
   {
-    for ( int i = 0; i < 8; i++)
-    {
-      digitalWrite(2 + i, !Slave.relay[i] );
+      digitalWrite(2, !Slave.relay.bits.b0 );
+      digitalWrite(3, !Slave.relay.bits.b1 );
+      digitalWrite(4, !Slave.relay.bits.b2 );
+      digitalWrite(5, !Slave.relay.bits.b3 );
+      digitalWrite(6, !Slave.relay.bits.b4 );
+      digitalWrite(7, !Slave.relay.bits.b5 );
+      digitalWrite(8, !Slave.relay.bits.b6 );
+      digitalWrite(9, !Slave.relay.bits.b7 );
+      
       /*
       Serial.println( "");
       Serial.print( "Relay" );
@@ -59,8 +65,7 @@ void loop()
       Serial.print( ":" );
       Serial.print( Slave.relay[i] );
       */
-    }
-
+    
     HaveTosend = true;
   }
   /*****************************************************************************/
