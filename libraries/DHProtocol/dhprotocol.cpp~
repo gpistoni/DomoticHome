@@ -35,9 +35,10 @@ void DHProtocol::setup( int myId, int otherId, SoftwareSerial *myserial)
   }
   pinMode(13, OUTPUT);
 
+  lastRecived=0;
+  lastRequest=0;
   swSerial->listen();
 }
-
 
 bool DHProtocol::_waitData( int msec )
 {
@@ -53,9 +54,11 @@ bool DHProtocol::_writeByte(byte value )
 
 byte DHProtocol::_readByte()
 {
-  if ( _waitData (40) )   // 20 msec
+  if ( _waitData (20) )   // 20 msec
   {
-    return swSerial->read();
+    byte r = swSerial->read();
+    OUT("r");
+    return r;
   }
   return 0;
 }
@@ -93,18 +96,18 @@ void DHProtocol::_writeHeader()
 
 bool DHProtocol::_waitHeaderAndData( int msec )
 {
-  if ( _waitData( msec ) )
+  while ( _waitData( msec ) )
   {
     if ( _readByte() == '#')
     {
       OUT("recived: #");
 
-      char sendId = _readByte();
+      byte sendId = _readByte();
       OUT(sendId);
 
       if (_readByte() == '@')
       {
-       OUT("@");
+        OUT("@");
 
         byte targetId = _readByte();
         OUT(targetId);
@@ -120,7 +123,7 @@ bool DHProtocol::_waitHeaderAndData( int msec )
       }
     }
   }
-return false;
+  return false;
 }
 
 //********************************************************************************/
@@ -144,34 +147,38 @@ void DHProtocol::sendRequest( )
 
   _writeByte('$');
   OUTLN('$');
-  lastsend = millis();
+  lastRequest = millis();
 }
 
 //********************************************************************************/
 bool DHProtocol::waitRequest( int timeout)
 {
-	bool r = false;
+  bool r = false;
 
-	if ( _waitHeaderAndData( timeout ))
-	{
-		byte temp[12];
-		for (int i = 0; i < 12 ; i++)
-		{
-			temp[i] = _readByte();
-			OUT(temp[i] );
-		}
-		// copio da temp a relay
-		if (_readByte() == '$')
-		{
-			OUT("$");
-			r = true;
-			for (int i = 0; i < 12 ; i++)
-			{
-			relay[i] = temp[i];
-			}
-		}
-	}
-	return r;
+  if ( _waitHeaderAndData( timeout ))
+  {
+    byte temp[12];
+    for (int i = 0; i < 12 ; i++)
+    {
+      temp[i] = _readByte();
+      OUT(temp[i] );
+    }
+    // copio da temp a relay
+    if (_readByte() == '$')
+    {
+      OUT("$");
+      r = true;
+      for (int i = 0; i < 12 ; i++)
+      {
+        relay[i] = temp[i];
+      }
+    }
+  }
+
+  //clear buffer
+  while ( swSerial->available() ) swSerial->read();
+
+  return r;
 }
 
 //********************************************************************************/
@@ -196,35 +203,44 @@ void DHProtocol::sendData( )
   }
 
   _writeByte('$');
- OUTLN('$');
-
-  lastsend = millis();
-
+  OUTLN('$');
 }
 
 //********************************************************************************/
 bool DHProtocol::waitData( int timeout)
 {
-	bool r = false;
-	byte b;
+  bool r = false;
+  byte b;
+  if( millis() - lastRecived > 60000)
+  {    
+     OUTLN("Reset data too old");
+     for (int i = 0; i < 24 ; i++)
+     {
+      sensor[i] = 0;
+     }
+  }
 
-	if ( _waitHeaderAndData( timeout ))
-	{
-		for (int i = 0; i < 24 ; i++)
-		{
-			sensor[i] = _readShort();
-			OUT( sensor[i] );
-			OUT(",");
-		}
+  if ( _waitHeaderAndData( timeout ))
+  {
+    for (int i = 0; i < 24 ; i++)
+    {
+      sensor[i] = _readShort();
+      OUT( sensor[i] );
+      OUT(",");
+    }
 
-		// verifico il finale
-		if ( _readByte() == '$')
-		{
-			OUTLN("$");
-			r = true;
-		}
-	}
+    // verifico il finale
+    if ( _readByte() == '$')
+    {
+      OUTLN("$");
+      r = true;
+      lastRecived = millis();
+    }
+  }
 
-return r;
+ //clear buffer
+  while ( swSerial->available() ) swSerial->read();
+
+  return r;
 }
 

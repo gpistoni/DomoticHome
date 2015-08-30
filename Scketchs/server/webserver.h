@@ -29,14 +29,18 @@ void listenForEthernetClients()
         if (c == '\n')
         {
           OUTLN( readString.c_str() );
+          int idx;
           //*************************************
           // comandi speciali
-          int idx = readString.indexOf("@debug");
+          idx = readString.indexOf("@debug");
           if (idx > 0)
           {
             for (int c = 0; c < 8; c++)
             {
-              client.println( "T" + String(c) );
+              client.print( "T" + String(c) + ": " );
+              client.print( T[ c ].lastRequest);
+              client.print( " / " );
+              client.println( T[ c ].lastRecived);
               for (int i = 0; i < 24; i++)
               {
                 if (i != 0) client.print(',');
@@ -93,7 +97,7 @@ void listenForEthernetClients()
           // client.println("Connection: close");        // the connection will be closed after completion of the response
           // client.println("Refresh: 1");               // refresh the page automatically every 5 sec
 
-          client.println("100");
+          client.println("Sintax error");
 
           //***************************************
           break;

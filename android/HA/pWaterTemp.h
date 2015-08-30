@@ -55,7 +55,7 @@ class WorkerThread : public QThread
         QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 
         // the HTTP request
-        QNetworkRequest req( QUrl( QString("http://www.google.it/") ) );
+        QNetworkRequest req( QUrl( QString("http://ip.jsontest.com/") ) );
         QNetworkReply *reply = mgr.get(req);
         eventLoop.exec();                       // blocks stack until "finished()" has been called
 

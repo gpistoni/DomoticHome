@@ -1,4 +1,4 @@
-#define DISABLE_TRACE
+//#define DISABLE_TRACE
 #define DISABLE_SD
 
 #include <dhprotocol.h>
@@ -65,7 +65,7 @@ void setup()
   OUTLN("initialization done.");
 
   //sample
-  //db.WriteValue("pinco", "pallino", "100");
+  db.WriteValue("pinco", "pallino", "100");
   //Serial.print( db.ReadValue("pinco", "pallino") );
 #endif
 
@@ -87,43 +87,57 @@ void loop()
    listenForEthernetClients();
 
   count++;
+  if ( T[2].checkTiming(2000) )
+  {
+    T[2].relay[0] = 0;
+    T[2].sendRequest();
+    T[2].waitData( 100 );
+    return;
+  };
   if ( T[3].checkTiming(3000) )
   {
+    //estate
+    //T[3].relay[0] = 1;
+    //T[3].relay[1] = 0;
+    //T[3].relay[2] = 1;
+    //T[3].relay[3] = 1;
+    //off
     T[3].relay[0] = 0;
     T[3].relay[1] = 0;
-    T[3].relay[2] = 1;
+    T[3].relay[2] = 0;
     T[3].relay[3] = 0;
+    
     T[3].relay[4] = 0;
-    T[3].relay[5] = 1;
+    T[3].relay[5] = 0;
     T[3].relay[6] = 0;
     T[3].relay[7] = 0;
-    T[3].relay[8] = 0;
 
     T[3].sendRequest();
     T[3].waitData( 100 );
     return;
   };
-  if ( T[4].checkTiming(5000) )
+  if ( T[4].checkTiming(4000) )
   {
-    T[4].relay[1] = 1;
+    T[4].relay[0] = 1;
 
     T[4].sendRequest();
     T[4].waitData( 100 );
     return;
   };
-  if ( T[5].checkTiming(15000) )
+  if ( T[5].checkTiming(10000) )
   {
-    T[5].relay[0] = 0;
+    T[5].relay[0] = 1;
 
     T[5].sendRequest();
     T[5].waitData( 100 );
     return;
   };
 
-  OUT( millis() );
-  OUT( " freeMemory()=" );
-  OUTLN( freeMemory() );
-  delay(1000);
+  Serial.print(".");
+  //OUT( millis() );
+  //OUT( " freeMemory()=" );
+  //OUTLN( freeMemory() );
+  delay(100);
 }
 
 

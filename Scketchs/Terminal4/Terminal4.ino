@@ -1,7 +1,7 @@
 // MODULO 05
 // sonde temperatura locale caldaia
-// ingressi sonde 2-10 onewire con resisteza pullup
-// send: tempertaure[0..8] 
+// ingressi sonde 2-9 onewire con resisteza pullup
+// send: tempertaura in sensor [0..8] 
 // rev: 16 ago 2015
 
 #include <cdht.h>
@@ -37,8 +37,7 @@ unsigned long old_Read = 0;
 
 void loop()
 {
- 
-  
+   
   if ( Slave.waitRequest( 50 ) )
   {
      Slave.sendData();
@@ -47,7 +46,7 @@ void loop()
   
 /*******************************************************************************/
   unsigned long now = millis();               // Terminal ID
-  if ( now - old_Read >= 2000)  //leggo probe ogni 2 secondi
+  if ( now - old_Read >= 10000)  //leggo probe ogni 2 secondi
   {
     old_Read = now;
 

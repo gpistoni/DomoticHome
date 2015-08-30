@@ -5,11 +5,11 @@
 #include "Arduino.h"
 
 #ifndef DISABLE_TRACE
-	#define OUT(x)   Serial.print(x)
-	#define OUTLN(x) Serial.println(x)
+#define OUT(x)   Serial.print(x)
+#define OUTLN(x) Serial.println(x)
 #else
-	#define OUT(x) 
-	#define OUTLN(x)  
+#define OUT(x)
+#define OUTLN(x)
 #endif
 
 class SoftwareSerial;
@@ -19,21 +19,22 @@ class DHProtocol
   private:
     SoftwareSerial *swSerial;
 
- public:
+  public:
     unsigned char m_id;
     unsigned char m_otherid;
- 
-    unsigned long lastsend;
+
+    unsigned long lastRequest;
+    unsigned long lastRecived;
 
     //dati
     short sensor[24];
     byte relay[12];
 
-    DHProtocol(){};
+    DHProtocol() {};
     void setup( int myId, int otherId, SoftwareSerial *myserial);
 
   private:
-    bool _waitData( int msec ); 
+    bool _waitData( int msec );
     bool _waitHeaderAndData( int msec );
     bool _writeByte(byte value );
     byte _readByte();
@@ -50,10 +51,10 @@ class DHProtocol
     void sendData( );
     bool waitData( int timeout );
 
-bool checkTiming( int interval )
-	{
-		return ( millis() - lastsend >= interval );
-	};
+    bool checkTiming( int interval )
+    {
+      return ( millis() - lastRequest >= interval );
+    };
 };
 
 int freeMemory();
