@@ -96,16 +96,21 @@ void loop()
   };
   if ( T[3].checkTiming(3000) )
   {
-    //estate
+    //estate  full
+    T[3].relay[0] = 1;
+    T[3].relay[1] = 0;
+    T[3].relay[2] = 1;
+    T[3].relay[3] = 0;
+    //estate  night
     //T[3].relay[0] = 1;
     //T[3].relay[1] = 0;
     //T[3].relay[2] = 1;
     //T[3].relay[3] = 1;
     //off
-    T[3].relay[0] = 0;
-    T[3].relay[1] = 0;
-    T[3].relay[2] = 0;
-    T[3].relay[3] = 0;
+    //T[3].relay[0] = 0;
+    //T[3].relay[1] = 0;
+    //T[3].relay[2] = 0;
+    //T[3].relay[3] = 0;
     
     T[3].relay[4] = 0;
     T[3].relay[5] = 0;
@@ -126,7 +131,14 @@ void loop()
   };
   if ( T[5].checkTiming(10000) )
   {
-    T[5].relay[0] = 1;
+    T[5].relay[0] = 0;
+    T[5].relay[1] = 1;
+    T[5].relay[2] = 1;
+    T[5].relay[3] = 1;
+    T[5].relay[4] = 1;
+    T[5].relay[5] = 1;
+    T[5].relay[6] = 1;
+    T[5].relay[7] = 1;
 
     T[5].sendRequest();
     T[5].waitData( 100 );
