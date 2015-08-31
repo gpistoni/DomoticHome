@@ -17,7 +17,7 @@ public:
     {
     };
 
-    void setup( IPAddress ip )
+    void setup( IPAddress ip, IPAddress gateway, IPAddress subnet )
     {
         char ssid[] = "PistoniHomeT";     	// your network SSID (name)
         char pass[] = "giaco.iren.dario";       	// your network password
@@ -27,7 +27,7 @@ public:
         Serial.print("Connecting to ");
         Serial.println(ssid);
 
-        WiFi.config(ip);
+        WiFi.config(ip, gateway, subnet);
         WiFi.begin(ssid, pass);
 
         while (WiFi.status() != WL_CONNECTED)
@@ -47,10 +47,16 @@ public:
         Serial.println(udp.localPort());
     }
 
-    void PrintTime();
+    String HttpRequest( String req = "@get(0,0)" );
 
+    time_t GetSystemTime();
+
+private:
     // send an NTP request to the time server at the given address
     unsigned long sendNTPpacket(IPAddress& address);
 
 };
+
+ void printDigits(int digits);
+
 #endif
