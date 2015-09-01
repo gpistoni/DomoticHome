@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     pWaterTemp.cpp \
     pMenu.cpp \
     pWork.cpp \
-    dhrequets.cpp
+    dhrequets.cpp \
+    HistogramView.cpp
 
 HEADERS  += mainwindow.h \
     pAirTemp.h \
@@ -27,7 +28,8 @@ HEADERS  += mainwindow.h \
     pWork.h \
     css.h \
     css.h \
-    dhrequets.h
+    dhrequets.h \
+    HistogramView.h
 
 FORMS    += mainwindow.ui \
     pWaterTemp.ui \
@@ -35,8 +37,11 @@ FORMS    += mainwindow.ui \
     pMenu.ui \
     pWork.ui
 
-CONFIG += mobility
-MOBILITY = 
+CONFIG += mobility \
+
+QMAKE_CXXFLAGS += -std=c++11
+
+MOBILITY =
 
 DISTFILES +=
 

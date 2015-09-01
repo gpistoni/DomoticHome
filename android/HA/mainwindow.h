@@ -1,5 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+
 #include <iostream>
 #include <memory>
 
@@ -28,7 +29,6 @@ private slots:
     void on_pushButton_Prev_clicked();
 
     void on_stackedWidget_currentChanged(int arg1);
-
     void on_pageIndexBar_valueChanged(int value);
 
 private:

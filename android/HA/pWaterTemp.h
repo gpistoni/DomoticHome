@@ -25,7 +25,6 @@ public:
 public:
     pWaterTempData()
     {
-
     }
 
     pWaterTempData( const pWaterTempData &cp )
@@ -34,28 +33,35 @@ public:
         values = cp.values;
     }
 };
+Q_DECLARE_METATYPE(pWaterTempData);
 
 
 //*************************************************************************************************************
 class WorkerThread : public QThread
 {
-    pWaterTempData data;
-
     Q_OBJECT
+
     void run()
     {
         while(1)
         {
             msleep(1000);
-            getWaterTemp( );
+            pWaterTempData data = getWaterTemp( );
             emit valueChanged( data );
             emit valueCh();
         }
     }
 
-    void getWaterTemp( )
+    pWaterTempData getWaterTemp( )
     {
-       QString res = DHRequets::sendRequest(  QUrl(QString("https://www.google.com")) );
+       pWaterTempData data;
+
+       QString str = DHRequets::sendRequest(  QUrl(QString("https://www.google.com")) );
+
+       QStringList list = str.split(".", QString::SkipEmptyParts);
+       data.values["val0"] = list[0].toDouble();
+
+       return data;
 
 
  //      DHRequets::sendRequest(  QUrl(QString("http://ip.jsontest.com/")) );
@@ -112,6 +118,7 @@ public:
     ~pWaterTemp();
 
 private:
+    std::vector<std::shared_ptr<QLabel>>        m_Title;
     std::vector<std::shared_ptr<QLabel>>        m_Labels;
     std::vector<std::shared_ptr<QLCDNumber>>    m_LcdNumber;
 

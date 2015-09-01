@@ -12,3 +12,5 @@ pWork::~pWork()
 {
     delete ui;
 }
+
+

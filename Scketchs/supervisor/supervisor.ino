@@ -5,6 +5,7 @@
 #include <Time.h>
 #include <TimeAlarms.h>
 #include <HttpClient.h>
+#include <FileIO.h>
 
 #include "DataTable.h"
 
@@ -17,7 +18,10 @@ cDataTable DT;
 
 void setup()
 {
+  Bridge.begin();
   Serial.begin(115200);
+  FileSystem.begin();
+  while (!Serial); // wait for Serial port to connect.
   Serial.println();
 
   IPAddress ip(192, 168, 0, 177);
@@ -55,6 +59,7 @@ void setup()
 void loop()
 {
   digitalClockDisplay();
+  logToFile();
   Alarm.delay(1000);
 }
 
@@ -109,8 +114,6 @@ void Minute()
   DT.UpdateT3( dhWifi.HttpRequest("@get(3,99)") );
   DT.UpdateT4( dhWifi.HttpRequest("@get(4,99)") );
   DT.UpdateT5( dhWifi.HttpRequest("@get(5,99)") );
-
-
 }
 
 void digitalClockDisplay()
@@ -120,4 +123,60 @@ void digitalClockDisplay()
   printDigits(minute());
   printDigits(second());
   Serial.println();
+}
+
+void logToFile ()
+{
+  // make a string that start with a timestamp for assembling the data to log:
+  String dataString;
+  dataString += getTimeStamp();
+  dataString += " = ";
+
+  // read three sensors and append to the string:
+  for (int analogPin = 0; analogPin < 3; analogPin++) {
+    int sensor = analogRead(analogPin);
+    dataString += String(sensor);
+    if (analogPin < 2) {
+      dataString += ",";  // separate the values with a comma
+    }
+  }
+
+  // open the file. note that only one file can be open at a time,
+  // so you have to close this one before opening another.
+  // The FileSystem card is mounted at the following "/mnt/FileSystema1"
+  File dataFile = FileSystem.open("/mnt/sd/datalog.txt", FILE_APPEND);
+
+  // if the file is available, write to it:
+  if (dataFile) {
+    dataFile.println(dataString);
+    dataFile.close();
+    // print to the serial port too:
+    Serial.println(dataString);
+  }
+  // if the file isn't open, pop up an error:
+  else {
+    Serial.println("error opening datalog.txt");
+  }
+}
+
+// This function return a string with the time stamp
+String getTimeStamp()
+{
+  String result;
+  Process time;
+  // date is a command line utility to get the date and the time
+  // in different formats depending on the additional parameter
+  time.begin("date");
+  time.addParameter("+%D-%T");  // parameters: D for the complete date mm/dd/yy
+  //             T for the time hh:mm:ss
+  time.run();  // run the command
+
+  // read the output of the command
+  while (time.available() > 0) {
+    char c = time.read();
+    if (c != '\n')
+      result += c;
+  }
+
+  return result;
 }

@@ -1,5 +1,5 @@
 #include "pMenu.h"
-#include "ui_pmain.h"
+#include "ui_pMenu.h"
 
 pMenu::pMenu(QWidget *parent) :
     QScrollArea(parent),
