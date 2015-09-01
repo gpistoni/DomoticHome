@@ -69,10 +69,9 @@ void listenForEthernetClients()
           int idxSET3 = readString.indexOf("=", idxSET2);
           int idxSET4 = readString.indexOf(")", idxSET3);
 
-          int SetParam[3] = {0, 0, 0};
-          SetParam[0] = readString.substring(idxSET + 5, idxSET2).toInt();
-          SetParam[1] = readString.substring(idxSET2 + 1, idxSET3).toInt();
-          SetParam[2] = readString.substring(idxSET3 + 1, idxSET4).toInt();
+          int SetParam0 = readString.substring(idxSET + 5, idxSET2).toInt();
+          int SetParam1 = readString.substring(idxSET2 + 1, idxSET3).toInt();
+          int SetParam2 = readString.substring(idxSET3 + 1, idxSET4).toInt();
 
           if ( idxGET > 0 )
           {
@@ -87,9 +86,16 @@ void listenForEthernetClients()
             break;
           }
 
+          if ( idxSET > 0 )
+          {
+            T[ SetParam0 ].relay[SetParam1] = SetParam2;
+            client.print( T[ SetParam0 ].relay[SetParam1] );
+            break;
+          }
+
 
           OUTLN( "Get:" + String( GetParam0 ) + "," + String( GetParam1) );
-          OUTLN( "Set:" + String(SetParam[0]) + "," + String(SetParam[1]) + "=" + String(SetParam[2]) );
+          OUTLN( "Set:" + String(SetParam0) + "," + String(SetParam1) + "=" + String(SetParam2) );
 
           //*************************************
           // client.println("HTTP/1.1 200 OK");

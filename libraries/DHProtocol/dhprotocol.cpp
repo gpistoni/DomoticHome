@@ -57,7 +57,6 @@ byte DHProtocol::_readByte()
   if ( _waitData (20) )   // 20 msec
   {
     byte r = swSerial->read();
-    OUT("r");
     return r;
   }
   return 0;

@@ -89,28 +89,33 @@ void loop()
   count++;
   if ( T[2].checkTiming(2000) )
   {
-    T[2].relay[0] = 0;
+//    T[2].relay[0] = 0;
     T[2].sendRequest();
     T[2].waitData( 100 );
     return;
   };
   if ( T[3].checkTiming(3000) )
   {
-    //estate
+    //estate  full
+    //T[3].relay[0] = 1;
+    //T[3].relay[1] = 0;
+    //T[3].relay[2] = 1;
+    //T[3].relay[3] = 0;
+    //estate  night
     //T[3].relay[0] = 1;
     //T[3].relay[1] = 0;
     //T[3].relay[2] = 1;
     //T[3].relay[3] = 1;
     //off
-    T[3].relay[0] = 0;
-    T[3].relay[1] = 0;
-    T[3].relay[2] = 0;
-    T[3].relay[3] = 0;
+    //T[3].relay[0] = 0;
+    //T[3].relay[1] = 0;
+    //T[3].relay[2] = 0;
+    //T[3].relay[3] = 0;
     
-    T[3].relay[4] = 0;
-    T[3].relay[5] = 0;
-    T[3].relay[6] = 0;
-    T[3].relay[7] = 0;
+//    T[3].relay[4] = 0;
+//    T[3].relay[5] = 0;
+//    T[3].relay[6] = 0;
+//    T[3].relay[7] = 0;
 
     T[3].sendRequest();
     T[3].waitData( 100 );
@@ -118,7 +123,7 @@ void loop()
   };
   if ( T[4].checkTiming(4000) )
   {
-    T[4].relay[0] = 1;
+ //   T[4].relay[0] = 1;
 
     T[4].sendRequest();
     T[4].waitData( 100 );
@@ -126,7 +131,14 @@ void loop()
   };
   if ( T[5].checkTiming(10000) )
   {
-    T[5].relay[0] = 1;
+    T[5].relay[0] = 0;
+    T[5].relay[1] = 1;
+    T[5].relay[2] = 1;
+    T[5].relay[3] = 1;
+    T[5].relay[4] = 1;
+    T[5].relay[5] = 1;
+    T[5].relay[6] = 1;
+    T[5].relay[7] = 1;
 
     T[5].sendRequest();
     T[5].waitData( 100 );
