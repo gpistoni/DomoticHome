@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     pAirTemp.cpp \
     pWaterTemp.cpp \
     pMenu.cpp \
-    pWork.cpp
+    pWork.cpp \
+    dhrequets.cpp
 
 HEADERS  += mainwindow.h \
     pAirTemp.h \
@@ -25,7 +26,8 @@ HEADERS  += mainwindow.h \
     pMenu.h \
     pWork.h \
     css.h \
-    css.h
+    css.h \
+    dhrequets.h
 
 FORMS    += mainwindow.ui \
     pWaterTemp.ui \

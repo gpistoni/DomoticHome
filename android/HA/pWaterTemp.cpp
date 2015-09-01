@@ -46,10 +46,13 @@ pWaterTemp::pWaterTemp(QWidget *parent) :
         m_LcdNumber.push_back(lcd);
     }
 
-
     //worker
     // Connect our signal and slot
-    connect(&m_work, SIGNAL(valueChanged(pWaterTempData data)),    SLOT(onValueChagned(pWaterTempData data)));
+    //connect(&m_work, SIGNAL(valueChanged(pWaterTempData)), this, SLOT(onValueChagned(pWaterTempData)));
+    connect(&m_work, &WorkerThread::valueChanged, this, &pWaterTemp::onValueChagned);
+
+    connect(&m_work, SIGNAL(valueCh()),                    this, SLOT(onValueCh()));
+
     // Setup callback for cleanup when it finishes
     connect(&m_work, SIGNAL(finished()), &m_work, SLOT(deleteLater()));
 
@@ -61,18 +64,28 @@ pWaterTemp::~pWaterTemp()
     delete ui;
 }
 
+void pWaterTemp::onValueCh()
+{
+    qDebug() << "onValueCh";
+}
 
 void pWaterTemp::onValueChagned(pWaterTempData data)
 {
     qDebug() << "onValueChagned";
 
-    int i=0;
-    for (auto lcd: m_LcdNumber)
+    std::map<QString,double>::iterator iter = data.values.begin();
+    for (int i=0; i<m_LcdNumber.size(); i++ )
     {
-        lcd->display( data.values[i]  );
-        i++;
-        i = i % data.values.size();
+        m_LcdNumber[i]->display(  iter->second );
+        m_Labels[i]->setText( iter->first );
     }
 
     ui->label_footer->setText( QString::number(data.values[0]) );
+}
+
+void pWaterTemp::on_pushUpdate_clicked()
+{
+    //QString res = DHRequets::sendRequest(  QUrl(QString("http://ip.jsontest.com/")) );
+    QString res = DHRequets::sendRequest(  QUrl(QString("https://www.google.com")) );
+    ui->label_footer->setText( res );
 }

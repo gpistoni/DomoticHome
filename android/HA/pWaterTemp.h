@@ -7,13 +7,9 @@
 #include <QLCDNumber>
 #include <QThread>
 #include <QDebug>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QUrl>
-#include <QUrlQuery>
-#include <QEventLoop>
 #include <QStringList>
+
+#include "dhrequets.h"
 
 namespace Ui {
 class WaterTemp;
@@ -23,28 +19,48 @@ class WorkerThread;
 //*************************************************************************************************************
 class pWaterTempData
 {
-   public:
-    std::vector<double> values;
+public:
+    std::map< QString, double> values;
+
+public:
+    pWaterTempData()
+    {
+
+    }
+
+    pWaterTempData( const pWaterTempData &cp )
+    {
+        qDebug() << "Copy pWaterTempData" ;
+        values = cp.values;
+    }
 };
 
 
 //*************************************************************************************************************
 class WorkerThread : public QThread
 {
+    pWaterTempData data;
+
     Q_OBJECT
     void run()
     {
         while(1)
         {
             msleep(1000);
-            pWaterTempData values =  sendRequest( );
-            emit valueChanged( values );
+            getWaterTemp( );
+            emit valueChanged( data );
+            emit valueCh();
         }
     }
 
-    pWaterTempData sendRequest( )
+    void getWaterTemp( )
     {
-        pWaterTempData data;
+       QString res = DHRequets::sendRequest(  QUrl(QString("https://www.google.com")) );
+
+
+ //      DHRequets::sendRequest(  QUrl(QString("http://ip.jsontest.com/")) );
+
+       /*
 
         QString str;
          // create custom temporary event loop on stack
@@ -77,13 +93,13 @@ class WorkerThread : public QThread
             str = reply->errorString();
             qDebug() << str;
             delete reply;
-        }
-        return data;
+        }*/
     }
 
     // Define signal:
 signals:
     void valueChanged( pWaterTempData values );
+    void valueCh();
 };
 
 //*************************************************************************************************************
@@ -103,8 +119,13 @@ private:
 
     // Worker Thread
     WorkerThread m_work;
+
 public slots:
     void onValueChagned(pWaterTempData data);
+    void onValueCh();
+
+private slots:
+    void on_pushUpdate_clicked();
 };
 
 #endif // PWATERTEMP_H
