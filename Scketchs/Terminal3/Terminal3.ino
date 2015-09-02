@@ -1,7 +1,7 @@
 // MODULO 03
 // elettrovalvole di gestione PDC e pompe
 // scheda 4 x 2 rele  ( uscita 2-9)
-// nessun dato di risposta
+// risposta: stato rele
 // rev: 23 ago 2015
 
 #include <dhprotocol.h>

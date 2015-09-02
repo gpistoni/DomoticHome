@@ -1,11 +1,8 @@
-//#define DISABLE_TRACE
-#define DISABLE_SD
+#define DISABLE_TRACE
 
 #include <dhprotocol.h>
-#include <DHSdDb.h>
 
 #include <SoftwareSerial.h>
-#include <SD.h>
 #include <SPI.h>
 #include <Ethernet.h>
 
@@ -20,7 +17,7 @@ SoftwareSerial mySerial(8, 9, 1);  //RX, TX, inverse logic (signal=5v)
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEE };
 
 // IP address for the controller:  -----------------------------
-IPAddress ip(192, 168, 1, 175);                         //<<-- IP
+IPAddress ip(192, 168, 1, 200);                         //<<-- IP
 //IPAddress gateway(172, 31, 8, 1);                     //<<-- GATEWAY
 //IPAddress subnet(255, 255, 255, 0);                   //<<-- SUBNET
 
@@ -29,19 +26,15 @@ IPAddress ip(192, 168, 1, 175);                         //<<-- IP
 // There is a built-in LED connected to digital pin 9.
 EthernetServer server(80);
 
-//SELECT (ON OFF) pins
-#define SD_SELECT 4
 #define ETHERNET_SELECT 10
-
-DHSdDb db;
 
 void setup()
 {
   T[1].setup(0, 1, &mySerial );  // -
   T[2].setup(0, 2, &mySerial );  // --
-  T[3].setup(0, 3, &mySerial );   // rele' pdc
+  T[3].setup(0, 3, &mySerial );  // rele' pdc
   T[4].setup(0, 4, &mySerial );  // temp caldaie
-  T[5].setup(0, 5, &mySerial );   // rele pavimento
+  T[5].setup(0, 5, &mySerial );  // rele pavimento
   T[6].setup(0, 6, &mySerial );  // --
   T[7].setup(0, 7, &mySerial );  // --
 
@@ -49,25 +42,8 @@ void setup()
   OUTLN("System Start");
 
   //inifile ************************************************************
-  pinMode(SD_SELECT, OUTPUT);
-  digitalWrite(SD_SELECT, HIGH); // disable SD card
-
   pinMode(ETHERNET_SELECT, OUTPUT);
   digitalWrite(ETHERNET_SELECT, HIGH); // disable Ethernet
-
-#ifndef DISABLE_SD
-  OUTLN("Initializing SD card...");
-  if (!SD.begin(4))
-  {
-    OUTLN("initialization failed!");
-    return;
-  }
-  OUTLN("initialization done.");
-
-  //sample
-  db.WriteValue("pinco", "pallino", "100");
-  //Serial.print( db.ReadValue("pinco", "pallino") );
-#endif
 
   //ethernet ************************************************************
   Ethernet.begin(mac, ip);
@@ -81,75 +57,73 @@ void setup()
 }
 
 int count = 0;
+unsigned int lastDataLogging = 0;
 
 void loop()
 {
-   listenForEthernetClients();
-
+  listenForEthernetClients();
   count++;
-  if ( T[2].checkTiming(2000) )
+  if ( T[1].checkTiming(1000) )
   {
-//    T[2].relay[0] = 0;
+    T[1].sendRequest();
+    T[1].waitData( 100 );
+  };
+
+  listenForEthernetClients();
+
+  if ( T[2].checkTiming(1000) )
+  {
     T[2].sendRequest();
     T[2].waitData( 100 );
-    return;
   };
-  if ( T[3].checkTiming(3000) )
-  {
-    //estate  full
-    //T[3].relay[0] = 1;
-    //T[3].relay[1] = 0;
-    //T[3].relay[2] = 1;
-    //T[3].relay[3] = 0;
-    //estate  night
-    //T[3].relay[0] = 1;
-    //T[3].relay[1] = 0;
-    //T[3].relay[2] = 1;
-    //T[3].relay[3] = 1;
-    //off
-    //T[3].relay[0] = 0;
-    //T[3].relay[1] = 0;
-    //T[3].relay[2] = 0;
-    //T[3].relay[3] = 0;
-    
-//    T[3].relay[4] = 0;
-//    T[3].relay[5] = 0;
-//    T[3].relay[6] = 0;
-//    T[3].relay[7] = 0;
 
+  listenForEthernetClients();
+
+  if ( T[3].checkTiming(1000) )
+  {
     T[3].sendRequest();
     T[3].waitData( 100 );
-    return;
   };
-  if ( T[4].checkTiming(4000) )
-  {
- //   T[4].relay[0] = 1;
 
+  listenForEthernetClients();
+
+  if ( T[4].checkTiming(1000) )
+  {
     T[4].sendRequest();
     T[4].waitData( 100 );
-    return;
   };
+
+  listenForEthernetClients();
+
   if ( T[5].checkTiming(10000) )
   {
-    T[5].relay[0] = 0;
-    T[5].relay[1] = 1;
-    T[5].relay[2] = 1;
-    T[5].relay[3] = 1;
-    T[5].relay[4] = 1;
-    T[5].relay[5] = 1;
-    T[5].relay[6] = 1;
-    T[5].relay[7] = 1;
-
     T[5].sendRequest();
     T[5].waitData( 100 );
-    return;
   };
 
-  Serial.print(".");
-  //OUT( millis() );
-  //OUT( " freeMemory()=" );
-  //OUTLN( freeMemory() );
-  delay(100);
+  listenForEthernetClients();
+
+  if ( T[6].checkTiming(1000) )
+  {
+    T[6].sendRequest();
+    T[6].waitData( 100 );
+  };
+
+  listenForEthernetClients();
+
+  if ( T[7].checkTiming(1000) )
+  {
+    T[7].sendRequest();
+    T[7].waitData( 100 );
+  };
+
+  listenForEthernetClients();
+
+  OUT(".");
+  OUT( millis() );
+  OUT( " freeMemory()=" );
+  OUTLN( freeMemory() );
+  delay(200);
 }
 
 

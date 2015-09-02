@@ -5,6 +5,7 @@
 #include <Time.h>
 #include <TimeAlarms.h>
 #include <HttpClient.h>
+
 #include <FileIO.h>
 
 #include "DataTable.h"
@@ -13,18 +14,14 @@ DHwifi dhWifi;
 
 cDataTable DT;
 
-// A UDP instance to let us send and receive packets over UDP
-//WiFiUDP udp;
-
 void setup()
 {
-  Bridge.begin();
+  //Bridge.begin();
   Serial.begin(115200);
   FileSystem.begin();
-  while (!Serial); // wait for Serial port to connect.
   Serial.println();
 
-  IPAddress ip(192, 168, 0, 177);
+  IPAddress ip(192, 168, 1, 201);
   IPAddress gateway(192, 168, 0, 254);
   IPAddress subnet(255, 255, 255, 0);
 
@@ -59,7 +56,7 @@ void setup()
 void loop()
 {
   digitalClockDisplay();
-  logToFile();
+  //logToFile();
   Alarm.delay(1000);
 }
 
@@ -77,6 +74,7 @@ void Hourly()
   Serial.println("Hourly timer");
 }
 
+/**************************************************************************************************/
 void PDC_Manager()
 {
   Serial.println("PDC_Manager timer");
@@ -107,6 +105,8 @@ void PDC_Manager()
   dhWifi.HttpRequest( String("@set(3,3=") + DT.rNightmode  + ")" );
 }
 
+
+/**************************************************************************************************/
 void Minute()
 {
   Serial.println("Minute timer");
@@ -129,7 +129,11 @@ void logToFile ()
 {
   // make a string that start with a timestamp for assembling the data to log:
   String dataString;
-  dataString += getTimeStamp();
+  dataString += hour();
+  dataString += ":";
+  dataString += minute();
+  dataString += ":";
+  dataString += second();
   dataString += " = ";
 
   // read three sensors and append to the string:
@@ -159,24 +163,3 @@ void logToFile ()
   }
 }
 
-// This function return a string with the time stamp
-String getTimeStamp()
-{
-  String result;
-  Process time;
-  // date is a command line utility to get the date and the time
-  // in different formats depending on the additional parameter
-  time.begin("date");
-  time.addParameter("+%D-%T");  // parameters: D for the complete date mm/dd/yy
-  //             T for the time hh:mm:ss
-  time.run();  // run the command
-
-  // read the output of the command
-  while (time.available() > 0) {
-    char c = time.read();
-    if (c != '\n')
-      result += c;
-  }
-
-  return result;
-}
