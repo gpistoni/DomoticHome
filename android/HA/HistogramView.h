@@ -3,25 +3,15 @@
 
 #include <QGraphicsView>
 
-
 class QGraphicsItemGroup;
-
-namespace ise {
-  class GrayScaleHistogram;
-}
-
 
 class HistogramView : public QGraphicsView
 {
 public:
   HistogramView(QWidget *parent = NULL);
-  HistogramView(std::vector<double> &histo, QWidget *parent = NULL);
+  HistogramView( std::map<double,double>  &histo, QWidget *parent = NULL);
 
-  /**
-   * Set a new GrayScaleHistogram.
-   * Will do a setMinMax().
-   */
-  virtual void setHistogram( std::vector<double> &histo );
+  virtual void setHistogram( std::map<double,double> &histo );
 
   /**
    * Change aboslute min & max of histogram view,
@@ -31,20 +21,28 @@ public:
    */
   virtual void setMinMax(int min, int max);
 
-  inline int absoluteMin() const { return m_min; }
-  inline int absoluteMax() const { return m_max; }
+protected:
+  void wheelEvent(QWheelEvent *event);
+  void resizeEvent(QResizeEvent *event);
+
+  void draw(QSize sz);
+
+  template <class T>
+  void addText( const T value, QPointF pos);
+  void addAxis( const QSize &sz );
+
+  int PosX( double value );
+  int PosY( double value, const QSize &sz );
 
 protected:
-  void wheelEvent(QWheelEvent *);
-  void populate( std::vector<double> &histo );
+  QGraphicsItemGroup *m_histogramItems;
+  QPen m_axisPen, m_textPen;
 
+  static const int m_Border = 10;
 
-protected:
-  static const int HEIGHT;
-
-  QGraphicsItemGroup *m_histogramItem;
-  double m_min;
-  double m_max;
+  float m_xRatio, m_yRatio;
+  double m_minX, m_minY, m_maxX, m_maxY;
+  std::map<double,double>  m_histo;
 
 };
 

@@ -57,10 +57,16 @@ void MainWindow::on_pushButton_Home_clicked()
 
 void MainWindow::on_stackedWidget_currentChanged(int idx )
 {
+    if (idx>0)
     ui->pageIndexBar->setValue(idx );
 }
 
 void MainWindow::on_pageIndexBar_valueChanged(int value)
 {
      ui->stackedWidget->setCurrentIndex( value );
+}
+
+void MainWindow::on_MainWindow_destroyed()
+{
+
 }

@@ -13,11 +13,11 @@ pAirTemp::pAirTemp(QWidget *parent) :
     ui->label_header->setText("AIR TEMP");
     ui->label_footer->setText("----");
 
-    std::vector<double> histo;
+    std::map<double,double> histo;
 
     // Fill in points with n number of points
     for(int i = 0; i< 100; i++)
-       histo.push_back(i);
+       histo[i]  = i*i;
 
     // Create a view, put a scene in it and add tiny circles
     // in the scene

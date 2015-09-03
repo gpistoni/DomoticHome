@@ -31,6 +31,8 @@ private slots:
     void on_stackedWidget_currentChanged(int arg1);
     void on_pageIndexBar_valueChanged(int value);
 
+    void on_MainWindow_destroyed();
+
 private:
     int num_pages;
     std::shared_ptr<pMenu>       m_pMenu;
