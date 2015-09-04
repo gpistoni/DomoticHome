@@ -17,7 +17,11 @@ pAirTemp::pAirTemp(QWidget *parent) :
 
     // Fill in points with n number of points
     for(int i = 0; i< 100; i++)
-       histo[i]  = i*i;
+    {
+        int x = 100 * qrand() / RAND_MAX;
+        int y = 500 - 1000 * qrand() / RAND_MAX;
+        histo[x]  = y;
+    }
 
     // Create a view, put a scene in it and add tiny circles
     // in the scene

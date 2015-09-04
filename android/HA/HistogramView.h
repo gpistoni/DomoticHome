@@ -7,6 +7,12 @@ class QGraphicsItemGroup;
 
 class HistogramView : public QGraphicsView
 {
+    typedef enum
+      {
+        H=0,
+        V=1
+    } tAxis;
+
 public:
   HistogramView(QWidget *parent = NULL);
   HistogramView( std::map<double,double>  &histo, QWidget *parent = NULL);
@@ -26,21 +32,24 @@ protected:
   void resizeEvent(QResizeEvent *event);
 
   void draw(QSize sz);
+  void Shadowize( int px );
 
   template <class T>
   void addText( const T value, QPointF pos);
   void addAxis( const QSize &sz );
+  void addGridLine( const double value, tAxis ax,  const QSize &sz );
 
-  int PosX( double value );
-  int PosY( double value, const QSize &sz );
+  double PosX( double value );
+  double PosY( double value, const QSize &sz );
 
 protected:
   QGraphicsItemGroup *m_histogramItems;
-  QPen m_axisPen, m_textPen;
+  QPen m_gridPen, m_axisPen, m_textPen, m_measurePen;
+  QPen m_shadowPen;
 
   static const int m_Border = 10;
 
-  float m_xRatio, m_yRatio;
+  double m_xRatio, m_yRatio;
   double m_minX, m_minY, m_maxX, m_maxY;
   std::map<double,double>  m_histo;
 

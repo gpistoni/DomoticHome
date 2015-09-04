@@ -9,9 +9,26 @@
 #include <QGraphicsTextItem>
 #include <QWheelEvent>
 #include <QPointF>
+#include <QTime>
+#include <QTextBlockFormat>
+#include <QTextCursor>
+
+double AutoRound(double d)
+{
+    if ( d<-9999 ) return round( d / 1000) * 1000;
+    if ( d<-999.9 )  return round( d / 100) * 100;
+    if ( d<-99.99 ) return round( d / 10) * 10;
+
+    if ( d>9999 )  return (round( d / 1000)) * 1000;
+    if ( d>999.9 )  return (round( d / 100)) * 100;
+    if ( d>99.99 ) return (round( d / 10)) * 10;
+
+    return round( d );
+}
 
 HistogramView::HistogramView(QWidget *parent)
     : QGraphicsView(parent),
+      m_histogramItems(NULL),
       m_xRatio(1), m_yRatio(1),
       m_minX(0), m_maxX(0),
       m_minY(0), m_maxY(0)
@@ -21,13 +38,20 @@ HistogramView::HistogramView(QWidget *parent)
     m_axisPen.setColor( QColor(255,128,0) );
     m_axisPen.setWidth(2);
 
+    m_gridPen.setColor( QColor(128,128,128) );
+    m_gridPen.setStyle( Qt::DashDotLine );
+
     m_textPen.setColor( QColor(255,128,0) );
 
+    m_measurePen.setColor( QColor(128,0,128) );
+
+    m_shadowPen.setColor( QColor(192,192,192) );
 }
 
 
 HistogramView::HistogramView(std::map<double,double> &histo, QWidget *parent)
     : QGraphicsView(parent),
+      m_histogramItems(NULL),
       m_xRatio(1), m_yRatio(1),
       m_minX(0), m_maxX(0),
       m_minY(0), m_maxY(0)
@@ -44,6 +68,28 @@ void HistogramView::setHistogram( std::map<double,double> &histo )
     if (sc)
     {
         m_histo = histo;
+
+        m_minX = 1e20;
+        m_maxX = -1e20;
+        m_minY = 1e20;
+        m_maxY = -1e20;
+
+        for (auto ih: m_histo)
+        {
+            if ( ih.first < m_minX )  m_minX = ih.first;
+            if ( ih.first > m_maxX )  m_maxX = ih.first;
+            if ( ih.second < m_minY )  m_minY = ih.second;
+            if ( ih.second > m_maxY )  m_maxY = ih.second;
+        }
+
+        if (m_maxX-m_minX < 1) m_maxX = m_minX + 1;
+        if (m_maxY-m_minY < 1) m_maxY = m_minY + 1;
+
+        m_minX = AutoRound( m_minX );
+        m_minY = AutoRound( m_minY );
+
+        m_maxX = AutoRound( m_maxX );
+        m_maxY = AutoRound( m_maxY );
     }
 }
 
@@ -52,39 +98,61 @@ template <class T>
 void HistogramView::addText( const T value,
                              QPointF pos)
 {
- /*   QGraphicsLineItem *line = new QGraphicsLineItem(QLineF(pos, pos2));
-    line->setPen(m_textPen);
-    m_histogramItems->addToGroup(line);
-    */
-
     QString str;
     str.setNum(value);
-    QGraphicsTextItem *text = new QGraphicsTextItem(str);
+
+    QGraphicsTextItem *text = new QGraphicsTextItem( str );
     text->setPos(pos);
+    pos.setX( pos.x - text->boundingRect().width() ) ;
     m_histogramItems->addToGroup(text);
 }
 
 void HistogramView::addAxis( const QSize &sz )
 {
     QPainterPath p;
-    p.moveTo( m_Border, sz.height() - m_Border );
-    p.lineTo( sz.width()-m_Border, m_Border );
-    p.moveTo( m_Border, sz.height() - m_Border );
-    p.lineTo( m_Border, m_Border ); //y points downwards in Qt default coordinate system
+    p.moveTo( m_Border, m_Border );
+    p.lineTo( m_Border, sz.height() - m_Border );
+    p.lineTo( sz.width()-m_Border, sz.height() - m_Border  );
+
+    QGraphicsPathItem *pathItemS = new QGraphicsPathItem(p);
+    pathItemS->setPen(m_shadowPen);
+    pathItemS->moveBy(1,1);
+    m_histogramItems->addToGroup(pathItemS);
 
     QGraphicsPathItem *pathItem = new QGraphicsPathItem(p);
     pathItem->setPen(m_axisPen);
     m_histogramItems->addToGroup(pathItem);
 }
 
-int HistogramView::PosX( double value )
+void HistogramView::addGridLine(  const double value, tAxis ax,  const QSize &sz )
 {
-   return m_Border + ( -m_minX + value ) * m_xRatio;
+    QPainterPath p;
+    if (ax == H)
+    {
+        p.moveTo( m_Border/2,  PosY(value,sz) );
+        p.lineTo( sz.width() - m_Border, PosY(value,sz)  );
+        addText( value, QPointF( sz.width() - 2 * m_Border, PosY(value,sz) - 20 ));
+    }
+    else
+    {
+        p.moveTo( PosX(value), m_Border );
+        p.lineTo( PosX(value), sz.height() - m_Border  );
+        addText( value, QPointF( PosX(value), sz.height() - m_Border - 20 ) );
+    }
+
+    QGraphicsPathItem *pathItem = new QGraphicsPathItem(p);
+    pathItem->setPen(m_gridPen);
+    m_histogramItems->addToGroup(pathItem);
 }
 
-int HistogramView::PosY( double value, const QSize &sz )
+double HistogramView::PosX( double value )
 {
-   return sz.height() - m_Border - ( -m_minY + value ) * m_yRatio;
+    return 1.0 * m_Border + ( -m_minX + value ) * m_xRatio;
+}
+
+double HistogramView::PosY( double value, const QSize &sz )
+{
+    return 1.0 * sz.height() - m_Border - ( -m_minY + value ) * m_yRatio;
 }
 
 void HistogramView::draw( QSize sz )
@@ -92,62 +160,56 @@ void HistogramView::draw( QSize sz )
     QGraphicsScene *sc = scene();
     assert(sc);
 
-    m_minX = 1e20;
-    m_maxX = -1e20;
-    m_minY = 1e20;
-    m_maxY = -1e20;
+    m_xRatio = 1.0 * ( sz.width() - 2*m_Border ) / ( m_maxX - m_minX );
+    m_yRatio = 1.0 * ( sz.height() - 2*m_Border ) / ( m_maxY - m_minY );
 
-    for (auto ih: m_histo)
+    // eleimino la vecchia scena
+    if (m_histogramItems != NULL)
     {
-        if ( ih.first < m_minX )  m_minX = ih.first;
-        if ( ih.first > m_maxX )  m_maxX = ih.first;
-        if ( ih.second < m_minY )  m_minY = ih.second;
-        if ( ih.second > m_maxY )  m_maxY = ih.second;
+        sc->removeItem(m_histogramItems);
+        delete m_histogramItems;
+        m_histogramItems = NULL;
     }
-
-    if (m_maxX-m_minX < 1) m_maxX = m_minX + 1;
-    if (m_maxY-m_minY < 1) m_maxY = m_minY + 1;
-
-
-    const float m_xRatio = (sz.width()-2*m_Border) / ( m_maxX - m_minX);
-    const float m_yRatio = (sz.height() -2*m_Border) / ( m_maxY - m_minY);
-
-      // eleimino la vecchia scena
-    if (m_histogramItem != NULL)
-            {
-                sc->removeItem(m_histogramItem);
-                delete m_histogramItem;
-                m_histogramItem = NULL;
-            }
-
-    m_histogramItem = new QGraphicsItemGroup;
-
+    m_histogramItems = new QGraphicsItemGroup;
 
     // inizio i disegni
     addAxis( sz );
 
     //texts on axes
-    addText( 0, QPointF(m_Border, m_maxY * m_yRatio));
+    //addText( m_minY, QPointF( 0, PosY(m_minY,sz) ) );
+    //addText( m_maxY, QPointF( 0, PosY(m_maxY,sz) ) );
 
-    /*
-    addTextOnX(m_histogramItems, axisPen, m_minX, m_Border,
-               QPointF(m_Border+1, 1));
+    addGridLine( 0, H, sz );
 
-    addTextOnX(m_histogramItems, axisPen, m_maxX, m_Border,
-               QPointF(m_Border, m_Border));*/
+    int nlines = 5;
+    for (int i=0; i<nlines; i++)
+        addGridLine(  AutoRound( m_minY + (m_maxY-m_minY)*i/nlines  ), H, sz );
 
     //vertical line histogram
-    const float y2 = sz.height()-m_Border;
-    QPen barPen(QColor(0,0,0), 1);
+    /*
+ *   const float y2 = sz.height()-m_Border;
     for (auto ih: m_histo)
     {
-        const float x1 = m_Border + ( -m_minX + ih.first) * m_xRatio ;
-        const float y1 = sz.height()- m_Border - (-m_minY + ih.second) * m_yRatio;
+        const float x1 = PosX (ih.first);
+        const float y1 = PosY (ih.second, sz);
         if (y1 != 0)
         {
             QGraphicsLineItem *bar = new QGraphicsLineItem(QLineF(x1, y2, x1, y1));
-            bar->setPen(barPen);
+            bar->setPen(m_measurePen);
             m_histogramItems->addToGroup(bar);
+        }
+    }*/
+
+    //2d point circle
+    for (auto ih: m_histo)
+    {
+        const float x1 = PosX (ih.first);
+        const float y1 = PosY (ih.second, sz);
+        if (y1 != 0)
+        {
+            QGraphicsEllipseItem *pt = new QGraphicsEllipseItem( QRectF( x1-1, y1-1,2,2) );
+            pt->setPen(m_measurePen);
+            m_histogramItems->addToGroup(pt);
         }
     }
 
@@ -160,20 +222,32 @@ void HistogramView::draw( QSize sz )
     assert(scene()->sceneRect() == sceneRect());
 }
 
+void HistogramView::Shadowize( int px )
+{
+    foreach( QGraphicsItem *item, scene()->items( m_histogramItems->boundingRect() ) )
+    {
+       item->moveBy(1,1);
+    }
+}
 
 void HistogramView::wheelEvent(QWheelEvent *event )
 {
- if (event->delta() > 0)
-   scale(1.2, 1.2);
- else
-   scale(1 / 1.2, 1 / 1.2);
+    Shadowize(2);
+    /*  if (event->delta() > 0)
+        scale(1.2, 1.2);
+    else
+        scale(1 / 1.2, 1 / 1.2);*/
 }
 
 void HistogramView::resizeEvent(QResizeEvent *event)
 {
-    draw( event->size() );
+    static QTime ct;
+    if ( QTime::currentTime() > ct )
+    {
+        ct  = QTime::currentTime().addMSecs(100);
+        draw( event->size() );
+    }
 }
-
 
 void HistogramView::setMinMax(int min ,int max)
 {

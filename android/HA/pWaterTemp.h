@@ -45,7 +45,7 @@ class WorkerThread : public QThread
     {
         while(1)
         {
-            msleep(1000);
+            msleep(10000);
             pWaterTempData data = getWaterTemp( );
             emit valueChanged( data );
             emit valueCh();
