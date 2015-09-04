@@ -59,7 +59,8 @@ String DHwifi::HttpRequest( String req )
 {
     WiFiClient client;
 
-    const char* host = "192.168.1.175";
+    char host[99];
+    m_host.toCharArray( host, 99);
     const int httpPort = 80;
 
     if (!client.connect(host, httpPort))

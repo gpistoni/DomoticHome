@@ -12,16 +12,20 @@ private:
     static const int NTP_PACKET_SIZE = 48;  	// NTP time stamp is in the first 48 bytes of the message
     byte packetBuffer[ NTP_PACKET_SIZE];  	// buffer to hold incoming and outgoing packets
 
+   String m_host;
+
 public:
     DHwifi()
     {
     };
 
-    void setup( IPAddress ip, IPAddress gateway, IPAddress subnet )
+    void setup( IPAddress ip, IPAddress gateway, IPAddress subnet, String remoteServer = "192.168.1.200" )
     {
         char ssid[] = "PistoniHomeT";     	// your network SSID (name)
         char pass[] = "giaco.iren.dario";       	// your network password
         unsigned int localPort = 2390;      	// local port to listen for UDP packets
+
+	m_host = remoteServer;
 
         // We start by connecting to a WiFi network
         Serial.print("Connecting to ");

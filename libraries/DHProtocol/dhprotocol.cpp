@@ -212,7 +212,6 @@ bool DHProtocol::waitData( int timeout)
   byte b;
   if( millis() - lastRecived > 60000)
   {    
-     OUTLN("Reset data too old");
      for (int i = 0; i < 24 ; i++)
      {
       sensor[i] = 0;
