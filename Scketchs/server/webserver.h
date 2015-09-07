@@ -75,6 +75,8 @@ void listenForEthernetClients()
 
           if ( idxGET > 0 )
           {
+            OUT("idxGET");
+            OUTLN(GetParam1);
             if ( GetParam1 < 99)
               client.print( T[ GetParam0 ]. sensor[ GetParam1 ] );
             else
@@ -88,6 +90,8 @@ void listenForEthernetClients()
 
           if ( idxSET > 0 )
           {
+            OUT("idxSET");
+            OUTLN(GetParam1);
             T[ SetParam0 ].relay[SetParam1] = SetParam2;
             client.print( T[ SetParam0 ].relay[SetParam1] );
             break;

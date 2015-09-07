@@ -9,6 +9,7 @@
 #include <FileIO.h>
 
 #include "DataTable.h"
+#include "functions.h"
 
 DHwifi dhWifi;
 
@@ -28,19 +29,11 @@ void setup()
   dhWifi.setup( ip, gateway, subnet );
   delay (1000);
 
+  DT.setup();
+
   time_t epoch = dhWifi.GetSystemTime();
   if (epoch > 0) setTime( epoch );           // update system time
 
-  Serial.print(hour());
-  printDigits(minute());
-  printDigits(second());
-  Serial.print(" ");
-  Serial.print(day());
-  Serial.print(" ");
-  Serial.print(month());
-  Serial.print(" ");
-  Serial.print(year());
-  Serial.println();
 
   //Alarm.alarmRepeat(8,30,0, MorningAlarm);  // 8:30am every day
   //Alarm.alarmRepeat(17,45,0,EveningAlarm);  // 5:45pm every day
@@ -50,16 +43,18 @@ void setup()
   Alarm.timerRepeat( 60,        Hourly);         // timer for every 1h
   Alarm.timerRepeat( 20,        Minute);         // timer for every 60sec
 
-  Alarm.timerRepeat( 60 * 10,   PDC_Manager);     // timer for every 10 minutes
+  Alarm.timerRepeat( 60 * 10,   PDC_Manager);             // timer for every 10 minutes
+  Alarm.timerRepeat( 60,        BoilerSanitaria_Manager); // timer for every 1 minutes
 }
 
+/**************************************************************************************************/
 void loop()
-{
-  digitalClockDisplay();
+{  
   //logToFile();
   Alarm.delay(1000);
 }
 
+/**************************************************************************************************/
 void Daily()
 {
   Serial.println("Dayly timer");
@@ -69,97 +64,91 @@ void Daily()
 
 }
 
+/**************************************************************************************************/
 void Hourly()
 {
   Serial.println("Hourly timer");
 }
 
+
 /**************************************************************************************************/
 void PDC_Manager()
 {
-  Serial.println("PDC_Manager timer");
-  DT.rPDC = 0;
-  DT.rPump = 0;
+  digitalClockDisplay();
+  Serial.println("PDC_Manager");
+  DT.rPdc.set(0);
+  DT.rPdcPompa.set(0);
 
   //decido se accendere la pdc
-  if ( month() >= 6 && month() <= 9) // solo estate
+  if ( month() == 6 ||  month() == 7 || month() == 8 ) // solo estate
   {
     if ( DT.tExternal > 30 && DT.tInletFloor > 20 )   // t esterne, minima t Acqua raffreddata
     {
       Serial.println("Condizione H1");
-      DT.rPDC = 1;
-      DT.rCool0_Heat1 = 0;
-      DT.rPump = 1;
-      DT.rNightmode = 1;
+      DT.rPdc.set(1);
+      DT.rPdcCool0_Heat1.set(0);
+      DT.rPdcPompa.set(1);
+      DT.rPdcNightMode.set(1);
     }
     if ( DT.tInletFloor < DT.tReturnFloor - 1 )
     {
       Serial.println("Condizione H2");
-      DT.rPump = 1;
+      DT.rPdcPompa.set(1);
     }
   }
 
-  dhWifi.HttpRequest( String("@set(3,0=") + DT.rPDC  + ")" );
-  dhWifi.HttpRequest( String("@set(3,1=") + DT.rCool0_Heat1  + ")" );
-  dhWifi.HttpRequest( String("@set(3,2=") + DT.rPump  + ")" );
-  dhWifi.HttpRequest( String("@set(3,3=") + DT.rNightmode  + ")" );
+  if ( month() == 9 ) // solo 1/2 stagione
+  {
+    if ( DT.tExternal > 10 && DT.tPufferHi < 30 )
+    {
+      Serial.println("Condizione H3");
+      DT.rPdc.set(1);;
+      DT.rPdcCool0_Heat1.set(1);
+      DT.rPdcPompa.set(1);
+      DT.rPdcNightMode.set(1);
+    }
+    if ( DT.tInletFloor < DT.tReturnFloor - 1 )
+    {
+      Serial.println("Condizione H4");
+      DT.rPdcPompa.set(1);
+    }
+  }
+
+  dhWifi.HttpRequest( DT.rPdc.getS() );             Serial.println(  DT.rPdc.getS() );
+  dhWifi.HttpRequest( DT.rPdcCool0_Heat1.getS() );  Serial.println(  DT.rPdcCool0_Heat1.getS() );
+  dhWifi.HttpRequest( DT.rPdcPompa.getS() );        Serial.println(  DT.rPdcPompa.getS() );
+  dhWifi.HttpRequest( DT.rPdcNightMode.getS() );    Serial.println(  DT.rPdcNightMode.getS() );
+}
+
+/**************************************************************************************************/
+void BoilerSanitaria_Manager()
+{
+  digitalClockDisplay();
+  Serial.println("BoilerSanitaria_Manager");
+  DT.rBoilerSanitaria.set( 0 );
+ 
+  //decido se accendere il boiler solo di notte
+  if ( hour() >= 20 || hour() < 7)
+  {
+    Serial.println("Condizione H1");
+    DT.rBoilerSanitaria.set( 1 );
+  }
+
+  dhWifi.HttpRequest( DT.rBoilerSanitaria.getS() );
+  Serial.println(  DT.rBoilerSanitaria.getS() );
 }
 
 
 /**************************************************************************************************/
 void Minute()
 {
+  digitalClockDisplay();
   Serial.println("Minute timer");
 
-  DT.UpdateT3( dhWifi.HttpRequest("@get(3,99)") );
-  DT.UpdateT4( dhWifi.HttpRequest("@get(4,99)") );
-  DT.UpdateT5( dhWifi.HttpRequest("@get(5,99)") );
+  DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
+  DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
+  DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
 }
+/**************************************************************************************************/
 
-void digitalClockDisplay()
-{
-  // digital clock display of the time
-  Serial.print(hour());
-  printDigits(minute());
-  printDigits(second());
-  Serial.println();
-}
-
-void logToFile ()
-{
-  // make a string that start with a timestamp for assembling the data to log:
-  String dataString;
-  dataString += hour();
-  dataString += ":";
-  dataString += minute();
-  dataString += ":";
-  dataString += second();
-  dataString += " = ";
-
-  // read three sensors and append to the string:
-  for (int analogPin = 0; analogPin < 3; analogPin++) {
-    int sensor = analogRead(analogPin);
-    dataString += String(sensor);
-    if (analogPin < 2) {
-      dataString += ",";  // separate the values with a comma
-    }
-  }
-
-  // open the file. note that only one file can be open at a time,
-  // so you have to close this one before opening another.
-  // The FileSystem card is mounted at the following "/mnt/FileSystema1"
-  File dataFile = FileSystem.open("/mnt/sd/datalog.txt", FILE_APPEND);
-
-  // if the file is available, write to it:
-  if (dataFile) {
-    dataFile.println(dataString);
-    dataFile.close();
-    // print to the serial port too:
-    Serial.println(dataString);
-  }
-  // if the file isn't open, pop up an error:
-  else {
-    Serial.println("error opening datalog.txt");
-  }
-}
 
