@@ -103,7 +103,7 @@ void HistogramView::addText( const T value,
 
     QGraphicsTextItem *text = new QGraphicsTextItem( str );
     text->setPos(pos);
-    pos.setX( pos.x - text->boundingRect().width() ) ;
+   // pos.setX( pos.x - text->boundingRect().width() ) ;
     m_histogramItems->addToGroup(text);
 }
 
