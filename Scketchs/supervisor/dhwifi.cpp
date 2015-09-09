@@ -1,14 +1,36 @@
 #include "dhwifi.h"
 
-void printDigits(int digits){
-    // utility function for digital clock display: prints preceding colon and leading 0
-    Serial.print(":");
-    if(digits < 10)
-        Serial.print('0');
-    Serial.print(digits);
-}
+void  DHwifi::setup( IPAddress ip, IPAddress gateway, IPAddress subnet, String remoteServer )
+    {
+        char ssid[] = "PistoniHomeT";     	// your network SSID (name)
+        char pass[] = "giaco.iren.dario";       	// your network password
+        unsigned int localPort = 2390;      	// local port to listen for UDP packets
 
+	m_host = remoteServer;
 
+        // We start by connecting to a WiFi network
+        Serial.print("Connecting to ");
+        Serial.println(ssid);
+
+        WiFi.config(ip, gateway, subnet);
+        WiFi.begin(ssid, pass);
+
+        while (WiFi.status() != WL_CONNECTED)
+        {
+            delay(500);
+            Serial.print(".");
+        }
+        Serial.println("");
+
+        Serial.print("WiFi connected. ");
+        Serial.println("IP address: ");
+        Serial.println(WiFi.localIP());
+
+        Serial.print("Starting UDP.");
+        udp.begin(localPort);
+        Serial.print("Local port: ");
+        Serial.println(udp.localPort());
+    }
 
 time_t DHwifi::GetSystemTime()
 {
@@ -65,7 +87,8 @@ String DHwifi::HttpRequest( String req )
 
     if (!client.connect(host, httpPort))
     {
-        Serial.println("connection failed");
+	Serial.print( host );
+        Serial.println(" connection failed");
         return "";
     }
 

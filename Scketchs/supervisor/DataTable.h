@@ -5,18 +5,110 @@ String strValue(String data, char separator, int index);
 double strValueD(String data, char separator, int index);
 bool strValueB(String data, char separator, int index);
 
-class cDataTable
+//********************************************************************************************
+class cVar
+{
+ public:
+  int m_t;
+  int m_s;
+  String m_descr;
+  
+  cVar(): 
+  m_t(0),
+  m_s(0)
+  {    
+  }
+  
+  void setup(int t, int s, String descr)
+  {
+    m_t = t;
+    m_s = s;
+    m_descr = descr;    
+  }
+};
+
+//********************************************************************************************
+class cFloat: public cVar
 {
   public:
+  float m_value;
+  
+  cFloat():cVar()
+  {    
+  }
+  
+  void set( float value )
+  {
+    m_value = value;
+  }
+  
+  void setS( String stringlist )
+  {
+    m_value = strValueB(stringlist, ',', m_s);
+    Serial.print(m_descr );
+    Serial.print(":");
+    Serial.println( m_value );
+  }
+  
+   String getS()
+   {
+   return String("@set(") + String(m_t) + "," + String(m_s) + "=" + String(m_value)  + ")";
+   }
+  
+  operator float()
+  {
+    return m_value;
+  }
+ };
+
+ //********************************************************************************************
+class cBool: public cVar
+{
+  public:
+  bool m_value;
+  
+  cBool():cVar()
+  {    
+  }
+  
+  void set( bool value )
+  {
+    m_value = value;
+  }
+  
+  void setS( String stringlist )
+  {
+    m_value = strValueB(stringlist, ',', m_s);
+    Serial.print(m_descr );
+    Serial.print(":");
+    Serial.println( m_value );
+  }
+
+  String getS()
+   {
+   return String("@set(") + String(m_t) + "," + String(m_s) + "=" + String(m_value)  + ")";
+   }
+  
+  operator bool()
+  {
+    return m_value;
+  }
+ };
+ 
+//********************************************************************************************
+class cDataTable
+{
+  enum { T0=0, T1=1, T2=2, T3=3, T4=4, T5=5, T6=6, T7=7 };
+  public:
     // terminal 3
-    float rPDC;
-    float rCool0_Heat1;
-    float rPump;
-    float rNightmode;
-    float r5;
-    float r6;
-    float r7;
-    float r8;
+    cBool rPdc;
+    cBool rPdcCool0_Heat1;
+    cBool rPdcPompa;
+    cBool rPdcNightMode;
+    
+    cBool rPompaPianoPrimo;
+    cBool rPompaPianoTerra;
+    cBool rBoilerSanitaria;
     
     // terminal 4
     float tPufferHi;
@@ -37,25 +129,33 @@ class cDataTable
     bool evCameraD1;
     bool evCameraD2;
 
-    void UpdateT3( String strs)
+    void setup()
     {
-      rPDC = strValueD(strs, ',', 0);
-      rCool0_Heat1 = strValueD(strs, ',', 1);
-      rPump = strValueD(strs, ',', 2);
-      rNightmode = strValueD(strs, ',', 3);
-
-      Serial.print( "DT.rPDC:" );
-      Serial.println( rPDC );
-      Serial.print( "DT.rCool0_Heat1:" );
-      Serial.println( rCool0_Heat1 );
-      Serial.print( "DT.rPump:" );
-      Serial.println( rPump );
-      Serial.print( "DT.rNightmode:" );
-      Serial.println( rNightmode );
+      rPdc.setup            ( T3, 0, "PDC");
+      rPdcCool0_Heat1.setup ( T3, 1, "CoolHeat");
+      rPdcPompa.setup       ( T3, 2, "PdcPompa");
+      rPdcNightMode.setup   ( T3, 3, "PdcNightMode");
+      rPompaPianoPrimo.setup( T3, 4, "PompaPianoPrimo");
+      rPompaPianoTerra.setup( T3, 5, "PompaPianoTerra");
+      rBoilerSanitaria.setup( T3, 6, "BoilerSanitaria");
+    };
+    
+    void UpdateT3( String strs )
+    {
+      Serial.println( "T3" );
+      rPdc.set( strs );
+      rPdcCool0_Heat1.set( strs );
+      rPdcPompa.set( strs );
+      rPdcNightMode.set( strs );
+      
+      rPompaPianoPrimo.set( strs );
+      rPompaPianoTerra.set( strs );
+      rBoilerSanitaria.set( strs );     
     };
     
     void UpdateT4( String strs)
     {
+      Serial.println( "T4" );
       tPufferHi = strValueD(strs, ',', 0);
       tPufferLow = strValueD(strs, ',', 1);
       tInputMixer = strValueD(strs, ',', 2);
@@ -83,6 +183,7 @@ class cDataTable
 
     void UpdateT5( String strs)
     {
+      Serial.println( "T5" );
       evCameraM1 = strValueB(strs, ',', 0);
       evCameraM2 = strValueB(strs, ',', 1);
       evSala1 = strValueB(strs, ',', 2);
@@ -111,6 +212,8 @@ class cDataTable
     };
 };
 
+//********************************************************************************************
+// scompatta una lista in campi
 String strValue(String data, char separator, int index)
 {
   int found = 0;

@@ -27,12 +27,7 @@ EthernetServer server(80);
 #define ETHERNET_SELECT 10
 
 void setup()
-{ 
-  Serial.begin(9600);
-  while(!Serial);
-  
-  OUTLN("System Start");
-  
+{
   T[1].setup(0, 1, &mySerial );  // -
   T[2].setup(0, 2, &mySerial );  // --
   T[3].setup(0, 3, &mySerial );  // rele' pdc
@@ -40,6 +35,9 @@ void setup()
   T[5].setup(0, 5, &mySerial );  // rele pavimento
   T[6].setup(0, 6, &mySerial );  // --
   T[7].setup(0, 7, &mySerial );  // --
+
+  Serial.begin(9600);
+  OUTLN("System Start");
 
   //inifile ************************************************************
   pinMode(ETHERNET_SELECT, OUTPUT);
@@ -50,26 +48,84 @@ void setup()
   server.begin();
 
   // give the sensor and Ethernet shield time to set up:
-  delay(2000);
+  delay(1000);
 
-  OUT("server is at ");
+  OUTLN("server is at ");
   OUTLN(Ethernet.localIP());
+  
+  pinMode(8, INPUT);
+  pinMode(9, OUTPUT);
 }
+
+int count = 0;
+unsigned int lastDataLogging = 0;
 
 void loop()
 {
-  for (int t = 1; t < 8; t++)
+  listenForEthernetClients();
+  count++;
+  if ( T[1].checkTiming(2000) )
   {
-    if ( T[t].checkTiming(2000) )
-    {
-      T[t].sendRequest();
-      T[t].waitData( 100 );
-    };
-    
-    listenForEthernetClients();
+    T[1].sendRequest();
+    T[1].waitData( 100 );
   };
-  
-  delay(10);
+
+  listenForEthernetClients();
+
+  if ( T[2].checkTiming(2000) )
+  {
+    T[2].sendRequest();
+    T[2].waitData( 100 );
+  };
+
+  listenForEthernetClients();
+
+  if ( T[3].checkTiming(2000) )
+  {
+    T[3].sendRequest();
+    T[3].waitData( 100 );
+  };
+
+  listenForEthernetClients();
+
+  if ( T[4].checkTiming(2000) )
+  {
+    T[4].sendRequest();
+    T[4].waitData( 100 );
+  };
+
+  listenForEthernetClients();
+
+  if ( T[5].checkTiming(10000) )
+  {
+    T[5].sendRequest();
+    T[5].waitData( 100 );
+  };
+
+  listenForEthernetClients();
+
+  if ( T[6].checkTiming(10000) )
+  {
+    T[6].sendRequest();
+    T[6].waitData( 100 );
+  };
+
+  listenForEthernetClients();
+
+  if ( T[7].checkTiming(10000) )
+  {
+    T[7].sendRequest();
+    T[7].waitData( 100 );
+  };
+
+  listenForEthernetClients();
+/*
+  OUT(".");
+  OUT( millis() );
+  OUT( " freeMemory()=" );
+  OUTLN( freeMemory() );
+  delay(200);
+*/
 }
 
 

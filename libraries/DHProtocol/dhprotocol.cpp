@@ -35,8 +35,8 @@ void DHProtocol::setup( int myId, int otherId, SoftwareSerial *myserial)
   }
   pinMode(13, OUTPUT);
 
-  lastRecived=0;
-  lastRequest=0;
+  lastRecived = 0;
+  lastRequest = 0;
   swSerial->listen();
 }
 
@@ -95,7 +95,7 @@ void DHProtocol::_writeHeader()
 
 bool DHProtocol::_waitHeaderAndData( int msec )
 {
-  while ( _waitData( msec ) )
+  if ( _waitData( msec ) )
   {
     if ( _readByte() == '#')
     {
@@ -130,6 +130,7 @@ void DHProtocol::sendRequest( )
 {
   _writeHeader();
 
+  OUTLN(" ");
   OUT( "sendRequest: " );
   OUT('#');
   OUT(m_id);
@@ -145,7 +146,7 @@ void DHProtocol::sendRequest( )
   }
 
   _writeByte('$');
-  OUTLN('$');
+  OUT('$ ');
   lastRequest = millis();
 }
 
@@ -210,33 +211,41 @@ bool DHProtocol::waitData( int timeout)
 {
   bool r = false;
   byte b;
-  if( millis() - lastRecived > 60000)
-  {    
-     for (int i = 0; i < 24 ; i++)
-     {
-      sensor[i] = 0;
-     }
-  }
+ 
 
   if ( _waitHeaderAndData( timeout ))
   {
+    short temp[24];
     for (int i = 0; i < 24 ; i++)
     {
-      sensor[i] = _readShort();
-      OUT( sensor[i] );
-      OUT(",");
+      temp[i] = _readShort();
     }
 
     // verifico il finale
     if ( _readByte() == '$')
     {
-      OUTLN("$");
+      for (int i = 0; i < 24 ; i++)
+      {
+        sensor[i] = temp[i];
+        OUT( sensor[i] );
+        OUT(",");
+      }
+      OUT("$ ");
       r = true;
       lastRecived = millis();
     }
   }
+  else if ( millis() - lastRecived > 60000)
+  {
+    OUTLN("Timeout");
+    for (int i = 0; i < 24 ; i++)
+    {
+      sensor[i] = 0; 
+      
+    }
+  }
 
- //clear buffer
+  //clear buffer
   while ( swSerial->available() ) swSerial->read();
 
   return r;
