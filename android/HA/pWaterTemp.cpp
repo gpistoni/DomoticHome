@@ -72,6 +72,7 @@ void pWaterTemp::onValueCh()
 void pWaterTemp::onValueChagned(pWaterTempData data)
 {
     qDebug() << "onValueChagned";
+    qDebug() << data.values["val0"];
 
     std::map<QString,double>::iterator iter = data.values.begin();
     for (size_t i=0; i<m_LcdNumber.size() && iter!= data.values.end(); i++ )

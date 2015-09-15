@@ -219,6 +219,8 @@ void HistogramView::draw( QSize sz )
     QRectF rectSc = m_histogramItems->boundingRect();
     scene()->setSceneRect(rectSc);
 
+    setRenderHint(QPainter::HighQualityAntialiasing, true);
+
     assert(scene()->sceneRect() == sceneRect());
 }
 

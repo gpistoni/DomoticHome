@@ -35,6 +35,7 @@ private slots:
 
 private:
     int num_pages;
+
     std::shared_ptr<pMenu>       m_pMenu;
     std::shared_ptr<pAirTemp>    m_pAirTemp;
     std::shared_ptr<pWaterTemp>  m_pWaterTemp;

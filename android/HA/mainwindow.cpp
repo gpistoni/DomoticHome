@@ -68,5 +68,4 @@ void MainWindow::on_pageIndexBar_valueChanged(int value)
 
 void MainWindow::on_MainWindow_destroyed()
 {
-
 }
