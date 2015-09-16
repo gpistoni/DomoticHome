@@ -1,5 +1,3 @@
-#include <dhwifi.h>
-
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 #include <Time.h>
@@ -8,6 +6,7 @@
 
 #include <FileIO.h>
 
+#include "dhwifi.h"
 #include "DataTable.h"
 #include "functions.h"
 

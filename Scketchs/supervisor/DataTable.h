@@ -1,100 +1,6 @@
 #pragma once
+#include "vars.h"
 
-
-String strValue(String data, char separator, int index);
-double strValueD(String data, char separator, int index);
-bool strValueB(String data, char separator, int index);
-
-//********************************************************************************************
-class cVar
-{
- public:
-  int m_t;
-  int m_s;
-  String m_descr;
-  
-  cVar(): 
-  m_t(0),
-  m_s(0)
-  {    
-  }
-  
-  void setup(int t, int s, String descr)
-  {
-    m_t = t;
-    m_s = s;
-    m_descr = descr;    
-  }
-};
-
-//********************************************************************************************
-class cFloat: public cVar
-{
-  public:
-  float m_value;
-  
-  cFloat():cVar()
-  {    
-  }
-  
-  void set( float value )
-  {
-    m_value = value;
-  }
-  
-  void setS( String stringlist )
-  {
-    m_value = strValueB(stringlist, ',', m_s);
-    Serial.print(m_descr );
-    Serial.print(":");
-    Serial.println( m_value );
-  }
-  
-   String getS()
-   {
-   return String("@set(") + String(m_t) + "," + String(m_s) + "=" + String(m_value)  + ")";
-   }
-  
-  operator float()
-  {
-    return m_value;
-  }
- };
-
- //********************************************************************************************
-class cBool: public cVar
-{
-  public:
-  bool m_value;
-  
-  cBool():cVar()
-  {    
-  }
-  
-  void set( bool value )
-  {
-    m_value = value;
-  }
-  
-  void setS( String stringlist )
-  {
-    m_value = strValueB(stringlist, ',', m_s);
-    Serial.print(m_descr );
-    Serial.print(":");
-    Serial.println( m_value );
-  }
-
-  String getS()
-   {
-   return String("@set(") + String(m_t) + "," + String(m_s) + "=" + String(m_value)  + ")";
-   }
-  
-  operator bool()
-  {
-    return m_value;
-  }
- };
- 
 //********************************************************************************************
 class cDataTable
 {
@@ -143,14 +49,14 @@ class cDataTable
     void UpdateT3( String strs )
     {
       Serial.println( "T3" );
-      rPdc.set( strs );
-      rPdcCool0_Heat1.set( strs );
-      rPdcPompa.set( strs );
-      rPdcNightMode.set( strs );
+      rPdc.setS( strs );
+      rPdcCool0_Heat1.setS( strs );
+      rPdcPompa.setS( strs );
+      rPdcNightMode.setS( strs );
       
-      rPompaPianoPrimo.set( strs );
-      rPompaPianoTerra.set( strs );
-      rBoilerSanitaria.set( strs );     
+      rPompaPianoPrimo.setS( strs );
+      rPompaPianoTerra.setS( strs );
+      rBoilerSanitaria.setS( strs );     
     };
     
     void UpdateT4( String strs)

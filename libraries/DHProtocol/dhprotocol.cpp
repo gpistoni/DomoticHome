@@ -99,7 +99,7 @@ bool DHProtocol::_waitHeaderAndData( int msec )
   {
     if ( _readByte() == '#')
     {
-      OUT("recived: #");
+      OUT(" Recived: #");
 
       byte sendId = _readByte();
       OUT(sendId);
@@ -237,7 +237,7 @@ bool DHProtocol::waitData( int timeout)
   }
   else if ( millis() - lastRecived > 60000)
   {
-    OUTLN("Timeout");
+    OUT(" Timeout ");
     for (int i = 0; i < 24 ; i++)
     {
       sensor[i] = 0; 

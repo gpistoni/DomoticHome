@@ -1,7 +1,7 @@
 #ifndef DHREQUETS_H
 #define DHREQUETS_H
 
-#include <QString.h>
+//#include <QString.h>
 #include <QUrl>
 
 class DHRequets
