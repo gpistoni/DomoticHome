@@ -16,7 +16,6 @@ cDataTable DT;
 
 void setup()
 {
-  //Bridge.begin();
   Serial.begin(115200);
   FileSystem.begin();
   Serial.println();
