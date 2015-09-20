@@ -8,17 +8,17 @@
 class CDht
 {
   private:
-    DHT dht[8];
+    DHT dht[10];
 
   public:
     int nums;
 
-    double h[8];
-    double t[8];
-    double hic[8];
+    double h[10];
+    double t[10];
+    double hic[10];
 
   public:
-    void setup(int in0, int in1=0,int in2=0,int in3=0, int in4=0, int in5=0, int in6=0, int in7=0 );
+    void setup(int in0, int in1=0,int in2=0,int in3=0, int in4=0, int in5=0, int in6=0, int in7=0, int in8=0 );
     void readvalues();
 };
 

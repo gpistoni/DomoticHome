@@ -26,7 +26,6 @@ void setup()
   Probes.setup(2,3,4,5,6,7,8,9);                        // 4 temp
  
   Serial.begin(9600);                     // disabilito le seriali 
-  while (!Serial); //wait
 
   Serial.print( "Setup-- SLAVE ID: " );
   Serial.print( Slave.m_id );
