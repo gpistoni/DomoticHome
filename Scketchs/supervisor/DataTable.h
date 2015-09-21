@@ -17,38 +17,57 @@ class cDataTable
     cBool rBoilerSanitaria;
     
     // terminal 4
-    float tPufferHi;
-    float tPufferLow;
-    float tInputMixer;
-    float tReturnFireplace;
-    float tReturnFloor;
-    float tInletFloor;
-    float tExternal;
+    cFloat tPufferHi;
+    cFloat tPufferLow;
+    cFloat tInputMixer;
+    cFloat tReturnFireplace;
+    cFloat tReturnFloor;
+    cFloat tInletFloor;
+    cFloat tExternal;
     
      // terminal 5
-    bool evCameraM1;
-    bool evCameraM2;
-    bool evSala1;
-    bool evSala2;
-    bool evCucina;
-    bool evCameraS;
-    bool evCameraD1;
-    bool evCameraD2;
+    cBool evCameraM1;
+    cBool evCameraM2;
+    cBool evSala1;
+    cBool evSala2;
+    cBool evCucina;
+    cBool evCameraS;
+    cBool evCameraD1;
+    cBool evCameraD2;
 
     void setup()
     {
-      rPdc.setup            ( T3, 0, "PDC");
-      rPdcCool0_Heat1.setup ( T3, 1, "CoolHeat");
-      rPdcPompa.setup       ( T3, 2, "PdcPompa");
-      rPdcNightMode.setup   ( T3, 3, "PdcNightMode");
-      rPompaPianoPrimo.setup( T3, 4, "PompaPianoPrimo");
-      rPompaPianoTerra.setup( T3, 5, "PompaPianoTerra");
-      rBoilerSanitaria.setup( T3, 6, "BoilerSanitaria");
+      rPdc.setup              ( T3, 0, "PDC");
+      rPdcCool0_Heat1.setup   ( T3, 1, "CoolHeat");
+      rPdcPompa.setup         ( T3, 2, "PdcPompa");
+      rPdcNightMode.setup     ( T3, 3, "PdcNightMode");
+      rPompaPianoPrimo.setup  ( T3, 4, "PompaPianoPrimo");
+      rPompaPianoTerra.setup  ( T3, 5, "PompaPianoTerra");
+      rBoilerSanitaria.setup  ( T3, 6, "BoilerSanitaria");
+
+      tPufferHi.setup         ( T4, 0, "tPufferHi");
+      tPufferLow.setup        ( T4, 1, "tPufferLow");
+      tInputMixer.setup       ( T4, 2, "tInputMixer");
+      tReturnFireplace.setup  ( T4, 3, "tReturnFireplace");
+      tReturnFloor.setup      ( T4, 4, "tReturnFloor");
+      tInletFloor.setup       ( T4, 5, "tInletFloor");
+      tExternal.setup         ( T4, 6, "tExternal");
+      
+      evCameraM1.setup        ( T5, 0, "evCameraM1");
+      evCameraM2.setup        ( T5, 1, "evCameraM2");
+      evSala1.setup           ( T5, 2, "evSala1");
+      evSala2.setup           ( T5, 3, "evSala2");
+      evCucina.setup          ( T5, 4, "evCucina");
+      evCameraS.setup         ( T5, 5, "evCameraS");
+      evCameraD1.setup        ( T5, 6, "evCameraD1");
+      evCameraD2.setup        ( T5, 7, "evCameraD2");
     };
     
     void UpdateT3( String strs )
     {
-      Serial.println( "T3" );
+      Serial.print( "T3: " );      
+      Serial.println( strs);
+      
       rPdc.setS( strs );
       rPdcCool0_Heat1.setS( strs );
       rPdcPompa.setS( strs );
@@ -61,60 +80,31 @@ class cDataTable
     
     void UpdateT4( String strs)
     {
-      Serial.println( "T4" );
-      tPufferHi = strValueD(strs, ',', 0);
-      tPufferLow = strValueD(strs, ',', 1);
-      tInputMixer = strValueD(strs, ',', 2);
-      tReturnFireplace = strValueD(strs, ',', 3);
-      tReturnFloor = strValueD(strs, ',', 4);
-      tInletFloor = strValueD(strs, ',', 5);
-      tExternal = strValueD(strs, ',', 6);
-
-
-      Serial.print( "DT.tPufferHi:" );
-      Serial.println( tPufferHi );
-      Serial.print( "DT.tPufferLow:" );
-      Serial.println( tPufferLow );
-      Serial.print( "DT.tInputMixer:" );
-      Serial.println( tInputMixer );
-      Serial.print( "DT.tReturnFireplace:" );
-      Serial.println( tReturnFireplace );
-      Serial.print( "DT.tReturnFloor:" );
-      Serial.println( tReturnFloor );
-      Serial.print( "DT.tInletFloor:" );
-      Serial.println( tInletFloor );
-      Serial.print( "DT.tExternal:" );
-      Serial.println( tExternal );
+      Serial.print( "T4: " );      
+      Serial.println( strs);
+      
+      tPufferHi.setS( strs );
+      tPufferLow.setS( strs );
+      tInputMixer.setS( strs );
+      tReturnFireplace.setS( strs );
+      tReturnFloor.setS( strs );
+      tInletFloor.setS( strs );
+      tExternal.setS( strs );
     };
 
     void UpdateT5( String strs)
     {
-      Serial.println( "T5" );
-      evCameraM1 = strValueB(strs, ',', 0);
-      evCameraM2 = strValueB(strs, ',', 1);
-      evSala1 = strValueB(strs, ',', 2);
-      evSala2 = strValueB(strs, ',', 3);
-      evCucina = strValueB(strs, ',', 4);
-      evCameraS = strValueB(strs, ',', 5);
-      evCameraD1 = strValueB(strs, ',', 6);
-      evCameraD2 = strValueB(strs, ',', 7);
-    
-      Serial.print( "DT.evCameraM1:" );
-      Serial.println( evCameraM1 );
-      Serial.print( "DT.evCameraM2:" );
-      Serial.println( evCameraM2 );
-      Serial.print( "DT.evSala1:" );
-      Serial.println( evSala1 );
-      Serial.print( "DT.evSala2:" );
-      Serial.println( evSala2 );
-      Serial.print( "DT.evCucina:" );
-      Serial.println( evCucina );
-      Serial.print( "DT.evCameraS:" );
-      Serial.println( evCameraS );
-      Serial.print( "DT.evCameraD1:" );
-      Serial.println( evCameraD1 );
-      Serial.print( "DT.evCameraD2:" );
-      Serial.println( evCameraD2 );
+      Serial.print( "T5: " );      
+      Serial.println( strs);
+      
+      evCameraM1.setS( strs );
+      evCameraM2.setS( strs );
+      evSala1.setS( strs );
+      evSala2.setS( strs );
+      evCucina.setS( strs );
+      evCameraS.setS( strs );
+      evCameraD1.setS( strs );
+      evCameraD2.setS( strs );
     };
 };
 

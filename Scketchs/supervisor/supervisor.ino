@@ -20,7 +20,7 @@ void setup()
   FileSystem.begin();
   Serial.println();
 
-  IPAddress ip(192, 168, 1, 201);
+  IPAddress ip(192, 168, 0, 201);
   IPAddress gateway(192, 168, 0, 254);
   IPAddress subnet(255, 255, 255, 0);
 
@@ -66,6 +66,17 @@ void Daily()
 void Hourly()
 {
   Serial.println("Hourly timer");
+}
+
+/**************************************************************************************************/
+void Minute()
+{
+  digitalClockDisplay();
+  Serial.println("Minute timer");
+
+  DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
+  DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
+  DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
 }
 
 
@@ -128,7 +139,7 @@ void BoilerSanitaria_Manager()
   //decido se accendere il boiler solo di notte
   if ( hour() >= 20 || hour() < 7)
   {
-    Serial.println("Condizione H1");
+    Serial.println("Condizione B1");
     DT.rBoilerSanitaria.set( 1 );
   }
 
@@ -137,16 +148,5 @@ void BoilerSanitaria_Manager()
 }
 
 
-/**************************************************************************************************/
-void Minute()
-{
-  digitalClockDisplay();
-  Serial.println("Minute timer");
-
-  DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
-  DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
-  DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
-}
-/**************************************************************************************************/
 
 
