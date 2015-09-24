@@ -28,7 +28,7 @@ public:
         line = readLine( client );
         if (line.length() > 0)
         {
-            if (line.contains("@data"))
+            if (line.contains("@val"))
             {
                 for (int i=0; i<10; i++)
                 {
@@ -62,7 +62,7 @@ public:
                 client->write(block);
                 writeLine( client, QDateTime::currentDateTime().toString() );
             }
-            //else
+             else
             {
                writeLine( client, QDateTime::currentDateTime().toString() );
             }

@@ -30,7 +30,9 @@ HEADERS  += mainwindow.h \
     css.h \
     dhrequets.h \
     HistogramView.h \
-    Lib/valueWidget.h
+    Lib/valueWidget.h \
+    workerHttp.h \
+    data.h
 
 FORMS    += mainwindow.ui \
     pWaterTemp.ui \

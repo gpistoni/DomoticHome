@@ -37,13 +37,6 @@ pWaterTemp::pWaterTemp(QWidget *parent) :
         val->init( QString("label_%1").arg( QString::number(i)), "@get(2,0)" );
         ui->gridLayout->addWidget( val, i+1, 0, 1, 1);
     }
-
-    connect(&m_work, &WorkerThread::valueChanged, this, &pWaterTemp::onValueChagned );
-
-   // Setup callback for cleanup when it finishes
-    connect(&m_work, SIGNAL(finished()), &m_work, SLOT(deleteLater()));
-
-    m_work.start();
 }
 
 pWaterTemp::~pWaterTemp()
@@ -56,9 +49,9 @@ void pWaterTemp::onValueCh()
     qDebug() << "onValueCh";
 }
 
-void pWaterTemp::onValueChagned(pWaterTempData data)
+void pWaterTemp::onValueChagned()
 {
-    qDebug() << "onValueChagned";
+/*    qDebug() << "onValueChagned";
     qDebug() << data.values["val0"];
 
     std::map<QString,double>::iterator iter = data.values.begin();
@@ -71,6 +64,7 @@ void pWaterTemp::onValueChagned(pWaterTempData data)
     }
 
     ui->label_footer->setText( QString::number(data.values[0]) );
+    */
 }
 
 void pWaterTemp::on_pushUpdate_clicked()

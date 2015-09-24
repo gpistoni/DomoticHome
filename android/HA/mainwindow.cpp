@@ -33,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //*****************************************
     ui->pageIndexBar->setMaximum( num_pages - 1 );
     ui->pageIndexBar->setValue(0);
+
+    m_work.start();
 }
 
 MainWindow::~MainWindow()
