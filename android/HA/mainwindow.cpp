@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QPixmap>
+#include <QDesktopWidget>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -68,4 +70,10 @@ void MainWindow::on_pageIndexBar_valueChanged(int value)
 
 void MainWindow::on_MainWindow_destroyed()
 {
+}
+
+void MainWindow::on_pushButton_Screenshot_clicked()
+{
+    QPixmap pm( QPixmap::grabWidget( this ) );
+    pm.save("\\pm.bmp");
 }

@@ -11,7 +11,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets network
 TARGET = HA_1.00
 TEMPLATE = app
 
-
 SOURCES += main.cpp\
         mainwindow.cpp \
     pAirTemp.cpp \
@@ -19,7 +18,8 @@ SOURCES += main.cpp\
     pMenu.cpp \
     pWork.cpp \
     dhrequets.cpp \
-    HistogramView.cpp
+    HistogramView.cpp \
+    Lib/valueWidget.cpp
 
 HEADERS  += mainwindow.h \
     pAirTemp.h \
@@ -29,7 +29,8 @@ HEADERS  += mainwindow.h \
     css.h \
     css.h \
     dhrequets.h \
-    HistogramView.h
+    HistogramView.h \
+    Lib/valueWidget.h
 
 FORMS    += mainwindow.ui \
     pWaterTemp.ui \
@@ -39,7 +40,7 @@ FORMS    += mainwindow.ui \
 
 CONFIG += mobility \
 
-QMAKE_CXXFLAGS += -std=c++11
+#QMAKE_CXXFLAGS += -std=c++11
 
 MOBILITY =
 

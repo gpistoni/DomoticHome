@@ -103,11 +103,7 @@ void HistogramView::addText( const T value,
 
     QGraphicsTextItem *text = new QGraphicsTextItem( str );
     text->setPos(pos);
-<<<<<<< HEAD
-   // pos.setX( pos.x - text->boundingRect().width() ) ;
-=======
     //pos.setX( pos.x - text->boundingRect().width() ) ;
->>>>>>> a
     m_histogramItems->addToGroup(text);
 }
 
@@ -135,7 +131,7 @@ void HistogramView::addGridLine(  const double value, tAxis ax,  const QSize &sz
     {
         p.moveTo( m_Border/2,  PosY(value,sz) );
         p.lineTo( sz.width() - m_Border, PosY(value,sz)  );
-        addText( value, QPointF( sz.width() - 2 * m_Border, PosY(value,sz) - 20 ));
+        addText( value, QPointF( sz.width() - 3 * m_Border, PosY(value,sz) - 20 ));
     }
     else
     {
@@ -164,7 +160,7 @@ void HistogramView::draw( QSize sz )
     QGraphicsScene *sc = scene();
     assert(sc);
 
-    m_xRatio = 1.0 * ( sz.width() - 2*m_Border ) / ( m_maxX - m_minX );
+    m_xRatio = 1.0 * ( sz.width() - 4*m_Border ) / ( m_maxX - m_minX );
     m_yRatio = 1.0 * ( sz.height() - 2*m_Border ) / ( m_maxY - m_minY );
 
     // eleimino la vecchia scena
@@ -189,29 +185,15 @@ void HistogramView::draw( QSize sz )
     for (int i=0; i<nlines; i++)
         addGridLine(  AutoRound( m_minY + (m_maxY-m_minY)*i/nlines  ), H, sz );
 
-    //vertical line histogram
-    /*
- *   const float y2 = sz.height()-m_Border;
+    //vertical line histogram from zero
+    const float y2 = PosY (0, sz);
     for (auto ih: m_histo)
     {
         const float x1 = PosX (ih.first);
         const float y1 = PosY (ih.second, sz);
         if (y1 != 0)
         {
-            QGraphicsLineItem *bar = new QGraphicsLineItem(QLineF(x1, y2, x1, y1));
-            bar->setPen(m_measurePen);
-            m_histogramItems->addToGroup(bar);
-        }
-    }*/
-
-    //2d point circle
-    for (auto ih: m_histo)
-    {
-        const float x1 = PosX (ih.first);
-        const float y1 = PosY (ih.second, sz);
-        if (y1 != 0)
-        {
-            QGraphicsEllipseItem *pt = new QGraphicsEllipseItem( QRectF( x1-1, y1-1,2,2) );
+            QGraphicsLineItem *pt = new QGraphicsLineItem( QLineF(x1, y2, x1, y1) );
             pt->setPen(m_measurePen);
             m_histogramItems->addToGroup(pt);
         }

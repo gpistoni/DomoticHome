@@ -10,6 +10,7 @@
 #include <QStringList>
 
 #include "dhrequets.h"
+#include "lib/valueWidget.h"
 
 namespace Ui {
 class WaterTemp;
@@ -108,6 +109,7 @@ signals:
     void valueCh();
 };
 
+
 //*************************************************************************************************************
 class pWaterTemp : public QScrollArea
 {
@@ -118,9 +120,8 @@ public:
     ~pWaterTemp();
 
 private:
-    std::vector<std::shared_ptr<QLabel>>        m_Title;
-    std::vector<std::shared_ptr<QLabel>>        m_Labels;
-    std::vector<std::shared_ptr<QLCDNumber>>    m_LcdNumber;
+    std::vector< QLabel* >         m_Title;
+    std::vector< ValueWidget* >    m_valueNumber;
 
     Ui::WaterTemp *ui;
 

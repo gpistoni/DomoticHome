@@ -33,6 +33,8 @@ private slots:
 
     void on_MainWindow_destroyed();
 
+    void on_pushButton_Screenshot_clicked();
+
 private:
     int num_pages;
 
