@@ -31,7 +31,7 @@ protected:
     void run();
     QString readLine(QTcpSocket *socket );
     int waitForInput( QTcpSocket *socket );
-    void writeLine( QTcpSocket *client, const QString &line );
+    bool writeLine( QTcpSocket *client, const QString &line );
 private:
     bool mRunThread;
 };

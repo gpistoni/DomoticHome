@@ -55,7 +55,7 @@ QString SocketThreadBase::readLine(QTcpSocket *socket )
 }
 
 
-void SocketThreadBase::writeLine(QTcpSocket *socket, const QString &line)
+bool SocketThreadBase::writeLine(QTcpSocket *socket, const QString &line)
 {
     if (line.length() > 0)
     {
@@ -75,6 +75,7 @@ void SocketThreadBase::writeLine(QTcpSocket *socket, const QString &line)
                 qDebug() << "Unknown identity - ";
             }
             qDebug() <<  "writeLine: the write to the socket failed\n";
+            return false;
         }
     }
 }
@@ -86,27 +87,32 @@ void SocketThreadBase::writeLine(QTcpSocket *socket, const QString &line)
 */
 void GenericServer::run()
 {
-    QHostAddress serverAddr( mIP );
-    QTcpServer server;
-    if (server.listen(serverAddr, mPort))
+    while ( getRunThread() )
     {
-        qDebug() << "EchoServer::run: listen() succeeded\n";
-        while (server.isListening() && getRunThread())
+        QHostAddress serverAddr( mIP );
+        QTcpServer server;
+        if (server.listen(serverAddr, mPort))
         {
-            if (server.waitForNewConnection(100))
+            qDebug() << "TCPServer listening succeeded\n";
+            while (server.isListening() && getRunThread())
             {
-                qDebug() << "EchoServer::run: got a TCP connection";
-                QTcpSocket *client = server.nextPendingConnection();
-                Reply( client );
-                client->close();
-            }
-            else {
-                Sleep( 100 );
-            }
-        } // while
-    }
-    else {
-        qDebug() << "EchoServer::run: listen operation failed\n";
+                if (server.waitForNewConnection(100))
+                {
+                    qDebug() << "TCPServer got a TCP connection";
+                    QTcpSocket *client = server.nextPendingConnection();
+                    Reply( client );
+                    if ( client->state() != QAbstractSocket::ConnectedState )
+                        server.close();
+                    client->close();
+                }
+                else {
+                    Sleep( 100 );
+                }
+            } // while
+        }
+        else {
+            qDebug() << "TCPServer listen operation failed\n";
+        }
     }
 }
 
