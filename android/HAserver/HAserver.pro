@@ -1,6 +1,6 @@
 QT       += core network
 
-TARGET = HAServer_1.01
+TARGET = HAServer_1.02
 
 HEADERS += \
     lib/SocketThreadBase.h

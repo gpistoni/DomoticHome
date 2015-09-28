@@ -32,9 +32,9 @@ public:
         {
             if (line.contains("@val"))
             {
+                writeLine( client, QString("HTTP/1.1 200 OK\r\nContent-Type: text/html \r\n\r\n") );
                 for (int i=0; i<10; i++)
                 {
-                    if (i!=0)  writeLine( client, "\n");
                     for (int j=0; j<10; j++)
                     {
                         if (j!=0)  writeLine( client, ",");
@@ -44,9 +44,9 @@ public:
             }
             else if (line.contains("@labels"))
             {
+                writeLine( client, QString("HTTP/1.1 200 OK\r\nContent-Type: text/html \r\n\r\n") );
                 for (int i=0; i<10; i++)
                 {
-                    if (i!=0)  writeLine( client, "\n");
                     for (int j=0; j<10; j++)
                     {
                         if (j!=0)  writeLine( client, ",");
@@ -97,9 +97,9 @@ public:
                                            "</html>""\r\n"
                                            ));
             }
-             else
+            else
             {
-               writeLine( client, QDateTime::currentDateTime().toString() );
+                writeLine( client, QDateTime::currentDateTime().toString() );
             }
 
         }
@@ -111,22 +111,19 @@ public:
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication a(argc, argv);
+    QGuiApplication app(argc, argv);
 
     qDebug() << "Primary screen:" << QGuiApplication::primaryScreen()->name();
 
-    //const QString IP =  "127.0.0.1";
-    const QString IP =  "192.168.56.1";
+    const QString IP =  "127.0.0.1";
+    //const QString IP =  "192.168.56.1";
     const ushort port = 9999;
 
     myServer server(IP, port );
     server.startThread();
 
-    //EchoClient client(IP, port );
-    //client.startThread();
-    while (1) // ! client.isDone())
-    {
-        Sleep( 100 );
-    }
-    return 0;
+    QWindow window;
+    window.show();
+
+    return app.exec();
 }

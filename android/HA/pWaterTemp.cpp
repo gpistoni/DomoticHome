@@ -70,6 +70,6 @@ void pWaterTemp::onValueChagned()
 void pWaterTemp::on_pushUpdate_clicked()
 {
     //QString res = DHRequets::sendRequest(  QUrl(QString("http://ip.jsontest.com/")) );
-    QString res = DHRequets::sendRequest(  QUrl(QString("https://www.google.com")) );
-    ui->label_footer->setText( res );
+    //DHRequets::sendRequest(  QUrl(QString("https://www.google.com")) );
+  //  ui->label_footer->setText( res );
 }

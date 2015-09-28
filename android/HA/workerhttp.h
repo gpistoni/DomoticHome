@@ -2,6 +2,15 @@
 #include "data.h"
 #include <QThread>
 #include "dhrequets.h"
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QByteArray>
+#include <QNetworkReply>
+#include <QMessageBox>
+#include <QEventLoop>
+#include "data.h"
+
+extern CData g_data;
 
 
 //*************************************************************************************************************
@@ -9,14 +18,18 @@ class WorkerThread : public QThread
 {
     Q_OBJECT
 
+    QNetworkAccessManager * m_mgr;
+
 public:
     WorkerThread()
     {
-       getDataLabels();
+        getDataLabels();
     }
 
     void run()
     {
+        m_mgr = new QNetworkAccessManager( this );
+
         while(1)
         {
             msleep(1000);
@@ -32,17 +45,25 @@ public:
 
     void getDataValues()
     {
-       QString str = DHRequets::sendRequest(  QUrl(QString("http://127.0.0.1/")) );
+        QByteArray arr = sendRequest(  QUrl(QString("http://127.0.0.1:9999/@value")) );
 
-       QStringList list = str.split(".", QString::SkipEmptyParts);
-      // data.values["val0"] = list[0].toDouble();
+        QString str(arr);
+        QStringList list = str.split(",", QString::SkipEmptyParts);
 
-      // return data;
+        for( int i=0; i<list.size(); i++ )
+            g_data.Set(i, list.at(i).toDouble() );
+
+        str ="";
 
 
- //      DHRequets::sendRequest(  QUrl(QString("http://ip.jsontest.com/")) );
+        // data.values["val0"] = list[0].toDouble();
 
-       /*
+        // return data;
+
+
+        //      DHRequets::sendRequest(  QUrl(QString("http://ip.jsontest.com/")) );
+
+        /*
 
         QString str;
          // create custom temporary event loop on stack
@@ -77,6 +98,40 @@ public:
             delete reply;
         }*/
     }
+
+
+    QByteArray sendRequest( QUrl url)
+    {
+        QByteArray ret;
+
+        // create custom temporary event loop on stack
+        QEventLoop eventLoop;
+
+        // "quit()" the event-loop, when the network request "finished()"
+        QNetworkAccessManager mgr;
+        QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+
+        // the HTTP request
+        QNetworkRequest req( url );
+        QNetworkReply *reply = mgr.get(req);
+        eventLoop.exec(); // blocks stack until "finished()" has been called
+
+        if (reply->error() == QNetworkReply::NoError)
+        {
+            //success
+            qDebug() << "Success" <<reply->readAll();
+            ret = reply->readAll();
+            delete reply;
+
+        }
+        else {
+            //failure
+            qDebug() << "Failure" <<reply->errorString();
+            delete reply;
+        }
+        return ret;
+    }
+
 
     // Define signal:
 signals:

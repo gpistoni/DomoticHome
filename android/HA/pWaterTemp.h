@@ -17,8 +17,6 @@ class WaterTemp;
 class WorkerThread;
 }
 
-
-
 //*************************************************************************************************************
 class pWaterTemp : public QScrollArea
 {
