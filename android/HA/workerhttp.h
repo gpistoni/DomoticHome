@@ -23,24 +23,32 @@ class WorkerThread : public QThread
 public:
     WorkerThread()
     {
-        getDataLabels();
     }
 
     void run()
     {
         m_mgr = new QNetworkAccessManager( this );
+        msleep(1000);
+        getDataLabels();
 
         while(1)
         {
             msleep(1000);
             getDataValues();
+            getDataLabels();
             emit valueChanged();
-            emit valueCh();
         }
     }
 
     void getDataLabels()
     {
+        QByteArray arr = sendRequest(  QUrl(QString("http://127.0.0.1:9999/@label")) );
+
+        QString str(arr);
+        QStringList list = str.split(",", QString::SkipEmptyParts);
+
+        for( int i=0; i<list.size(); i++ )
+            g_data.SetS(i, list.at(i) );
     }
 
     void getDataValues()
@@ -52,52 +60,8 @@ public:
 
         for( int i=0; i<list.size(); i++ )
             g_data.Set(i, list.at(i).toDouble() );
-
-        str ="";
-
-
-        // data.values["val0"] = list[0].toDouble();
-
-        // return data;
-
-
-        //      DHRequets::sendRequest(  QUrl(QString("http://ip.jsontest.com/")) );
-
-        /*
-
-        QString str;
-         // create custom temporary event loop on stack
-        QEventLoop eventLoop;
-
-        // "quit()" the event-loop, when the network request "finished()"
-        QNetworkAccessManager mgr;
-        QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
-
-        // the HTTP request
-        QNetworkRequest req( QUrl( QString("http://ip.jsontest.com/") ) );
-        QNetworkReply *reply = mgr.get(req);
-        eventLoop.exec();                       // blocks stack until "finished()" has been called
-
-        if (reply->error() == QNetworkReply::NoError)
-        {
-            //success
-            str = reply->readAll();
-            qDebug() << str;
-
-            QStringList list = str.split(".", QString::SkipEmptyParts);
-            for ( auto sti : list)
-            {
-                data.values.push_back( sti.toDouble() );
-            }
-            delete reply;
-        }
-        else {
-            //failure
-            str = reply->errorString();
-            qDebug() << str;
-            delete reply;
-        }*/
     }
+
 
 
     QByteArray sendRequest( QUrl url)
@@ -119,14 +83,14 @@ public:
         if (reply->error() == QNetworkReply::NoError)
         {
             //success
-            qDebug() << "Success" <<reply->readAll();
+            qDebug() <<  "Success: " << url;
             ret = reply->readAll();
             delete reply;
 
         }
         else {
             //failure
-            qDebug() << "Failure" <<reply->errorString();
+            qDebug() << "Failure: " << url;
             delete reply;
         }
         return ret;
@@ -136,6 +100,5 @@ public:
     // Define signal:
 signals:
     void valueChanged();
-    void valueCh();
 };
 

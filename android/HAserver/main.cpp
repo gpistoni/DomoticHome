@@ -37,20 +37,20 @@ public:
                 {
                     for (int j=0; j<10; j++)
                     {
-                        if (j!=0)  writeLine( client, ",");
                         writeLine( client, QString::number(i*10+j) );
+                        writeLine( client, ",");
                     }
                 }
             }
-            else if (line.contains("@labels"))
+            else if (line.contains("@label"))
             {
                 writeLine( client, QString("HTTP/1.1 200 OK\r\nContent-Type: text/html \r\n\r\n") );
                 for (int i=0; i<10; i++)
                 {
                     for (int j=0; j<10; j++)
                     {
-                        if (j!=0)  writeLine( client, ",");
                         writeLine( client, "lab_" + QString::number(i*10+j) );
+                        writeLine( client, ",");
                     }
                 }
             }
@@ -82,7 +82,7 @@ public:
                                            "<script src='http://code.jquery.com/jquery-latest.js'></script>"
                                            "<script>""\r\n"
                                            "$(document).ready(function(){""\r\n"
-                                           "     setInterval(timedRefresh, 1000);""\r\n"
+                                           "setInterval(timedRefresh, 1000);""\r\n"
                                            " });""\r\n"
                                            "function timedRefresh(timeoutPeriod) {""\r\n"
                                            "var d = new Date();""\r\n"
