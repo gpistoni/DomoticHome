@@ -4,18 +4,24 @@
 //********************************************************************************************
 class cDataTable
 {
-  enum { T0=0, T1=1, T2=2, T3=3, T4=4, T5=5, T6=6, T7=7 };
+    enum { T0 = 0, T1 = 1, T2 = 2, T3 = 3, T4 = 4, T5 = 5, T6 = 6, T7 = 7 };
   public:
+    // terminal 1
+    cFloat hCucina;
+    cFloat hSala;
+    cFloat tCucina;
+    cFloat tSala;
+
     // terminal 3
     cBool rPdc;
     cBool rPdcCool0_Heat1;
     cBool rPdcPompa;
     cBool rPdcNightMode;
-    
+
     cBool rPompaPianoPrimo;
     cBool rPompaPianoTerra;
     cBool rBoilerSanitaria;
-    
+
     // terminal 4
     cFloat tPufferHi;
     cFloat tPufferLow;
@@ -24,8 +30,8 @@ class cDataTable
     cFloat tReturnFloor;
     cFloat tInletFloor;
     cFloat tExternal;
-    
-     // terminal 5
+
+    // terminal 5
     cBool evCameraM1;
     cBool evCameraM2;
     cBool evSala1;
@@ -35,76 +41,116 @@ class cDataTable
     cBool evCameraD1;
     cBool evCameraD2;
 
+    cVar* webVar[100];
+
     void setup()
     {
-      rPdc.setup              ( T3, 0, "PDC");
-      rPdcCool0_Heat1.setup   ( T3, 1, "CoolHeat");
-      rPdcPompa.setup         ( T3, 2, "PdcPompa");
-      rPdcNightMode.setup     ( T3, 3, "PdcNightMode");
-      rPompaPianoPrimo.setup  ( T3, 4, "PompaPianoPrimo");
-      rPompaPianoTerra.setup  ( T3, 5, "PompaPianoTerra");
-      rBoilerSanitaria.setup  ( T3, 6, "BoilerSanitaria");
+      memset( webVar, 0, 100 * sizeof(cVar*) );
 
-      tPufferHi.setup         ( T4, 0, "tPufferHi");
-      tPufferLow.setup        ( T4, 1, "tPufferLow");
-      tInputMixer.setup       ( T4, 2, "tInputMixer");
-      tReturnFireplace.setup  ( T4, 3, "tReturnFireplace");
-      tReturnFloor.setup      ( T4, 4, "tReturnFloor");
-      tInletFloor.setup       ( T4, 5, "tInletFloor");
-      tExternal.setup         ( T4, 6, "tExternal");
+      webVar[1] = hCucina.setup            ( T1, 0, "hCucina");
+      webVar[1] = hSala.setup              ( T1, 1, "hSala");
       
-      evCameraM1.setup        ( T5, 0, "evCameraM1");
-      evCameraM2.setup        ( T5, 1, "evCameraM2");
-      evSala1.setup           ( T5, 2, "evSala1");
-      evSala2.setup           ( T5, 3, "evSala2");
-      evCucina.setup          ( T5, 4, "evCucina");
-      evCameraS.setup         ( T5, 5, "evCameraS");
-      evCameraD1.setup        ( T5, 6, "evCameraD1");
-      evCameraD2.setup        ( T5, 7, "evCameraD2");
+      webVar[10] = tCucina.setup           ( T1, 10, "tCucina" );
+      webVar[11] = tSala.setup             ( T1, 11, "tSala");
+
+      webVar[30] = rPdc.setup              ( T3, 0, "PDC");
+      webVar[31] = rPdcCool0_Heat1.setup   ( T3, 1, "CoolHeat");
+      webVar[32] = rPdcPompa.setup         ( T3, 2, "PdcPompa");
+      webVar[33] = rPdcNightMode.setup     ( T3, 3, "PdcNightMode");
+      webVar[34] = rPompaPianoPrimo.setup  ( T3, 4, "PompaPianoPrimo");
+      webVar[35] = rPompaPianoTerra.setup  ( T3, 5, "PompaPianoTerra");
+      webVar[36] = rBoilerSanitaria.setup  ( T3, 6, "BoilerSanitaria");
+
+      webVar[40] = tPufferHi.setup         ( T4, 0, "tPufferHi");
+      webVar[41] = tPufferLow.setup        ( T4, 1, "tPufferLow");
+      webVar[42] = tInputMixer.setup       ( T4, 2, "tInputMixer");
+      webVar[43] = tReturnFireplace.setup  ( T4, 3, "tReturnFireplace");
+      webVar[44] = tReturnFloor.setup      ( T4, 4, "tReturnFloor");
+      webVar[45] = tInletFloor.setup       ( T4, 5, "tInletFloor");
+      webVar[46] = tExternal.setup         ( T4, 6, "tExternal");
+
+      webVar[50] = evCameraM1.setup        ( T5, 0, "evCameraM1");
+      webVar[51] = evCameraM2.setup        ( T5, 1, "evCameraM2");
+      webVar[52] = evSala1.setup           ( T5, 2, "evSala1");
+      webVar[53] = evSala2.setup           ( T5, 3, "evSala2");
+      webVar[54] = evCucina.setup          ( T5, 4, "evCucina");
+      webVar[55] = evCameraS.setup         ( T5, 5, "evCameraS");
+      webVar[56] = evCameraD1.setup        ( T5, 6, "evCameraD1");
+      webVar[57] = evCameraD2.setup        ( T5, 7, "evCameraD2");
     };
-    
+
+    void UpdateT1( String strs )
+    {
+      Serial.print( "T1: " );
+      Serial.println( strs);
+
+      tCucina.update( strs );
+      tSala.update( strs );
+      hCucina.update( strs );
+      hSala.update( strs );
+    };
+
     void UpdateT3( String strs )
     {
-      Serial.print( "T3: " );      
+      Serial.print( "T3: " );
       Serial.println( strs);
-      
-      rPdc.setS( strs );
-      rPdcCool0_Heat1.setS( strs );
-      rPdcPompa.setS( strs );
-      rPdcNightMode.setS( strs );
-      
-      rPompaPianoPrimo.setS( strs );
-      rPompaPianoTerra.setS( strs );
-      rBoilerSanitaria.setS( strs );     
+
+      rPdc.update( strs );
+      rPdcCool0_Heat1.update( strs );
+      rPdcPompa.update( strs );
+      rPdcNightMode.update( strs );
+
+      rPompaPianoPrimo.update( strs );
+      rPompaPianoTerra.update( strs );
+      rBoilerSanitaria.update( strs );
     };
-    
+
     void UpdateT4( String strs)
     {
-      Serial.print( "T4: " );      
+      Serial.print( "T4: " );
       Serial.println( strs);
-      
-      tPufferHi.setS( strs );
-      tPufferLow.setS( strs );
-      tInputMixer.setS( strs );
-      tReturnFireplace.setS( strs );
-      tReturnFloor.setS( strs );
-      tInletFloor.setS( strs );
-      tExternal.setS( strs );
+
+      tPufferHi.update( strs );
+      tPufferLow.update( strs );
+      tInputMixer.update( strs );
+      tReturnFireplace.update( strs );
+      tReturnFloor.update( strs );
+      tInletFloor.update( strs );
+      tExternal.update( strs );
     };
 
     void UpdateT5( String strs)
     {
-      Serial.print( "T5: " );      
+      Serial.print( "T5: " );
       Serial.println( strs);
-      
-      evCameraM1.setS( strs );
-      evCameraM2.setS( strs );
-      evSala1.setS( strs );
-      evSala2.setS( strs );
-      evCucina.setS( strs );
-      evCameraS.setS( strs );
-      evCameraD1.setS( strs );
-      evCameraD2.setS( strs );
+
+      evCameraM1.update( strs );
+      evCameraM2.update( strs );
+      evSala1.update( strs );
+      evSala2.update( strs );
+      evCucina.update( strs );
+      evCameraS.update( strs );
+      evCameraD1.update( strs );
+      evCameraD2.update( strs );
+    };
+
+    void enumerate( String &labels, String &values)
+    {
+      for ( int i = 0; i < 100; i++ )
+      {
+        if ( webVar[i] != 0 )
+        {
+          labels += webVar[i]->m_descr;
+          labels += ",";
+          values += webVar[i]->m_value;
+          values += ",";
+        }
+        else
+        {
+          labels += "?,";
+          values += "0,";
+        }
+      };
     };
 };
 
@@ -123,7 +169,6 @@ String strValue(String data, char separator, int index)
       strIndex[1] = (i == maxIndex) ? i + 1 : i;
     }
   }
-
   return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
 

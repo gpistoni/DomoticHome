@@ -1,4 +1,4 @@
-#include <ESP8266WiFi.h>  
+#include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 
@@ -18,7 +18,7 @@ DHwifi dhWifi;
 
 cDataTable DT;
 
-ESP8266WebServer server(80);
+ESP8266WebServer webServer(80);
 
 void setup()
 {
@@ -38,11 +38,12 @@ void setup()
   if (epoch > 0) setTime( epoch );           // update system time
 
 
-  server.on("/", handleRoot);
-  server.on("/log", handleLog);
-  
-  server.onNotFound(handleNotFound);
-  server.begin();
+  webServer.on("/", handleRoot );
+  webServer.on("/log", handleLog );
+  webServer.on("/values", handleValues );
+  webServer.on("/labels", handleLabels );
+  webServer.onNotFound(handleNotFound);
+  webServer.begin();
   Serial.println("HTTP server started");
 
   //Alarm.alarmRepeat(8,30,0, MorningAlarm);  // 8:30am every day
@@ -59,8 +60,8 @@ void setup()
 
 /**************************************************************************************************/
 void loop()
-{  
-  server.handleClient();
+{
+  webServer.handleClient();
   Alarm.delay(100);
 }
 
@@ -86,6 +87,7 @@ void Minute()
   digitalClockDisplay();
   Serial.println("Minute timer");
 
+  DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
@@ -147,12 +149,15 @@ void BoilerSanitaria_Manager()
   digitalClockDisplay();
   Serial.println("BoilerSanitaria_Manager");
   DT.rBoilerSanitaria.set( 0 );
- 
+
   //decido se accendere il boiler solo di notte
   if ( hour() >= 20 || hour() < 7)
   {
-    Serial.println("Condizione B1");
-    DT.rBoilerSanitaria.set( 1 );
+    if ( DT.tReturnFireplace < 30 )
+    {
+      Serial.println("Condizione B1");
+      DT.rBoilerSanitaria.set( 1 );
+    }
   }
 
   dhWifi.HttpRequest( DT.rBoilerSanitaria.getS() );
