@@ -32,7 +32,8 @@ HEADERS  += mainwindow.h \
     HistogramView.h \
     Lib/valueWidget.h \
     workerHttp.h \
-    data.h
+    data.h \
+    workerhttp.h
 
 FORMS    += mainwindow.ui \
     pWaterTemp.ui \

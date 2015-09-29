@@ -10,7 +10,7 @@
 #include "pAirTemp.h"
 #include "pWaterTemp.h"
 #include "pWork.h"
-#include "workerHttp.h"
+#include "workerhttp.h"
 
 namespace Ui {
 class MainWindow;

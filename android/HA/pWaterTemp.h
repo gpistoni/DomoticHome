@@ -10,7 +10,7 @@
 #include <QStringList>
 
 #include "dhrequets.h"
-#include "lib/valueWidget.h"
+#include "Lib/valueWidget.h"
 
 namespace Ui {
 class WaterTemp;

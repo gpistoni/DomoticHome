@@ -42,7 +42,8 @@ public:
 
     void getDataLabels()
     {
-        QByteArray arr = sendRequest(  QUrl(QString("http://127.0.0.1:9999/@label")) );
+        //QByteArray arr = sendRequest(  QUrl(QString("http://127.0.0.1:9999/@label")) );
+        QByteArray arr = sendRequest(  QUrl(QString("http://196.168.0.201/labels")) );
 
         QString str(arr);
         QStringList list = str.split(",", QString::SkipEmptyParts);
@@ -53,7 +54,9 @@ public:
 
     void getDataValues()
     {
-        QByteArray arr = sendRequest(  QUrl(QString("http://127.0.0.1:9999/@value")) );
+        //QByteArray arr = sendRequest(  QUrl(QString("http://127.0.0.1:9999/@value")) );
+         QByteArray arr = sendRequest(  QUrl(QString("http://196.168.0.201/values")) );
+
 
         QString str(arr);
         QStringList list = str.split(",", QString::SkipEmptyParts);

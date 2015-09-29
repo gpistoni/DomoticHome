@@ -47,7 +47,7 @@ class cDataTable
     {
       memset( webVar, 0, 100 * sizeof(cVar*) );
 
-      webVar[1] = hCucina.setup            ( T1, 0, "hCucina");
+      webVar[0] = hCucina.setup            ( T1, 0, "hCucina");
       webVar[1] = hSala.setup              ( T1, 1, "hSala");
       
       webVar[10] = tCucina.setup           ( T1, 10, "tCucina" );

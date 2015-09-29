@@ -1,5 +1,5 @@
-#include "ValueWidget.h"
-#include "..\css.h"
+#include "valueWidget.h"
+#include "../css.h"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
