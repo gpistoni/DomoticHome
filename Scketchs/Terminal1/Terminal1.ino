@@ -40,7 +40,7 @@ void loop()
   
 /*******************************************************************************/
   unsigned long now = millis();               // Terminal ID
-  if ( now - old_ReadHDT >= 1000)  //leggo probe ogni 2 secondi
+  if ( now - old_ReadHDT >= 5000)  //leggo probe ogni 2 secondi
   {
     old_ReadHDT = now;
 
@@ -49,15 +49,19 @@ void loop()
  
     for ( int i = 0; i < SensorsHDT.nums; i++)
     {
-      Slave.sensor[i] = SensorsHDT.h[i] * 10;
-      Slave.sensor[10+i] = SensorsHDT.t[i] * 10;
+      if (SensorsHDT.h[i]>0)
+        Slave.sensor[i] = SensorsHDT.h[i] * 10;
+      if (SensorsHDT.t[i]>0)
+        Slave.sensor[10+i] = SensorsHDT.t[i] * 10;
 
       Serial.println("");
       Serial.print( i );
       Serial.print( " - H:" );
-      Serial.print( Slave.sensor[i] );
+      Serial.print( SensorsHDT.h[i] );
       Serial.print( " \tT:" );
-      Serial.print( Slave.sensor[10+i] );
+      Serial.print( SensorsHDT.t[i] );
+      Serial.print( " \tTp:" );
+      Serial.print( SensorsHDT.hic[i] );
     }
   }
   

@@ -14,7 +14,12 @@
       nums = 1 + (in1!=0) + (in2!=0) + (in3!=0)+ (in4!=0) + (in5!=0) + (in6!=0) + (in7!=0) + (in8!=0);
       
       for (int i = 0; i < nums; i++)
+{
         dht[i].begin();
+h[i] = 0;
+t[i] = 0;
+hic[i] = 0;
+}
     };
 
     void CDht::readvalues()
@@ -25,17 +30,18 @@
         // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
         h[i] = 0;
         h[i] = dht[i].readHumidity();
+
         // Read temperature as Celsius (the default)
         t[i] = 0;
         t[i] = dht[i].readTemperature();
 
         // Check if any reads failed and exit early (to try again).
-        if (isnan(h[i]) || isnan(t[i]) )
+        if ( isnan(h[i]) || isnan(t[i]) )
         {
           continue;
         }
         // Compute heat index in Fahrenheit (the default)
-        hic[i] = dht[i].computeHeatIndex(t[i], h[i], false);
+        hic[i] = dht[i].computeHeatIndex( t[i], h[i], false);
       };
     };
 
