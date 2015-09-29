@@ -41,21 +41,21 @@ void logToFile ()
       dataString += ",";  // separate the values with a comma
     }
   }
-
-  // open the file. note that only one file can be open at a time,
-  // so you have to close this one before opening another.
-  // The FileSystem card is mounted at the following "/mnt/FileSystema1"
-  File dataFile = FileSystem.open("/mnt/sd/datalog.txt", FILE_APPEND);
-
-  // if the file is available, write to it:
-  if (dataFile) {
-    dataFile.println(dataString);
-    dataFile.close();
-    // print to the serial port too:
-    Serial.println(dataString);
-  }
-  // if the file isn't open, pop up an error:
-  else {
-    Serial.println("error opening datalog.txt");
-  }
+//
+//  // open the file. note that only one file can be open at a time,
+//  // so you have to close this one before opening another.
+//  // The FileSystem card is mounted at the following "/mnt/FileSystema1"
+//  File dataFile = FileSystem.open("/mnt/sd/datalog.txt", FILE_APPEND);
+//
+//  // if the file is available, write to it:
+//  if (dataFile) {
+//    dataFile.println(dataString);
+//    dataFile.close();
+//    // print to the serial port too:
+//    Serial.println(dataString);
+//  }
+//  // if the file isn't open, pop up an error:
+//  else {
+//    Serial.println("error opening datalog.txt");
+//  }
 }

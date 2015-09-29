@@ -1,26 +1,31 @@
-#include <ESP8266WiFi.h>
+#include <ESP8266WiFi.h>  
+#include <ESP8266WebServer.h>
+#include <ESP8266mDNS.h>
+
 #include <WiFiUdp.h>
 #include <Time.h>
 #include <TimeAlarms.h>
 #include <HttpClient.h>
 
-#include <FileIO.h>
+//#include <FileIO.h>
 
 #include "dhwifi.h"
 #include "DataTable.h"
 #include "functions.h"
+#include "webServer.h"
 
 DHwifi dhWifi;
 
 cDataTable DT;
 
+ESP8266WebServer server(80);
+
 void setup()
 {
   Serial.begin(115200);
-  FileSystem.begin();
   Serial.println();
 
-  IPAddress ip(192, 168, 1, 201);
+  IPAddress ip(192, 168, 0, 201);
   IPAddress gateway(192, 168, 0, 254);
   IPAddress subnet(255, 255, 255, 0);
 
@@ -32,6 +37,13 @@ void setup()
   time_t epoch = dhWifi.GetSystemTime();
   if (epoch > 0) setTime( epoch );           // update system time
 
+
+  server.on("/", handleRoot);
+  server.on("/log", handleLog);
+  
+  server.onNotFound(handleNotFound);
+  server.begin();
+  Serial.println("HTTP server started");
 
   //Alarm.alarmRepeat(8,30,0, MorningAlarm);  // 8:30am every day
   //Alarm.alarmRepeat(17,45,0,EveningAlarm);  // 5:45pm every day
@@ -48,8 +60,8 @@ void setup()
 /**************************************************************************************************/
 void loop()
 {  
-  //logToFile();
-  Alarm.delay(1000);
+  server.handleClient();
+  Alarm.delay(100);
 }
 
 /**************************************************************************************************/
@@ -66,6 +78,17 @@ void Daily()
 void Hourly()
 {
   Serial.println("Hourly timer");
+}
+
+/**************************************************************************************************/
+void Minute()
+{
+  digitalClockDisplay();
+  Serial.println("Minute timer");
+
+  DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
+  DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
+  DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
 }
 
 
@@ -128,7 +151,7 @@ void BoilerSanitaria_Manager()
   //decido se accendere il boiler solo di notte
   if ( hour() >= 20 || hour() < 7)
   {
-    Serial.println("Condizione H1");
+    Serial.println("Condizione B1");
     DT.rBoilerSanitaria.set( 1 );
   }
 
@@ -137,16 +160,5 @@ void BoilerSanitaria_Manager()
 }
 
 
-/**************************************************************************************************/
-void Minute()
-{
-  digitalClockDisplay();
-  Serial.println("Minute timer");
-
-  DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
-  DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
-  DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
-}
-/**************************************************************************************************/
 
 

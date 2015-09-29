@@ -10,6 +10,7 @@
 #include "pAirTemp.h"
 #include "pWaterTemp.h"
 #include "pWork.h"
+#include "workerHttp.h"
 
 namespace Ui {
 class MainWindow;
@@ -32,6 +33,7 @@ private slots:
     void on_pageIndexBar_valueChanged(int value);
 
     void on_MainWindow_destroyed();
+    void on_pushButton_Screenshot_clicked();
 
 private:
     int num_pages;
@@ -40,6 +42,9 @@ private:
     std::shared_ptr<pAirTemp>    m_pAirTemp;
     std::shared_ptr<pWaterTemp>  m_pWaterTemp;
     std::shared_ptr<pWork>       m_pWork;
+
+     // Worker Thread
+    WorkerThread m_work;
 
     Ui::MainWindow *ui;
 };

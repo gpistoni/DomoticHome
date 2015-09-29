@@ -41,7 +41,7 @@ class cFloat: public cVar
   
   void setS( String stringlist )
   {
-    m_value = strValueB(stringlist, ',', m_s);
+    m_value = strValueD(stringlist, ',', m_s);
     Serial.print(m_descr );
     Serial.print(":");
     Serial.println( m_value );

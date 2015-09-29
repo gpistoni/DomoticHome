@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QPixmap>
+#include <QDesktopWidget>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -31,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //*****************************************
     ui->pageIndexBar->setMaximum( num_pages - 1 );
     ui->pageIndexBar->setValue(0);
+
+    m_work.start();
 }
 
 MainWindow::~MainWindow()
@@ -68,4 +72,10 @@ void MainWindow::on_pageIndexBar_valueChanged(int value)
 
 void MainWindow::on_MainWindow_destroyed()
 {
+}
+
+void MainWindow::on_pushButton_Screenshot_clicked()
+{
+    QPixmap pm( QPixmap::grabWidget( this ) );
+    pm.save("\\pm.bmp");
 }
