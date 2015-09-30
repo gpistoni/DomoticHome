@@ -18,7 +18,7 @@ class DHwifi
     DHwifi() {};
 
     void setup( IPAddress ip, IPAddress gateway, IPAddress subnet, String remoteServer = "192.168.0.200" );
-    String HttpRequest( String req = "@get(0,0)" );
+    String HttpRequest( String req );
     time_t GetSystemTime();
 
   private:

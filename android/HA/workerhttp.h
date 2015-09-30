@@ -27,7 +27,7 @@ public:
 
     void run()
     {
-        m_mgr = new QNetworkAccessManager( this );
+        m_mgr = new QNetworkAccessManager( );
         msleep(1000);
         getDataLabels();
 

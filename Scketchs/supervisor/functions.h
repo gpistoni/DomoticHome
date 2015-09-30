@@ -1,6 +1,7 @@
+extern const int led;
+
 void printDigits(int digits){
     // utility function for digital clock display: prints preceding colon and leading 0
-    Serial.print(":");
     if(digits < 10)
         Serial.print('0');
     Serial.print(digits);
@@ -8,10 +9,12 @@ void printDigits(int digits){
 
 void digitalClockDisplay()
 {
+  digitalWrite(led, 1);
   // digital clock display of the time
   Serial.print(hour());
   Serial.print(":");
   printDigits(minute());
+  Serial.print(":");
   printDigits(second());
   Serial.print(" ");
   printDigits(day());

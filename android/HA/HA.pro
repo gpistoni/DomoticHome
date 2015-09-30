@@ -27,11 +27,9 @@ HEADERS  += mainwindow.h \
     pMenu.h \
     pWork.h \
     css.h \
-    css.h \
     dhrequets.h \
     HistogramView.h \
     Lib/valueWidget.h \
-    workerHttp.h \
     data.h \
     workerhttp.h
 
