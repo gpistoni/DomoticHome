@@ -6,7 +6,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QLCDNumber>
-
+#include "data.h"
 
 //class MyWidget : public QWidget //inherit from QWidget
 //{
@@ -55,14 +55,21 @@ ValueWidget::ValueWidget(QWidget* parent) : QWidget(parent)
 
     m_Layout->addWidget(m_label);
     m_Layout->addWidget(m_value);
+
+    connect( &g_data, SIGNAL(sigChanged()), this, SLOT(onValueChanged()) );
 }
 
 
-void ValueWidget::init( QString label, QString ReadTcpStr )
+void ValueWidget::init(int idx, QString style )
 {
-    m_label->setText( label );
-    m_readTcpStr = ReadTcpStr;
+    m_dataIndex = idx;
+
+    m_label->setText( g_data.GetL( idx ) );
+    m_value->display( g_data.GetV( idx ) );
+
     m_value->setStyleSheet( CSS_LCDDISPLAY );
+
+    setStyleSheet( style );
 }
 
 void ValueWidget::display( float val)
@@ -74,3 +81,10 @@ void ValueWidget::label( QString label )
 {
     m_label->setText( label );
 }
+
+ void ValueWidget::onValueChanged()
+ {
+     m_label->setText( g_data.GetL( m_dataIndex ) );
+     m_value->display( g_data.GetV( m_dataIndex ) );
+ }
+

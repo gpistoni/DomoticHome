@@ -1,4 +1,5 @@
 #pragma once
+
 #include <QWidget>
 
 //forward declarations
@@ -14,26 +15,25 @@ class ValueWidget : public QWidget //inherit from QWidget
 public:
     ValueWidget(QWidget* parent = 0); //don't forget to pass the parent
 
-    void init( QString label, QString ReadTcpStr );
+    void init( int index, QString style );
+
     void display( float val);
     void label( QString label );
 
-private:
+protected:
     //contained widgets:
-    // QVBoxLayout *V1Layout;
     QHBoxLayout *m_Layout;
 
     QLabel *m_label;
     QLCDNumber *m_value;
 
-    QString m_readTcpStr;
-    //QPushButton *firstButton;
-    //QPushButton *secondButton;
+    int m_dataIndex;
 
 signals:
     //MyWidget's signals....
 
 public slots:
+    void onValueChanged();
     //MyWidget's slots example:
     // void firstButtonClicked();
     //...

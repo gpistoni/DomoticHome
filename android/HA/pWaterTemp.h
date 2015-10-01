@@ -1,5 +1,5 @@
-#ifndef PWATERTEMP_H
-#define PWATERTEMP_H
+#pragma once
+
 #include <memory>
 
 #include <QScrollArea>
@@ -32,12 +32,4 @@ private:
 
     Ui::WaterTemp *ui;
 
-public slots:
-    void onValueChagned();
-    void onValueCh();
-
-private slots:
-    void on_pushUpdate_clicked();
 };
-
-#endif // PWATERTEMP_H

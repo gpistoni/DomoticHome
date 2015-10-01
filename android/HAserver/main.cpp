@@ -37,7 +37,7 @@ public:
                 {
                     for (int j=0; j<10; j++)
                     {
-                        writeLine( client, QString::number(i*10+j) );
+                        writeLine( client, QString::number(i*10+j - 4 + GetTickCount()%8 ) );
                         writeLine( client, ",");
                     }
                 }

@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     pWork.cpp \
     dhrequets.cpp \
     HistogramView.cpp \
-    Lib/valueWidget.cpp
+    Lib/valueWidget.cpp \
+    Lib/valueSetWidget.cpp
 
 HEADERS  += mainwindow.h \
     pAirTemp.h \
@@ -27,19 +28,19 @@ HEADERS  += mainwindow.h \
     pMenu.h \
     pWork.h \
     css.h \
-    css.h \
     dhrequets.h \
     HistogramView.h \
-    Lib/valueWidget.h \
     workerHttp.h \
-    data.h \
-    workerhttp.h
+    Lib/valueWidget.h \
+    Lib/data.h \
+    Lib/valueSetWidget.h
 
 FORMS    += mainwindow.ui \
     pWaterTemp.ui \
     pAirTemp.ui \
     pMenu.ui \
-    pWork.ui
+    pWork.ui \
+    _test_frame.ui
 
 CONFIG += mobility \
 
