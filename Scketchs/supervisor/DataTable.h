@@ -71,9 +71,9 @@ class cDataTable
 
       webVar[50] = evCameraM1.setup        ( T5, 0, "evCameraM1");
       webVar[51] = evCameraM2.setup        ( T5, 1, "evCameraM2");
-      webVar[52] = evSala1.setup           ( T5, 2, "evSala1");
-      webVar[53] = evSala2.setup           ( T5, 3, "evSala2");
-      webVar[54] = evCucina.setup          ( T5, 4, "evCucina");
+      webVar[52] = evCucina.setup          ( T5, 2, "evCucina");
+      webVar[53] = evSala1.setup           ( T5, 3, "evSala1");
+      webVar[54] = evSala2.setup           ( T5, 4, "evSala2");
       webVar[55] = evCameraS.setup         ( T5, 5, "evCameraS");
       webVar[56] = evCameraD1.setup        ( T5, 6, "evCameraD1");
       webVar[57] = evCameraD2.setup        ( T5, 7, "evCameraD2");
@@ -126,9 +126,9 @@ class cDataTable
 
       evCameraM1.update( strs );
       evCameraM2.update( strs );
+      evCucina.update( strs );
       evSala1.update( strs );
       evSala2.update( strs );
-      evCucina.update( strs );
       evCameraS.update( strs );
       evCameraD1.update( strs );
       evCameraD2.update( strs );
