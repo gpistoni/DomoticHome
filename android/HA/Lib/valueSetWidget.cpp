@@ -16,7 +16,9 @@ ValueSetWidget::ValueSetWidget(QWidget* parent) : ValueWidget(parent)
     m_minus = new QPushButton("-");
 
     m_plus->setMinimumWidth( 40 );
+    m_plus->setMaximumWidth( 100 );
     m_minus->setMinimumWidth( 40 );
+    m_plus->setMaximumWidth( 100 );
 
     m_Layout->addWidget(m_plus);
     m_Layout->addWidget(m_value);
@@ -33,38 +35,44 @@ void ValueSetWidget::init(int idx, QString style, float increment )
     m_dataIndex = idx;
     m_increment = increment;
 
+    setStyleSheet( CSS_LCDDISPLAY_VALUE );
     m_label->setText( g_data.GetL( idx ) );
     m_value->display( g_data.GetV( idx ) );
 
-    m_value->setStyleSheet( CSS_LCDDISPLAY_VALUE );
-    setStyleSheet( style );
+    m_value->setPalette(Qt::yellow);
 }
 
 void ValueSetWidget::onPlusClicked()
 {
-    disconnect( this, SLOT( onValueChanged() ) );
+    disconnect( &g_data, SIGNAL(sigChanged()), this, SLOT(onValueChanged()) );
+    m_timer.stop();
+    m_timer.start(5000);
 
-    m_timer.start(2000);
+    m_value->setPalette(Qt::red);
 
-    m_label->setText( g_data.GetL( m_dataIndex ) );
-    m_value->display( g_data.GetV( m_dataIndex ) );
+    float setpoint = g_data.GetVsetpoint( m_dataIndex ) + m_increment ;
+    g_data.SetVsetpoint( m_dataIndex, setpoint );
+    m_value->display( setpoint );
 }
 
 void ValueSetWidget::onMinusClicked()
 {
-    disconnect( this, SLOT( onValueChanged() ) );
-    m_timer.start(2000);
+    disconnect( &g_data, SIGNAL(sigChanged()), this, SLOT(onValueChanged()) );
+    m_timer.stop();
+    m_timer.start(5000);
 
-    m_label->setText( g_data.GetL( m_dataIndex ) );
+    m_value->setPalette(Qt::red);
 
     float setpoint = g_data.GetVsetpoint( m_dataIndex ) - m_increment ;
     g_data.SetVsetpoint( m_dataIndex, setpoint );
     m_value->display( setpoint );
-    m_value->setStyleSheet( CSS_LCDDISPLAY_SETPOINT );
 }
 
 void ValueSetWidget::onTimerTimeout()
 {
+   m_timer.stop();
    connect( &g_data, SIGNAL( sigChanged() ), this, SLOT( onValueChanged() ) );
-   m_value->setStyleSheet( CSS_LCDDISPLAY_VALUE );
+
+   m_value->setPalette(Qt::yellow);
+   onValueChanged();
 }

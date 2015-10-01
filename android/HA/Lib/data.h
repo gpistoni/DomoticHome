@@ -87,7 +87,7 @@ public:
     float GetVsetpoint( const int i )
     {
         QMutexLocker m(&m_mutex);
-        return m_value[i];
+        return m_valueSetpoint[i];
     }
 
     QString GetL( const int x, const int y)

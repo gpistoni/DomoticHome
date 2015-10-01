@@ -36,7 +36,7 @@ pWaterTemp::pWaterTemp(QWidget *parent) :
     for (int i=0; i<14; i++)
     {
         ValueSetWidget *val =  new  ValueSetWidget();
-        val->init( 30 + i, CSS_TEMPVALUE, 0.5 );
+        val->init( 30 + i, CSS_TEMPVALUE, 1 );
         ui->verticalLayout_3->addWidget( val);
     }
 }
