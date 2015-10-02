@@ -49,9 +49,10 @@ void ValueSetWidget::onPlusClicked()
     m_timer.start(5000);
 
     m_value->setPalette(Qt::red);
+    QString label =  g_data.GetL( m_dataIndex );
 
-    float setpoint = g_data.GetVsetpoint( m_dataIndex ) + m_increment ;
-    g_data.SetVsetpoint( m_dataIndex, setpoint );
+    float setpoint = g_data.GetVsetpoint(label) + m_increment ;
+    g_data.SetVsetpoint(  label, setpoint );
     m_value->display( setpoint );
 }
 
@@ -62,9 +63,10 @@ void ValueSetWidget::onMinusClicked()
     m_timer.start(5000);
 
     m_value->setPalette(Qt::red);
+    QString label =  g_data.GetL( m_dataIndex );
 
-    float setpoint = g_data.GetVsetpoint( m_dataIndex ) - m_increment ;
-    g_data.SetVsetpoint( m_dataIndex, setpoint );
+    float setpoint = g_data.GetVsetpoint(label) - m_increment ;
+    g_data.SetVsetpoint(  label, setpoint );
     m_value->display( setpoint );
 }
 

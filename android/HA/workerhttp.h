@@ -1,6 +1,5 @@
 #pragma once
 #include <QThread>
-#include "dhrequets.h"
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QByteArray>

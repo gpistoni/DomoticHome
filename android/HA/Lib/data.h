@@ -20,9 +20,10 @@ private:
 
     std::map<int, double> m_value;
     std::map<int, QString> m_label;
-    std::map< QString, int> m_index;
+    std::map<QString, int> m_index;
 
-    std::map<int, double> m_valueSetpoint;
+    std::map< QString, double> m_valueSetpoint;
+    std::map< QString, std::map<double,double> > m_valueHisto;
 
     QMutex m_mutex;
 
@@ -47,10 +48,10 @@ public:
         m_value[i] =  val;
     }
 
-    void SetVsetpoint( const int i, const float val )
+    void SetVsetpoint( const QString &label, const float val )
     {
         QMutexLocker m(&m_mutex);
-        m_valueSetpoint[i] =  val;
+        m_valueSetpoint[label] =  val;
     }
 
     void SetV( const int i, const QString &value )
@@ -84,10 +85,10 @@ public:
         return m_value[ m_index[label] ];
     }
 
-    float GetVsetpoint( const int i )
+    float GetVsetpoint( const QString &label )
     {
         QMutexLocker m(&m_mutex);
-        return m_valueSetpoint[i];
+        return m_valueSetpoint[label];
     }
 
     QString GetL( const int x, const int y)

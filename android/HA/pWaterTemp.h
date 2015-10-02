@@ -9,7 +9,6 @@
 #include <QDebug>
 #include <QStringList>
 
-#include "dhrequets.h"
 #include "Lib/valueWidget.h"
 
 namespace Ui {

@@ -17,10 +17,9 @@ SOURCES += main.cpp\
     pWaterTemp.cpp \
     pMenu.cpp \
     pWork.cpp \
-    dhrequets.cpp \
-    HistogramView.cpp \
     Lib/valueWidget.cpp \
-    Lib/valueSetWidget.cpp
+    Lib/valueSetWidget.cpp \
+    Lib/HistogramView.cpp
 
 HEADERS  += mainwindow.h \
     pAirTemp.h \
@@ -28,12 +27,11 @@ HEADERS  += mainwindow.h \
     pMenu.h \
     pWork.h \
     css.h \
-    dhrequets.h \
-    HistogramView.h \
     workerHttp.h \
-    Lib/valueWidget.h \
     Lib/data.h \
-    Lib/valueSetWidget.h
+    Lib/valueSetWidget.h \
+    Lib/valueWidget.h \
+    Lib/HistogramView.h
 
 FORMS    += mainwindow.ui \
     pWaterTemp.ui \
