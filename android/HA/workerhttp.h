@@ -1,14 +1,12 @@
 #pragma once
-#include "data.h"
 #include <QThread>
-#include "dhrequets.h"
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QByteArray>
 #include <QNetworkReply>
 #include <QMessageBox>
 #include <QEventLoop>
-#include "data.h"
+#include "Lib/data.h"
 
 extern CData g_data;
 
@@ -35,36 +33,34 @@ public:
         {
             msleep(1000);
             getDataValues();
-            getDataLabels();
-            emit valueChanged();
+            emit g_data.sigChanged();
         }
     }
 
     void getDataLabels()
     {
-        //QByteArray arr = sendRequest(  QUrl(QString("http://127.0.0.1:9999/@label")) );
-        QByteArray arr = sendRequest(  QUrl(QString("http://196.168.0.201/labels")) );
+        QByteArray arr = sendRequest(  QUrl(QString("http://127.0.0.1:9999/@label")) );
+        //QByteArray arr = sendRequest(  QUrl(QString("http://196.168.0.201/labels")) );
 
         QString str(arr);
         QStringList list = str.split(",", QString::SkipEmptyParts);
 
         for( int i=0; i<list.size(); i++ )
-            g_data.SetS(i, list.at(i) );
+            g_data.SetL( i, list.at(i) );
     }
 
     void getDataValues()
     {
-        //QByteArray arr = sendRequest(  QUrl(QString("http://127.0.0.1:9999/@value")) );
-         QByteArray arr = sendRequest(  QUrl(QString("http://196.168.0.201/values")) );
+        QByteArray arr = sendRequest(  QUrl(QString("http://127.0.0.1:9999/@value")) );
+        //QByteArray arr = sendRequest(  QUrl(QString("http://196.168.0.201/values")) );
 
 
         QString str(arr);
         QStringList list = str.split(",", QString::SkipEmptyParts);
 
         for( int i=0; i<list.size(); i++ )
-            g_data.Set(i, list.at(i).toDouble() );
+            g_data.SetV( i, list.at(i) );
     }
-
 
 
     QByteArray sendRequest( QUrl url)
@@ -98,10 +94,5 @@ public:
         }
         return ret;
     }
-
-
-    // Define signal:
-signals:
-    void valueChanged();
 };
 

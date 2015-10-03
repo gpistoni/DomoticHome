@@ -1,5 +1,5 @@
-#ifndef PWATERTEMP_H
-#define PWATERTEMP_H
+#pragma once
+
 #include <memory>
 
 #include <QScrollArea>
@@ -9,7 +9,6 @@
 #include <QDebug>
 #include <QStringList>
 
-#include "dhrequets.h"
 #include "Lib/valueWidget.h"
 
 namespace Ui {
@@ -32,12 +31,4 @@ private:
 
     Ui::WaterTemp *ui;
 
-public slots:
-    void onValueChagned();
-    void onValueCh();
-
-private slots:
-    void on_pushUpdate_clicked();
 };
-
-#endif // PWATERTEMP_H

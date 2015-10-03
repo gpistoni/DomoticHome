@@ -13,6 +13,7 @@ class HistogramView : public QGraphicsView
         V=1
     } tAxis;
 
+
 public:
   HistogramView(QWidget *parent = NULL);
   HistogramView( std::map<double,double>  &histo, QWidget *parent = NULL);

@@ -2,7 +2,7 @@
 #include "ui_pairtemp.h"
 #include <QGraphicsView>
 #include <QGraphicsScene>
-#include "HistogramView.h"
+#include "lib/HistogramView.h"
 
 pAirTemp::pAirTemp(QWidget *parent) :
     QScrollArea(parent),
@@ -10,8 +10,8 @@ pAirTemp::pAirTemp(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->label_header->setText("AIR TEMP");
-    ui->label_footer->setText("----");
+    ui->label_header->setText( "AIR" );
+    ui->label_footer->setText( "----" );
 
     std::map<double,double> histo;
 
@@ -26,7 +26,10 @@ pAirTemp::pAirTemp(QWidget *parent) :
     // Create a view, put a scene in it and add tiny circles
     // in the scene
     HistogramView * view = new HistogramView();
+    view->setHistogram(histo);
+    ui->gridLayout->addWidget(view);
 
+    view = new HistogramView();
     view->setHistogram(histo);
     ui->gridLayout->addWidget(view);
 }
