@@ -28,7 +28,7 @@ IPAddress subnet(255, 255, 255, 0);                   //<<-- SUBNET
 EthernetServer server(80);
 
 #define ETHERNET_SELECT 10
-#define ACTIVITY 12
+#define ACTIVITY 13
 
 void setup()
 {
