@@ -202,7 +202,7 @@ void winterPP_Manager()
   //decido se accendere le stanze
   if ( DT.tPufferHi > 25 )
   {
-    if ( DT.tSala < 21)
+    if ( DT.tSala < 22)
     {
       Serial.println("Condizione S1");
       sala = true;
@@ -251,11 +251,13 @@ void winterPT_Manager()
   //decido se accendere sulla lavanderia
   if ( DT.tPufferHi > 40 )
   {
-    pompa = true;
+     Serial.println("Condizione T1");
+     pompa = true;
   }
 
   DT.rPompaPianoTerra.set(pompa);
   dhWifi.HttpRequest( DT.rPompaPianoTerra.getS() );
+
 }
 
 

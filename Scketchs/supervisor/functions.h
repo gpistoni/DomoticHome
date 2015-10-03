@@ -37,13 +37,16 @@ void logToFile ()
   dataString += " = ";
 
   // read three sensors and append to the string:
-  for (int analogPin = 0; analogPin < 3; analogPin++) {
+  for (int analogPin = 0; analogPin < 3; analogPin++) 
+  {
     int sensor = analogRead(analogPin);
     dataString += String(sensor);
-    if (analogPin < 2) {
+    if (analogPin < 2) 
+    {
       dataString += ",";  // separate the values with a comma
     }
   }
+  
 //
 //  // open the file. note that only one file can be open at a time,
 //  // so you have to close this one before opening another.
