@@ -6,7 +6,7 @@
 
 #include <QPushButton>
 #include <QMainWindow>
-#include "pMenu.h"
+//#include "pMenu.h"
 #include "pWaterTemp.h"
 #include "workerhttp.h"
 
@@ -36,8 +36,8 @@ private slots:
 private:
     int num_pages;
 
-    std::shared_ptr<pMenu>       m_pMenu;
-    std::shared_ptr<pAirTemp>    m_pAirTemp;
+    //std::shared_ptr<pMenu>       m_pMenu;
+    //std::shared_ptr<pAirTemp>    m_pAirTemp;
     std::shared_ptr<pWaterTemp>  m_pWaterTemp;
 //    std::shared_ptr<pWork>       m_pWork;
 

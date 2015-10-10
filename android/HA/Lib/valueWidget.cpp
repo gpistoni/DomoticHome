@@ -8,6 +8,8 @@
 #include <QLCDNumber>
 #include "data.h"
 
+extern CData g_data;
+
 //class MyWidget : public QWidget //inherit from QWidget
 //{
 //    Q_OBJECT

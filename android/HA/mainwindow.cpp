@@ -11,14 +11,14 @@ MainWindow::MainWindow(QWidget *parent) :
     num_pages = 0;
 
     //********** main **********************
-    m_pMenu = std::make_shared<pMenu>(ui->stackedWidget);
+    /*m_pMenu = std::make_shared<pMenu>(ui->stackedWidget);
     ui->stackedWidget->addWidget( m_pMenu.get() );
-    num_pages++;
+    num_pages++;*/
 
     //********** AirTemp **********************
-    m_pAirTemp = std::make_shared<pAirTemp>(ui->stackedWidget);
+   /* m_pAirTemp = std::make_shared<pAirTemp>(ui->stackedWidget);
     ui->stackedWidget->addWidget( m_pAirTemp.get() );
-    num_pages++;
+    num_pages++;*/
 
     //********** WaterTemp **********************
     m_pWaterTemp = std::make_shared<pWaterTemp>(ui->stackedWidget);
@@ -26,9 +26,9 @@ MainWindow::MainWindow(QWidget *parent) :
     num_pages++;
 
     //********** Work **********************
-    m_pWork = std::make_shared<pWork>(ui->stackedWidget);
+    /*m_pWork = std::make_shared<pWork>(ui->stackedWidget);
     ui->stackedWidget->addWidget( m_pWork.get() );
-    num_pages++;
+    num_pages++;*/
 
     //*****************************************
     ui->pageIndexBar->setMaximum( num_pages - 1 );
