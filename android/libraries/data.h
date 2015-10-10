@@ -6,14 +6,13 @@
 #include <QDebug>
 #include <QMutex>
 
-class CData;
-extern CData g_data;
+#define gData CData::m_pInstance
 
 //*************************************************************************************************************
 class CData : public QObject
 {
-   Q_OBJECT
-   Q_DISABLE_COPY(CData);
+    Q_OBJECT
+    Q_DISABLE_COPY(CData);
 
 private:
     static const int cols=10;
@@ -27,14 +26,19 @@ private:
 
     QMutex m_mutex;
 
-// Define signal:
+    // Define signal:
 signals:
     void sigChanged();
 
 public:
+    static CData* m_pInstance;
+
     CData()
     {
+        m_pInstance = NULL;
     }
+
+    static void init();
 
     void SetV( const int x, const int y, const float val )
     {
@@ -103,6 +107,8 @@ public:
         return m_label[i];
     }
 };
+
+
 
 
 

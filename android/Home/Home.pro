@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets network
 
 TARGET = Home
 TEMPLATE = app
@@ -14,10 +14,21 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    widgetvl.cpp
+    cwidgettair.cpp \
+    cwidgetvl.cpp \
+    ../libraries/HistogramView.cpp \
+    ../libraries/valueSetWidget.cpp \
+    ../libraries/valueWidget.cpp \
+    ../libraries/data.cpp
 
 HEADERS  += mainwindow.h \
-    widgetvl.h
+    cwidgettair.h \
+    cwidgetvl.h \
+    ../libraries/data.h \
+    ../libraries/HistogramView.h \
+    ../libraries/valueSetWidget.h \
+    ../libraries/valueWidget.h \
+    workerhttp.h
 
 FORMS    += mainwindow.ui \
     widgetvl.ui

@@ -6,10 +6,7 @@
 #include <QNetworkReply>
 #include <QMessageBox>
 #include <QEventLoop>
-#include "Lib/data.h"
-
-extern CData gData;
-
+#include "../libraries/data.h"
 
 //*************************************************************************************************************
 class WorkerThread : public QThread
@@ -28,12 +25,13 @@ public:
         m_mgr = new QNetworkAccessManager( );
         msleep(1000);
         getDataLabels();
+        emit gData->sigChanged();
 
         while(1)
         {
-            msleep(1000);
             getDataValues();
-            emit gData.sigChanged();
+            emit gData->sigChanged();
+            msleep(1000);
         }
     }
 
@@ -46,7 +44,7 @@ public:
         QStringList list = str.split(",", QString::SkipEmptyParts);
 
         for( int i=0; i<list.size(); i++ )
-            gData.SetL( i, list.at(i) );
+            gData->SetL( i, list.at(i) );
     }
 
     void getDataValues()
@@ -59,7 +57,7 @@ public:
         QStringList list = str.split(",", QString::SkipEmptyParts);
 
         for( int i=0; i<list.size(); i++ )
-            gData.SetV( i, list.at(i) );
+            gData->SetV( i, list.at(i) );
     }
 
 

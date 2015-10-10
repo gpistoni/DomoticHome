@@ -1,14 +1,14 @@
-#include "widgetvl.h"
+#include "cwidgetvl.h"
 #include "ui_widgetvl.h"
 
-widgetVL::widgetVL(QWidget *parent) :
+CwidgetVL::CwidgetVL(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::widgetVL)
 {
     ui->setupUi(this);
 }
 
-widgetVL::~widgetVL()
+CwidgetVL::~CwidgetVL()
 {
     delete ui;
 }

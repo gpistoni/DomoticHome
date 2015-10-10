@@ -8,23 +8,27 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    m_work.start();
+
     //********** AIR **********************
-    m_pagTAir = std::make_shared<widgetVL>(ui->stackedWidget);
-    ui->stackedWidget->addWidget( m_pagTAir.get() );
+    m_pagTAir =  new CWidgetTAir( ui->stackedWidget );
+    ui->stackedWidget->addWidget( m_pagTAir );
     m_num_pages++;
 
     //********** Water **********************
-    m_pagTWater = std::make_shared<widgetVL>(ui->stackedWidget);
-    ui->stackedWidget->addWidget( m_pagTWater.get() );
+    m_pagTWater = new CwidgetVL(ui->stackedWidget);
+    ui->stackedWidget->addWidget( m_pagTWater );
     m_num_pages++;
 
     //********** EV **********************
-    m_pagEv = std::make_shared<widgetVL>(ui->stackedWidget);
+    m_pagEv = std::make_shared<CwidgetVL>(ui->stackedWidget);
     ui->stackedWidget->addWidget( m_pagEv.get() );
     m_num_pages++;
 
+
     ui->pageIndexBar->setMaximum( m_num_pages - 1 );
     ui->pageIndexBar->setValue(0);
+
 }
 
 MainWindow::~MainWindow()
@@ -49,12 +53,11 @@ void MainWindow::on_pushButton_Next_clicked()
 void MainWindow::on_pageIndexBar_valueChanged(int value)
 {
     ui->stackedWidget->setCurrentIndex( value );
+    ui->label_title->setText( "Page" + QString::number(value));
 }
 
 void MainWindow::on_stackedWidget_currentChanged(int idx)
 {
     if (idx>0)
         ui->pageIndexBar->setValue(idx );
-     int p = ui->stackedWidget->currentIndex();
-     ui->label_title->setText( "Page" + QString::number(p) );
 }

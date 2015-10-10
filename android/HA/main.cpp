@@ -2,7 +2,7 @@
 #include <QApplication>
 
 
-CData g_data;
+CData gData;
 
 int main(int argc, char *argv[])
 {

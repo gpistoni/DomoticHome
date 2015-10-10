@@ -7,7 +7,7 @@
 #include <QMutex>
 
 class CData;
-extern CData g_data;
+extern CData gData;
 
 //*************************************************************************************************************
 class CData : public QObject

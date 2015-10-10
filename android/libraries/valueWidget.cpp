@@ -1,5 +1,4 @@
 #include "valueWidget.h"
-#include "../css.h"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -8,7 +7,6 @@
 #include <QLCDNumber>
 #include "data.h"
 
-extern CData g_data;
 
 //class MyWidget : public QWidget //inherit from QWidget
 //{
@@ -58,7 +56,7 @@ ValueWidget::ValueWidget(QWidget* parent) : QWidget(parent)
     m_Layout->addWidget(m_label);
     m_Layout->addWidget(m_value);
 
-    connect( &g_data, SIGNAL(sigChanged()), this, SLOT(onValueChanged()) );
+    connect( gData, SIGNAL(sigChanged()), this, SLOT(onValueChanged()) );
 }
 
 
@@ -66,10 +64,10 @@ void ValueWidget::init(int idx, QString style )
 {
     m_dataIndex = idx;
 
-    m_label->setText( g_data.GetL( idx ) );
-    m_value->display( g_data.GetV( idx ) );
+    m_label->setText( gData->GetL( idx ) );
+    m_value->display( gData->GetV( idx ) );
 
-    m_value->setStyleSheet( CSS_LCDDISPLAY );
+    m_value->setStyleSheet( style );
 
     setStyleSheet( style );
 }
@@ -86,7 +84,7 @@ void ValueWidget::label( QString label )
 
  void ValueWidget::onValueChanged()
  {
-     m_label->setText( g_data.GetL( m_dataIndex ) );
-     m_value->display( g_data.GetV( m_dataIndex ) );
+     m_label->setText( gData->GetL( m_dataIndex ) );
+     m_value->display( gData->GetV( m_dataIndex ) );
  }
 

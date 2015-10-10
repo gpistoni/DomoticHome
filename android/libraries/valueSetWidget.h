@@ -2,7 +2,12 @@
 
 #include <QWidget>
 #include <QTimer>
+#include <QLabel>
+#include <QLCDNumber>
 #include "valueWidget.h"
+#include "data.h"
+
+
 
 class ValueSetWidget : public ValueWidget //inherit from QWidget
 {
@@ -10,7 +15,18 @@ class ValueSetWidget : public ValueWidget //inherit from QWidget
 
 public:
     ValueSetWidget(QWidget* parent = 0); //don't forget to pass the parent
-    void init( int index, QString style, float increment );
+
+    void init(int idx, QString style, float increment )
+    {
+        m_dataIndex = idx;
+        m_increment = increment;
+
+        setStyleSheet( style );
+        m_label->setText( gData->GetL( idx ) );
+        m_value->display( gData->GetV( idx ) );
+
+        m_value->setPalette(Qt::yellow);
+    }
 
 private:
     QPushButton *m_plus;

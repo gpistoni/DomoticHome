@@ -7,15 +7,15 @@ namespace Ui {
 class widgetVL;
 }
 
-class widgetVL : public QWidget
+class CwidgetVL : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit widgetVL(QWidget *parent = 0);
-    ~widgetVL();
+    explicit CwidgetVL(QWidget *parent = 0);
+    ~CwidgetVL();
 
-private:
+public:
     Ui::widgetVL *ui;
 };
 

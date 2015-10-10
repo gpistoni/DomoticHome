@@ -6,8 +6,8 @@
 
 #include <QMainWindow>
 
-#include "widgetvl.h"
-#include "pagina2.h"
+#include "cwidgettair.h"
+#include "workerhttp.h"
 
 namespace Ui {
 class MainWindow;
@@ -32,9 +32,13 @@ private:
     Ui::MainWindow *ui;
     int m_num_pages;
 
-    std::shared_ptr<widgetVL>  m_pagTAir;
-    std::shared_ptr<widgetVL>  m_pagTWater;
-    std::shared_ptr<pagina2>  m_pagEv;
+   CWidgetTAir *m_pagTAir;
+   CwidgetVL  *m_pagTWater;
+   std::shared_ptr<CwidgetVL>  m_pagEv;
+
+private:
+   // Worker Thread
+  WorkerThread m_work;
 };
 
 #endif // MAINWINDOW_H

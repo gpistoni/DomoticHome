@@ -36,44 +36,44 @@ void ValueSetWidget::init(int idx, QString style, float increment )
     m_increment = increment;
 
     setStyleSheet( CSS_LCDDISPLAY_VALUE );
-    m_label->setText( g_data.GetL( idx ) );
-    m_value->display( g_data.GetV( idx ) );
+    m_label->setText( gData.GetL( idx ) );
+    m_value->display( gData.GetV( idx ) );
 
     m_value->setPalette(Qt::yellow);
 }
 
 void ValueSetWidget::onPlusClicked()
 {
-    disconnect( &g_data, SIGNAL(sigChanged()), this, SLOT(onValueChanged()) );
+    disconnect( &gData, SIGNAL(sigChanged()), this, SLOT(onValueChanged()) );
     m_timer.stop();
     m_timer.start(5000);
 
     m_value->setPalette(Qt::red);
-    QString label =  g_data.GetL( m_dataIndex );
+    QString label =  gData.GetL( m_dataIndex );
 
-    float setpoint = g_data.GetVsetpoint(label) + m_increment ;
-    g_data.SetVsetpoint(  label, setpoint );
+    float setpoint = gData.GetVsetpoint(label) + m_increment ;
+    gData.SetVsetpoint(  label, setpoint );
     m_value->display( setpoint );
 }
 
 void ValueSetWidget::onMinusClicked()
 {
-    disconnect( &g_data, SIGNAL(sigChanged()), this, SLOT(onValueChanged()) );
+    disconnect( &gData, SIGNAL(sigChanged()), this, SLOT(onValueChanged()) );
     m_timer.stop();
     m_timer.start(5000);
 
     m_value->setPalette(Qt::red);
-    QString label =  g_data.GetL( m_dataIndex );
+    QString label =  gData.GetL( m_dataIndex );
 
-    float setpoint = g_data.GetVsetpoint(label) - m_increment ;
-    g_data.SetVsetpoint(  label, setpoint );
+    float setpoint = gData.GetVsetpoint(label) - m_increment ;
+    gData.SetVsetpoint(  label, setpoint );
     m_value->display( setpoint );
 }
 
 void ValueSetWidget::onTimerTimeout()
 {
    m_timer.stop();
-   connect( &g_data, SIGNAL( sigChanged() ), this, SLOT( onValueChanged() ) );
+   connect( &gData, SIGNAL( sigChanged() ), this, SLOT( onValueChanged() ) );
 
    m_value->setPalette(Qt::yellow);
    onValueChanged();
