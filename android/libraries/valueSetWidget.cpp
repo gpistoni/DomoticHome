@@ -9,9 +9,20 @@
 #include "data.h"
 
 ValueSetWidget::ValueSetWidget(QWidget* parent) : ValueWidget(parent)
-{
-    m_plus = new QPushButton("+");
-    m_minus = new QPushButton("-");
+{    
+    m_plus = new QPushButton( "" );
+    m_minus = new QPushButton( "" );
+
+    QIcon icon;
+    icon.addFile(QStringLiteral(":/icons/icons/up.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    m_plus->setIcon(icon);
+    m_plus->setFlat(true);
+
+    QIcon icon2;
+    icon2.addFile(QStringLiteral(":/icons/icons/down.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    m_minus->setIcon(icon2);
+    m_minus->setFlat(true);
+
 
     m_plus->setMinimumWidth( 40 );
     m_plus->setMaximumWidth( 100 );
@@ -28,17 +39,21 @@ ValueSetWidget::ValueSetWidget(QWidget* parent) : ValueWidget(parent)
     connect( &m_timer, SIGNAL(timeout()), this, SLOT( onTimerTimeout() ) );
 }
 
-//void ValueSetWidget::init(int idx, QString style, float increment )
-//{
-//    m_dataIndex = idx;
-//    m_increment = increment;
+void ValueSetWidget::init(int idx, QString style, float increment )
+{
+    m_dataIndex = idx;
+    m_increment = increment;
 
-//    setStyleSheet( style );
-//    m_label->setText( g_data.GetL( idx ) );
-//    m_value->display( g_data.GetV( idx ) );
+    m_label->setText( gData->GetL( idx ) );
 
-//    m_value->setPalette(Qt::yellow);
-//}
+    m_value->setStyleSheet( style );
+    m_value->display( gData->GetV( idx ) );
+
+   // m_plus->setStyleSheet( CSS_BUTTON );
+   // m_minus->setStyleSheet( CSS_BUTTON );
+
+    m_value->setPalette(Qt::yellow);
+}
 
 void ValueSetWidget::onPlusClicked()
 {

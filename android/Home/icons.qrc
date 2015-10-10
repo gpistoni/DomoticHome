@@ -1,2 +1,25 @@
-<RCC/>
-
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/up.svg</file>
+        <file>icons/down.svg</file>
+        <file>icons/left.svg</file>
+        <file>icons/right.svg</file>
+        <file>icons/basic14.svg</file>
+        <file>icons/bookmark49.svg</file>
+        <file>icons/control16.svg</file>
+        <file>icons/delete85.svg</file>
+        <file>icons/expand42.svg</file>
+        <file>icons/flag97.svg</file>
+        <file>icons/flask.svg</file>
+        <file>icons/heart297.svg</file>
+        <file>icons/home153.svg</file>
+        <file>icons/image6.svg</file>
+        <file>icons/play-button4.svg</file>
+        <file>icons/right arrow.svg</file>
+        <file>icons/round77.svg</file>
+        <file>icons/zoom71.svg</file>
+        <file>icons/zoom72.svg</file>
+        <file>icons/up.png</file>
+        <file>icons/down.png</file>
+    </qresource>
+</RCC>

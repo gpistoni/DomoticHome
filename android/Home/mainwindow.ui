@@ -35,8 +35,8 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>../icons/left.svg</normaloff>../icons/left.svg</iconset>
+         <iconset resource="icons.qrc">
+          <normaloff>:/icons/icons/left.svg</normaloff>:/icons/icons/left.svg</iconset>
         </property>
         <property name="flat">
          <bool>true</bool>
@@ -87,7 +87,7 @@
          <number>1</number>
         </property>
         <property name="tracking">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -99,7 +99,7 @@
          <bool>false</bool>
         </property>
         <property name="tickPosition">
-         <enum>QSlider::TicksBothSides</enum>
+         <enum>QSlider::TicksAbove</enum>
         </property>
        </widget>
       </item>
@@ -124,8 +124,8 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>../icons/right.svg</normaloff>../icons/right.svg</iconset>
+         <iconset resource="icons.qrc">
+          <normaloff>:/icons/icons/right.svg</normaloff>:/icons/icons/right.svg</iconset>
         </property>
         <property name="autoDefault">
          <bool>false</bool>
@@ -152,6 +152,8 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -28,10 +28,14 @@ HEADERS  += mainwindow.h \
     ../libraries/HistogramView.h \
     ../libraries/valueSetWidget.h \
     ../libraries/valueWidget.h \
-    workerhttp.h
+    workerhttp.h \
+    css.h
 
 FORMS    += mainwindow.ui \
     widgetvl.ui
 
 
 QMAKE_CXXFLAGS += -std=c++11
+
+RESOURCES += \
+    icons.qrc

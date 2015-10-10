@@ -71,25 +71,25 @@ public:
         m_index[label] = i;
     }
 
-    float GetV( const int x, const int y)
+    double GetV( const int x, const int y)
     {
         QMutexLocker m(&m_mutex);
         return m_value[x + y*cols];
     }
 
-    float GetV( const int i )
+    double GetV( const int i )
     {
         QMutexLocker m(&m_mutex);
         return m_value[i];
     }
 
-    float GetV( const QString &label )
+    double GetV( const QString &label )
     {
         QMutexLocker m(&m_mutex);
         return m_value[ m_index[label] ];
     }
 
-    float GetVsetpoint( const QString &label )
+    double GetVsetpoint( const QString &label )
     {
         QMutexLocker m(&m_mutex);
         return m_valueSetpoint[label];

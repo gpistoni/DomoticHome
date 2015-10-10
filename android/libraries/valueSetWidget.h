@@ -16,17 +16,7 @@ class ValueSetWidget : public ValueWidget //inherit from QWidget
 public:
     ValueSetWidget(QWidget* parent = 0); //don't forget to pass the parent
 
-    void init(int idx, QString style, float increment )
-    {
-        m_dataIndex = idx;
-        m_increment = increment;
-
-        setStyleSheet( style );
-        m_label->setText( gData->GetL( idx ) );
-        m_value->display( gData->GetV( idx ) );
-
-        m_value->setPalette(Qt::yellow);
-    }
+    void init(int idx, QString style, float increment );
 
 private:
     QPushButton *m_plus;
