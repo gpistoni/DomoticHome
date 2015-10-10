@@ -207,7 +207,7 @@ void HistogramView::draw( QSize sz )
 
     setRenderHint(QPainter::HighQualityAntialiasing, true);
 
-    assert(scene()->sceneRect() == sceneRect());
+    //assert(scene()->sceneRect() == sceneRect());
 }
 
 void HistogramView::Shadowize( int px )

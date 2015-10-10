@@ -1,4 +1,4 @@
-#include "ValueSetWidget.h"
+#include "valueSetWidget.h"
 #include "../css.h"
 
 #include <QVBoxLayout>
