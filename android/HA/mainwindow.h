@@ -7,9 +7,7 @@
 #include <QPushButton>
 #include <QMainWindow>
 #include "pMenu.h"
-#include "pAirTemp.h"
 #include "pWaterTemp.h"
-#include "pWork.h"
 #include "workerhttp.h"
 
 namespace Ui {
@@ -41,7 +39,7 @@ private:
     std::shared_ptr<pMenu>       m_pMenu;
     std::shared_ptr<pAirTemp>    m_pAirTemp;
     std::shared_ptr<pWaterTemp>  m_pWaterTemp;
-    std::shared_ptr<pWork>       m_pWork;
+//    std::shared_ptr<pWork>       m_pWork;
 
      // Worker Thread
     WorkerThread m_work;

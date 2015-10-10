@@ -13,32 +13,22 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    pWork.cpp \
     Lib/valueWidget.cpp \
     Lib/valueSetWidget.cpp \
     Lib/HistogramView.cpp \
-    pag1.cpp \
-    pag2.cpp \
-    pag3.cpp
+    pWaterTemp.cpp
 
 HEADERS  += mainwindow.h \
-    pWork.h \
     css.h \
     Lib/data.h \
     Lib/valueSetWidget.h \
     Lib/valueWidget.h \
     Lib/HistogramView.h \
     workerhttp.h \
-    pag1.h \
-    pag2.h \
-    pag3.h
+    pWaterTemp.h
 
 FORMS    += mainwindow.ui \
-    pWaterTemp.ui \
-    pAirTemp.ui \
-    pMenu.ui \
-    pWork.ui \
-    _test_frame.ui
+    pWaterTemp.ui
 
 CONFIG += mobility \
 
