@@ -39,10 +39,6 @@ void loop()
   /*******************************************************************************/
   if ( Slave.waitRequest(50) )
   {
-    for (int i = 0; i < 8; i++)
-    {
-      Slave.sensor[i] = Slave.relay[i];
-    }
     Slave.sendData();
       
     Serial.println( "");
