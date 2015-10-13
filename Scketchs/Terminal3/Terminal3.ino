@@ -30,7 +30,6 @@ void setup()
   Serial.begin(9600);
   Serial.print( "Setup-- SLAVE ID: " );
   Serial.print( Slave.m_id );
-
 }
 
 
@@ -46,8 +45,9 @@ void loop()
     
     for (int i = 0; i < 8; i++)
     {
+	  Slave.sensor[i] = Slave.relay[i];
       digitalWrite(2 + i, !Slave.relay[i] );
-      if (i!=0)  Serial.print( "," );
+	  if (i!=0)  Serial.print( "," );
       Serial.print( Slave.relay[i] );
     }
   }
