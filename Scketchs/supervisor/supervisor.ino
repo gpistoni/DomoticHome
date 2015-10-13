@@ -45,6 +45,11 @@ void setup()
   webServer.on("/log", handleLog );
   webServer.on("/values", handleValues );
   webServer.on("/labels", handleLabels );
+
+  webServer.on("/pars", handlePars );
+  webServer.on("/labpars", handleLabelsPars );
+
+  webServer.on("/print", handlePrint );
   webServer.onNotFound(handleNotFound);
   webServer.begin();
   Serial.println("HTTP server started");
@@ -62,8 +67,6 @@ void setup()
   Alarm.timerRepeat( 61,        winterPP_Manager);        // timer for every 1 minutes
   Alarm.timerRepeat( 62,        winterPT_Manager);        // timer for every 1 minutes
   Alarm.timerRepeat( 63,        BoilerSanitaria_Manager); // timer for every 1 minutes
-
-
 
   UpdateAll();
   PDC_Manager();
@@ -122,8 +125,10 @@ void UpdateAll()
 /**************************************************************************************************/
 void PDC_Manager()
 {
+  if ( DT.pPDC_man ) return;
   digitalClockDisplay();
   Serial.println("PDC_Manager");
+  
   DT.rPdc.set(0);
   DT.rPdcPompa.set(0);
 
@@ -173,8 +178,10 @@ void PDC_Manager()
 /**************************************************************************************************/
 void BoilerSanitaria_Manager()
 {
+  if ( DT.pBoilerSanitaria_man ) return;
   digitalClockDisplay();
   Serial.println("BoilerSanitaria_Manager");
+
   DT.rBoilerSanitaria.set( 0 );
 
   //decido se accendere il boiler solo di notte e solo se il camino non funziona
@@ -194,27 +201,35 @@ void BoilerSanitaria_Manager()
 /**************************************************************************************************/
 void winterPP_Manager()
 {
+  if ( DT.pWinterPP_man ) return;
   digitalClockDisplay();
   Serial.println("winterPP_Manager");
+
   bool sala = false;
   bool cucina = false;
+  bool bagno = false;
 
   //decido se accendere le stanze
   if ( DT.tPufferHi > 25 )
   {
-    if ( DT.tSala < 22)
+    if ( DT.tSala < DT.ptSala )
     {
       Serial.println("Condizione S1");
       sala = true;
     }
-    if ( DT.tCucina < 21)
+    if ( DT.tCucina < DT.ptCucina )
     {
       Serial.println("Condizione S2");
       cucina = true;
     }
+    if ( hour() >= 19 || hour() < 8 )
+    {
+      Serial.println("Condizione S3");
+      bagno = true;
+    }
   }
 
-  bool pompa = sala || cucina;
+  bool pompa = sala || cucina || bagno;
 
   // attuatori
   DT.evCameraM1.set(pompa && 0);
@@ -243,6 +258,7 @@ void winterPP_Manager()
 /**************************************************************************************************/
 void winterPT_Manager()
 {
+  if ( DT.pWinterPT_man ) return;
   digitalClockDisplay();
   Serial.println("winterPT_Manager");
 
@@ -251,8 +267,8 @@ void winterPT_Manager()
   //decido se accendere sulla lavanderia
   if ( DT.tPufferHi > 40 )
   {
-     Serial.println("Condizione T1");
-     pompa = true;
+    Serial.println("Condizione T1");
+    pompa = true;
   }
 
   DT.rPompaPianoTerra.set(pompa);
