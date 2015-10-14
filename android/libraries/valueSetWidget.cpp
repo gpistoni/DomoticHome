@@ -23,7 +23,6 @@ ValueSetWidget::ValueSetWidget(QWidget* parent) : ValueWidget(parent)
     m_minus->setIcon(icon2);
     m_minus->setFlat(true);
 
-
     m_plus->setMinimumWidth( 40 );
     m_plus->setMaximumWidth( 100 );
     m_minus->setMinimumWidth( 40 );
@@ -35,7 +34,6 @@ ValueSetWidget::ValueSetWidget(QWidget* parent) : ValueWidget(parent)
 
     connect( m_plus, SIGNAL( clicked() ), this, SLOT( onPlusClicked() ) );
     connect( m_minus, SIGNAL( clicked() ), this, SLOT( onMinusClicked() ) );
-
     connect( &m_timer, SIGNAL(timeout()), this, SLOT( onTimerTimeout() ) );
 }
 
@@ -59,12 +57,15 @@ void ValueSetWidget::init(int idx, int idxParam, QString style, float increment 
 void ValueSetWidget::onPlusClicked()
 {
     disconnect( gData, SIGNAL(sigValueChanged()), this, SLOT(onValueChanged()) );
+    int active = 0;
+    if ( m_timer.isActive() ) active = 1;
+
     m_timer.stop();
     m_timer.start(5000);
 
     m_value->setPalette(Qt::red);
 
-    float setpoint = gData->GetVparam(m_dataIndexParam) + m_increment ;
+    float setpoint = gData->GetVparam(m_dataIndexParam) + m_increment * active ;
     gData->SetVparam( m_dataIndexParam, setpoint );
     m_value->display( setpoint );
 }

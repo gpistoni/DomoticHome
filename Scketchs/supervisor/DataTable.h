@@ -123,7 +123,7 @@ class cDataTable
       webParam[3] = pPDC_man.setup             ( "pPDC_man", 0 );
 
       webParam[10] = ptCucina.setup        ( "ptCucina",  20 );
-      webParam[11] = ptSala.setup          ( "ptSala",    24 );
+      webParam[11] = ptSala.setup          ( "ptSala",    22 );
       webParam[12] = ptCameraS.setup       ( "ptCameraS", 18 );
       webParam[13] = ptCameraD.setup       ( "ptCameraD", 18 );
       webParam[14] = ptCameraM.setup       ( "ptCameraM", 18 );
@@ -194,6 +194,17 @@ class cDataTable
       evCameraD1.update( strs );
       evCameraD2.update( strs );
     };
+
+    void setPars( String &label, String &value)
+    {
+      for ( int i = 0; i < 100; i++ )
+      {
+        if ( webParam[i] != 0 && webParam[i]->m_descr == label  )
+        {
+          webParam[i]->m_value = value.toFloat();
+        }
+      }
+    }
 
     void enumerateVals( String &labels, String &values)
     {

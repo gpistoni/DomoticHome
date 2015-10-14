@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     ../libraries/HistogramView.cpp \
     ../libraries/valueSetWidget.cpp \
     ../libraries/valueWidget.cpp \
-    ../libraries/data.cpp
+    ../libraries/data.cpp \
+    cwidgettwater.cpp
 
 HEADERS  += mainwindow.h \
     cwidgettair.h \
@@ -29,7 +30,8 @@ HEADERS  += mainwindow.h \
     ../libraries/valueSetWidget.h \
     ../libraries/valueWidget.h \
     workerhttp.h \
-    css.h
+    css.h \
+    cwidgettwater.h
 
 FORMS    += mainwindow.ui \
     widgetvl.ui

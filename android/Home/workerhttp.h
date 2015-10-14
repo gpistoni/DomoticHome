@@ -16,16 +16,16 @@ class WorkerHTTP : public QThread
     QNetworkAccessManager * m_mgr;
 
 public slots:
-    void onParamChanged()
+    void onParamChanged(QString par)
     {
-        sendDataPars();
+        sendDataPars( par );
         requestDataValues();
     }
 
 public:
     WorkerHTTP()
     {
-         connect( gData, SIGNAL(sigParamChanged()), this, SLOT(onParamChanged()) );
+         connect( gData, SIGNAL(sigParamChanged( QString )), this, SLOT(onParamChanged( QString )) );
     }
 
     void run()
@@ -79,7 +79,7 @@ public:
 
     void requestDataLabelsPars()
     {
-        QByteArray arr = sendRequest(  QUrl(QString("http://192.168.0.201/labelspars")) );
+        QByteArray arr = sendRequest(  QUrl(QString("http://192.168.0.201/labpars")) );
 
         QString str(arr);
         QStringList list = str.split(",", QString::SkipEmptyParts);
@@ -88,16 +88,15 @@ public:
             gData->SetLparam( i, list.at(i) );
     }
 
-    void sendDataPars()
+    void sendDataPars( QString par )
     {
-        QByteArray arr = "http://192.168.0.201/setPars=";
+        QByteArray arr = "http://192.168.0.201/setPars?";
 
-        for( int i=0; i<100; i++ )
-        {
-            arr += gData->GetVparam(i);
-            arr += ',';
-        }
+        double val = gData->GetVparam( par );
 
+        arr += par;
+        arr += "=";
+        arr += QString::number( val );
         sendRequest(  QUrl( arr ) );
     }
 

@@ -32,7 +32,7 @@ private:
     // Define signal:
 signals:
     void sigValueChanged();
-    void sigParamChanged();
+    void sigParamChanged( QString par );
 
 public:
     static CData* m_pInstance;  // m_pInstance
@@ -56,7 +56,7 @@ public:
     //********************************************************************/
     void SetV( const int i, const float val )
     {
-        m_mutex.lockForWrite();
+        QWriteLocker m(&m_mutex);
         if ( m_value[i] != val )
         {
             m_value[i] = val;
@@ -67,12 +67,12 @@ public:
 
     void SetVparam( const int i, const float val )
     {
-        m_mutex.lockForWrite();
+        QWriteLocker m(&m_mutex);
         if ( m_param[i] != val )
         {
             m_param[i] = val;
             m_mutex.unlock();
-            emit sigParamChanged();
+            emit sigParamChanged( m_labelParam[i] );
         }
     }
 
@@ -102,6 +102,12 @@ public:
     {
         QReadLocker m(&m_mutex);
         return m_param[i];
+    }
+
+    double GetVparam( const QString &par )
+    {
+        QReadLocker m(&m_mutex);
+        return m_param[m_indexParam[par]];
     }
 
     //********************************************************************/

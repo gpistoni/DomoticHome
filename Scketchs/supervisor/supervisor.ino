@@ -35,24 +35,16 @@ void setup()
   IPAddress subnet(255, 255, 255, 0);
 
   dhWifi.setup( ip, gateway, subnet );
+
+  digitalWrite(led, 1);
   delay (1000);
+  digitalWrite(led, 0);
 
   DT.setup();
 
   UpdateTime();      // update system time
 
-  webServer.on("/", handleRoot );
-  webServer.on("/log", handleLog );
-  webServer.on("/values", handleValues );
-  webServer.on("/labels", handleLabels );
-
-  webServer.on("/pars", handlePars );
-  webServer.on("/labpars", handleLabelsPars );
-
-  webServer.on("/print", handlePrint );
-  webServer.onNotFound(handleNotFound);
-  webServer.begin();
-  Serial.println("HTTP server started");
+  initWebserver();
 
   //Alarm.alarmRepeat(8,30,0, MorningAlarm);  // 8:30am every day
   //Alarm.alarmRepeat(17,45,0,EveningAlarm);  // 5:45pm every day
@@ -61,12 +53,13 @@ void setup()
   Alarm.timerRepeat( 3600 * 24, Daily);             // timer for every 24h
   Alarm.timerRepeat( 60 * 60,    Hourly);           // timer for every 1h
 
-  Alarm.timerRepeat( 20,        UpdateAll);         // timer for every 60sec
+  Alarm.timerRepeat( 10,        UpdateAll);         // timer for every 60sec
 
   Alarm.timerRepeat( 60,        PDC_Manager);             // timer for every 10 minutes
   Alarm.timerRepeat( 61,        winterPP_Manager);        // timer for every 1 minutes
   Alarm.timerRepeat( 62,        winterPT_Manager);        // timer for every 1 minutes
   Alarm.timerRepeat( 63,        BoilerSanitaria_Manager); // timer for every 1 minutes
+
 
   UpdateAll();
   PDC_Manager();
@@ -88,7 +81,6 @@ void loop()
 void Daily()
 {
   Serial.println("Dayly timer");
-
   UpdateTime();
 }
 
@@ -109,16 +101,18 @@ void UpdateTime()
 /**************************************************************************************************/
 void UpdateAll()
 {
+  static unsigned int i = 0;
   digitalClockDisplay();
   Serial.println("UpdateAll");
 
   if (year() < 2000 )
     UpdateTime();
 
-  DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
-  DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
-  DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
-  DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
+  i++;
+  if ( i%4 == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
+  if ( i%4 == 1 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
+  if ( i%4 == 2 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
+  if ( i%4 == 3 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
 }
 
 
@@ -128,7 +122,7 @@ void PDC_Manager()
   if ( DT.pPDC_man ) return;
   digitalClockDisplay();
   Serial.println("PDC_Manager");
-  
+
   DT.rPdc.set(0);
   DT.rPdcPompa.set(0);
 

@@ -51,7 +51,7 @@ ValueWidget::ValueWidget(QWidget* parent) : QWidget(parent)
 {
     m_Layout = new QHBoxLayout(this);
     m_label = new QLabel("Label");
-    m_value = new QLCDNumber( 3 );
+    m_value = new QLCDNumber( 4 );
 
     m_Layout->addWidget(m_label);
     m_Layout->addWidget(m_value);
@@ -64,11 +64,11 @@ void ValueWidget::init(int idx, QString style )
     m_dataIndex = idx;
 
     m_label->setText( gData->GetL( idx ) );
-    m_value->display( gData->GetV( idx ) );
 
     m_value->setStyleSheet( style );
+    m_value->display( gData->GetV( idx ) );
 
-    setStyleSheet( style );
+    //setStyleSheet( style );
 }
 
 void ValueWidget::display( float val)

@@ -1,5 +1,5 @@
-#ifndef CWIDGETTAIR_H
-#define CWIDGETTAIR_H
+#ifndef CWIDGETTWATER_H
+#define CWIDGETTWATER_H
 
 #include <QScrollArea>
 #include <QLabel>
@@ -11,13 +11,13 @@
 #include "cwidgetvl.h"
 
 namespace Ui {
-class CWidgetTAir;
+class CWidgetTWater;
 }
 
-class CWidgetTAir : public CwidgetVL
+class CWidgetTWater : public CwidgetVL
 {
 public:
-    CWidgetTAir( QWidget *parent = 0 );
+    CWidgetTWater( QWidget *parent = 0 );
 
 protected:
     std::vector< QLabel* >            m_Title;
@@ -25,4 +25,4 @@ protected:
     std::vector< ValueWidget* >       m_humi;
 };
 
-#endif // CWIDGETTAIR_H
+#endif // CWIDGETTWATER_H

@@ -7,6 +7,7 @@
 #include <QMainWindow>
 
 #include "cwidgettair.h"
+#include "cwidgettwater.h"
 #include "workerhttp.h"
 
 namespace Ui {
@@ -32,8 +33,10 @@ private:
     Ui::MainWindow *ui;
     int m_num_pages;
 
-   CWidgetTAir *m_pagTAir;
-   CwidgetVL  *m_pagTWater;
+   CWidgetTAir      *m_pagTAir;
+   CWidgetTWater    *m_pagTWater;
+
+   CwidgetVL  *m_pagTWater1;
    std::shared_ptr<CwidgetVL>  m_pagEv;
 
 private:

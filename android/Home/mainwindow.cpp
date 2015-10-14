@@ -16,8 +16,13 @@ MainWindow::MainWindow(QWidget *parent) :
     m_num_pages++;
 
     //********** Water **********************
-    m_pagTWater = new CwidgetVL(ui->stackedWidget);
+    m_pagTWater = new CWidgetTWater(ui->stackedWidget);
     ui->stackedWidget->addWidget( m_pagTWater );
+    m_num_pages++;
+
+    //********** 11 **********************
+    m_pagTWater1 = new CwidgetVL(ui->stackedWidget);
+    ui->stackedWidget->addWidget( m_pagTWater1);
     m_num_pages++;
 
     //********** EV **********************
