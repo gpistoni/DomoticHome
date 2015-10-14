@@ -9,8 +9,31 @@ class cDataTable
     // terminal 1
     cFloat hCucina;
     cFloat hSala;
+    cFloat hCameraS;
+    cFloat hCameraD;
+    cFloat hCameraM;
+    cFloat hBagno;
+
     cFloat tCucina;
     cFloat tSala;
+    cFloat tCameraS;
+    cFloat tCameraD;
+    cFloat tCameraM;
+    cFloat tBagno;
+
+    cParam phCucina;
+    cParam phSala;
+    cParam phCameraS;
+    cParam phCameraD;
+    cParam phCameraM;
+    cParam phBagno;
+
+    cParam ptCucina;
+    cParam ptSala;
+    cParam ptCameraS;
+    cParam ptCameraD;
+    cParam ptCameraM;
+    cParam ptBagno;
 
     // terminal 3
     cBool rPdc;
@@ -41,7 +64,15 @@ class cDataTable
     cBool evCameraD1;
     cBool evCameraD2;
 
+    //Man-Auto
+    cParam pWinterPP_man;
+    cParam pWinterPT_man;
+    cParam pBoilerSanitaria_man;
+    cParam pPDC_man;
+
+    // puntatori
     cVar* webVar[100];
+    cParam* webParam[100];
 
     void setup()
     {
@@ -49,9 +80,17 @@ class cDataTable
 
       webVar[0] = hCucina.setup            ( T1, 0, "hCucina");
       webVar[1] = hSala.setup              ( T1, 1, "hSala");
-      
+      webVar[2] = hCameraS.setup           ( T1, 2, "hCameraS");
+      webVar[3] = hCameraD.setup           ( T1, 3, "hCameraD");
+      webVar[4] = hCameraM.setup           ( T1, 4, "hCameraM");
+      webVar[5] = hBagno.setup             ( T1, 5, "hBagno");
+
       webVar[10] = tCucina.setup           ( T1, 10, "tCucina" );
       webVar[11] = tSala.setup             ( T1, 11, "tSala");
+      webVar[12] = tCameraS.setup          ( T1, 12, "tCameraS");
+      webVar[13] = tCameraD.setup          ( T1, 13, "tCameraD");
+      webVar[14] = tCameraM.setup          ( T1, 14, "tCameraM");
+      webVar[15] = tBagno.setup            ( T1, 15, "tBagno");
 
       webVar[30] = rPdc.setup              ( T3, 0, "PDC");
       webVar[31] = rPdcCool0_Heat1.setup   ( T3, 1, "CoolHeat");
@@ -77,6 +116,18 @@ class cDataTable
       webVar[55] = evCameraS.setup         ( T5, 5, "evCameraS");
       webVar[56] = evCameraD1.setup        ( T5, 6, "evCameraD1");
       webVar[57] = evCameraD2.setup        ( T5, 7, "evCameraD2");
+
+      webParam[0] = pWinterPP_man.setup        ( "pWinterPP_man", 0 );
+      webParam[1] = pWinterPT_man.setup        ( "pWinterPT_man", 0 );
+      webParam[2] = pBoilerSanitaria_man.setup ( "pBoilerSanitaria_man", 0 );
+      webParam[3] = pPDC_man.setup             ( "pPDC_man", 0 );
+
+      webParam[10] = ptCucina.setup        ( "ptCucina",  20 );
+      webParam[11] = ptSala.setup          ( "ptSala",    24 );
+      webParam[12] = ptCameraS.setup       ( "ptCameraS", 18 );
+      webParam[13] = ptCameraD.setup       ( "ptCameraD", 18 );
+      webParam[14] = ptCameraM.setup       ( "ptCameraM", 18 );
+      webParam[15] = ptBagno.setup         ( "ptBagno",   24 );
     };
 
     void UpdateT1( String strs )
@@ -86,8 +137,18 @@ class cDataTable
 
       tCucina.update( strs );
       tSala.update( strs );
+      tCameraS.update( strs );
+      tCameraD.update( strs );
+      tCameraM.update( strs );
+      tBagno.update( strs );
+
       hCucina.update( strs );
       hSala.update( strs );
+      hCameraS.update( strs );
+      hCameraD.update( strs );
+      hCameraM.update( strs );
+      hBagno.update( strs );
+
     };
 
     void UpdateT3( String strs )
@@ -134,7 +195,7 @@ class cDataTable
       evCameraD2.update( strs );
     };
 
-    void enumerate( String &labels, String &values)
+    void enumerateVals( String &labels, String &values)
     {
       for ( int i = 0; i < 100; i++ )
       {
@@ -149,6 +210,54 @@ class cDataTable
         {
           labels += "?,";
           values += "0,";
+        }
+      };
+    };
+
+    void enumeratePars( String &labels, String &values)
+    {
+      for ( int i = 0; i < 100; i++ )
+      {
+        if ( webParam[i] != 0 )
+        {
+          labels += webParam[i]->m_descr;
+          labels += ",";
+          values += webParam[i]->m_value;
+          values += ",";
+        }
+        else
+        {
+          labels += "?,";
+          values += "0,";
+        }
+      };
+    };
+
+    void print( String &readable )
+    {
+      for ( int i = 0; i < 100; i++ )
+      {
+        if ( webVar[i] != 0 )
+        {
+          readable += "\n[";
+          readable += i;
+          readable += "] ";
+          readable += webVar[i]->m_descr;
+          readable += " = ";
+          readable += webVar[i]->m_value;
+        }
+      };
+      readable += "\n";
+      for ( int i = 0; i < 100; i++ )
+      {
+        if ( webParam[i] != 0 )
+        {
+          readable += "\n(";
+          readable += i;
+          readable += ") ";
+          readable += webParam[i]->m_descr;
+          readable += " = ";
+          readable += webParam[i]->m_value;
         }
       };
     };

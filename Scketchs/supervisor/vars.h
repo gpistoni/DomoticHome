@@ -2,6 +2,32 @@ String strValue(String data, char separator, int index);
 double strValueD(String data, char separator, int index);
 bool strValueB(String data, char separator, int index);
 
+
+//********************************************************************************************
+class cParam
+{
+  public:
+    String m_descr;
+    float m_value;
+
+    cParam():
+     m_value(0)
+    {
+    }
+
+    cParam* setup( String descr, float def )
+    {
+      m_descr = descr;
+      m_value = def;
+      return this;
+    }
+    
+    operator float()
+    {
+      return m_value;
+    }
+};
+
 //********************************************************************************************
 class cVar
 {
@@ -13,7 +39,8 @@ class cVar
 
     cVar():
       m_t(0),
-      m_s(0)
+      m_s(0),
+      m_value(0)
     {
     }
 
@@ -22,7 +49,6 @@ class cVar
       m_t = t;
       m_s = s;
       m_descr = descr;
-      m_value = 0;
       return this;
     }
 };
