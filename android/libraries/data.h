@@ -35,14 +35,13 @@ signals:
     void sigParamChanged();
 
 public:
-    static CData* m_pInstance;
-
+    static CData* m_pInstance;  // m_pInstance
+    static void init();
     CData()
     {
         m_pInstance = NULL;
     }
-
-    static void init();
+    //********************************************************************/
 
     void _SetV( const int i, const QString &value )
     {
@@ -54,6 +53,7 @@ public:
         SetVparam( i, value.toDouble() );
     }
 
+    //********************************************************************/
     void SetV( const int i, const float val )
     {
         m_mutex.lockForWrite();
@@ -76,6 +76,7 @@ public:
         }
     }
 
+    //********************************************************************/
     void SetL( const int i, const QString &label )
     {
         QWriteLocker m(&m_mutex);
@@ -103,6 +104,7 @@ public:
         return m_param[i];
     }
 
+    //********************************************************************/
     QString GetL( const int i )
     {
         QReadLocker m(&m_mutex);
@@ -114,6 +116,8 @@ public:
         QReadLocker m(&m_mutex);
         return m_labelParam[i];
     }
+
+    //********************************************************************/
 };
 
 
