@@ -39,9 +39,10 @@ ValueSetWidget::ValueSetWidget(QWidget* parent) : ValueWidget(parent)
     connect( &m_timer, SIGNAL(timeout()), this, SLOT( onTimerTimeout() ) );
 }
 
-void ValueSetWidget::init(int idx, QString style, float increment )
+void ValueSetWidget::init(int idx, int idxParam, QString style, float increment )
 {
     m_dataIndex = idx;
+    m_dataIndexParam = idxParam;
     m_increment = increment;
 
     m_label->setText( gData->GetL( idx ) );
@@ -57,36 +58,34 @@ void ValueSetWidget::init(int idx, QString style, float increment )
 
 void ValueSetWidget::onPlusClicked()
 {
-    disconnect( gData, SIGNAL(sigChanged()), this, SLOT(onValueChanged()) );
+    disconnect( gData, SIGNAL(sigValueChanged()), this, SLOT(onValueChanged()) );
     m_timer.stop();
     m_timer.start(5000);
 
     m_value->setPalette(Qt::red);
-    QString label =  gData->GetL( m_dataIndex );
 
-    float setpoint = gData->GetVsetpoint(label) + m_increment ;
-    gData->SetVsetpoint(  label, setpoint );
+    float setpoint = gData->GetVparam(m_dataIndexParam) + m_increment ;
+    gData->SetVparam( m_dataIndexParam, setpoint );
     m_value->display( setpoint );
 }
 
 void ValueSetWidget::onMinusClicked()
 {
-    disconnect( gData, SIGNAL(sigChanged()), this, SLOT(onValueChanged()) );
+    disconnect( gData, SIGNAL(sigValueChanged()), this, SLOT(onValueChanged()) );
     m_timer.stop();
     m_timer.start(5000);
 
     m_value->setPalette(Qt::red);
-    QString label =  gData->GetL( m_dataIndex );
 
-    float setpoint = gData->GetVsetpoint(label) - m_increment ;
-    gData->SetVsetpoint(  label, setpoint );
+    float setpoint = gData->GetVparam( m_dataIndexParam ) - m_increment ;
+    gData->SetVparam(  m_dataIndexParam, setpoint );
     m_value->display( setpoint );
 }
 
 void ValueSetWidget::onTimerTimeout()
 {
    m_timer.stop();
-   connect( gData, SIGNAL( sigChanged() ), this, SLOT( onValueChanged() ) );
+   connect( gData, SIGNAL( sigValueChanged() ), this, SLOT( onValueChanged() ) );
 
    m_value->setPalette(Qt::yellow);
    onValueChanged();

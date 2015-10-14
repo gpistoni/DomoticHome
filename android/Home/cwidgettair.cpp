@@ -20,7 +20,7 @@ CWidgetTAir::CWidgetTAir(QWidget *parent) :
     for (int i=0; i<10; i++)
     {
         ValueSetWidget *val =  new  ValueSetWidget();
-        val->init( 10 + i, CSS_TEMPVALUE, 1 );
+        val->init( 10 + i, 10 + i, CSS_TEMPVALUE, 1 );
         ui->verticalLayout_3->addWidget( val );
     }
 

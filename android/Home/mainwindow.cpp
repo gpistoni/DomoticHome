@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    m_work.start();
+    m_workerHTTP.start();
 
     //********** AIR **********************
     m_pagTAir =  new CWidgetTAir( ui->stackedWidget );

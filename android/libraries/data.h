@@ -4,7 +4,7 @@
 #include <QString>
 #include <map>
 #include <QDebug>
-#include <QMutex>
+#include <QReadWriteLock>
 
 #define gData CData::m_pInstance
 
@@ -21,14 +21,18 @@ private:
     std::map<int, QString> m_label;
     std::map<QString, int> m_index;
 
-    std::map< QString, double> m_valueSetpoint;
+    std::map< int, double> m_param;
+    std::map< int, QString> m_labelParam;
+    std::map<QString, int> m_indexParam;
+
     std::map< QString, std::map<double,double> > m_valueHisto;
 
-    QMutex m_mutex;
+    QReadWriteLock m_mutex;
 
     // Define signal:
 signals:
-    void sigChanged();
+    void sigValueChanged();
+    void sigParamChanged();
 
 public:
     static CData* m_pInstance;
@@ -40,71 +44,75 @@ public:
 
     static void init();
 
-    void SetV( const int x, const int y, const float val )
+    void _SetV( const int i, const QString &value )
     {
-        QMutexLocker m(&m_mutex);
-        m_value[x + y*cols] =  val;
+        SetV( i, value.toDouble() );
+    }
+
+    void _SetVparam( const int i, const QString &value )
+    {
+        SetVparam( i, value.toDouble() );
     }
 
     void SetV( const int i, const float val )
     {
-        QMutexLocker m(&m_mutex);
-        m_value[i] =  val;
+        m_mutex.lockForWrite();
+        if ( m_value[i] != val )
+        {
+            m_value[i] = val;
+            m_mutex.unlock();
+            emit sigValueChanged();
+        }
     }
 
-    void SetVsetpoint( const QString &label, const float val )
+    void SetVparam( const int i, const float val )
     {
-        QMutexLocker m(&m_mutex);
-        m_valueSetpoint[label] =  val;
-    }
-
-    void SetV( const int i, const QString &value )
-    {
-        QMutexLocker m(&m_mutex);
-        m_value[i] =  value.toDouble();
+        m_mutex.lockForWrite();
+        if ( m_param[i] != val )
+        {
+            m_param[i] = val;
+            m_mutex.unlock();
+            emit sigParamChanged();
+        }
     }
 
     void SetL( const int i, const QString &label )
     {
-        QMutexLocker m(&m_mutex);
+        QWriteLocker m(&m_mutex);
         m_label[i] =  label;
         m_index[label] = i;
     }
 
-    double GetV( const int x, const int y)
+    void SetLparam( const int i, const QString &label )
     {
-        QMutexLocker m(&m_mutex);
-        return m_value[x + y*cols];
+        QWriteLocker m(&m_mutex);
+        m_labelParam[i] = label;
+        m_indexParam[label] = i;
     }
 
+    //********************************************************************/
     double GetV( const int i )
     {
-        QMutexLocker m(&m_mutex);
+        QReadLocker m(&m_mutex);
         return m_value[i];
     }
 
-    double GetV( const QString &label )
+    double GetVparam( const int i )
     {
-        QMutexLocker m(&m_mutex);
-        return m_value[ m_index[label] ];
-    }
-
-    double GetVsetpoint( const QString &label )
-    {
-        QMutexLocker m(&m_mutex);
-        return m_valueSetpoint[label];
-    }
-
-    QString GetL( const int x, const int y)
-    {
-        QMutexLocker m(&m_mutex);
-        return m_label[x + y*cols];
+        QReadLocker m(&m_mutex);
+        return m_param[i];
     }
 
     QString GetL( const int i )
     {
-        QMutexLocker m(&m_mutex);
+        QReadLocker m(&m_mutex);
         return m_label[i];
+    }
+
+    QString GetLparam( const int i )
+    {
+        QReadLocker m(&m_mutex);
+        return m_labelParam[i];
     }
 };
 

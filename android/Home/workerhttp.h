@@ -9,35 +9,43 @@
 #include "../libraries/data.h"
 
 //*************************************************************************************************************
-class WorkerThread : public QThread
+class WorkerHTTP : public QThread
 {
     Q_OBJECT
 
     QNetworkAccessManager * m_mgr;
 
-public:
-    WorkerThread()
+public slots:
+    void onParamChanged()
     {
+        sendDataPars();
+        requestDataValues();
+    }
+
+public:
+    WorkerHTTP()
+    {
+         connect( gData, SIGNAL(sigParamChanged()), this, SLOT(onParamChanged()) );
     }
 
     void run()
     {
         m_mgr = new QNetworkAccessManager( );
         msleep(1000);
-        getDataLabels();
-        emit gData->sigChanged();
+        requestDataLabels();
+        requestDataLabelsPars();
+        requestDataPars();
+        emit gData->sigValueChanged();
 
         while(1)
         {
-            getDataValues();
-            emit gData->sigChanged();
-            msleep(1000);
+            requestDataValues();
+            msleep(2500);
         }
     }
 
-    void getDataLabels()
+    void requestDataLabels()
     {
-        //QByteArray arr = sendRequest(  QUrl(QString("http://127.0.0.1:9999/@label")) );
         QByteArray arr = sendRequest(  QUrl(QString("http://192.168.0.201/labels")) );
 
         QString str(arr);
@@ -47,20 +55,53 @@ public:
             gData->SetL( i, list.at(i) );
     }
 
-    void getDataValues()
+    void requestDataValues()
     {
-        //QByteArray arr = sendRequest(  QUrl(QString("http://127.0.0.1:9999/@value")) );
         QByteArray arr = sendRequest(  QUrl(QString("http://192.168.0.201/values")) );
-
 
         QString str(arr);
         QStringList list = str.split(",", QString::SkipEmptyParts);
 
         for( int i=0; i<list.size(); i++ )
-            gData->SetV( i, list.at(i) );
+            gData->_SetV( i, list.at(i) );
     }
 
+    void requestDataPars()
+    {
+        QByteArray arr = sendRequest(  QUrl(QString("http://192.168.0.201/pars")) );
 
+        QString str(arr);
+        QStringList list = str.split(",", QString::SkipEmptyParts);
+
+        for( int i=0; i<list.size(); i++ )
+            gData->_SetVparam( i, list.at(i) );
+    }
+
+    void requestDataLabelsPars()
+    {
+        QByteArray arr = sendRequest(  QUrl(QString("http://192.168.0.201/labelspars")) );
+
+        QString str(arr);
+        QStringList list = str.split(",", QString::SkipEmptyParts);
+
+        for( int i=0; i<list.size(); i++ )
+            gData->SetLparam( i, list.at(i) );
+    }
+
+    void sendDataPars()
+    {
+        QByteArray arr = "http://192.168.0.201/setPars=";
+
+        for( int i=0; i<100; i++ )
+        {
+            arr += gData->GetVparam(i);
+            arr += ',';
+        }
+
+        sendRequest(  QUrl( arr ) );
+    }
+
+  private:
     QByteArray sendRequest( QUrl url)
     {
         QByteArray ret;

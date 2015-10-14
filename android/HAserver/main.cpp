@@ -30,7 +30,7 @@ public:
         line = readLine( client );
         if (line.length() > 0)
         {
-            if (line.contains("@val"))
+            if (line.contains("val"))
             {
                 writeLine( client, QString("HTTP/1.1 200 OK\r\nContent-Type: text/html \r\n\r\n") );
                 for (int i=0; i<10; i++)
@@ -42,7 +42,7 @@ public:
                     }
                 }
             }
-            else if (line.contains("@label"))
+            else if (line.contains("label"))
             {
                 writeLine( client, QString("HTTP/1.1 200 OK\r\nContent-Type: text/html \r\n\r\n") );
                 for (int i=0; i<10; i++)

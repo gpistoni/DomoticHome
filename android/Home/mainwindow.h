@@ -38,7 +38,7 @@ private:
 
 private:
    // Worker Thread
-  WorkerThread m_work;
+  WorkerHTTP m_workerHTTP;
 };
 
 #endif // MAINWINDOW_H

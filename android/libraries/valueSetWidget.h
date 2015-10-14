@@ -16,11 +16,13 @@ class ValueSetWidget : public ValueWidget //inherit from QWidget
 public:
     ValueSetWidget(QWidget* parent = 0); //don't forget to pass the parent
 
-    void init(int idx, QString style, float increment );
+    void init(int idx, int idxParam, QString style, float increment );
 
 private:
     QPushButton *m_plus;
     QPushButton *m_minus;
+
+    int m_dataIndexParam;
 
     float m_increment;
     QTimer m_timer;

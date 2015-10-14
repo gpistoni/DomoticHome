@@ -56,9 +56,8 @@ ValueWidget::ValueWidget(QWidget* parent) : QWidget(parent)
     m_Layout->addWidget(m_label);
     m_Layout->addWidget(m_value);
 
-    connect( gData, SIGNAL(sigChanged()), this, SLOT(onValueChanged()) );
+    connect( gData, SIGNAL(sigValueChanged()), this, SLOT(onValueChanged()) );
 }
-
 
 void ValueWidget::init(int idx, QString style )
 {
