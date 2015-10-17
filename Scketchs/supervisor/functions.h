@@ -1,6 +1,9 @@
-extern const int led;
+#ifndef functions_h
+#define functions_h
 
-void printDigits(int digits){
+
+void printDigits(int digits)
+{
     // utility function for digital clock display: prints preceding colon and leading 0
     if(digits < 10)
         Serial.print('0');
@@ -9,7 +12,6 @@ void printDigits(int digits){
 
 void digitalClockDisplay()
 {
-  digitalWrite(led, 1);
   // digital clock display of the time
   Serial.print(hour());
   Serial.print(":");
@@ -25,17 +27,32 @@ void digitalClockDisplay()
   Serial.print(" ");
 }
 
+String short_time()
+{
+  String dataString;
+  if(hour() < 10)
+        dataString += "0";
+  dataString += hour();
+  dataString += ":";
+  if(minute() < 10)
+        dataString += "0";
+  dataString += minute();
+  dataString += ":";
+    if(second() < 10)
+        dataString += "0";
+  dataString += second();
+  dataString += " ";
+ 
+  return dataString;
+}
+
 void logToFile ()
 {
   // make a string that start with a timestamp for assembling the data to log:
   String dataString;
-  dataString += hour();
-  dataString += ":";
-  dataString += minute();
-  dataString += ":";
-  dataString += second();
+  dataString = short_time();
   dataString += " = ";
-
+ /* 
   // read three sensors and append to the string:
   for (int analogPin = 0; analogPin < 3; analogPin++) 
   {
@@ -46,6 +63,7 @@ void logToFile ()
       dataString += ",";  // separate the values with a comma
     }
   }
+  */
   
 //
 //  // open the file. note that only one file can be open at a time,
@@ -65,3 +83,5 @@ void logToFile ()
 //    Serial.println("error opening datalog.txt");
 //  }
 }
+
+#endif

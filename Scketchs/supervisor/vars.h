@@ -1,3 +1,5 @@
+#include "functions.h"
+
 String strValue(String data, char separator, int index);
 double strValueD(String data, char separator, int index);
 bool strValueB(String data, char separator, int index);
@@ -11,7 +13,7 @@ class cParam
     float m_value;
 
     cParam():
-     m_value(0)
+      m_value(0)
     {
     }
 
@@ -21,7 +23,7 @@ class cParam
       m_value = def;
       return this;
     }
-    
+
     operator float()
     {
       return m_value;
@@ -56,7 +58,7 @@ class cVar
 //********************************************************************************************
 class cFloat: public cVar
 {
-   public:
+  public:
     cFloat(): cVar()
     {
     }
@@ -114,5 +116,39 @@ class cBool: public cVar
     operator bool()
     {
       return (bool) m_value;
+    }
+};
+
+class BufferString
+{
+    String m_queue[30];
+    unsigned int index;
+
+  public:
+    BufferString():
+      index(0)
+    {
+    }
+
+    void add( const String &str )
+    {
+      String dataString;
+      dataString = short_time();
+      dataString += str;
+
+      Serial.println(dataString);
+      m_queue[index] = dataString + "\n";
+      index++;
+      if (index >= 30) index = 0;
+    }
+
+    String get( )
+    {
+      String str;
+      for (int i = index; i < 30; i++)
+        str += m_queue[index];
+      for (int i = 0; i < index; i++)
+        str += m_queue[index];
+      return str;
     }
 };

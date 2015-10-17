@@ -3,7 +3,6 @@ extern ESP8266WebServer webServer;
 extern cDataTable DT;
 
 
-
 void handleRoot()
 {
   webServer.send(200, "text/plain", "hello from esp8266! Usage: \n /log   Output logfile \n state \n /values \n /labels ");
@@ -45,7 +44,7 @@ void handleLabelsPars()
 void handleSetPars()
 {
   String message;
-  for (uint8_t i=0; i<webServer.args(); i++)
+  for (uint8_t i = 0; i < webServer.args(); i++)
   {
     String name = webServer.argName(i);
     String val = webServer.arg(i);
@@ -53,13 +52,13 @@ void handleSetPars()
     message += " " + webServer.argName(i) + ": " + webServer.arg(i) + "\n";
   }
   webServer.send(200, "text/plain", message);
- 
 }
 
 void handlePrint()
 {
   String labl;
   DT.print( labl );
+  labl = labl + "\n" + DT.m_log.get();
   webServer.send(200, "text/plain", labl );
 }
 
@@ -69,12 +68,12 @@ void handleNotFound()
   message += "URI: ";
   message += webServer.uri();
   message += "\nMethod: ";
-  message += (webServer.method() == HTTP_GET)?"GET":"POST";
+  message += (webServer.method() == HTTP_GET) ? "GET" : "POST";
   message += "\nArguments: ";
   message += webServer.args();
   message += "\n";
-  
-  for (uint8_t i=0; i<webServer.args(); i++)
+
+  for (uint8_t i = 0; i < webServer.args(); i++)
   {
     message += " " + webServer.argName(i) + ": " + webServer.arg(i) + "\n";
   }
