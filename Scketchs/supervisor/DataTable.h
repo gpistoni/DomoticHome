@@ -40,7 +40,6 @@ class cDataTable
     cBool rPdcCool0_Heat1;
     cBool rPdcPompa;
     cBool rPdcNightMode;
-
     cBool rPompaPianoPrimo;
     cBool rPompaPianoTerra;
     cBool rBoilerSanitaria;
@@ -49,6 +48,9 @@ class cDataTable
     cParam prPdcCool0_Heat1;
     cParam prPdcPompa;
     cParam prPdcNightMode;
+    cParam prPompaPianoPrimo;
+    cParam prPompaPianoTerra;
+    cParam prBoilerSanitaria;
 
     // terminal 4
     cFloat tPufferHi;
@@ -69,12 +71,6 @@ class cDataTable
     cBool evCameraD1;
     cBool evCameraD2;
 
-    //Man-Auto
-    cParam pWinterPP_man;
-    cParam pWinterPT_man;
-    cParam pBoilerSanitaria_man;
-    cParam pPDC_man;
-
     // puntatori
     cVar* webVar[100];
     cParam* webParam[100];
@@ -84,11 +80,7 @@ class cDataTable
     void setup()
     {
       memset( webVar, 0, 100 * sizeof(cVar*) );
-
-      webParam[0] = pWinterPP_man.setup        ( "pWinterPP_man", 0 );
-      webParam[1] = pWinterPT_man.setup        ( "pWinterPT_man", 0 );
-      webParam[2] = pBoilerSanitaria_man.setup ( "pBoilerSanitaria_man", 0 );
-      webParam[3] = pPDC_man.setup             ( "pPDC_man", 0 );
+      memset( webParam, 0, 100 * sizeof(cParam*) );
 
       webVar[0] = hCucina.setup            ( T1, 0, "hCucina");
       webVar[1] = hSala.setup              ( T1, 1, "hSala");
@@ -119,10 +111,13 @@ class cDataTable
       webVar[35] = rPompaPianoTerra.setup  ( T3, 5, "PompaPianoTerra");
       webVar[36] = rBoilerSanitaria.setup  ( T3, 6, "BoilerSanitaria");
 
-      webParam[30] = prPdc.setup            ( "pPDC", 0 );
-      webParam[31] = prPdcCool0_Heat1.setup ( "pCoolHeat", 0 );
-      webParam[32] = prPdcPompa.setup       ( "pPdcPompa", 0 );
-      webParam[33] = prPdcNightMode.setup   ( "pPdcNightMode", 0 );
+      webParam[30] = prPdc.setup              ( "pPDC", 0 );
+      webParam[31] = prPdcCool0_Heat1.setup   ( "pCoolHeat", 0 );
+      webParam[32] = prPdcPompa.setup         ( "pPdcPompa", 0 );
+      webParam[33] = prPdcNightMode.setup     ( "pPdcNightMode", 0 );
+      webParam[34] = prPompaPianoPrimo.setup  ( "pPompaPianoPrimo",0 );
+      webParam[35] = prPompaPianoTerra.setup  ( "pPompaPianoTerra",0 );
+      webParam[36] = prBoilerSanitaria.setup  ( "pBoilerSanitaria",0 );
 
       webVar[40] = tPufferHi.setup         ( T4, 0, "tPufferHi");
       webVar[41] = tPufferLow.setup        ( T4, 1, "tPufferLow");

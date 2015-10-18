@@ -10,7 +10,7 @@ void handleRoot()
 
 void handleLog()
 {
-  webServer.send(200, "text/plain", "logfile");
+  webServer.send(200, "text/plain",    DT.m_log.get() );
 }
 
 void handleValues()
@@ -111,14 +111,12 @@ void initWebserver()
   Serial.println("HTTP server started");
 }
 
-String srcIcon(String name)
-{
-  return "src='http://www.fancyicons.com/free-icons/107/basic-icons/png/32/" + name + "_32.png'";
-}
+
 
 //***************************************************************************************************
 void HtmlPage()
 {
+  Serial.println("HtmlPage");
   String page;
   page += "<!DOCTYPE html><html xmlns='http://www.w3.org/1999/xhtml' dir='ltr'>"
           "<head>"
@@ -157,8 +155,9 @@ void HtmlPage()
   page +=  "<body>"
            "<p><title> Home</span></title></p>";
   //***************************************************************************************************************/
+  Serial.println("Stanze");
   page +=  "\n<h1> Stanze </h1>"
-           "<table border='2' style='width: 100%; font-family: Arial,Helvetica,sans-serif'>"
+           "<table>"
            "  <tbody>"
            "    <tr>"
            "      <th>Stanza</th>"
@@ -170,96 +169,102 @@ void HtmlPage()
   for (int i = 0; i < 6; i++)
   {
     page += "    \n<tr>";
-    page += "      <td>" + DT.webVar[10 + i]->m_descr + "</td>";
-    page += "      <td>" + String(DT.webVar[10 + i]->m_value) + "</td>";
-    page += "      <td>" + String(DT.webVar[i]->m_value) + "</td>";
-    page += "      <td>" + String(DT.webParam[10 + i]->m_value) + "</td>";
+    page += DT.webVar[10 + i]->td_descr();
+    page += DT.webVar[10 + i]->td_valueF();
+    page += DT.webVar[i]->td_valueF();
+    page += DT.webParam[i]->td_valueF();
+
     String href_p = "'http://192.168.0.201/set?" + DT.webParam[10 + i]->m_descr + "=" + String(DT.webParam[10 + i]->m_value + 0.5 ) + "'";
     String href_m = "'http://192.168.0.201/set?" + DT.webParam[10 + i]->m_descr + "=" + String(DT.webParam[10 + i]->m_value - 0.5 ) + "'";
-    page += "      <td><a href=" + href_p + "> <img " + srcIcon("up") + " alt='+' >  </a> </td>";
-    page += "      <td><a href=" + href_m + "> <img " + srcIcon("down") + " alt='-' >  </a> </td>";
+    page += "      <td><a href=" + href_p + "> <img " + srcIcon("arrow_up") + " alt='+' >  </a> </td>";
+    page += "      <td><a href=" + href_m + "> <img " + srcIcon("arrow_down") + " alt='-' >  </a> </td>";
     page += "    </tr>";
   }
   page +=  "  </tbody>"
            "</table>";
   //***************************************************************************************************************/
-  page +=  "<h1> Caldaia </h1>"
-           "<table border='2' style='width: 100%; font-family: Arial,Helvetica,sans-serif'>"
+  Serial.println("Caldaia");
+  page +=  "\n<h1> Caldaia </h1>"
+           "<table>"
            "  <tbody>"
            "    <tr>"
            "      <th>Sonda</th>"
            "      <th>Temperatura</th>"
-           "      <th></th>"
-           "      <th></th>"
-           "      <th></th>"
            "    </tr>";
   for (int i = 0; i < 10; i++)
   {
     if (DT.webVar[40 + i])
     {
-      page += "    <tr>";
-      page += "      <td>" + DT.webVar[40 + i]->m_descr + "</td>";
-      page += "      <td>" + String(DT.webVar[40 + i]->m_value) + "</td>";
-      page += "    </tr>";
+      page += "\n<tr>";
+      page += DT.webVar[40 + i]->td_descr();
+      page += "<td>" + String(DT.webVar[40 + i]->m_value) + "</td>";
+      page += "</tr>";
     }
   }
   page += "  </tbody>"
           "</table>";
   //***************************************************************************************************************/
-  page +=  "<h1> Attuatori Pavimento </h1>"
-           "<table border='2' style='width: 100%; font-family: Arial,Helvetica,sans-serif'>"
+  Serial.println("Pavimento");
+  page +=  "\n<h1> Attuatori Pavimento </h1>"
+           "<table>"
            "  <tbody>"
            "    <tr>"
            "      <th>Stanze</th>"
            "      <th>Stato</th>"
-           "      <th></th>"
-           "      <th></th>"
-           "      <th></th>"
            "    </tr>";
   for (int i = 0; i < 10; i++)
   {
     if (DT.webVar[50 + i])
     {
-      page += "    <tr>";
-      page += "      <td>" + DT.webVar[50 + i]->m_descr + "</td>";
-      if ( DT.webVar[50 + i]->m_value )
-        page += "      <td> <img " + srcIcon("tick") + " alt='ON'></td>";
-      else
-        page += "      <td> <img " + srcIcon("stop") + " alt='OFF'></td>";
-      page += "    </tr>";
-    }
-  }
-  page += "  </tbody>"
-          "</table>";
-//***************************************************************************************************************/
-  page +=  "<h1> Attuatori Caldaia </h1>"
-           "<table border='2' style='width: 100%; font-family: Arial,Helvetica,sans-serif'>"
-           "  <tbody>"
-           "    <tr>"
-           "      <th>Stanze</th>"
-           "      <th>Stato</th>"
-           "      <th></th>"
-           "      <th></th>"
-           "      <th></th>"
-           "    </tr>";
-  for (int i = 0; i < 10; i++)
-  {
-    if (DT.webVar[50 + i])
-    {
-      page += "    <tr>";
-      page += "      <td>" + DT.webVar[50 + i]->m_descr + "</td>";
-      if ( DT.webVar[50 + i]->m_value )
-        page += "      <td> <img " + srcIcon("tick") + " alt='ON'></td>";
-      else
-        page += "      <td> <img " + srcIcon("stop") + " alt='OFF'></td>";
-      page += "    </tr>";
+      page += "\n<tr>";
+      page += DT.webVar[50 + i]->td_descr();
+      page += DT.webVar[50 + i]->td_bulb();
+      page += "</tr>";
     }
   }
   page += "  </tbody>"
           "</table>";
   //***************************************************************************************************************/
-  page +=  "</body>"
-           "</html>";
+  Serial.println("Attuatori");
+  page +=  "\n<h1> Attuatori Caldaia </h1>"
+           "<table>"
+           "  <tbody>"
+           "    <tr>"
+           "      <th>Stanze</th>"
+           "      <th>Stato</th>"
+           "      <th>Forzato</th>"
+           "    </tr>";
+  for (int i = 0; i < 10; i++)
+  {
+    if (DT.webVar[30 + i])
+    {
+      Serial.println(i);
+          
+      page += "\n<tr>";
+      page += DT.webVar[30 + i]->td_descr();
+      page += DT.webVar[30 + i]->td_bulb();
+
+     // if ( DT.webParam[30 + i] )
+     // {
+      //  String href_p = "'http://192.168.0.201/set?" + DT.webParam[30 + i]->m_descr + "=" + String(DT.webParam[30 + i]->m_value == 0 ) + "'";
+
+     //   if ( DT.webParam[30 + i]->m_value )
+     //     page += "<td><a href=" + href_p + "> <img " + srcIcon("star_1") + " alt='ON' >  </a> </td>";
+     //   else
+     //     page += "<td><a href=" + href_p + "> <img " + srcIcon("star_3") + " alt='OFF'>  </a> </td>";
+     // }
+     // else
+     // {
+     //   page += "<td></td>";
+     // }
+      page += "</tr>";
+    }
+  }
+  page += "  </tbody>";
+  page += "</table>";
+  //***************************************************************************************************************/
+  page += "</body>";
+  page += "</html>";
   webServer.send(200, "text/html", page);
 }
 /*

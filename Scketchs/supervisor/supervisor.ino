@@ -118,7 +118,7 @@ void UpdateAll()
 /**************************************************************************************************/
 void PDC_Manager()
 {
-  if ( DT.pPDC_man ) return;
+  //if ( DT.pPDC_man ) return;
   //  digitalClockDisplay();
   //  Serial.println("PDC_Manager");
   //
@@ -152,12 +152,12 @@ void PDC_Manager()
 /**************************************************************************************************/
 void BoilerSanitaria_Manager()
 {
-  if ( DT.pBoilerSanitaria_man ) return;
+//  if ( DT.pBoilerSanitaria_man ) return;
 
   digitalWrite(ACT, 0);
   Serial.println("BoilerSanitaria_Manager");
 
-  DT.rBoilerSanitaria.set( 0 );
+  bool pompa = false;
 
   //decido se accendere il boiler solo di notte e solo se il camino non funziona
   if ( hour() >= 20 || hour() < 7)
@@ -165,10 +165,15 @@ void BoilerSanitaria_Manager()
     if ( DT.tReturnFireplace < 30 )
     {
       Serial.println("Condizione B1");
-      DT.rBoilerSanitaria.set( 1 );
+      pompa = true;
     }
   }
-
+  
+  //manual mode
+  if ( DT.prBoilerSanitaria ) 
+   pompa = true;
+   
+  DT.rBoilerSanitaria.set( pompa );
   dhWifi.HttpRequest( DT.rBoilerSanitaria.getS() );
 
 }
@@ -176,7 +181,7 @@ void BoilerSanitaria_Manager()
 /**************************************************************************************************/
 void winterPP_Manager()
 {
-  if ( DT.pWinterPP_man ) return;
+//  if ( DT.pWinterPP_man ) return;
 
   digitalWrite(ACT, 0);
   DT.m_log.add("winterPP_Manager");
@@ -300,7 +305,7 @@ void winterPP_Manager()
 /**************************************************************************************************/
 void winterPT_Manager()
 {
-  if ( DT.pWinterPT_man ) return;
+  //if ( DT.pWinterPT_man ) return;
   digitalWrite(ACT, 0);
   Serial.println("winterPT_Manager");
 
@@ -312,6 +317,10 @@ void winterPT_Manager()
     Serial.println("Condizione T1");
     pompa = true;
   }
+  
+   //manual mode
+  if ( DT.prPompaPianoTerra ) 
+   pompa = true;
 
   DT.rPompaPianoTerra.set(pompa);
   dhWifi.HttpRequest( DT.rPompaPianoTerra.getS() );

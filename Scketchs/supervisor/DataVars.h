@@ -4,6 +4,10 @@ String strValue(String data, char separator, int index);
 double strValueD(String data, char separator, int index);
 bool strValueB(String data, char separator, int index);
 
+String srcIcon(String name)
+{
+  return "src='http://www.fancyicons.com/free-icons/123/onebit-2/png/32/" + name + "_32.png'";
+}
 
 //********************************************************************************************
 class cParam
@@ -27,6 +31,11 @@ class cParam
     operator float()
     {
       return m_value;
+    }
+
+    String td_valueF()
+    {
+      return String("<td>") + m_value + String("</td>");
     }
 };
 
@@ -52,6 +61,29 @@ class cVar
       m_s = s;
       m_descr = descr;
       return this;
+    }
+
+    String td_descr()
+    {
+      return String("<td>") + m_descr + String("</td>");
+    }
+
+    String td_valueF()
+    {
+      return String("<td>") + m_value + String("</td>");
+    }
+
+    String td_valueB()
+    {
+      return String("<td>") + (int)m_value + String("</td>");
+    }
+
+    String td_bulb()
+    {
+      if ( m_value )
+        return "<td> <img " + srcIcon("bulb_1") + " alt='ON'></td>";
+      else
+        return "<td> <img " + srcIcon("bulb_2") + " alt='OFF'></td>";
     }
 };
 
