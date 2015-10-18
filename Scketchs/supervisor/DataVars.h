@@ -37,6 +37,22 @@ class cParam
     {
       return String("<td>") + m_value + String("</td>");
     }
+
+    String td_star()
+    {
+      String href = "'http://192.168.0.201/set?" + m_descr + "=" + String( m_value == 0 ) + "'";
+
+      if ( m_value == 0  )
+      {
+        String href = "'http://192.168.0.201/set?" + m_descr + "=1'";
+        return "<td><a href=" + href + "> <img " + srcIcon("star_3") + " alt='OFF'>  </a> </td>";
+      }
+      else
+      {
+        String href = "'http://192.168.0.201/set?" + m_descr + "=0'";
+        return "<td><a href=" + href + "> <img " + srcIcon("star_3") + " alt='OFF'>  </a> </td>";
+      }
+    }
 };
 
 //********************************************************************************************
@@ -47,11 +63,13 @@ class cVar
     int m_s;
     String m_descr;
     float m_value;
+    bool m_modified;
 
     cVar():
       m_t(0),
       m_s(0),
-      m_value(0)
+      m_value(0),
+      m_modified(false)
     {
     }
 
@@ -61,6 +79,18 @@ class cVar
       m_s = s;
       m_descr = descr;
       return this;
+    }
+
+    String send( DHwifi *wifi)
+    {
+      if (m_modified)
+      {
+        String s =  String("@set(") + String(m_t) + "," + String(m_s) + "=" + String(m_value)  + ")";
+        wifi->HttpRequest( s );
+        m_modified = false;
+        return String("Send Modified Value ") + m_descr + ":" + String(m_value);
+      }
+      return "";
     }
 
     String td_descr()
@@ -97,7 +127,11 @@ class cFloat: public cVar
 
     void set( float value )
     {
-      m_value = value;
+      if ( m_value != value)
+      {
+        m_value = value;
+        m_modified = true;
+      }
     }
 
     void update( String stringlist )
@@ -106,11 +140,6 @@ class cFloat: public cVar
       Serial.print(m_descr );
       Serial.print(":");
       Serial.println( m_value );
-    }
-
-    String getS()
-    {
-      return String("@set(") + String(m_t) + "," + String(m_s) + "=" + String(m_value)  + ")";
     }
 
     operator float()
@@ -129,7 +158,11 @@ class cBool: public cVar
 
     void set( bool value )
     {
-      m_value = value;
+      if (  m_value != value)
+      {
+        m_value = value;
+        m_modified = true;
+      }
     }
 
     void update( String stringlist )
@@ -138,11 +171,6 @@ class cBool: public cVar
       Serial.print(m_descr );
       Serial.print(":");
       Serial.println( m_value );
-    }
-
-    String getS()
-    {
-      return String("@set(") + String(m_t) + "," + String(m_s) + "=" + String(m_value)  + ")";
     }
 
     operator bool()
@@ -164,14 +192,17 @@ class BufferString
 
     void add( const String &str )
     {
-      String dataString;
-      dataString = short_time();
-      dataString += str;
+      if (str.length() > 0)
+      {
+        String dataString;
+        dataString = short_time();
+        dataString += str;
 
-      Serial.println(dataString);
-      m_queue[index] = dataString + "\n";
-      index++;
-      if (index >= 60) index = 0;
+        Serial.println(dataString);
+        m_queue[index] = dataString + "\n";
+        index++;
+        if (index >= 60) index = 0;
+      }
     }
 
     String get( )

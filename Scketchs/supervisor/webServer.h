@@ -163,22 +163,27 @@ void HtmlPage()
            "      <th>Stanza</th>"
            "      <th>Temperatura</th>"
            "      <th>Umidita</th>"
+           "      <th></th>"
            "      <th>Target</th>"
            "      <th></th>"
            "    </tr>";
   for (int i = 0; i < 6; i++)
   {
-    page += "    \n<tr>";
-    page += DT.webVar[10 + i]->td_descr();
-    page += DT.webVar[10 + i]->td_valueF();
-    page += DT.webVar[i]->td_valueF();
-    page += DT.webParam[i]->td_valueF();
+    if ( DT.webVar[10 + i] && DT.webVar[i] && DT.webParam[10 + i] )
+    {
+      page += "    \n<tr>";
+      page += DT.webVar[10 + i]->td_descr();
+      page += DT.webVar[10 + i]->td_valueF();
+      page += DT.webVar[i]->td_valueF();
 
-    String href_p = "'http://192.168.0.201/set?" + DT.webParam[10 + i]->m_descr + "=" + String(DT.webParam[10 + i]->m_value + 0.5 ) + "'";
-    String href_m = "'http://192.168.0.201/set?" + DT.webParam[10 + i]->m_descr + "=" + String(DT.webParam[10 + i]->m_value - 0.5 ) + "'";
-    page += "      <td><a href=" + href_p + "> <img " + srcIcon("arrow_up") + " alt='+' >  </a> </td>";
-    page += "      <td><a href=" + href_m + "> <img " + srcIcon("arrow_down") + " alt='-' >  </a> </td>";
-    page += "    </tr>";
+      String href_p = "'http://192.168.0.201/set?" + DT.webParam[10 + i]->m_descr + "=" + String(DT.webParam[10 + i]->m_value + 0.5 ) + "'";
+      String href_m = "'http://192.168.0.201/set?" + DT.webParam[10 + i]->m_descr + "=" + String(DT.webParam[10 + i]->m_value - 0.5 ) + "'";
+      page += "      <td><a href=" + href_p + "> <img " + srcIcon("arrow_up") + " alt='+' >  </a> </td>";
+      page += DT.webParam[10 + i]->td_valueF();
+      page += "      <td><a href=" + href_m + "> <img " + srcIcon("arrow_down") + " alt='-' >  </a> </td>";
+
+      page += "    </tr>";
+    }
   }
   page +=  "  </tbody>"
            "</table>";
@@ -197,7 +202,7 @@ void HtmlPage()
     {
       page += "\n<tr>";
       page += DT.webVar[40 + i]->td_descr();
-      page += "<td>" + String(DT.webVar[40 + i]->m_value) + "</td>";
+      page += DT.webVar[40 + i]->td_valueF();
       page += "</tr>";
     }
   }
@@ -212,6 +217,10 @@ void HtmlPage()
            "      <th>Stanze</th>"
            "      <th>Stato</th>"
            "    </tr>";
+  page += "\n<tr>"
+          "<td>Bagno</td>";
+  page += DT.rPompaPianoPrimo.td_bulb();
+  page += "</tr>";
   for (int i = 0; i < 10; i++)
   {
     if (DT.webVar[50 + i])
@@ -238,25 +247,11 @@ void HtmlPage()
   {
     if (DT.webVar[30 + i])
     {
-      Serial.println(i);
-          
       page += "\n<tr>";
       page += DT.webVar[30 + i]->td_descr();
       page += DT.webVar[30 + i]->td_bulb();
-
      // if ( DT.webParam[30 + i] )
-     // {
-      //  String href_p = "'http://192.168.0.201/set?" + DT.webParam[30 + i]->m_descr + "=" + String(DT.webParam[30 + i]->m_value == 0 ) + "'";
-
-     //   if ( DT.webParam[30 + i]->m_value )
-     //     page += "<td><a href=" + href_p + "> <img " + srcIcon("star_1") + " alt='ON' >  </a> </td>";
-     //   else
-     //     page += "<td><a href=" + href_p + "> <img " + srcIcon("star_3") + " alt='OFF'>  </a> </td>";
-     // }
-     // else
-     // {
-     //   page += "<td></td>";
-     // }
+     //   page += DT.webParam[30 + i]->td_star();
       page += "</tr>";
     }
   }
@@ -265,6 +260,7 @@ void HtmlPage()
   //***************************************************************************************************************/
   page += "</body>";
   page += "</html>";
+  Serial.println("send Page");
   webServer.send(200, "text/html", page);
 }
 /*

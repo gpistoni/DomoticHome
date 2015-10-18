@@ -57,13 +57,12 @@ void setup()
   Alarm.timerRepeat( 62,        winterPT_Manager);        // timer for every 1 minutes
   Alarm.timerRepeat( 63,        BoilerSanitaria_Manager); // timer for every 1 minutes
 
-
-  UpdateAll();
-/*  PDC_Manager();
+  UpdateAll( );
+  PDC_Manager();
   winterPP_Manager();
   winterPT_Manager();
   BoilerSanitaria_Manager();
-*/
+
 }
 
 /**************************************************************************************************/
@@ -107,11 +106,12 @@ void UpdateAll()
   if (year() < 2000 )
     UpdateTime();
 
+  if ( i % 4 == 0 || i==0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
+  if ( i % 4 == 1 || i==0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
+  if ( i % 4 == 2 || i==0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
+  if ( i % 4 == 3 || i==0 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
+  
   i++;
-  if ( i % 4 == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
-  if ( i % 4 == 1 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
-  if ( i % 4 == 2 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
-  if ( i % 4 == 3 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
 }
 
 
@@ -152,8 +152,6 @@ void PDC_Manager()
 /**************************************************************************************************/
 void BoilerSanitaria_Manager()
 {
-//  if ( DT.pBoilerSanitaria_man ) return;
-
   digitalWrite(ACT, 0);
   Serial.println("BoilerSanitaria_Manager");
 
@@ -168,21 +166,18 @@ void BoilerSanitaria_Manager()
       pompa = true;
     }
   }
-  
-  //manual mode
-  if ( DT.prBoilerSanitaria ) 
-   pompa = true;
-   
-  DT.rBoilerSanitaria.set( pompa );
-  dhWifi.HttpRequest( DT.rBoilerSanitaria.getS() );
 
+  //manual mode
+  if ( DT.prBoilerSanitaria )
+    pompa = true;
+
+  DT.rBoilerSanitaria.set( pompa );
+  DT.m_log.add( DT.rBoilerSanitaria.send( &dhWifi) );
 }
 
 /**************************************************************************************************/
 void winterPP_Manager()
 {
-//  if ( DT.pWinterPP_man ) return;
-
   digitalWrite(ACT, 0);
   DT.m_log.add("winterPP_Manager");
 
@@ -267,64 +262,58 @@ void winterPP_Manager()
 
   // attuatori
   DT.evCameraM1.set(cameraM);
+  DT.m_log.add( DT.evCameraM1.send(&dhWifi) );
   DT.evCameraM2.set(cameraM2);
+  DT.m_log.add( DT.evCameraM2.send(&dhWifi) );
   DT.evSala1.set(sala);
+  DT.m_log.add( DT.evSala1.send(&dhWifi) );
   DT.evSala2.set(sala2);
+  DT.m_log.add( DT.evSala2.send(&dhWifi) );
   DT.evCucina.set(cucina);
+  DT.m_log.add( DT.evCucina.send(&dhWifi) );
   DT.evCameraS.set(cameraS);
+  DT.m_log.add( DT.evCameraS.send(&dhWifi) );
   DT.evCameraD1.set(cameraD);
+  DT.m_log.add( DT.evCameraD1.send(&dhWifi) );
   DT.evCameraD2.set(cameraD2);
+  DT.m_log.add( DT.evCameraD2.send(&dhWifi) );
 
   // accendo pompa
   DT.rPompaPianoPrimo.set( needPompa_pp );
+  DT.m_log.add( DT.rPompaPianoPrimo.send(&dhWifi) );
 
   // accendo PDC
   DT.rPdc.set( needPdc );
-  DT.rPdcCool0_Heat1.set(1);
-  DT.rPdcPompa.set(needPdc);
-  DT.rPdcNightMode.set(1);
-
-//set
-  dhWifi.HttpRequest( DT.evCameraM1.getS() );
-  dhWifi.HttpRequest( DT.evCameraM2.getS() );
-  dhWifi.HttpRequest( DT.evSala1.getS() );
-  dhWifi.HttpRequest( DT.evSala2.getS() );
-  dhWifi.HttpRequest( DT.evCucina.getS() );
-  dhWifi.HttpRequest( DT.evCameraS.getS() );
-  dhWifi.HttpRequest( DT.evCameraD1.getS() );
-  dhWifi.HttpRequest( DT.evCameraD2.getS() );
-
-  dhWifi.HttpRequest( DT.rPompaPianoPrimo.getS() );
-
-  dhWifi.HttpRequest( DT.rPdc.getS() );
-  dhWifi.HttpRequest( DT.rPdcCool0_Heat1.getS() );
-  dhWifi.HttpRequest( DT.rPdcPompa.getS() );
-  dhWifi.HttpRequest( DT.rPdcNightMode.getS() );
+  DT.m_log.add( DT.rPdc.send(&dhWifi) );
+  DT.rPdcCool0_Heat1.set( needPdc );
+  DT.m_log.add( DT.rPdcCool0_Heat1.send(&dhWifi) );
+  DT.rPdcPompa.set( needPdc );
+  DT.m_log.add( DT.rPdcPompa.send(&dhWifi) );
+  DT.rPdcNightMode.set( needPdc );
+  DT.m_log.add( DT.rPdcNightMode.send(&dhWifi) );
 }
 
 /**************************************************************************************************/
 void winterPT_Manager()
 {
-  //if ( DT.pWinterPT_man ) return;
   digitalWrite(ACT, 0);
-  Serial.println("winterPT_Manager");
+  DT.m_log.add("winterPT_Manager");
 
   bool pompa = false;
 
   //decido se accendere sulla lavanderia
   if ( DT.tPufferHi > 40 )
   {
-    Serial.println("Condizione T1");
+    DT.m_log.add("Condizione tPufferHi:" +  String(DT.tPufferHi) );
     pompa = true;
   }
-  
-   //manual mode
-  if ( DT.prPompaPianoTerra ) 
-   pompa = true;
+
+  //manual mode
+  if ( DT.prPompaPianoTerra )
+    pompa = true;
 
   DT.rPompaPianoTerra.set(pompa);
-  dhWifi.HttpRequest( DT.rPompaPianoTerra.getS() );
-
+  DT.m_log.add( DT.rPompaPianoTerra.send(&dhWifi) );
 }
 
 
