@@ -58,7 +58,7 @@ void handlePrint()
 {
   String labl;
   DT.print( labl );
-  labl = labl + "\n" + DT.m_log.get();
+  labl = labl + "\n\n------------------------------------ \n" + DT.m_log.get();
   webServer.send(200, "text/plain", labl );
 }
 
@@ -80,10 +80,12 @@ void handleNotFound()
   webServer.send(404, "text/plain", message);
 }
 
+void HtmlPage();
+
 //***************************************************************************************************
 void initWebserver()
 {
-  webServer.on("/", handleRoot );
+  webServer.on("/", HtmlPage );
   webServer.on("/log", handleLog );
   webServer.on("/values", handleValues );
   webServer.on("/labels", handleLabels );
@@ -98,3 +100,42 @@ void initWebserver()
   Serial.println("HTTP server started");
 }
 
+//***************************************************************************************************
+void HtmlPage()
+{
+  String page = "<!DOCTYPE html><html xmlns='http://www.w3.org/1999/xhtml' dir='ltr'>"
+"<head>"
+"  <meta http-equiv='content-type' content='text/html; charset=iso-8859-1' />"
+"  <title>Home</title>"
+"</head>"
+"<body>"
+"<p><title> Home</span></title></p>"
+"<p><span style='font-family: Arial,Helvetica,sans-serif'>Stanze"
+
+"<table border='3' style='width: 100%'>"
+"  <tbody>"
+"    <tr>"
+"      <td>Stanza</td>"
+"      <td>Temperatura</td>"
+"      <td>Umidità</td>"
+"      <td>Target</td>"
+"      <td></td>"
+"    </tr>";
+
+for (int i=0; i<6; i++)
+{
+page +="    <tr>";
+page +="      <td>" + DT.webVar[10+i]->m_descr + "</td>";
+page +="      <td>#t</td>";
+page +="      <td>#u</td>";
+page +="      <td>#p</td>";
+page +="      <td>+-</td>";
+page +="    </tr>";
+}
+"  </tbody>"
+"</table>"
+"</span></p>"
+"</body>"
+"</html>";
+  webServer.send(200, "text/html", page); 
+  }

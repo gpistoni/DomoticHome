@@ -57,13 +57,13 @@ void setup()
   Alarm.timerRepeat( 62,        winterPT_Manager);        // timer for every 1 minutes
   Alarm.timerRepeat( 63,        BoilerSanitaria_Manager); // timer for every 1 minutes
 
-
+/*
   UpdateAll();
   PDC_Manager();
   winterPP_Manager();
   winterPT_Manager();
   BoilerSanitaria_Manager();
-
+*/
 }
 
 /**************************************************************************************************/
@@ -99,7 +99,7 @@ void UpdateTime()
 void UpdateAll()
 {
   digitalWrite(ACT, 0);
-    
+
   static unsigned int i = 0;
   digitalClockDisplay();
   Serial.println("UpdateAll");
@@ -119,34 +119,34 @@ void UpdateAll()
 void PDC_Manager()
 {
   if ( DT.pPDC_man ) return;
-//  digitalClockDisplay();
-//  Serial.println("PDC_Manager");
-//
-//  DT.rPdc.set(0);
-//  DT.rPdcPompa.set(0);
-//
-//  //decido se accendere la pdc
-//  if ( month() == 6 ||  month() == 7 || month() == 8 ) // solo estate
-//  {
-//    if ( DT.tExternal > 30 && DT.tInletFloor > 20 )   // t esterne, minima t Acqua raffreddata
-//    {
-//      Serial.println("Condizione H1");
-//      DT.rPdc.set(1);
-//      DT.rPdcCool0_Heat1.set(0);
-//      DT.rPdcPompa.set(1);
-//      DT.rPdcNightMode.set(1);
-//    }
-//    if ( DT.tInletFloor < DT.tReturnFloor - 1 )
-//    {
-//      Serial.println("Condizione H2");
-//      DT.rPdcPompa.set(1);
-//    }
-//  }
-//
-//  dhWifi.HttpRequest( DT.rPdc.getS() );
-//  dhWifi.HttpRequest( DT.rPdcCool0_Heat1.getS() );
-//  dhWifi.HttpRequest( DT.rPdcPompa.getS() );
-//  dhWifi.HttpRequest( DT.rPdcNightMode.getS() );
+  //  digitalClockDisplay();
+  //  Serial.println("PDC_Manager");
+  //
+  //  DT.rPdc.set(0);
+  //  DT.rPdcPompa.set(0);
+  //
+  //  //decido se accendere la pdc
+  //  if ( month() == 6 ||  month() == 7 || month() == 8 ) // solo estate
+  //  {
+  //    if ( DT.tExternal > 30 && DT.tInletFloor > 20 )   // t esterne, minima t Acqua raffreddata
+  //    {
+  //      Serial.println("Condizione H1");
+  //      DT.rPdc.set(1);
+  //      DT.rPdcCool0_Heat1.set(0);
+  //      DT.rPdcPompa.set(1);
+  //      DT.rPdcNightMode.set(1);
+  //    }
+  //    if ( DT.tInletFloor < DT.tReturnFloor - 1 )
+  //    {
+  //      Serial.println("Condizione H2");
+  //      DT.rPdcPompa.set(1);
+  //    }
+  //  }
+  //
+  //  dhWifi.HttpRequest( DT.rPdc.getS() );
+  //  dhWifi.HttpRequest( DT.rPdcCool0_Heat1.getS() );
+  //  dhWifi.HttpRequest( DT.rPdcPompa.getS() );
+  //  dhWifi.HttpRequest( DT.rPdcNightMode.getS() );
 }
 
 /**************************************************************************************************/
@@ -177,23 +177,31 @@ void BoilerSanitaria_Manager()
 void winterPP_Manager()
 {
   if ( DT.pWinterPP_man ) return;
-  
+
   digitalWrite(ACT, 0);
   DT.m_log.add("winterPP_Manager");
 
   bool sala = false;
+  bool sala2 = false;
   bool cucina = false;
   bool cameraS = false;
-  bool cameraD = false; 
-   bool cameraM = false;
-   bool bagno = false;
+  bool cameraD = false;
+  bool cameraD2 = false;
+  bool cameraM = false;
+  bool cameraM2 = false;
+  bool bagno = false;
 
   //decido se accendere le stanze
 
   if ( DT.tSala < DT.ptSala )
   {
-     DT.m_log.add("Condizione tSala " + String(DT.tSala) + " < " + String(DT.ptSala) );
+    DT.m_log.add("Condizione tSala " + String(DT.tSala) + " < " + String(DT.ptSala) );
     sala = true;
+  }
+  if ( DT.tSala < DT.ptSala - 1 )
+  {
+    DT.m_log.add("Condizione tSala2 " + String(DT.tSala) + " << " + String(DT.ptSala) );
+    sala2 = true;
   }
   if ( DT.tCucina < DT.ptCucina )
   {
@@ -210,10 +218,20 @@ void winterPP_Manager()
     DT.m_log.add("Condizione tCameraD " + String(DT.tCameraD) + " < " + String(DT.ptCameraD) );
     cameraD = true;
   }
+  if ( DT.tCameraD < DT.ptCameraD - 1 )
+  {
+    DT.m_log.add("Condizione tCameraD2 " + String(DT.tCameraD) + " << " + String(DT.ptCameraD) );
+    cameraD2 = true;
+  }
   if ( DT.tCameraM < DT.ptCameraM )
   {
     DT.m_log.add("Condizione tCameraM " + String(DT.tCameraM) + " < " + String(DT.ptCameraM) );
     cameraM = true;
+  }
+  if ( DT.tCameraM < DT.ptCameraM - 1 )
+  {
+    DT.m_log.add("Condizione tCameraM " + String(DT.tCameraM) + " << " + String(DT.ptCameraM) );
+    cameraM2 = true;
   }
   if ( DT.tBagno < DT.ptBagno )
   {
@@ -226,31 +244,31 @@ void winterPP_Manager()
     bagno = true;
   }
 
-  bool needCalore = sala || cucina || bagno;
+  bool needCalore = sala || cucina || bagno || cameraS || cameraD || cameraM;
 
   bool needPompa_pp = false;
   bool needPdc = false;
 
   if ( DT.tPufferHi > 25 )
   {
-    DT.m_log.add("Condizione H1");
+    DT.m_log.add("Condizione needCalore Puffer");
     needPompa_pp = needCalore;
   }
   else if ( DT.prPdc && DT.tExternal > 10  )
   {
-    DT.m_log.add("Condizione H2");
+    DT.m_log.add("Condizione needCalore PDC tExternal: "  + String(DT.tExternal) );
     needPdc = needCalore;  // accendo PDC
   }
 
   // attuatori
-  DT.evCameraM1.set(0);
-  DT.evCameraM2.set(0);
+  DT.evCameraM1.set(cameraM);
+  DT.evCameraM2.set(cameraM2);
   DT.evSala1.set(sala);
-  DT.evSala2.set(sala);
+  DT.evSala2.set(sala2);
   DT.evCucina.set(cucina);
-  DT.evCameraS.set(0);
-  DT.evCameraD1.set(0);
-  DT.evCameraD2.set(0);
+  DT.evCameraS.set(cameraS);
+  DT.evCameraD1.set(cameraD);
+  DT.evCameraD2.set(cameraD2);
 
   // accendo pompa
   DT.rPompaPianoPrimo.set( needPompa_pp );
@@ -261,6 +279,7 @@ void winterPP_Manager()
   DT.rPdcPompa.set(needPdc);
   DT.rPdcNightMode.set(1);
 
+//set
   dhWifi.HttpRequest( DT.evCameraM1.getS() );
   dhWifi.HttpRequest( DT.evCameraM2.getS() );
   dhWifi.HttpRequest( DT.evSala1.getS() );

@@ -1,5 +1,5 @@
 #pragma once
-#include "vars.h"
+#include "DataVars.h"
 
 //********************************************************************************************
 class cDataTable
