@@ -57,9 +57,9 @@ void setup()
   Alarm.timerRepeat( 62,        winterPT_Manager);        // timer for every 1 minutes
   Alarm.timerRepeat( 63,        BoilerSanitaria_Manager); // timer for every 1 minutes
 
-/*
+
   UpdateAll();
-  PDC_Manager();
+/*  PDC_Manager();
   winterPP_Manager();
   winterPT_Manager();
   BoilerSanitaria_Manager();

@@ -119,7 +119,7 @@ class cDataTable
       webVar[35] = rPompaPianoTerra.setup  ( T3, 5, "PompaPianoTerra");
       webVar[36] = rBoilerSanitaria.setup  ( T3, 6, "BoilerSanitaria");
 
-      webParam[30] = prPdc.setup           ( "pPDC", 0 );
+      webParam[30] = prPdc.setup            ( "pPDC", 0 );
       webParam[31] = prPdcCool0_Heat1.setup ( "pCoolHeat", 0 );
       webParam[32] = prPdcPompa.setup       ( "pPdcPompa", 0 );
       webParam[33] = prPdcNightMode.setup   ( "pPdcNightMode", 0 );
