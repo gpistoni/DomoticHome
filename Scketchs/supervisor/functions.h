@@ -1,7 +1,6 @@
 #ifndef functions_h
 #define functions_h
 
-
 void printDigits(int digits)
 {
     // utility function for digital clock display: prints preceding colon and leading 0

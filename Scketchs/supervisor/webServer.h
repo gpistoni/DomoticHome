@@ -111,9 +111,183 @@ void initWebserver()
   Serial.println("HTTP server started");
 }
 
-
-
 //***************************************************************************************************
+void HtmlPage()
+{
+  Serial.println("HtmlPage");
+  String page;
+  page += "<!DOCTYPE html><html xmlns='http://www.w3.org/1999/xhtml' dir='ltr'>"
+          "<head>"
+          "<meta http-equiv='refresh' content='30'>"
+          "<title>Home</title>"
+          "<script>"
+          "function myButton( str )"
+          "{"
+          "window.location='http://192.168.0.201/set?' + str;"
+          "}"
+          "</script>"
+          // <!-- define on/off styles -->
+          "<style type='text/css'>"
+          ".on  { background:yellow; }"
+          ".off { background:gray; }"
+          "</style>"
+          //<!-- define the toggle function -->
+          "<script language='javascript'>"
+          "function toggleState(item){"
+          "if(item.className == 'on') {"
+          "item.className='off';"
+          "} else {"
+          "item.className='on';"
+          "}"
+          "}"
+          "</script>"
+          "</head>";
+  page += "<style>"
+          "body {"
+          "font-family:verdana;"
+          "font-size:120%;"
+          "}"
+          "h1 {"
+          "color:blue;"
+          "font-family:verdana;"
+          "font-size:160%;"
+          "}"
+          "p  {"
+          "color:red;"
+          "font-family:verdana;"
+          "font-size:160%;"
+          "}"
+          "a  {"
+          "font-family:verdana;"
+          "font-size:120%;"
+          "}"
+          "table, th, td {"
+          "border: 1px solid black;"
+          "border-collapse: collapse;"
+          "}"
+          "th, td {"
+          "padding: 5px;"
+          "text-align: cnter;"
+          "}"
+          "</style>";
+  //***************************************************************************************************************/
+  page +=  "<body>"
+           "<p><title> Home</span></title></p>";
+  //***************************************************************************************************************/
+  Serial.println("Stanze");
+  page +=  "\n<h1> Stanze </h1>"
+           "<table>"
+           "<tbody>"
+           "<tr>"
+           "<th>Stanza"
+           "<th>Temperatura"
+           "<th>Umidita"
+           "<th>"
+           "<th>Target"
+           "<th>"
+           "</tr>";
+  for (int i = 0; i < 6; i++)
+  {
+    if ( DT.webVar[10 + i] && DT.webVar[i] && DT.webParam[10 + i] )
+    {
+      page += "\n<tr>";
+      page += DT.webVar[10 + i]->td_descr();
+      page += DT.webVar[10 + i]->td_valueF();
+      page += DT.webVar[i]->td_valueF();
+
+      String req_p = DT.webParam[10 + i]->m_descr + "=" + String(DT.webParam[10 + i]->m_value + 0.5 );
+      page += "<td><button onclick='myButton(\"" + req_p + "\")'> UP </button></td>";
+
+      page += DT.webParam[10 + i]->td_valueF();
+
+      String req_m = DT.webParam[10 + i]->m_descr + "=" + String(DT.webParam[10 + i]->m_value - 0.5 );
+      page += "<td><button onclick='myButton(\"" + req_m + "\")'> DW </td>";
+
+      // page += "<td><input type='button' id='btn' class='on' onclick='toggleState(this)'/></td>";
+      page += "</tr>";
+    }
+  }
+  page +=  "  </tbody>"
+           "</table>";
+  //***************************************************************************************************************/
+  Serial.println("Caldaia");
+  page +=  "\n<h1> Caldaia </h1>"
+           "<table>"
+           "<tbody>"
+           "<tr>"
+           "<th>Sonda</th>"
+           "<th>Temperatura</th>"
+           "</tr>";
+  for (int i = 0; i < 10; i++)
+  {
+    if (DT.webVar[40 + i])
+    {
+      page += "\n<tr>";
+      page += DT.webVar[40 + i]->td_descr();
+      page += DT.webVar[40 + i]->td_valueF();
+      page += "</tr>";
+    }
+  }
+  page += "  </tbody>"
+          "</table>";
+  //***************************************************************************************************************/
+  Serial.println("Pavimento");
+  page +=  "\n<h1> Attuatori Pavimento </h1>"
+           "<table>"
+           "<tbody>"
+           "<tr>"
+           "<th>Stanze</th>"
+           "<th>Stato</th>"
+           "</tr>";
+  page += "\n<tr>"
+          "<td>Bagno</td>";
+  page += DT.rPompaPianoPrimo.td_bulb();
+  page += "</tr>";
+  for (int i = 0; i < 10; i++)
+  {
+    if (DT.webVar[50 + i])
+    {
+      page += "\n<tr>";
+      page += DT.webVar[50 + i]->td_descr();
+      page += DT.webVar[50 + i]->td_bulb();
+      page += "</tr>";
+    }
+  }
+  page += "  </tbody>"
+          "</table>";
+  //***************************************************************************************************************/
+  Serial.println("Attuatori");
+  page +=  "\n<h1> Attuatori Caldaia </h1>"
+           "<table>"
+           "<tbody>"
+           "<tr>"
+           "<th>Stanze</th>"
+           "<th>Stato</th>"
+           "<th>Forzato</th>"
+           "</tr>";
+  for (int i = 0; i < 10; i++)
+  {
+    if (DT.webVar[30 + i])
+    {
+      page += "\n<tr>";
+      page += DT.webVar[30 + i]->td_descr();
+      page += DT.webVar[30 + i]->td_bulb();
+      // if ( DT.webParam[30 + i] )
+      //   page += DT.webParam[30 + i]->td_star();
+      page += "</tr>";
+    }
+  }
+  page += "  </tbody>";
+  page += "</table>";
+  //***************************************************************************************************************/
+  page += "</body>";
+  page += "</html>";
+  Serial.println("send Page");
+  webServer.send(200, "text/html", page);
+}
+
+
+/***************************************************************************************************
 void HtmlPage()
 {
   Serial.println("HtmlPage");
@@ -125,36 +299,36 @@ void HtmlPage()
           "</head>";
   page += "<style>"
           "body {"
-          "    font-family:verdana;"
-          "    font-size:120%;"
+          "font-family:verdana;"
+          "font-size:120%;"
           "}"
           "h1 {"
-          "    color:blue;"
-          "    font-family:verdana;"
-          "    font-size:160%;"
+          "color:blue;"
+          "font-family:verdana;"
+          "font-size:160%;"
           "}"
           "p  {"
-          "    color:red;"
-          "    font-family:verdana;"
-          "    font-size:160%;"
+          "color:red;"
+          "font-family:verdana;"
+          "font-size:160%;"
           "}"
           "a  {"
-          "    font-family:verdana;"
-          "    font-size:120%;"
+          "font-family:verdana;"
+          "font-size:120%;"
           "}"
           "table, th, td {"
           "border: 1px solid black;"
           "border-collapse: collapse;"
           "}"
           "th, td {"
-          "    padding: 5px;"
-          "    text-align: cnter;"
+          "padding: 5px;"
+          "text-align: cnter;"
           "}"
           "</style>";
-  //***************************************************************************************************************/
+  //***************************************************************************************************************
   page +=  "<body>"
            "<p><title> Home</span></title></p>";
-  //***************************************************************************************************************/
+  //***************************************************************************************************************
   Serial.println("Stanze");
   page +=  "\n<h1> Stanze </h1>"
            "<table>"
@@ -187,7 +361,7 @@ void HtmlPage()
   }
   page +=  "  </tbody>"
            "</table>";
-  //***************************************************************************************************************/
+  //***************************************************************************************************************
   Serial.println("Caldaia");
   page +=  "\n<h1> Caldaia </h1>"
            "<table>"
@@ -208,7 +382,7 @@ void HtmlPage()
   }
   page += "  </tbody>"
           "</table>";
-  //***************************************************************************************************************/
+  //***************************************************************************************************************
   Serial.println("Pavimento");
   page +=  "\n<h1> Attuatori Pavimento </h1>"
            "<table>"
@@ -233,7 +407,7 @@ void HtmlPage()
   }
   page += "  </tbody>"
           "</table>";
-  //***************************************************************************************************************/
+  //***************************************************************************************************************
   Serial.println("Attuatori");
   page +=  "\n<h1> Attuatori Caldaia </h1>"
            "<table>"
@@ -257,12 +431,13 @@ void HtmlPage()
   }
   page += "  </tbody>";
   page += "</table>";
-  //***************************************************************************************************************/
+  //***************************************************************************************************************
   page += "</body>";
   page += "</html>";
   Serial.println("send Page");
   webServer.send(200, "text/html", page);
-}
+}*/
+
 /*
 
 void HtmlPage() {

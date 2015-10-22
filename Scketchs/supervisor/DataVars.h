@@ -1,4 +1,5 @@
 #include "functions.h"
+#include "Logs.h"
 
 String strValue(String data, char separator, int index);
 double strValueD(String data, char separator, int index);
@@ -55,6 +56,7 @@ class cParam
     }
 };
 
+
 //********************************************************************************************
 class cVar
 {
@@ -81,16 +83,15 @@ class cVar
       return this;
     }
 
-    String send( DHwifi *wifi)
+    void send( DHwifi *wifi, BufferString &log)
     {
       if (m_modified)
       {
         String s =  String("@set(") + String(m_t) + "," + String(m_s) + "=" + String(m_value)  + ")";
         wifi->HttpRequest( s );
         m_modified = false;
-        return String("Send Modified Value ") + m_descr + ":" + String(m_value);
+        log.add( String("Send Value ") + m_descr + ":" + String(m_value) );
       }
-      return "";
     }
 
     String td_descr()
@@ -111,9 +112,15 @@ class cVar
     String td_bulb()
     {
       if ( m_value )
+        return "<td><input type='button' id='btn' class='on'/></td>";
+      else
+        return "<td><input type='button' id='btn' class='off'/></td>";
+     /* 
+      if ( m_value )
         return "<td> <img " + srcIcon("bulb_1") + " alt='ON'></td>";
       else
         return "<td> <img " + srcIcon("bulb_2") + " alt='OFF'></td>";
+     */
     }
 };
 
@@ -179,39 +186,3 @@ class cBool: public cVar
     }
 };
 
-class BufferString
-{
-    String m_queue[60];
-    unsigned int index;
-
-  public:
-    BufferString():
-      index(0)
-    {
-    }
-
-    void add( const String &str )
-    {
-      if (str.length() > 0)
-      {
-        String dataString;
-        dataString = short_time();
-        dataString += str;
-
-        Serial.println(dataString);
-        m_queue[index] = dataString + "\n";
-        index++;
-        if (index >= 60) index = 0;
-      }
-    }
-
-    String get( )
-    {
-      String str;
-      for (int i = index; i < 60; i++)
-        str += m_queue[i];
-      for (int i = 0; i < index; i++)
-        str += m_queue[i];
-      return str;
-    }
-};
