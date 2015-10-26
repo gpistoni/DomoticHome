@@ -38,18 +38,16 @@ void loop()
   /*******************************************************************************/
   if ( Slave.waitRequest(50) )
   {
-    Slave.sendData();
-    
-    Serial.println( "");
-    Serial.print( "Set Relay: " );
-    
+    Serial.print( "\nSet Relay: " );
+
     for (int i = 0; i < 8; i++)
     {
-	  Slave.sensor[i] = Slave.relay[i];
+      Slave.sensor[i] = Slave.relay[i];
       digitalWrite(2 + i, !Slave.relay[i] );
-	  if (i!=0)  Serial.print( "," );
+      if (i != 0)  Serial.print( "," );
       Serial.print( Slave.relay[i] );
     }
+    Slave.sendData();
   }
   /*****************************************************************************/
   delay(10);

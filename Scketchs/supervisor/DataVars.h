@@ -5,11 +5,6 @@ String strValue(String data, char separator, int index);
 double strValueD(String data, char separator, int index);
 bool strValueB(String data, char separator, int index);
 
-String srcIcon(String name)
-{
-  return "src='http://www.fancyicons.com/free-icons/123/onebit-2/png/32/" + name + "_32.png'";
-}
-
 //********************************************************************************************
 class cParam
 {
@@ -41,17 +36,20 @@ class cParam
 
     String td_star()
     {
-      String href = "'http://192.168.0.201/set?" + m_descr + "=" + String( m_value == 0 ) + "'";
-
       if ( m_value == 0  )
       {
         String href = "'http://192.168.0.201/set?" + m_descr + "=1'";
-        return "<td><a href=" + href + "> <img " + srcIcon("star_3") + " alt='OFF'>  </a> </td>";
+        return "<td><a href=" + href + "> <input type='button' id='btn' value='DIS'  class='fdis'/>";
+      }
+      else if ( m_value == 1  )
+      {
+        String href = "'http://192.168.0.201/set?" + m_descr + "=2'";
+        return "<td><a href=" + href + ">  <input type='button' id='btn' value='ON' class='fon'/>";
       }
       else
       {
         String href = "'http://192.168.0.201/set?" + m_descr + "=0'";
-        return "<td><a href=" + href + "> <img " + srcIcon("star_3") + " alt='OFF'>  </a> </td>";
+        return "<td><a href=" + href + ">  <input type='button' id='btn' value='OFF' class='foff'/>";
       }
     }
 };
@@ -61,8 +59,8 @@ class cParam
 class cVar
 {
   public:
-    int m_t;
-    int m_s;
+    byte m_t;
+    byte m_s;
     String m_descr;
     float m_value;
     bool m_modified;
@@ -75,7 +73,7 @@ class cVar
     {
     }
 
-    cVar* setup(int t, int s, String descr)
+    cVar* setup(byte t, byte s, String descr)
     {
       m_t = t;
       m_s = s;
@@ -96,31 +94,20 @@ class cVar
 
     String td_descr()
     {
-      return String("<td>") + m_descr + String("</td>");
+      return String("<td>") + m_descr ;
     }
 
     String td_valueF()
     {
-      return String("<td>") + m_value + String("</td>");
-    }
-
-    String td_valueB()
-    {
-      return String("<td>") + (int)m_value + String("</td>");
+      return String("<td>") + m_value;
     }
 
     String td_bulb()
     {
       if ( m_value )
-        return "<td><input type='button' id='btn' class='on'/></td>";
+        return "<td><input type='button' id='btn' class='on'/>";
       else
-        return "<td><input type='button' id='btn' class='off'/></td>";
-     /* 
-      if ( m_value )
-        return "<td> <img " + srcIcon("bulb_1") + " alt='ON'></td>";
-      else
-        return "<td> <img " + srcIcon("bulb_2") + " alt='OFF'></td>";
-     */
+        return "<td><input type='button' id='btn' class='off'/>";
     }
 };
 
@@ -144,9 +131,9 @@ class cFloat: public cVar
     void update( String stringlist )
     {
       m_value = strValueD(stringlist, ',', m_s);
-      Serial.print(m_descr );
-      Serial.print(":");
-      Serial.println( m_value );
+      //Serial.print(m_descr );
+      //Serial.print(":");
+      //Serial.println( m_value );
     }
 
     operator float()
@@ -175,9 +162,9 @@ class cBool: public cVar
     void update( String stringlist )
     {
       m_value = strValueB(stringlist, ',', m_s);
-      Serial.print(m_descr );
-      Serial.print(":");
-      Serial.println( m_value );
+      //Serial.print(m_descr );
+      //Serial.print(":");
+      //Serial.println( m_value );
     }
 
     operator bool()

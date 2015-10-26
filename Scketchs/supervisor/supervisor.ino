@@ -48,17 +48,16 @@ void setup()
   //Alarm.alarmRepeat(dowSaturday,8,30,30,WeeklyAlarm);  // 8:30:30 every Saturday
 
   Alarm.timerRepeat( 3600 * 24, Daily);             // timer for every 24h
-  Alarm.timerRepeat( 60 * 60,    Hourly);           // timer for every 1h
 
-  Alarm.timerRepeat( 10,        UpdateAll);         // timer for every 60sec
+  Alarm.timerRepeat( 10,        UpdateAll);         // timer for every 10 sec
 
-  Alarm.timerRepeat( 60,        PDC_Manager);             // timer for every 10 minutes
+  Alarm.timerRepeat( 60,        summerPP_Manager);        // timer for every 1 minutes
   Alarm.timerRepeat( 61,        winterPP_Manager);        // timer for every 1 minutes
   Alarm.timerRepeat( 62,        winterPT_Manager);        // timer for every 1 minutes
   Alarm.timerRepeat( 63,        BoilerSanitaria_Manager); // timer for every 1 minutes
 
   UpdateAll( );
-  PDC_Manager();
+  summerPP_Manager();
   winterPP_Manager();
   winterPT_Manager();
   BoilerSanitaria_Manager();
@@ -81,12 +80,6 @@ void Daily()
 }
 
 /**************************************************************************************************/
-void Hourly()
-{
-  Serial.println("Hourly timer");
-}
-
-/**************************************************************************************************/
 void UpdateTime()
 {
   Serial.println("UpdateTime");
@@ -99,13 +92,15 @@ void UpdateAll()
 {
   digitalWrite(ACT, 0);
 
-  static unsigned int i = 0;
   digitalClockDisplay();
   Serial.println("UpdateAll");
 
   if (year() < 2000 )
     UpdateTime();
 
+
+  static unsigned int i = 0;
+  
   if ( i % 4 == 0 || i == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
   if ( i % 4 == 1 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
   if ( i % 4 == 2 || i == 0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
@@ -116,7 +111,7 @@ void UpdateAll()
 
 
 /**************************************************************************************************/
-void PDC_Manager()
+void summerPP_Manager()
 {
   //if ( DT.pPDC_man ) return;
   //  digitalClockDisplay();
@@ -153,6 +148,7 @@ void PDC_Manager()
 void BoilerSanitaria_Manager()
 {
   digitalWrite(ACT, 0);
+  digitalClockDisplay();
   Serial.println("BoilerSanitaria_Manager");
 
   bool pompa = false;
@@ -162,23 +158,25 @@ void BoilerSanitaria_Manager()
   {
     if ( DT.tReturnFireplace < 30 )
     {
-      Serial.println("Condizione B1");
+      DT.m_log.add("Condizione hour:" + String( hour() ) + " tReturnFireplace < " + String( DT.tReturnFireplace ) );
       pompa = true;
     }
   }
 
   //manual mode
-  if ( DT.prBoilerSanitaria )
-    pompa = true;
-
-  DT.rBoilerSanitaria.set( pompa );
+  if ( DT.prBoilerSanitaria == 1 ) DT.rBoilerSanitaria.set( true );
+  else if ( DT.prBoilerSanitaria == 2 ) DT.rBoilerSanitaria.set ( false );
+  else DT.rBoilerSanitaria.set( pompa );
   DT.rBoilerSanitaria.send(&dhWifi, DT.m_log);
 }
 
 /**************************************************************************************************/
 void winterPP_Manager()
 {
+  if ( month() == 6 || month() == 7 || month() == 8 || month() == 9 ) return;  // estate
+
   digitalWrite(ACT, 0);
+    digitalClockDisplay();
   Serial.println("winterPP_Manager");
 
   bool sala = false;
@@ -238,29 +236,27 @@ void winterPP_Manager()
     DT.m_log.add("Condizione tBagno " + String(DT.tBagno) + " < " + String(DT.ptBagno) );
     bagno = true;
   }
-  if ( hour() >= 19 || hour() < 8 )
+  /*if ( hour() >= 19 || hour() < 8 )
   {
     DT.m_log.add("Condizione bagno hour " + String( hour() ) );
-    bagno = true;
-  }
+    bagno2 = true;
+  }*/
 
   bool needCalore = sala || cucina || bagno || cameraS || cameraD || cameraM;
 
   bool needPompa_pp = false;
   bool needPdc = false;
 
-  if ( DT.tPufferHi > 25 )
+  if ( DT.tPufferHi > 24 )
   {
     DT.m_log.add("Condizione needCalore Puffer");
     needPompa_pp = needCalore;
   }
-  else if ( DT.prPdc && DT.tExternal > 10  )
+  else if ( DT.tPufferHi < 24 && DT.prPdc && DT.tExternal > 5  )
   {
     DT.m_log.add("Condizione needCalore PDC tExternal: "  + String(DT.tExternal) );
     needPdc = needCalore;  // accendo PDC
   }
-
-  needPdc = true;
 
   // attuatori
   DT.evCameraM1.set(cameraM);
@@ -281,17 +277,33 @@ void winterPP_Manager()
   DT.evCameraD2.send(&dhWifi, DT.m_log);;
 
   // accendo pompa
-  DT.rPompaPianoPrimo.set( needPompa_pp );
+  if ( DT.prPompaPianoPrimo == 1 )   DT.rPompaPianoPrimo.set( true );       //manual mode
+  else if ( DT.prPompaPianoPrimo == 2 )   DT.rPompaPianoPrimo.set( false );
+  else DT.rPompaPianoPrimo.set( needPompa_pp );
   DT.rPompaPianoPrimo.send(&dhWifi, DT.m_log );
 
   // accendo PDC
-  DT.rPdc.set( needPdc );
+  if ( DT.prPdc == 1 ) DT.rPdc.set ( true );
+  else if ( DT.prPdc == 2 ) DT.rPdc.set ( false );
+  else DT.rPdc.set( needPdc );
   DT.rPdc.send(&dhWifi, DT.m_log );
-  DT.rPdcCool0_Heat1.set( needPdc );
-  DT.rPdcCool0_Heat1.send(&dhWifi, DT.m_log );
-  DT.rPdcPompa.set( needPdc );
+
+  // heat
+  if ( DT.prPdcHeat == 1 ) DT.rPdcHeat.set ( true );
+  else if ( DT.prPdcHeat == 2 ) DT.rPdcHeat.set ( false );
+  else DT.rPdcHeat.set( needPdc );
+  DT.rPdcHeat.send(&dhWifi, DT.m_log );
+
+  //pompa
+  if ( DT.prPdcPompa == 1 ) DT.rPdcPompa.set ( true );
+  else if ( DT.prPdcPompa == 2 ) DT.rPdcPompa.set ( false );
+  else DT.rPdcPompa.set( needPdc );
   DT.rPdcPompa.send(&dhWifi, DT.m_log );
-  DT.rPdcNightMode.set( needPdc );
+
+  //night
+  if ( DT.prPdcNightMode == 1 ) DT.rPdcNightMode.set ( true );
+  else if ( DT.prPdcNightMode == 2 ) DT.rPdcNightMode.set ( false );
+  else DT.rPdcNightMode.set( needPdc );
   DT.rPdcNightMode.send(&dhWifi, DT.m_log );
 }
 
@@ -299,6 +311,7 @@ void winterPP_Manager()
 void winterPT_Manager()
 {
   digitalWrite(ACT, 0);
+    digitalClockDisplay();
   Serial.println("winterPT_Manager");
 
   bool pompa = false;
@@ -310,11 +323,10 @@ void winterPT_Manager()
     pompa = true;
   }
 
-  //manual mode
-  if ( DT.prPompaPianoTerra )
-    pompa = true;
-
-  DT.rPompaPianoTerra.set(pompa);
+  //piano terra
+  if ( DT.prPompaPianoTerra == 1 ) DT.rPompaPianoTerra.set ( true );
+  else if ( DT.prPompaPianoTerra == 2 ) DT.rPompaPianoTerra.set ( false );
+  else DT.rPompaPianoTerra.set( pompa );
   DT.rPompaPianoTerra.send(&dhWifi,  DT.m_log);
 }
 
