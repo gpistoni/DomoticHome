@@ -12,12 +12,14 @@
 #include "dhwifi.h"
 #include "DataTable.h"
 #include "functions.h"
+#include "httpServer.h"
 #include "webServer.h"
 
 DHwifi dhWifi;
 
 cDataTable DT;
 
+WiFiServer httpServer(81);
 ESP8266WebServer webServer(80);
 
 const int ACT = 2;
@@ -41,7 +43,8 @@ void setup()
 
   UpdateTime();      // update system time
 
-  initWebserver();
+  initWebServer();
+  initHttpServer();
 
   //Alarm.alarmRepeat(8,30,0, MorningAlarm);  // 8:30am every day
   //Alarm.alarmRepeat(17,45,0,EveningAlarm);  // 5:45pm every day
@@ -68,6 +71,7 @@ void setup()
 void loop()
 {
   webServer.handleClient();
+  handleHttpServer();
   digitalWrite(ACT, 1);
   Alarm.delay(10);
 }

@@ -1,4 +1,3 @@
-
 extern ESP8266WebServer webServer;
 extern cDataTable DT;
 
@@ -10,7 +9,7 @@ void handleRoot()
 
 void handleLog()
 {
-  webServer.send(200, "text/plain",    DT.m_log.get() );
+  webServer.send(200, "text/plain", DT.m_log.get() );
 }
 
 void handleValues()
@@ -93,14 +92,13 @@ void handleNotFound()
 }
 
 //***************************************************************************************************
-void initWebserver()
+void initWebServer()
 {
   webServer.on("/", HtmlPage );
   webServer.on("/log", handleLog );
   webServer.on("/values", handleValues );
   webServer.on("/labels", handleLabels );
 
-  webServer.on("/pars", handlePars );
   webServer.on("/labpars", handleLabelsPars );
   webServer.on("/setpars", handleSetPars );
   webServer.on("/set", handleSet );
