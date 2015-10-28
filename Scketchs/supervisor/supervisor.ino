@@ -104,7 +104,7 @@ void UpdateAll()
 
 
   static unsigned int i = 0;
-  
+
   if ( i % 4 == 0 || i == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
   if ( i % 4 == 1 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
   if ( i % 4 == 2 || i == 0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
@@ -168,9 +168,7 @@ void BoilerSanitaria_Manager()
   }
 
   //manual mode
-  if ( DT.prBoilerSanitaria == 1 ) DT.rBoilerSanitaria.set( true );
-  else if ( DT.prBoilerSanitaria == 2 ) DT.rBoilerSanitaria.set ( false );
-  else DT.rBoilerSanitaria.set( pompa );
+  DT.rBoilerSanitaria.manualCheck( pompa );
   DT.rBoilerSanitaria.send(&dhWifi, DT.m_log);
 }
 
@@ -180,7 +178,7 @@ void winterPP_Manager()
   if ( month() == 6 || month() == 7 || month() == 8 || month() == 9 ) return;  // estate
 
   digitalWrite(ACT, 0);
-    digitalClockDisplay();
+  digitalClockDisplay();
   Serial.println("winterPP_Manager");
 
   bool sala = false;
@@ -195,49 +193,49 @@ void winterPP_Manager()
 
   //decido se accendere le stanze
 
-  if ( DT.tSala < DT.ptSala )
+  if ( DT.tSala < DT.tSala.setPoint() )
   {
-    DT.m_log.add("Condizione tSala " + String(DT.tSala) + " < " + String(DT.ptSala) );
+    DT.m_log.add("Condizione tSala " + String(DT.tSala) + " < " + String(DT.tSala.setPoint()) );
     sala = true;
   }
-  if ( DT.tSala < DT.ptSala - 1 )
+  if ( DT.tSala < DT.tSala.setPoint() - 1 )
   {
-    DT.m_log.add("Condizione tSala2 " + String(DT.tSala) + " << " + String(DT.ptSala) );
+    DT.m_log.add("Condizione tSala2 " + String(DT.tSala) + " << " + String(DT.tSala.setPoint()) );
     sala2 = true;
   }
-  if ( DT.tCucina < DT.ptCucina )
+  if ( DT.tCucina < DT.tCucina.setPoint() )
   {
-    DT.m_log.add("Condizione tCucina " + String(DT.tCucina) + " < " + String(DT.ptCucina) );
+    DT.m_log.add("Condizione tCucina " + String(DT.tCucina) + " < " + String(DT.tCucina.setPoint()) );
     cucina = true;
   }
-  if ( DT.tCameraS < DT.ptCameraS )
+  if ( DT.tCameraS < DT.tCameraS.setPoint() )
   {
-    DT.m_log.add("Condizione tCameraS " + String(DT.tCameraS) + " < " + String(DT.ptCameraS) );
+    DT.m_log.add("Condizione tCameraS " + String(DT.tCameraS) + " < " + String(DT.tCameraS.setPoint()) );
     cameraS = true;
   }
-  if ( DT.tCameraD < DT.ptCameraD )
+  if ( DT.tCameraD < DT.tCameraD.setPoint() )
   {
-    DT.m_log.add("Condizione tCameraD " + String(DT.tCameraD) + " < " + String(DT.ptCameraD) );
+    DT.m_log.add("Condizione tCameraD " + String(DT.tCameraD) + " < " + String(DT.tCameraD.setPoint()) );
     cameraD = true;
   }
-  if ( DT.tCameraD < DT.ptCameraD - 1 )
+  if ( DT.tCameraD < DT.tCameraD.setPoint() - 1 )
   {
-    DT.m_log.add("Condizione tCameraD2 " + String(DT.tCameraD) + " << " + String(DT.ptCameraD) );
+    DT.m_log.add("Condizione tCameraD2 " + String(DT.tCameraD) + " << " + String(DT.tCameraD.setPoint()) );
     cameraD2 = true;
   }
-  if ( DT.tCameraM < DT.ptCameraM )
+  if ( DT.tCameraM < DT.tCameraM.setPoint() )
   {
-    DT.m_log.add("Condizione tCameraM " + String(DT.tCameraM) + " < " + String(DT.ptCameraM) );
+    DT.m_log.add("Condizione tCameraM " + String(DT.tCameraM) + " < " + String(DT.tCameraM.setPoint()) );
     cameraM = true;
   }
-  if ( DT.tCameraM < DT.ptCameraM - 1 )
+  if ( DT.tCameraM < DT.tCameraM.setPoint() - 1 )
   {
-    DT.m_log.add("Condizione tCameraM " + String(DT.tCameraM) + " << " + String(DT.ptCameraM) );
+    DT.m_log.add("Condizione tCameraM " + String(DT.tCameraM) + " << " + String(DT.tCameraM.setPoint()) );
     cameraM2 = true;
   }
-  if ( DT.tBagno < DT.ptBagno )
+  if ( DT.tBagno < DT.tBagno.setPoint() )
   {
-    DT.m_log.add("Condizione tBagno " + String(DT.tBagno) + " < " + String(DT.ptBagno) );
+    DT.m_log.add("Condizione tBagno " + String(DT.tBagno) + " < " + String(DT.tBagno.setPoint()) );
     bagno = true;
   }
   /*if ( hour() >= 19 || hour() < 8 )
@@ -256,7 +254,7 @@ void winterPP_Manager()
     DT.m_log.add("Condizione needCalore Puffer");
     needPompa_pp = needCalore;
   }
-  else if ( DT.tPufferHi < 24 && DT.prPdc && DT.tExternal > 5  )
+  else if ( DT.tPufferHi < 24 && DT.rPdc.setPoint() == 1  && DT.tExternal > 5  )
   {
     DT.m_log.add("Condizione needCalore PDC tExternal: "  + String(DT.tExternal) );
     needPdc = needCalore;  // accendo PDC
@@ -281,33 +279,23 @@ void winterPP_Manager()
   DT.evCameraD2.send(&dhWifi, DT.m_log);;
 
   // accendo pompa
-  if ( DT.prPompaPianoPrimo == 1 )   DT.rPompaPianoPrimo.set( true );       //manual mode
-  else if ( DT.prPompaPianoPrimo == 2 )   DT.rPompaPianoPrimo.set( false );
-  else DT.rPompaPianoPrimo.set( needPompa_pp );
+  DT.rPompaPianoPrimo.manualCheck( needPompa_pp );
   DT.rPompaPianoPrimo.send(&dhWifi, DT.m_log );
 
   // accendo PDC
-  if ( DT.prPdc == 1 ) DT.rPdc.set ( true );
-  else if ( DT.prPdc == 2 ) DT.rPdc.set ( false );
-  else DT.rPdc.set( needPdc );
+  DT.rPdc.manualCheck( needPdc );
   DT.rPdc.send(&dhWifi, DT.m_log );
 
   // heat
-  if ( DT.prPdcHeat == 1 ) DT.rPdcHeat.set ( true );
-  else if ( DT.prPdcHeat == 2 ) DT.rPdcHeat.set ( false );
-  else DT.rPdcHeat.set( needPdc );
+  DT.rPdcHeat.manualCheck( needPdc );
   DT.rPdcHeat.send(&dhWifi, DT.m_log );
 
   //pompa
-  if ( DT.prPdcPompa == 1 ) DT.rPdcPompa.set ( true );
-  else if ( DT.prPdcPompa == 2 ) DT.rPdcPompa.set ( false );
-  else DT.rPdcPompa.set( needPdc );
+  DT.rPdcPompa.manualCheck( needPdc );
   DT.rPdcPompa.send(&dhWifi, DT.m_log );
 
   //night
-  if ( DT.prPdcNightMode == 1 ) DT.rPdcNightMode.set ( true );
-  else if ( DT.prPdcNightMode == 2 ) DT.rPdcNightMode.set ( false );
-  else DT.rPdcNightMode.set( needPdc );
+  DT.rPdcNightMode.manualCheck( needPdc );
   DT.rPdcNightMode.send(&dhWifi, DT.m_log );
 }
 
@@ -315,7 +303,7 @@ void winterPP_Manager()
 void winterPT_Manager()
 {
   digitalWrite(ACT, 0);
-    digitalClockDisplay();
+  digitalClockDisplay();
   Serial.println("winterPT_Manager");
 
   bool pompa = false;
@@ -328,9 +316,7 @@ void winterPT_Manager()
   }
 
   //piano terra
-  if ( DT.prPompaPianoTerra == 1 ) DT.rPompaPianoTerra.set ( true );
-  else if ( DT.prPompaPianoTerra == 2 ) DT.rPompaPianoTerra.set ( false );
-  else DT.rPompaPianoTerra.set( pompa );
+  DT.rPompaPianoTerra.manualCheck(pompa);
   DT.rPompaPianoTerra.send(&dhWifi,  DT.m_log);
 }
 

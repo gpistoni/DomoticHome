@@ -27,25 +27,25 @@ void handleHttpServer()
   }
 
   // Read the first line of the request
-  String req = client.readStringUntil('\r');
-  Serial.println(req);
+  String readString = client.readStringUntil('\r');
+  Serial.println(readString);
   client.flush();
 
   // Match the request
   int value = 0;
-  if (req.indexOf("/set") != -1)
+  if (readString.indexOf("/set") != -1)
   {
     int idxSET = readString.indexOf("/set?");
     int idxSET2 = readString.indexOf("=", idxSET2);
 
-    String name = readString.substring(idxSET + 5, idxSET2).toInt();
-    float val = readString.substring(idxSET2 + 1, 999).toInt();
+    String name = readString.substring(idxSET + 5, idxSET2);
+    String val = readString.substring(idxSET2 + 1, 999);
 
     Serial.println(name);
     Serial.println(val);
     DT.setPars( name, val );    
   }
-  if (req.indexOf(" / LED = OFF") != -1)
+  if (readString.indexOf(" / LED = OFF") != -1)
   {
     value = 2;
   }

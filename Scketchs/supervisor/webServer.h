@@ -188,12 +188,12 @@ void HtmlPage()
       page += DT.webVar[10 + i]->td_valueF();
       page += DT.webVar[i]->td_valueF();
 
-      String req_p = DT.webParam[10 + i]->m_descr + "=" + String(DT.webParam[10 + i]->m_value + 0.5 );
+      String req_p = DT.webParam[10 + i]->descrSetPoint() + "=" + String(DT.webParam[10 + i]->setPoint() + 0.5 );
       page += "<td><button onclick='myButton(\"" + req_p + "\")'> UP </button></td>";
 
       page += DT.webParam[10 + i]->td_valueF();
 
-      String req_m = DT.webParam[10 + i]->m_descr + "=" + String(DT.webParam[10 + i]->m_value - 0.5 );
+      String req_m = DT.webParam[10 + i]->descrSetPoint() + "=" + String(DT.webParam[10 + i]->setPoint() - 0.5 );
       page += "<td><button onclick='myButton(\"" + req_m + "\")'> DW </td>";
 
       page += "</tr>";
