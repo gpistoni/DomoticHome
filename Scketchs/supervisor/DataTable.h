@@ -21,20 +21,6 @@ class cDataTable
     cFloat tCameraM;
     cFloat tBagno;
 
-    cParam phCucina;
-    cParam phSala;
-    cParam phCameraS;
-    cParam phCameraD;
-    cParam phCameraM;
-    cParam phBagno;
-
-    cParam ptCucina;
-    cParam ptSala;
-    cParam ptCameraS;
-    cParam ptCameraD;
-    cParam ptCameraM;
-    cParam ptBagno;
-
     // terminal 3
     cBool rPdc;
     cBool rPdcHeat;
@@ -43,14 +29,6 @@ class cDataTable
     cBool rPompaPianoPrimo;
     cBool rPompaPianoTerra;
     cBool rBoilerSanitaria;
-
-    cParam prPdc;
-    cParam prPdcHeat;
-    cParam prPdcPompa;
-    cParam prPdcNightMode;
-    cParam prPompaPianoPrimo;
-    cParam prPompaPianoTerra;
-    cParam prBoilerSanitaria;
 
     // terminal 4
     cFloat tPufferHi;
@@ -73,52 +51,35 @@ class cDataTable
 
     // puntatori
     cVar* webVar[100];
-    cParam* webParam[100];
 
     BufferString m_log;
 
     void setup()
     {
       memset( webVar, 0, 100 * sizeof(cVar*) );
-      memset( webParam, 0, 100 * sizeof(cParam*) );
 
-      webVar[0] = hCucina.setup            ( T1, 0, "hCucina");
-      webVar[1] = hSala.setup              ( T1, 1, "hSala");
-      webVar[2] = hCameraS.setup           ( T1, 2, "hCameraS");
-      webVar[3] = hCameraD.setup           ( T1, 3, "hCameraD");
-      webVar[4] = hCameraM.setup           ( T1, 4, "hCameraM");
-      webVar[5] = hBagno.setup             ( T1, 5, "hBagno");
+      webVar[0] = hCucina.setup            ( T1, 0, "hCucina",  50);
+      webVar[1] = hSala.setup              ( T1, 1, "hSala",    50);
+      webVar[2] = hCameraS.setup           ( T1, 2, "hCameraS", 50);
+      webVar[3] = hCameraD.setup           ( T1, 3, "hCameraD", 50);
+      webVar[4] = hCameraM.setup           ( T1, 4, "hCameraM", 50);
+      webVar[5] = hBagno.setup             ( T1, 5, "hBagno",   50);
 
-      webVar[10] = tCucina.setup           ( T1, 10, "tCucina" );
-      webVar[11] = tSala.setup             ( T1, 11, "tSala");
-      webVar[12] = tCameraS.setup          ( T1, 12, "tCameraS");
-      webVar[13] = tCameraD.setup          ( T1, 13, "tCameraD");
-      webVar[14] = tCameraM.setup          ( T1, 14, "tCameraM");
-      webVar[15] = tBagno.setup            ( T1, 15, "tBagno");
-
-      webParam[10] = ptCucina.setup        ( "ptCucina",  20 );
-      webParam[11] = ptSala.setup          ( "ptSala",    22 );
-      webParam[12] = ptCameraS.setup       ( "ptCameraS", 18 );
-      webParam[13] = ptCameraD.setup       ( "ptCameraD", 18 );
-      webParam[14] = ptCameraM.setup       ( "ptCameraM", 18 );
-      webParam[15] = ptBagno.setup         ( "ptBagno",   24 );
+      webVar[10] = tCucina.setup           ( T1, 10, "tCucina",  20);
+      webVar[11] = tSala.setup             ( T1, 11, "tSala"  ,  22);
+      webVar[12] = tCameraS.setup          ( T1, 12, "tCameraS", 18);
+      webVar[13] = tCameraD.setup          ( T1, 13, "tCameraD", 18);
+      webVar[14] = tCameraM.setup          ( T1, 14, "tCameraM", 18);
+      webVar[15] = tBagno.setup            ( T1, 15, "tBagno",   22);
 
       webVar[30] = rPdc.setup              ( T3, 0, "PDC");
       webVar[31] = rPdcHeat.setup          ( T3, 1, "PdcHeat");
       webVar[32] = rPdcPompa.setup         ( T3, 2, "PdcPompa");
       webVar[33] = rPdcNightMode.setup     ( T3, 3, "PdcNightMode");
-      
+
       webVar[34] = rPompaPianoPrimo.setup  ( T3, 4, "PompaPianoPrimo");
       webVar[35] = rPompaPianoTerra.setup  ( T3, 5, "PompaPianoTerra");
       webVar[36] = rBoilerSanitaria.setup  ( T3, 6, "BoilerSanitaria");
-
-      webParam[30] = prPdc.setup              ( "pPDC", 0 );
-      webParam[31] = prPdcHeat.setup          ( "pHeat", 0 );
-      webParam[32] = prPdcPompa.setup         ( "pPdcPompa", 0 );
-      webParam[33] = prPdcNightMode.setup     ( "pPdcNightMode", 0 );
-      webParam[34] = prPompaPianoPrimo.setup  ( "pPompaPianoPrimo",0 );
-      webParam[35] = prPompaPianoTerra.setup  ( "pPompaPianoTerra",0 );
-      webParam[36] = prBoilerSanitaria.setup  ( "pBoilerSanitaria",0 );
 
       webVar[40] = tPufferHi.setup         ( T4, 0, "tPufferHi");
       webVar[41] = tPufferLow.setup        ( T4, 1, "tPufferLow");
@@ -208,9 +169,9 @@ class cDataTable
     {
       for ( int i = 0; i < 100; i++ )
       {
-        if ( webParam[i] != 0 && webParam[i]->m_descr == label  )
+        if ( webVar[i] != 0 && webVar[i]->descrSetPoint() == label  )
         {
-          webParam[i]->m_value = value.toFloat();
+          webVar[i]->set( value.toFloat() );
         }
       }
     }
@@ -221,9 +182,9 @@ class cDataTable
       {
         if ( webVar[i] != 0 )
         {
-          labels += webVar[i]->m_descr;
+          labels += webVar[i]->descr();
           labels += ",";
-          values += webVar[i]->m_value;
+          values += webVar[i]->value();
           values += ",";
         }
         else
@@ -238,11 +199,11 @@ class cDataTable
     {
       for ( int i = 0; i < 100; i++ )
       {
-        if ( webParam[i] != 0 )
+        if ( webVar[i] != 0 )
         {
-          labels += webParam[i]->m_descr;
+          labels += webVar[i]->descrSetPoint();
           labels += ",";
-          values += webParam[i]->m_value;
+          values += webVar[i]->setPoint();
           values += ",";
         }
         else
@@ -262,22 +223,22 @@ class cDataTable
           readable += "\n[";
           readable += i;
           readable += "] ";
-          readable += webVar[i]->m_descr;
+          readable += webVar[i]->descr();
           readable += " = ";
-          readable += webVar[i]->m_value;
+          readable += webVar[i]->value();
         }
       };
       readable += "\n";
       for ( int i = 0; i < 100; i++ )
       {
-        if ( webParam[i] != 0 )
+        if ( webVar[i] != 0 )
         {
           readable += "\n(";
           readable += i;
           readable += ") ";
-          readable += webParam[i]->m_descr;
+          readable += webVar[i]->descrSetPoint();
           readable += " = ";
-          readable += webParam[i]->m_value;
+          readable += webVar[i]->setPoint();
         }
       };
     };

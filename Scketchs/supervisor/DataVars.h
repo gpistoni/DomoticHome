@@ -6,79 +6,44 @@ double strValueD(String data, char separator, int index);
 bool strValueB(String data, char separator, int index);
 
 //********************************************************************************************
-class cParam
-{
-  public:
-    String m_descr;
-    float m_value;
-
-    cParam():
-      m_value(0)
-    {
-    }
-
-    cParam* setup( String descr, float def )
-    {
-      m_descr = descr;
-      m_value = def;
-      return this;
-    }
-
-    operator float()
-    {
-      return m_value;
-    }
-
-    String td_valueF()
-    {
-      return String("<td>") + m_value + String("</td>");
-    }
-
-    String td_star()
-    {
-      if ( m_value == 0  )
-      {
-        String href = "'http://192.168.0.201/set?" + m_descr + "=1'";
-        return "<td><a href=" + href + "> <input type='button' id='btn' value='DIS'  class='fdis'/>";
-      }
-      else if ( m_value == 1  )
-      {
-        String href = "'http://192.168.0.201/set?" + m_descr + "=2'";
-        return "<td><a href=" + href + ">  <input type='button' id='btn' value='ON' class='fon'/>";
-      }
-      else
-      {
-        String href = "'http://192.168.0.201/set?" + m_descr + "=0'";
-        return "<td><a href=" + href + ">  <input type='button' id='btn' value='OFF' class='foff'/>";
-      }
-    }
-};
-
-
-//********************************************************************************************
 class cVar
 {
-  public:
+  protected:
     byte m_t;
     byte m_s;
     String m_descr;
     float m_value;
+    float m_setpoint;
     bool m_modified;
-
+    
+  public:
     cVar():
       m_t(0),
       m_s(0),
       m_value(0),
+      m_setpoint(0),
       m_modified(false)
     {
     }
 
-    cVar* setup(byte t, byte s, String descr)
+    cVar* setup(byte t, byte s, String descr, float setpoint = 0)
     {
       m_t = t;
       m_s = s;
       m_descr = descr;
+      m_value = setpoint;
+      m_setpoint = setpoint;
       return this;
+    }
+
+    
+    void set( float value )
+    {
+      if ( m_value != value)
+      {
+        m_value = value;
+        m_modified = true;
+      }
     }
 
     void send( DHwifi *wifi, BufferString &log)
@@ -92,6 +57,26 @@ class cVar
       }
     }
 
+    float value()
+    {
+      return m_value ;
+    }
+    
+    float setPoint()
+    {
+      return m_setpoint;
+    }
+    
+    String descr()
+    {
+      return m_descr ;
+    }
+
+    String descrSetPoint()
+    {
+      return "p" + m_descr ;
+    }
+
     String td_descr()
     {
       return String("<td>") + m_descr ;
@@ -102,12 +87,36 @@ class cVar
       return String("<td>") + m_value;
     }
 
+    String td_setpointF()
+    {
+      return String("<td>") + m_setpoint;
+    }
+
     String td_bulb()
     {
       if ( m_value )
         return "<td><input type='button' id='btn' class='on'/>";
       else
         return "<td><input type='button' id='btn' class='off'/>";
+    }
+
+    String td_star()
+    {
+      if ( m_setpoint == 0  )
+      {
+        String href = "'http://192.168.0.201/set?" + descrSetPoint() + "=1'";
+        return "<td><a href=" + href + "> <input type='button' id='btn' value='DIS'  class='fdis'/>";
+      }
+      else if ( m_value == 1  )
+      {
+        String href = "'http://192.168.0.201/set?" + descrSetPoint() + "=2'";
+        return "<td><a href=" + href + ">  <input type='button' id='btn' value='ON' class='fon'/>";
+      }
+      else
+      {
+        String href = "'http://192.168.0.201/set?" + descrSetPoint() + "=0'";
+        return "<td><a href=" + href + ">  <input type='button' id='btn' value='OFF' class='foff'/>";
+      }
     }
 };
 
@@ -117,15 +126,6 @@ class cFloat: public cVar
   public:
     cFloat(): cVar()
     {
-    }
-
-    void set( float value )
-    {
-      if ( m_value != value)
-      {
-        m_value = value;
-        m_modified = true;
-      }
     }
 
     void update( String stringlist )
@@ -140,6 +140,7 @@ class cFloat: public cVar
     {
       return m_value;
     }
+
 };
 
 //********************************************************************************************
@@ -170,6 +171,18 @@ class cBool: public cVar
     operator bool()
     {
       return (bool) m_value;
+    }
+
+    int setPoint()
+    {
+      return (int)m_setpoint;
+    }
+
+    void manualCheck( bool autoValue )
+    {
+      if ( setPoint() == 1 )   set( true );       //manual mode
+      else if ( setPoint() == 2 )   set( false );
+      else set( autoValue );
     }
 };
 

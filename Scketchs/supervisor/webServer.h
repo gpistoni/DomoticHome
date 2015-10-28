@@ -179,21 +179,21 @@ void HtmlPage()
            "<th>Target"
            "<th>"
            "</tr>";
-  for (int i = 0; i < 6; i++)
+  for (int i = 0; i < 10; i++)
   {
-    if ( DT.webVar[10 + i] && DT.webVar[i] && DT.webParam[10 + i] )
+    if ( DT.webVar[10 + i] && DT.webVar[i] )
     {
       page += "\n<tr>";
       page += DT.webVar[10 + i]->td_descr();
       page += DT.webVar[10 + i]->td_valueF();
       page += DT.webVar[i]->td_valueF();
 
-      String req_p = DT.webParam[10 + i]->m_descr + "=" + String(DT.webParam[10 + i]->m_value + 0.5 );
+      String req_p = DT.webVar[10 + i]->descrSetPoint() + "=" + String(DT.webVar[10 + i]->setPoint() + 0.5 );
       page += "<td><button onclick='myButton(\"" + req_p + "\")'> UP </button></td>";
 
-      page += DT.webParam[10 + i]->td_valueF();
+      page += DT.webVar[10 + i]->td_setpointF();
 
-      String req_m = DT.webParam[10 + i]->m_descr + "=" + String(DT.webParam[10 + i]->m_value - 0.5 );
+      String req_m = DT.webVar[10 + i]->descrSetPoint() + "=" + String(DT.webVar[10 + i]->setPoint() - 0.5 );
       page += "<td><button onclick='myButton(\"" + req_m + "\")'> DW </td>";
 
       page += "</tr>";
@@ -244,8 +244,8 @@ void HtmlPage()
       page += "\n<tr>";
       page += DT.webVar[30 + i]->td_descr();
       page += DT.webVar[30 + i]->td_bulb();
-      if ( DT.webParam[30 + i] )
-        page += DT.webParam[30 + i]->td_star();
+      if ( DT.webVar[30 + i] )
+        page += DT.webVar[30 + i]->td_star();
       page += "</tr>";
     }
   }
