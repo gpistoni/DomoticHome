@@ -45,7 +45,15 @@ class cVar
         m_modified = true;
       }
     }
-
+    
+    void setSetPoint( float value )
+    {
+      m_setpoint = value;
+      Serial.print(m_descr);
+      Serial.print("=");
+      Serial.println(m_setpoint);
+    }
+    
     void send( DHwifi *wifi, BufferString &log)
     {
       if (m_modified)
@@ -104,17 +112,17 @@ class cVar
     {
       if ( m_setpoint == 0  )
       {
-        String href = "'http://192.168.0.201/set?" + descrSetPoint() + "=1'";
+        String href = "'/set?" + descrSetPoint() + "=1'";
         return "<td><a href=" + href + "> <input type='button' id='btn' value='DIS'  class='fdis'/>";
       }
-      else if ( m_value == 1  )
+      else if ( m_setpoint == 1  )
       {
-        String href = "'http://192.168.0.201/set?" + descrSetPoint() + "=2'";
+        String href = "'/set?" + descrSetPoint() + "=2'";
         return "<td><a href=" + href + ">  <input type='button' id='btn' value='ON' class='fon'/>";
       }
       else
       {
-        String href = "'http://192.168.0.201/set?" + descrSetPoint() + "=0'";
+        String href = "'set?" + descrSetPoint() + "=0'";
         return "<td><a href=" + href + ">  <input type='button' id='btn' value='OFF' class='foff'/>";
       }
     }

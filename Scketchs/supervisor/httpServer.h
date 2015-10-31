@@ -3,6 +3,7 @@ extern cDataTable DT;
 
 void initHttpServer()
 {
+  httpServer.begin();
   Serial.println("HTTP server started");
   Serial.print("Use this URL to connect: ");
   Serial.print("http://");
@@ -36,7 +37,7 @@ void handleHttpServer()
   if (readString.indexOf("/set") != -1)
   {
     int idxSET = readString.indexOf("/set?");
-    int idxSET2 = readString.indexOf("=", idxSET2);
+    int idxSET2 = readString.indexOf("=", idxSET);
 
     String name = readString.substring(idxSET + 5, idxSET2);
     String val = readString.substring(idxSET2 + 1, 999);
@@ -71,8 +72,8 @@ void handleHttpServer()
     message += "Off";
   }
   message += "<br><br>";
-  message += "Click <a href=\"/LED=ON\">here</a> turn the LED on pin 2 ON<br>";
-  message += "Click <a href=\"/LED=OFF\">here</a> turn the LED on pin 2 OFF<br>";
+  message += "Click <a href=\"/set?ptCucina=20\">here</a> turn the LED on pin 2 ON<br>";
+  message += "Click <a href=\"/set?ptCucina=22\">here</a> turn the LED on pin 2 OFF<br>";
   message += "</html>";
 
   client.println(message);

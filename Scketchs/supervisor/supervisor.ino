@@ -7,6 +7,7 @@
 #include <TimeAlarms.h>
 
 #include "dhwifi.h"
+#include "dhconfig.h"
 #include "DataTable.h"
 #include "functions.h"
 #include "httpServer.h"
@@ -15,6 +16,7 @@
 DHwifi dhWifi;
 
 cDataTable DT;
+DHConfig   Config;
 
 WiFiServer httpServer(81);
 ESP8266WebServer webServer(80);
@@ -36,6 +38,7 @@ void setup()
   dhWifi.setup( ip, gateway, subnet );
   delay (1000);
 
+  Config.setup();
   DT.setup();
 
   UpdateTime();      // update system time

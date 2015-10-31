@@ -171,7 +171,7 @@ class cDataTable
       {
         if ( webVar[i] != 0 && webVar[i]->descrSetPoint() == label  )
         {
-          webVar[i]->set( value.toFloat() );
+          webVar[i]->setSetPoint( value.toFloat() );
         }
       }
     }
