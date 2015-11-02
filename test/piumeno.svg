@@ -7,8 +7,8 @@
     <dc:title/>
    </cc:Work>
   </rdf:RDF>
- </metadata> <script type="text/javascript"><![CDATA[var redVal=0;var greenVal=0;var blueVal=0;function changeCol(evt){   redVal = Math.round(Math.random()*255);   greenVal = Math.round(Math.random()*255);   blueVal = Math.round(Math.random()*255);      evt.setAttribute("fill", "rgb(" + redVal + "," + greenVal + "," + blueVal + ")");}// ]]></script> 
- <g id="layer1" stroke-linejoin="round" stroke="#000" stroke-dasharray="none" stroke-miterlimit="4" stroke-width="1" >  <rect id="rect1" height="290" width="250"  y="0"   x="0" 		fill="#FF1" onclick="changeCol(this)"/>  <rect id="rect2" height="160" width="250"  y="0"   x="260" 	fill="#FF2" onclick="changeCol(this)"/>
+ </metadata> <script type="text/javascript"><![CDATA[var redVal=0;var greenVal=0;var blueVal=0;function changeCol(evt){   redVal = Math.round(Math.random()*255);   greenVal = Math.round(Math.random()*255);   blueVal = Math.round(Math.random()*255);      evt.setAttribute("fill", "rgb(" + redVal + "," + greenVal + "," + blueVal + ")");}function redirect(){	location.href = 'piumeno.html';}// ]]></script> 
+ <g id="layer1" stroke-linejoin="round" stroke="#000" stroke-dasharray="none" stroke-miterlimit="4" stroke-width="1" >  <rect id="rect1" height="290" width="250"  y="0"   x="0" 		fill="#FF1" onclick="redirect()"/>  <rect id="rect2" height="160" width="250"  y="0"   x="260" 	fill="#FF2" onclick="changeCol(this)"/>
   <rect id="rect3" height="140" width="250"  y="300" x="0" 		fill="#FF3" onclick="changeCol(this)"/>
   <rect id="rect4" height="200" width="250"  y="450" x="0"  	fill="#FF4" onclick="changeCol(this)"/>
   <rect id="rect5" height="200" width="250"  y="450" x="260" 	fill="#FF5" onclick="changeCol(this)"/>
