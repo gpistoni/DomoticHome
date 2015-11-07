@@ -249,12 +249,12 @@ void winterPP_Manager()
   bool needPompa_pp = false;
   bool needPdc = false;
 
-  if ( DT.tPufferHi > 24 )
+  if ( DT.tPufferHi > 24 || DT.tReturnFireplace > 30 || DT.tInputMixer > DT.tReturnFloor + 3 )
   {
     DT.m_log.add("Condizione needCalore Puffer");
     needPompa_pp = needCalore;
   }
-  else if ( DT.tPufferHi < 24 && DT.rPdc.setPoint() == 1  && DT.tExternal > 5  )
+  else if ( DT.rPdc.setPoint() == 1  && DT.tExternal > 5  )
   {
     DT.m_log.add("Condizione needCalore PDC tExternal: "  + String(DT.tExternal) );
     needPdc = needCalore;  // accendo PDC

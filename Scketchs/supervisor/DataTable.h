@@ -70,7 +70,7 @@ class cDataTable
       webVar[12] = tCameraS.setup          ( T1, 12, "tCameraS", 18);
       webVar[13] = tCameraD.setup          ( T1, 13, "tCameraD", 18);
       webVar[14] = tCameraM.setup          ( T1, 14, "tCameraM", 18);
-      webVar[15] = tBagno.setup            ( T1, 15, "tBagno",   22);
+      webVar[15] = tBagno.setup            ( T1, 15, "tBagno",   21);
 
       webVar[30] = rPdc.setup              ( T3, 0, "PDC");
       webVar[31] = rPdcHeat.setup          ( T3, 1, "PdcHeat");
