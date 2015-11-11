@@ -13,6 +13,7 @@ class cDataTable
     cFloat hCameraD;
     cFloat hCameraM;
     cFloat hBagno;
+    cFloat hLavanderia;
 
     cFloat tCucina;
     cFloat tSala;
@@ -20,6 +21,7 @@ class cDataTable
     cFloat tCameraD;
     cFloat tCameraM;
     cFloat tBagno;
+    cFloat tLavanderia;
 
     // terminal 3
     cBool rPdc;

@@ -3,6 +3,9 @@
 extern WiFiServer httpServer;
 extern cDataTable DT;
 
+
+void page1( WiFiClient &client);
+  
 void initHttpServer()
 {
   httpServer.begin();
@@ -53,15 +56,12 @@ void handleHttpServer()
     value = 2;
   }
 
-  page1();
-  return;
-
   // Return the response
-  client.println("HTTP/1.1 200 OK");
-  client.println("Content-Type: text/html");
-  client.println(""); //  do not forget this one
-  client.println("<!DOCTYPE HTML>");
-  client.println("<html>");
+
+  //client.println("<html>");
+
+  page1( client );
+  return;
 
   ///********************************************************************************************
   // message
@@ -89,10 +89,13 @@ void handleHttpServer()
 
 }
 
-
-
 void page1( WiFiClient &client)
 {
+  client.println("HTTP/1.1 200 OK");
+  client.println("Content-Type: text/html");
+  client.println(""); //  do not forget this one
+  client.println("<!DOCTYPE HTML>");
+  
   String message = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
 
                    "<svg id=\"svg2\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns=\"http://www.w3.org/2000/svg\"  xmlns:osb=\"http://www.openswatchbook.org/uri/2009/osb\"  height=\"700\" width=\"600\" version=\"1.1\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">"
@@ -125,13 +128,13 @@ void page1( WiFiClient &client)
   client.println(message);
 
   message = "<g id=\"layer1\" stroke-linejoin=\"round\" stroke=\"#000\" stroke-dasharray=\"none\" stroke-miterlimit=\"4\" stroke-width=\"1\" >"
-            "<rect id=\"rect1\" height=\"290\" width=\"250\"  y=\"0\"   x=\"0\"    fill=\"#FF1\" onclick=\"changeCol(this)\"/>"
-            "<rect id=\"rect2\" height=\"160\" width=\"250\"  y=\"0\"   x=\"260\"   fill=\"#FF2\" onclick=\"changeCol(this)\"/>"
-            "<rect id=\"rect3\" height=\"140\" width=\"250\"  y=\"300\" x=\"0\"     fill=\"#FF3\" onclick=\"changeCol(this)\"/>"
-            "<rect id=\"rect4\" height=\"200\" width=\"250\"  y=\"450\" x=\"0\"   fill=\"#FF4\" onclick=\"changeCol(this)\"/>"
-            "<rect id=\"rect5\" height=\"200\" width=\"250\"  y=\"450\" x=\"260\"   fill=\"#FF5\" onclick=\"changeCol(this)\"/>"
-            "<rect id=\"rect7\" height=\"140\" width=\"250\"  y=\"220\" x=\"310\"   fill=\"#FF7\" onclick=\"changeCol(this)\"/>"
-            "<rect id=\"rect6\" height=\"140\" width=\"250\"  y=\"300\" x=\"260\"   fill=\"#FF6\" onclick=\"changeCol(this)\"/>"
+            "<rect id=\"rect1\" height=\"290\" width=\"250\"  y=\"0\"   x=\"0\"     fill=\"£1\" onclick=\"changeCol(this)\"/>"
+            "<rect id=\"rect2\" height=\"160\" width=\"250\"  y=\"0\"   x=\"260\"   fill=\"£2\" onclick=\"changeCol(this)\"/>"
+            "<rect id=\"rect3\" height=\"140\" width=\"250\"  y=\"300\" x=\"0\"     fill=\"£3\" onclick=\"changeCol(this)\"/>"
+            "<rect id=\"rect4\" height=\"200\" width=\"250\"  y=\"450\" x=\"0\"     fill=\"£4\" onclick=\"changeCol(this)\"/>"
+            "<rect id=\"rect5\" height=\"200\" width=\"250\"  y=\"450\" x=\"260\"   fill=\"£5\" onclick=\"changeCol(this)\"/>"
+            "<rect id=\"rect7\" height=\"140\" width=\"250\"  y=\"220\" x=\"310\"   fill=\"£6\" onclick=\"changeCol(this)\"/>"
+            "<rect id=\"rect6\" height=\"140\" width=\"250\"  y=\"300\" x=\"260\"   fill=\"£6\" onclick=\"changeCol(this)\"/>"
             "</g>"
 
             "<g id=\"layer2\" font-size=\"45px\" font-family=\"Verdana\" >"
@@ -149,6 +152,24 @@ void page1( WiFiClient &client)
             "</g>"
 
             "</svg>";
+
+
+            message.replace("$1", String(DT.tSala) );
+            message.replace("$2", String(DT.tCucina) );
+            message.replace("$3", String(DT.tCameraS) );
+            message.replace("$4", String(DT.tCameraD) );
+            message.replace("$5", String(DT.tCameraM) );
+            message.replace("$6", String(DT.tBagno) );
+            message.replace("$7", String(DT.tLavanderia) );
+
+            message.replace("£1", DT.tSala.webColor() );
+            message.replace("£2", String("rgb(") + String((int)(DT.tCucina*10)) + String(",120,200)") );
+            message.replace("£3", String("rgb(") + String((int)(DT.tCameraS*10)) + String(",120,200)") );
+            message.replace("£4", String("rgb(") + String((int)(DT.tCameraD*10)) + String(",120,200)") );
+            message.replace("£5", String("rgb(") + String((int)(DT.tCameraM*10)) + String(",120,200)") );
+            message.replace("£6", String("rgb(") + String((int)(DT.tBagno*10)) + String(",120,200)") );
+            message.replace("£7", String("rgb(") + String((int)(DT.tLavanderia*10)) + String(",120,200)") );
+            
             client.println(message);
 
 }

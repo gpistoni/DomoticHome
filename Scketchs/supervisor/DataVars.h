@@ -15,7 +15,7 @@ class cVar
     float m_value;
     float m_setpoint;
     bool m_modified;
-    
+
   public:
     cVar():
       m_t(0),
@@ -36,7 +36,7 @@ class cVar
       return this;
     }
 
-    
+
     void set( float value )
     {
       if ( m_value != value)
@@ -45,7 +45,7 @@ class cVar
         m_modified = true;
       }
     }
-    
+
     void setSetPoint( float value )
     {
       m_setpoint = value;
@@ -53,7 +53,7 @@ class cVar
       Serial.print("=");
       Serial.println(m_setpoint);
     }
-    
+
     void send( DHwifi *wifi, BufferString &log)
     {
       if (m_modified)
@@ -69,12 +69,12 @@ class cVar
     {
       return m_value ;
     }
-    
+
     float setPoint()
     {
       return m_setpoint;
     }
-    
+
     String descr()
     {
       return m_descr ;
@@ -147,6 +147,13 @@ class cFloat: public cVar
     operator float()
     {
       return m_value;
+    }
+
+    String webColor()
+    {
+      int v = (int)(m_value - 10 * 20);
+      if ( v > 255 ) v = 255;
+      return String("rgb(") + String(v) + String(",255,") + String(255 - v) + String(")");
     }
 
 };
