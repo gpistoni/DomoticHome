@@ -61,21 +61,21 @@ TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
 class CScreen
 {
   public:
-    void setup(void) {
-
-      Serial.println(F("TFT LCD"));
+    void setup(void) 
+    {
+      Serial.println("TFT LCD");
       Serial.print("TFT size is "); Serial.print(tft.width()); Serial.print("x"); Serial.println(tft.height());
 
       tft.reset();
 
-      uint16_t identifier = 0x9341;    //Need hardcode here (IC)
+      uint16_t identifier = 0x9341;    
       tft.begin(identifier);
 
       tft.fillScreen(BLACK);
       pinMode(13, OUTPUT);
     }
 
-    unsigned long testFillScreen()
+   /* unsigned long testFillScreen()
     {
       Serial.println(F("testFillScreen"));
       unsigned long start = micros();
@@ -86,9 +86,9 @@ class CScreen
       tft.fillScreen(BLACK);
       return micros() - start;
     }
-
-
-    unsigned long testText() {
+    
+    unsigned long testText()
+    {
       tft.fillScreen(BLACK);
       unsigned long start = micros();
       tft.setCursor(0, 0);
@@ -113,7 +113,7 @@ class CScreen
       tft.println("with my blurglecruncheon,");
       tft.println("see if I don't!");
       return micros() - start;
-    }
+    }*/
 
     TSPoint getTouchPoint()
     {
@@ -128,7 +128,7 @@ class CScreen
       //pinMode(YM, OUTPUT);
 
       TSPoint screenp;
-      if (p.z > 0)
+      if (p.z > 20)
       {
         // scale from 0->1023 to tft.width
         screenp.z = p.z;
@@ -143,6 +143,7 @@ class CScreen
     }
 };
 
+
 class ButtonLabel
 {
     short x0, y0;
@@ -153,6 +154,9 @@ class ButtonLabel
   public:
     ButtonLabel()
     {
+    x0=0; y0=0;
+    w=10; h=10;
+    m_color = WHITE;
     }
 
     void setup( short _x0, short _y0, short _w, short _h, String str, int color)
@@ -162,12 +166,19 @@ class ButtonLabel
       w = _w;
       h = _h;
       m_color = color;
-      label( str );
       draw(true);
+      label(str);
     }
 
     void label( String str)
     {
+      m_label = str;
+      draw(false);
+    }
+
+    void label( String str, int color)
+    {
+      m_color = color;
       m_label = str;
       draw(false);
     }
@@ -182,28 +193,30 @@ class ButtonLabel
       label(s);
     }
 
-      void label( float v)
+    void label( float v, short len=4, short ndecimali=1 )
     {
       // utility function for digital clock display: prints preceding colon and leading 0
-      String s;
-      if (v < 10)
-        s += "0";
-      s += String(v);
-      label(s);
+      char outstr[15];
+      dtostrf(v, len, ndecimali, outstr);
+      label(outstr);
     }
-
     
     void bkgCol( int col)
     {
-       m_color = col;
+      m_color = col;
     }
     
+    void hide()
+    {
+       tft.fillRect(x0, y0, w+2, h+2, BLACK );
+    }
+
     void draw(bool shadow)
     {
       if (shadow) tft.fillRect(x0 + 2, y0 + 2, w, h, GRAY);
       tft.fillRect(x0, y0, w, h, m_color );
 
-      tft.setCursor(x0 + 8, y0 + 8);
+      tft.setCursor(x0 + 8, y0 + h/2 - 13);
       tft.setTextColor(BLACK);
       tft.setTextSize(4);
       tft.println(m_label);
