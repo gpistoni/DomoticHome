@@ -67,12 +67,15 @@ class cDataTable
       webVar[4] = hCameraM.setup           ( T1, 4, "hCameraM", 50);
       webVar[5] = hBagno.setup             ( T1, 5, "hBagno",   50);
 
-      webVar[10] = tCucina.setup           ( T1, 10, "tCucina",  20);
+      webVar[10] = tCucina.setup           ( T1, 10, "tCucina",  21);
+      tCucina.setAdjust(-0.5);
       webVar[11] = tSala.setup             ( T1, 11, "tSala"  ,  22);
+      tSala.setAdjust(1.5);
       webVar[12] = tCameraS.setup          ( T1, 12, "tCameraS", 18);
       webVar[13] = tCameraD.setup          ( T1, 13, "tCameraD", 18);
       webVar[14] = tCameraM.setup          ( T1, 14, "tCameraM", 18);
-      webVar[15] = tBagno.setup            ( T1, 15, "tBagno",   21);
+      webVar[15] = tBagno.setup            ( T1, 15, "tBagno",   22);
+      tBagno.setAdjust(2);
 
       webVar[30] = rPdc.setup              ( T3, 0, "PDC");
       webVar[31] = rPdcHeat.setup          ( T3, 1, "PdcHeat");

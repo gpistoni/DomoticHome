@@ -23,6 +23,14 @@ ESP8266WebServer webServer(80);
 
 const int ACT = 2;
 
+void Daily();
+void UpdateTime();
+void UpdateAll();
+void summerPP_Manager();
+void winterPP_Manager();
+void winterPT_Manager();
+void BoilerSanitaria_Manager();
+
 void setup()
 {
   pinMode(ACT, OUTPUT);
@@ -75,7 +83,6 @@ void loop()
   digitalWrite(ACT, 1);
   Alarm.delay(10);
 }
-
 /**************************************************************************************************/
 void Daily()
 {
@@ -90,6 +97,8 @@ void UpdateTime()
   time_t epoch = dhWifi.GetSystemTime();
   if (epoch > 0) setTime( epoch );
 }
+
+
 
 /**************************************************************************************************/
 void UpdateAll()
@@ -238,21 +247,19 @@ void winterPP_Manager()
     DT.m_log.add("Condizione tBagno " + String(DT.tBagno) + " < " + String(DT.tBagno.setPoint()) );
     bagno = true;
   }
-  /*if ( hour() >= 19 || hour() < 8 )
-  {
-    DT.m_log.add("Condizione bagno hour " + String( hour() ) );
-    bagno2 = true;
-  }*/
 
   bool needCalore = sala || cucina || bagno || cameraS || cameraD || cameraM;
 
   bool needPompa_pp = false;
   bool needPdc = false;
 
-  if ( DT.tPufferHi > 24 || DT.tReturnFireplace > 30 || DT.tInputMixer > DT.tReturnFloor + 3 )
+  if ( DT.tPufferHi > 24 || DT.tReturnFireplace > 30 || DT.tInputMixer > DT.tReturnFloor + 3  )
   {
-    DT.m_log.add("Condizione needCalore Puffer");
-    needPompa_pp = needCalore;
+    if ( DT.tInletFloor < 35  && DT.tReturnFloor < 28  )  //35 è la sicurezza, 28 la t massima dopo al quale spengo la pompa
+    {
+      DT.m_log.add("Condizione needCalore Puffer");
+      needPompa_pp = needCalore;
+    }
   }
   else if ( DT.rPdc.setPoint() == 1  && DT.tExternal > 5  )
   {
@@ -309,7 +316,7 @@ void winterPT_Manager()
   bool pompa = false;
 
   //decido se accendere sulla lavanderia
-  if ( DT.tPufferHi > 40 )
+  if ( DT.tPufferHi > 50 )
   {
     DT.m_log.add("Condizione tPufferHi:" +  String(DT.tPufferHi) );
     pompa = true;

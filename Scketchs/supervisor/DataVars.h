@@ -131,17 +131,18 @@ class cVar
 //********************************************************************************************
 class cFloat: public cVar
 {
+  float m_adjust;
+  
   public:
-    cFloat(): cVar()
+    cFloat(): cVar(),
+    m_adjust(0)
     {
     }
 
     void update( String stringlist )
     {
       m_value = strValueD(stringlist, ',', m_s);
-      //Serial.print(m_descr );
-      //Serial.print(":");
-      //Serial.println( m_value );
+      m_value += m_adjust;
     }
 
     operator float()
@@ -154,6 +155,11 @@ class cFloat: public cVar
       int v = (int)(m_value - 10 * 20);
       if ( v > 255 ) v = 255;
       return String("rgb(") + String(v) + String(",255,") + String(255 - v) + String(")");
+    }
+
+    void setAdjust( float adj)
+    {
+      m_adjust = adj;
     }
 
 };
