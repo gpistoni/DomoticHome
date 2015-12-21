@@ -212,7 +212,6 @@ bool DHProtocol::waitData( int timeout)
   bool r = false;
   byte b;
  
-
   if ( _waitHeaderAndData( timeout ))
   {
     short temp[24];
@@ -241,7 +240,6 @@ bool DHProtocol::waitData( int timeout)
     for (int i = 0; i < 24 ; i++)
     {
       sensor[i] = 0; 
-      
     }
   }
 
@@ -251,3 +249,30 @@ bool DHProtocol::waitData( int timeout)
   return r;
 }
 
+//********************************************************************************/
+unsigned short DHProtocol::CalculateModbusCrc16( byte * Buffer, unsigned short wMessageLength)
+/* CRC runs cyclic Redundancy Check Algorithm on input Buffer */
+/* Returns value of 16 bit CRC after completion */
+/* Returns 0 if incoming message has correct CRC */
+{
+	unsigned short wCRC= 0xffff;
+	unsigned short wNext;
+	unsigned short wCarry;
+
+	for (unsigned short i=0; i<wMessageLength; i++)
+	{
+		wNext = (unsigned short)*Buffer;
+		wCRC ^= wNext;
+		for (unsigned short j = 0; j < 8; j++)
+		{
+			wCarry = wCRC & 1;
+			wCRC >>= 1;
+			if (wCarry)
+			{
+				wCRC ^= 0xA001;
+			}
+		}
+		Buffer++;
+	}
+	return wCRC;
+}

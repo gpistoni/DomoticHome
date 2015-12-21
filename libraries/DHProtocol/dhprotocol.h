@@ -31,7 +31,7 @@ class DHProtocol
     byte relay[12];
 
     DHProtocol() {};
-    void setup( int myId, int otherId, SoftwareSerial *myserial);
+    void setup( int myId, int otherId, SoftwareSerial *myserial );
 
   private:
     bool _waitData( int msec );
@@ -55,6 +55,9 @@ class DHProtocol
     {
       return ( millis() - lastRequest >= interval );
     };
+	
+	//********************************************************************************/
+    unsigned short CalculateModbusCrc16(byte * Buffer, unsigned short wMessageLength);
 };
 
 int freeMemory();
