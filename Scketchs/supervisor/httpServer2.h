@@ -100,7 +100,7 @@ void S2_header( WiFiClient &client)
           "\n<script>"
           "function myButton( str )"
           "{"
-          "window.location='http://192.168.0.201:82/set?' + str;"
+          "window.location='http://192.168.0.201/set?' + str;"
           "}"
           "</script>"
           // <!-- define on/off styles -->
