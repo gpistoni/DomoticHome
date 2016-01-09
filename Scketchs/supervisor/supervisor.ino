@@ -11,6 +11,7 @@
 #include "DataTable.h"
 #include "functions.h"
 #include "httpServer.h"
+#include "httpServer2.h"
 #include "webServer.h"
 
 DHwifi dhWifi;
@@ -19,7 +20,8 @@ cDataTable DT;
 DHConfig   Config;
 
 WiFiServer httpServer(81);
-ESP8266WebServer webServer(80);
+WiFiServer httpServer2(80);
+//ESP8266WebServer webServer(80);
 
 const int ACT = 2;
 
@@ -51,8 +53,9 @@ void setup()
 
   UpdateTime();      // update system time
 
-  initWebServer();
+//  initWebServer();
   initHttpServer();
+  initHttpServer2();
 
   //Alarm.alarmRepeat(8,30,0, MorningAlarm);  // 8:30am every day
   //Alarm.alarmRepeat(17,45,0,EveningAlarm);  // 5:45pm every day
@@ -60,7 +63,7 @@ void setup()
 
   Alarm.timerRepeat( 3600 * 24, Daily);             // timer for every 24h
 
-  Alarm.timerRepeat( 10,        UpdateAll);         // timer for every 10 sec
+  Alarm.timerRepeat( 20,        UpdateAll);         // timer for every 10 sec
 
   Alarm.timerRepeat( 60,        summerPP_Manager);        // timer for every 1 minutes
   Alarm.timerRepeat( 61,        winterPP_Manager);        // timer for every 1 minutes
@@ -78,8 +81,9 @@ void setup()
 /**************************************************************************************************/
 void loop()
 {
-  webServer.handleClient();
+//  webServer.handleClient();
   handleHttpServer();
+  handleHttpServer2();
   digitalWrite(ACT, 1);
   Alarm.delay(10);
 }
@@ -253,9 +257,15 @@ void winterPP_Manager()
   bool needPompa_pp = false;
   bool needPdc = false;
 
+  if ( hour() >= 22 || hour() < 5 ) 
+   needCalore = false;    
+
+  if ( DT.tPufferLow > 45 ) 
+   needCalore = true; 
+
   if ( DT.tPufferHi > 24 || DT.tReturnFireplace > 30 || DT.tInputMixer > DT.tReturnFloor + 3  )
   {
-    if ( DT.tInletFloor < 35  && DT.tReturnFloor < 28  )  //35 è la sicurezza, 28 la t massima dopo al quale spengo la pompa
+    if ( DT.tInletFloor < 35  && DT.tReturnFloor < 29  )  //35 è la sicurezza, 29 la t massima dopo al quale spengo la pompa
     {
       DT.m_log.add("Condizione needCalore Puffer");
       needPompa_pp = needCalore;

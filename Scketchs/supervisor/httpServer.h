@@ -3,7 +3,6 @@
 extern WiFiServer httpServer;
 extern cDataTable DT;
 
-
 void page1( WiFiClient &client);
   
 void initHttpServer()
