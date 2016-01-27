@@ -31,9 +31,12 @@ bool handleHttpServer()
 
   // Wait until the client sends some data
   Serial.println("new client");
+  int i=0;
   while (!client.available())
   {
     delay(1);
+    i++;
+    if (i>1000) return false;
   }
 
   // Read the first line of the request

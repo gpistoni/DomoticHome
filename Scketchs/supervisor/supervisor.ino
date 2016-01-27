@@ -12,7 +12,7 @@
 #include "functions.h"
 #include "httpServer.h"
 #include "httpServer2.h"
-#include "webServer.h"
+
 
 DHwifi dhWifi;
 
@@ -54,14 +54,6 @@ void setup()
   //  initWebServer();
   initHttpServer();
 
-  //Alarm.alarmRepeat(8,30,0, MorningAlarm);  // 8:30am every day
-  //Alarm.alarmRepeat(17,45,0,EveningAlarm);  // 5:45pm every day
-  //Alarm.alarmRepeat(dowSaturday,8,30,30,WeeklyAlarm);  // 8:30:30 every Saturday
-
-  Alarm.timerRepeat( 3600 * 24, Daily);             // timer for every 24h
-
-  Alarm.timerRepeat( 30,        UpdateAll);         // timer for every 10 sec
-
   Alarm.timerRepeat( 60,        summerPP_Manager);        // timer for every 1 minutes
   Alarm.timerRepeat( 61,        winterPP_Manager);        // timer for every 1 minutes
   Alarm.timerRepeat( 62,        winterPT_Manager);        // timer for every 1 minutes
@@ -82,16 +74,11 @@ void loop()
   {
     // UpdateAll();
   }
-  Alarm.delay(10);
+  Alarm.delay(100);
   digitalWrite(ACT, 0);
+  UpdateAll();
 }
 
-/**************************************************************************************************/
-void Daily()
-{
-  Serial.println("Dayly timer");
-  UpdateTime();
-}
 
 /**************************************************************************************************/
 void UpdateTime()
@@ -105,7 +92,9 @@ void UpdateTime()
 /**************************************************************************************************/
 void UpdateAll()
 {
-  //digitalWrite(ACT, 0);
+  static unsigned long last = 0;
+  if ( millis() - last < 15000 ) return;
+  last = millis();
 
   digitalClockDisplay();
   Serial.println("UpdateAll");
@@ -200,7 +189,7 @@ void winterPP_Manager()
   bool cameraM = false;
   bool cameraM2 = false;
   bool bagno = false;
-
+  
   //decido se accendere le stanze
 
   if ( DT.tSala < DT.tSala.setPoint() )

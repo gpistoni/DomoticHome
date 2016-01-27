@@ -141,8 +141,15 @@ class cFloat: public cVar
 
     void update( String stringlist )
     {
-      m_value = strValueD(stringlist, ',', m_s);
-      m_value += m_adjust;
+      float fval = strValueD(stringlist, ',', m_s);
+      fval += m_adjust;
+      if ( m_value == 0 ) m_value = fval;
+      if ( fval < m_value ) m_value -= 0.05;
+      if ( fval > m_value ) m_value += 0.05;
+      Serial.print(fval);
+      Serial.print("-");
+      Serial.print(m_value);
+      Serial.println(m_descr);
     }
 
     operator float()
