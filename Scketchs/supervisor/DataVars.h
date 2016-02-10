@@ -131,11 +131,11 @@ class cVar
 //********************************************************************************************
 class cFloat: public cVar
 {
-  float m_adjust;
-  
+    float m_adjust;
+
   public:
     cFloat(): cVar(),
-    m_adjust(0)
+      m_adjust(0)
     {
     }
 
@@ -144,11 +144,19 @@ class cFloat: public cVar
       float fval = strValueD(stringlist, ',', m_s);
       fval += m_adjust;
       if ( m_value == 0 ) m_value = fval;
-      if ( fval < m_value ) m_value -= 0.05;
-      if ( fval > m_value ) m_value += 0.05;
-      Serial.print(fval);
-      Serial.print("-");
+      if ( m_setpoint == 0 ) 
+      {
+        m_value = m_value * 0.8 + fval * 0.2;
+      }
+      else
+      {
+         if ( fval < m_value ) m_value -= 0.05;
+         if ( fval > m_value ) m_value += 0.05;
+      }
       Serial.print(m_value);
+      Serial.print("(");
+      Serial.print(fval);
+      Serial.print(") ");
       Serial.println(m_descr);
     }
 

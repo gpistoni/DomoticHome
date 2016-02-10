@@ -189,7 +189,7 @@ void winterPP_Manager()
   bool cameraM = false;
   bool cameraM2 = false;
   bool bagno = false;
-  
+
   //decido se accendere le stanze
 
   if ( DT.tSala < DT.tSala.setPoint() )
@@ -240,28 +240,38 @@ void winterPP_Manager()
 
   bool needCalore = sala || cucina || bagno || cameraS || cameraD || cameraM;
 
-  bool needPompa_pp = false;
-  bool needPdc = false;
-
   if ( hour() < 5 )
     needCalore = false;
 
   if ( DT.tPufferLow > 45 )
     needCalore = true;
 
-  if ( DT.tInputMixer > 24 || DT.tPufferHi > 24 || DT.tReturnFireplace > 30 )
+  bool needPompa_pp = false;
+  bool needPdc = false;
+  //////////////////////////////////////////////////////////////////////////////////
+  if ( DT.tInputMixer > 23 || DT.tPufferHi > 23 || DT.tReturnFireplace > 30 )
   {
-    if ( DT.tInletFloor < 35 && DT.tReturnFloor < 29  )  //35 è la sicurezza, 29 la t massima dopo al quale spengo la pompa
+    DT.m_log.add("Condizione needCalore Puffer");
+    needPompa_pp = needCalore;
+
+    if ( ( DT.tInletFloor - DT.tReturnFloor ) <= 1 && random(10) > 2 )  // troppo poco delta
     {
-      DT.m_log.add("Condizione needCalore Puffer");
-      needPompa_pp = needCalore;
+      DT.m_log.add("Stop Pompa: Delta temp insufficiente");
+      needPompa_pp = false;
+    }
+    if ( DT.tInletFloor > 35 || DT.tReturnFloor > 29  )  //35 è la sicurezza, 29 la t massima dopo al quale spengo la pompa
+    {
+      DT.m_log.add("Stop Pompa: Sicurezza temp ingreso impianto");
+      needPompa_pp = false;
     }
   }
+  //////////////////////////////////////////////////////////////////////////////////
   else if ( DT.rPdc.setPoint() == 1  && DT.tExternal > 5  )
   {
     DT.m_log.add("Condizione needCalore PDC tExternal: "  + String(DT.tExternal) );
     needPdc = needCalore;  // accendo PDC
   }
+  //////////////////////////////////////////////////////////////////////////////////
 
   // attuatori
   DT.evCameraM1.set(cameraM);
