@@ -11,15 +11,15 @@
 #include "DataTable.h"
 #include "functions.h"
 #include "httpServer.h"
-#include "webServer.h"
+#include "httpServer2.h"
+
 
 DHwifi dhWifi;
 
 cDataTable DT;
 DHConfig   Config;
 
-WiFiServer httpServer(81);
-ESP8266WebServer webServer(80);
+WiFiServer httpServer(80);
 
 const int ACT = 2;
 
@@ -51,16 +51,8 @@ void setup()
 
   UpdateTime();      // update system time
 
-  initWebServer();
+  //  initWebServer();
   initHttpServer();
-
-  //Alarm.alarmRepeat(8,30,0, MorningAlarm);  // 8:30am every day
-  //Alarm.alarmRepeat(17,45,0,EveningAlarm);  // 5:45pm every day
-  //Alarm.alarmRepeat(dowSaturday,8,30,30,WeeklyAlarm);  // 8:30:30 every Saturday
-
-  Alarm.timerRepeat( 3600 * 24, Daily);             // timer for every 24h
-
-  Alarm.timerRepeat( 10,        UpdateAll);         // timer for every 10 sec
 
   Alarm.timerRepeat( 60,        summerPP_Manager);        // timer for every 1 minutes
   Alarm.timerRepeat( 61,        winterPP_Manager);        // timer for every 1 minutes
@@ -72,23 +64,21 @@ void setup()
   winterPP_Manager();
   winterPT_Manager();
   BoilerSanitaria_Manager();
-
 }
 
 /**************************************************************************************************/
 void loop()
 {
-  webServer.handleClient();
-  handleHttpServer();
   digitalWrite(ACT, 1);
-  Alarm.delay(10);
+  if ( handleHttpServer() )
+  {
+    // UpdateAll();
+  }
+  Alarm.delay(100);
+  digitalWrite(ACT, 0);
+  UpdateAll();
 }
-/**************************************************************************************************/
-void Daily()
-{
-  Serial.println("Dayly timer");
-  UpdateTime();
-}
+
 
 /**************************************************************************************************/
 void UpdateTime()
@@ -99,18 +89,18 @@ void UpdateTime()
 }
 
 
-
 /**************************************************************************************************/
 void UpdateAll()
 {
-  digitalWrite(ACT, 0);
+  static unsigned long last = 0;
+  if ( millis() - last < 15000 ) return;
+  last = millis();
 
   digitalClockDisplay();
   Serial.println("UpdateAll");
 
   if (year() < 2000 )
     UpdateTime();
-
 
   static unsigned int i = 0;
 
@@ -160,7 +150,7 @@ void summerPP_Manager()
 /**************************************************************************************************/
 void BoilerSanitaria_Manager()
 {
-  digitalWrite(ACT, 0);
+  //digitalWrite(ACT, 0);
   digitalClockDisplay();
   Serial.println("BoilerSanitaria_Manager");
 
@@ -186,7 +176,7 @@ void winterPP_Manager()
 {
   if ( month() == 6 || month() == 7 || month() == 8 || month() == 9 ) return;  // estate
 
-  digitalWrite(ACT, 0);
+  //digitalWrite(ACT, 0);
   digitalClockDisplay();
   Serial.println("winterPP_Manager");
 
@@ -250,22 +240,38 @@ void winterPP_Manager()
 
   bool needCalore = sala || cucina || bagno || cameraS || cameraD || cameraM;
 
+  if ( hour() < 5 )
+    needCalore = false;
+
+  if ( DT.tPufferLow > 45 )
+    needCalore = true;
+
   bool needPompa_pp = false;
   bool needPdc = false;
-
-  if ( DT.tPufferHi > 24 || DT.tReturnFireplace > 30 || DT.tInputMixer > DT.tReturnFloor + 3  )
+  //////////////////////////////////////////////////////////////////////////////////
+  if ( DT.tInputMixer > 23 || DT.tPufferHi > 23 || DT.tReturnFireplace > 30 )
   {
-    if ( DT.tInletFloor < 35  && DT.tReturnFloor < 28  )  //35 è la sicurezza, 28 la t massima dopo al quale spengo la pompa
+    DT.m_log.add("Condizione needCalore Puffer");
+    needPompa_pp = needCalore;
+
+    if ( ( DT.tInletFloor - DT.tReturnFloor ) <= 1 && random(10) > 2 )  // troppo poco delta
     {
-      DT.m_log.add("Condizione needCalore Puffer");
-      needPompa_pp = needCalore;
+      DT.m_log.add("Stop Pompa: Delta temp insufficiente");
+      needPompa_pp = false;
+    }
+    if ( DT.tInletFloor > 35 || DT.tReturnFloor > 29  )  //35 è la sicurezza, 29 la t massima dopo al quale spengo la pompa
+    {
+      DT.m_log.add("Stop Pompa: Sicurezza temp ingreso impianto");
+      needPompa_pp = false;
     }
   }
+  //////////////////////////////////////////////////////////////////////////////////
   else if ( DT.rPdc.setPoint() == 1  && DT.tExternal > 5  )
   {
     DT.m_log.add("Condizione needCalore PDC tExternal: "  + String(DT.tExternal) );
     needPdc = needCalore;  // accendo PDC
   }
+  //////////////////////////////////////////////////////////////////////////////////
 
   // attuatori
   DT.evCameraM1.set(cameraM);
@@ -309,14 +315,14 @@ void winterPP_Manager()
 /**************************************************************************************************/
 void winterPT_Manager()
 {
-  digitalWrite(ACT, 0);
+  //digitalWrite(ACT, 0);
   digitalClockDisplay();
   Serial.println("winterPT_Manager");
 
   bool pompa = false;
 
   //decido se accendere sulla lavanderia
-  if ( DT.tPufferHi > 50 )
+  if ( DT.tPufferLow > 45 )
   {
     DT.m_log.add("Condizione tPufferHi:" +  String(DT.tPufferHi) );
     pompa = true;
