@@ -31,19 +31,43 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "Adafruit_GFX.h"
-#include "glcdfont.c"
 #ifdef __AVR__
  #include <avr/pgmspace.h>
 #elif defined(ESP8266)
  #include <pgmspace.h>
-#else
+#endif
+#include "Adafruit_GFX.h"
+#include "glcdfont.c"
+
+// Many (but maybe not all) non-AVR board installs define macros
+// for compatibility with existing PROGMEM-reading AVR code.
+// Do our own checks and defines here for good measure...
+
+#ifndef pgm_read_byte
  #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
+#endif
+#ifndef pgm_read_word
  #define pgm_read_word(addr) (*(const unsigned short *)(addr))
+#endif
+#ifndef pgm_read_dword
+ #define pgm_read_dword(addr) (*(const unsigned long *)(addr))
+#endif
+
+// Pointers are a peculiar case...typically 16-bit on AVR boards,
+// 32 bits elsewhere.  Try to accommodate both...
+
+#if !defined(__INT_MAX__) || (__INT_MAX__ > 0xFFFF)
+ #define pgm_read_pointer(addr) ((void *)pgm_read_dword(addr))
+#else
+ #define pgm_read_pointer(addr) ((void *)pgm_read_word(addr))
 #endif
 
 #ifndef min
 #define min(a,b) (((a) < (b)) ? (a) : (b))
+#endif
+
+#ifndef _swap_int16_t
+#define _swap_int16_t(a, b) { int16_t t = a; a = b; b = t; }
 #endif
 
 Adafruit_GFX::Adafruit_GFX(int16_t w, int16_t h):
@@ -173,13 +197,13 @@ void Adafruit_GFX::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1,
  uint16_t color) {
   int16_t steep = abs(y1 - y0) > abs(x1 - x0);
   if (steep) {
-    adagfxswap(x0, y0);
-    adagfxswap(x1, y1);
+    _swap_int16_t(x0, y0);
+    _swap_int16_t(x1, y1);
   }
 
   if (x0 > x1) {
-    adagfxswap(x0, x1);
-    adagfxswap(y0, y1);
+    _swap_int16_t(x0, x1);
+    _swap_int16_t(y0, y1);
   }
 
   int16_t dx, dy;
@@ -284,13 +308,13 @@ void Adafruit_GFX::fillTriangle(int16_t x0, int16_t y0,
 
   // Sort coordinates by Y order (y2 >= y1 >= y0)
   if (y0 > y1) {
-    adagfxswap(y0, y1); adagfxswap(x0, x1);
+    _swap_int16_t(y0, y1); _swap_int16_t(x0, x1);
   }
   if (y1 > y2) {
-    adagfxswap(y2, y1); adagfxswap(x2, x1);
+    _swap_int16_t(y2, y1); _swap_int16_t(x2, x1);
   }
   if (y0 > y1) {
-    adagfxswap(y0, y1); adagfxswap(x0, x1);
+    _swap_int16_t(y0, y1); _swap_int16_t(x0, x1);
   }
 
   if(y0 == y2) { // Handle awkward all-on-same-line case as its own thing
@@ -332,7 +356,7 @@ void Adafruit_GFX::fillTriangle(int16_t x0, int16_t y0,
     a = x0 + (x1 - x0) * (y - y0) / (y1 - y0);
     b = x0 + (x2 - x0) * (y - y0) / (y2 - y0);
     */
-    if(a > b) adagfxswap(a,b);
+    if(a > b) _swap_int16_t(a,b);
     drawFastHLine(a, y, b-a+1, color);
   }
 
@@ -349,7 +373,7 @@ void Adafruit_GFX::fillTriangle(int16_t x0, int16_t y0,
     a = x1 + (x2 - x1) * (y - y1) / (y2 - y1);
     b = x0 + (x2 - x0) * (y - y0) / (y2 - y0);
     */
-    if(a > b) adagfxswap(a,b);
+    if(a > b) _swap_int16_t(a,b);
     drawFastHLine(a, y, b-a+1, color);
   }
 }
@@ -474,7 +498,7 @@ void Adafruit_GFX::write(uint8_t c) {
       uint8_t first = pgm_read_byte(&gfxFont->first);
       if((c >= first) && (c <= (uint8_t)pgm_read_byte(&gfxFont->last))) {
         uint8_t   c2    = c - pgm_read_byte(&gfxFont->first);
-        GFXglyph *glyph = &(((GFXglyph *)pgm_read_word(&gfxFont->glyph))[c2]);
+        GFXglyph *glyph = &(((GFXglyph *)pgm_read_pointer(&gfxFont->glyph))[c2]);
         uint8_t   w     = pgm_read_byte(&glyph->width),
                   h     = pgm_read_byte(&glyph->height);
         if((w > 0) && (h > 0)) { // Is there an associated bitmap?
@@ -533,8 +557,8 @@ void Adafruit_GFX::drawChar(int16_t x, int16_t y, unsigned char c,
     // directly with 'bad' characters of font may cause mayhem!
 
     c -= pgm_read_byte(&gfxFont->first);
-    GFXglyph *glyph  = &(((GFXglyph *)pgm_read_word(&gfxFont->glyph))[c]);
-    uint8_t  *bitmap = (uint8_t *)pgm_read_word(&gfxFont->bitmap);
+    GFXglyph *glyph  = &(((GFXglyph *)pgm_read_pointer(&gfxFont->glyph))[c]);
+    uint8_t  *bitmap = (uint8_t *)pgm_read_pointer(&gfxFont->bitmap);
 
     uint16_t bo = pgm_read_word(&glyph->bitmapOffset);
     uint8_t  w  = pgm_read_byte(&glyph->width),
@@ -690,7 +714,7 @@ void Adafruit_GFX::getTextBounds(char *str, int16_t x, int16_t y,
         if(c != '\r') { // Not a carriage return, is normal char
           if((c >= first) && (c <= last)) { // Char present in current font
             c    -= first;
-            glyph = &(((GFXglyph *)pgm_read_word(&gfxFont->glyph))[c]);
+            glyph = &(((GFXglyph *)pgm_read_pointer(&gfxFont->glyph))[c]);
             gw    = pgm_read_byte(&glyph->width);
             gh    = pgm_read_byte(&glyph->height);
             xa    = pgm_read_byte(&glyph->xAdvance);
@@ -779,7 +803,7 @@ void Adafruit_GFX::getTextBounds(const __FlashStringHelper *str,
         if(c != '\r') { // Not a carriage return, is normal char
           if((c >= first) && (c <= last)) { // Char present in current font
             c    -= first;
-            glyph = &(((GFXglyph *)pgm_read_word(&gfxFont->glyph))[c]);
+            glyph = &(((GFXglyph *)pgm_read_pointer(&gfxFont->glyph))[c]);
             gw    = pgm_read_byte(&glyph->width);
             gh    = pgm_read_byte(&glyph->height);
             xa    = pgm_read_byte(&glyph->xAdvance);

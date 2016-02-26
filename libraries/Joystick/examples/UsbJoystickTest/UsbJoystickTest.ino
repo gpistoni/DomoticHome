@@ -3,7 +3,10 @@
 //
 // Matthew Heironimus
 // 2015-03-28
+// Updated on 2015-11-18 to use the new Joystick library written for version 1.6.6.
 //------------------------------------------------------------
+
+#include "Joystick.h"
 
 // Set to true to test "Auto Send" mode or false to test "Manual Send" mode.
 //const bool testAutoSendMode = true;

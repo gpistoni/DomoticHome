@@ -19,7 +19,7 @@ byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEE };
 IPAddress ip(192, 168, 0, 200);                       //<<-- IP
 IPAddress gateway(192, 168, 0, 254);                  //<<-- GATEWAY
 IPAddress subnet(255, 255, 255, 0);                   //<<-- SUBNET
-  
+
 
 
 // Pins 10, 11, 12 and 13 are reserved for interfacing with the Ethernet module and should not be used otherwise
@@ -33,7 +33,7 @@ EthernetServer server(80);
 void setup()
 {
   Serial.begin(9600);
- // while (!Serial);
+  // while (!Serial);
 
   OUTLN("System Start");
 
@@ -52,7 +52,7 @@ void setup()
 
   Ethernet.begin(mac, ip);
   server.begin();
- 
+
   // give the sensor and Ethernet shield time to set up:
   delay(1000);
 
@@ -64,17 +64,17 @@ void loop()
 {
   for (int t = 1; t < 8; t++)
   {
-    if ( T[t].checkTiming(2000) )
-    {      
+    if ( T[t].checkTiming(4000) )
+    {
       T[t].sendRequest();
-      if ( T[t].waitData( 100 ) ) 
-       {
-          digitalWrite(ACTIVITY, HIGH); 
-       }
+      if ( T[t].waitData( 100 ) )
+      {
+        digitalWrite(ACTIVITY, HIGH);
+      }
     };
 
     listenForEthernetClients();
-    digitalWrite(ACTIVITY, LOW ); 
+    digitalWrite(ACTIVITY, LOW );
   };
 
   if (  Ethernet.localIP() != ip)
