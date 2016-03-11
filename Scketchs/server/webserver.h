@@ -101,12 +101,6 @@ void listenForEthernetClients()
           OUTLN( "Get:" + String( GetParam0 ) + "," + String( GetParam1) );
           OUTLN( "Set:" + String(SetParam0) + "," + String(SetParam1) + "=" + String(SetParam2) );
 
-          //*************************************
-          // client.println("HTTP/1.1 200 OK");
-          // client.println("Content-Type: text/html");
-          // client.println("Connection: close");        // the connection will be closed after completion of the response
-          // client.println("Refresh: 1");               // refresh the page automatically every 5 sec
-
           client.println("Sintax error");
 
           //***************************************

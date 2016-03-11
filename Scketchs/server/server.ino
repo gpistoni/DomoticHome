@@ -21,7 +21,6 @@ IPAddress gateway(192, 168, 0, 254);                  //<<-- GATEWAY
 IPAddress subnet(255, 255, 255, 0);                   //<<-- SUBNET
 
 
-
 // Pins 10, 11, 12 and 13 are reserved for interfacing with the Ethernet module and should not be used otherwise
 // Pin 10 is reserved for the Wiznet interface, SS for the SD card is on Pin 4.
 // There is a built-in LED connected to digital pin 9.
@@ -64,13 +63,14 @@ void loop()
 {
   for (int t = 1; t < 8; t++)
   {
-    if ( T[t].checkTiming(4000) )
+    if ( T[t].checkTiming(5000) )
     {
       T[t].sendRequest();
       if ( T[t].waitData( 100 ) )
       {
         digitalWrite(ACTIVITY, HIGH);
       }
+      delay(100);
     };
 
     listenForEthernetClients();
@@ -79,11 +79,13 @@ void loop()
 
   if (  Ethernet.localIP() != ip)
   {
+    delay(1000);
     Ethernet.begin(mac, ip);
 
     OUT("RECONNECT server is at ");
     OUTLN( Ethernet.localIP() );
   };
+  
   delay(10);
 }
 
