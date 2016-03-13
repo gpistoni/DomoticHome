@@ -3,11 +3,11 @@
 
 /*   For Arduino 1.0 and newer, do this:   */
 #include "Arduino.h"
-#include <OneWire.h>
+#include <DHOneWire.h>
 
 class CProbe
 {
-    OneWire  ds[8];
+    DHOneWire  ds[8];
 
   public:
     int nums;

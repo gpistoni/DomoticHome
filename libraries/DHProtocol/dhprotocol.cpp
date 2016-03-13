@@ -99,7 +99,7 @@ bool DHProtocol::_waitHeaderAndData( int msec )
   {
     if ( _readByte() == '#')
     {
-      OUT(" Recived: #");
+      OUT("\nRecived: #");
 
       byte sendId = _readByte();
       OUT(sendId);

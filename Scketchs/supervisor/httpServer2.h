@@ -2,6 +2,7 @@
 
 extern WiFiServer httpServer;
 extern cDataTable DT;
+extern DHFile Config;
 
 String LastPage;
 
@@ -9,6 +10,7 @@ void S_header( WiFiClient &client);
 void S_page1( WiFiClient &client);
 void S_page2( WiFiClient &client);
 void S_page3( WiFiClient &client);
+void S_page4( WiFiClient &client, JsonObject& json );
 
 void initHttpServer()
 {
@@ -31,12 +33,12 @@ bool handleHttpServer()
 
   // Wait until the client sends some data
   Serial.println("new client");
-  int i=0;
+  int i = 0;
   while (!client.available())
   {
     delay(1);
     i++;
-    if (i>1000) return false;
+    if (i > 1000) return false;
   }
 
   // Read the first line of the request
@@ -63,18 +65,24 @@ bool handleHttpServer()
 
   if (readString.indexOf("/page1") != -1)
   {
-    S_header(  client );
+    S_header( client );
     S_page1( client );
   }
   else if (readString.indexOf("/page2") != -1)
   {
-    S_header(  client );
+    S_header( client );
     S_page2( client );
   }
   else if (readString.indexOf("/page3") != -1)
   {
-    S_header(  client );
+    S_header( client );
     S_page3( client );
+  }
+  else if (readString.indexOf("/page4") != -1)
+  {
+    JsonObject& root = Config.root();    
+    S_header( client );
+    S_page4( client, root );
   }
   else
   {
@@ -159,6 +167,7 @@ void S_page1( WiFiClient &client)
           "<th>Stanza"
           "<th>Temperatura"
           "<th>Umidita"
+          "<th>TPercepita"
           "<th>"
           "<th>Target"
           "<th>"
@@ -167,21 +176,22 @@ void S_page1( WiFiClient &client)
   //***************************************************************************************************************/
 
   page = "";
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < 8; i++)
   {
-    if ( DT.webVar[10 + i] && DT.webVar[i] )
+    if ( DT.webVar[i] )
     {
       page += "\n<tr>";
-      page += DT.webVar[10 + i]->td_descr();
-      page += DT.webVar[10 + i]->td_valueF();
+      page += DT.webVar[i]->td_descr();
       page += DT.webVar[i]->td_valueF();
+      page += DT.webVar[8 + i]->td_valueF();
+      page += DT.webVar[16 + i]->td_valueF();
 
-      String req_p = DT.webVar[10 + i]->descrSetPoint() + "=" + String(DT.webVar[10 + i]->setPoint() + 0.5 );
+      String req_p = DT.webVar[i]->descrSetPoint() + "=" + String(DT.webVar[i]->setPoint() + 0.5 );
       page += "<td><button onclick='myButton(\"" + req_p + "\")'> UP </button></td>";
 
-      page += DT.webVar[10 + i]->td_setpointF();
+      page += DT.webVar[i]->td_setpointF();
 
-      String req_m = DT.webVar[10 + i]->descrSetPoint() + "=" + String(DT.webVar[10 + i]->setPoint() - 0.5 );
+      String req_m = DT.webVar[ i]->descrSetPoint() + "=" + String(DT.webVar[ i]->setPoint() - 0.5 );
       page += "<td><button onclick='myButton(\"" + req_m + "\")'> DW </td>";
 
       page += "</tr>";
@@ -289,6 +299,17 @@ void S_page3( WiFiClient &client)
   page += "  </tbody>"
           "</table>";
   //***************************************************************************************************************/
-  page +=  "<a href=page2> <<-- </a>";
+  page +=  "<a href=page2> <<-- </a>"
+          "<a href=page4> Config </a>";
   client.println(page);
+}
+
+void S_page4( WiFiClient& client, JsonObject& json)
+{
+  client.println("HTTP/1.1 200 OK");
+  client.println("Content-Type: application/json");
+  client.println("Connection: close");
+  client.println();
+
+  json.prettyPrintTo(client);
 }

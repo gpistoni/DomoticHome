@@ -7,6 +7,14 @@ class cDataTable
     enum { T0 = 0, T1 = 1, T2 = 2, T3 = 3, T4 = 4, T5 = 5, T6 = 6, T7 = 7 };
   public:
     // terminal 1
+    cFloat tCucina;
+    cFloat tSala;
+    cFloat tCameraS;
+    cFloat tCameraD;
+    cFloat tCameraM;
+    cFloat tBagno;
+    cFloat tLavanderia;
+
     cFloat hCucina;
     cFloat hSala;
     cFloat hCameraS;
@@ -15,13 +23,13 @@ class cDataTable
     cFloat hBagno;
     cFloat hLavanderia;
 
-    cFloat tCucina;
-    cFloat tSala;
-    cFloat tCameraS;
-    cFloat tCameraD;
-    cFloat tCameraM;
-    cFloat tBagno;
-    cFloat tLavanderia;
+    cFloat thCucina;
+    cFloat thSala;
+    cFloat thCameraS;
+    cFloat thCameraD;
+    cFloat thCameraM;
+    cFloat thBagno;
+    cFloat thLavanderia;
 
     // terminal 3
     cBool rPdc;
@@ -60,22 +68,29 @@ class cDataTable
     {
       memset( webVar, 0, 100 * sizeof(cVar*) );
 
-      webVar[0] = hCucina.setup            ( T1, 0, "hCucina",  50);
-      webVar[1] = hSala.setup              ( T1, 1, "hSala",    50);
-      webVar[2] = hCameraS.setup           ( T1, 2, "hCameraS", 50);
-      webVar[3] = hCameraD.setup           ( T1, 3, "hCameraD", 50);
-      webVar[4] = hCameraM.setup           ( T1, 4, "hCameraM", 50);
-      webVar[5] = hBagno.setup             ( T1, 5, "hBagno",   50);
-
-      webVar[10] = tCucina.setup           ( T1, 10, "tCucina",  21);
+      webVar[0] = tCucina.setup           ( T1, 0, "tCucina",  21);
+      webVar[1] = tSala.setup             ( T1, 1, "tSala"  ,  23);
+      webVar[2] = tCameraS.setup          ( T1, 2, "tCameraS", 18);
+      webVar[3] = tCameraD.setup          ( T1, 3, "tCameraD", 18);
+      webVar[4] = tCameraM.setup          ( T1, 4, "tCameraM", 18);
+      webVar[5] = tBagno.setup            ( T1, 5, "tBagno",   22);
       tCucina.setAdjust(-0.5);
-      webVar[11] = tSala.setup             ( T1, 11, "tSala"  ,  23);
       tSala.setAdjust(1.5);
-      webVar[12] = tCameraS.setup          ( T1, 12, "tCameraS", 18);
-      webVar[13] = tCameraD.setup          ( T1, 13, "tCameraD", 18);
-      webVar[14] = tCameraM.setup          ( T1, 14, "tCameraM", 18);
-      webVar[15] = tBagno.setup            ( T1, 15, "tBagno",   22);
       tBagno.setAdjust(2);
+
+      webVar[8 + 0] = hCucina.setup         ( T1, 8 + 0, "hCucina"  );
+      webVar[8 + 1] = hSala.setup           ( T1, 8 + 1, "hSala"    );
+      webVar[8 + 2] = hCameraS.setup        ( T1, 8 + 2, "hCameraS" );
+      webVar[8 + 3] = hCameraD.setup        ( T1, 8 + 3, "hCameraD" );
+      webVar[8 + 4] = hCameraM.setup        ( T1, 8 + 4, "hCameraM" );
+      webVar[8 + 5] = hBagno.setup          ( T1, 8 + 5, "hBagno"   );
+
+      webVar[16 + 0] = thCucina.setup       ( T1, 16 + 0, "thCucina",  21);
+      webVar[16 + 1] = thSala.setup         ( T1, 16 + 1, "thSala",    22);
+      webVar[16 + 2] = thCameraS.setup      ( T1, 16 + 2, "thCameraS", 18);
+      webVar[16 + 3] = thCameraD.setup      ( T1, 16 + 3, "thCameraD", 18);
+      webVar[16 + 4] = thCameraM.setup      ( T1, 16 + 4, "thCameraM", 18);
+      webVar[16 + 5] = thBagno.setup        ( T1, 16 + 5, "thBagno",   22);
 
       webVar[30] = rPdc.setup              ( T3, 0, "PDC");
       webVar[31] = rPdcHeat.setup          ( T3, 1, "PdcHeat");
@@ -124,6 +139,12 @@ class cDataTable
       hCameraM.update( strs );
       hBagno.update( strs );
 
+      thCucina.update( strs );
+      thSala.update( strs );
+      thCameraS.update( strs );
+      thCameraD.update( strs );
+      thCameraM.update( strs );
+      thBagno.update( strs );
     };
 
     void UpdateT3( String strs )

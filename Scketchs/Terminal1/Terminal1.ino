@@ -8,7 +8,7 @@
 #include <cprobe.h>
 
 #include <DHT.h>
-#include <OneWire.h>
+#include <DHOneWire.h>
 #include <SoftwareSerial.h>
 
 CDht    SensorsHDT;
@@ -19,7 +19,7 @@ SoftwareSerial mySerial(11, 12, TRUE);     // 11,12 Serial
 
 void setup()
 {
-  SensorsHDT.setup(2,3,4,5,6,7,8,9,10);          // 4,5,6... DHT
+  SensorsHDT.setup(2,3,4,5,6,7,8,9);          // 4,5,6... DHT
 
   Slave.setup(1, 0, &mySerial);     // Terminal ID
   
@@ -33,14 +33,14 @@ unsigned long old_ReadHDT = 0;
 
 void loop()
 {
-  if ( Slave.waitRequest( 50 ) )
+  if ( Slave.waitRequest( 100 ) )
   {
      Slave.sendData();
    }
   
 /*******************************************************************************/
   unsigned long now = millis();               // Terminal ID
-  if ( now - old_ReadHDT >= 5000)  //leggo probe ogni 2 secondi
+  if ( now - old_ReadHDT >= 6000)  //leggo probe ogni 2 secondi
   {
     old_ReadHDT = now;
 
@@ -49,10 +49,13 @@ void loop()
  
     for ( int i = 0; i < SensorsHDT.nums; i++)
     {
-      if (SensorsHDT.h[i]>0)
-        Slave.sensor[i] = SensorsHDT.h[i] * 10;
       if (SensorsHDT.t[i]>0)
-        Slave.sensor[10+i] = SensorsHDT.t[i] * 10;
+        Slave.sensor[i] = Slave.sensor[i] * 0.9 + SensorsHDT.t[i];
+      if (SensorsHDT.h[i]>0)
+        Slave.sensor[8+i] = Slave.sensor[8+i]* 0.9 + SensorsHDT.h[i];
+      if (SensorsHDT.hic[i]>0)
+        Slave.sensor[16+i] = Slave.sensor[16+i] * 0.9 + SensorsHDT.t[i];
+
 
       Serial.println("");
       Serial.print( i );
@@ -62,6 +65,14 @@ void loop()
       Serial.print( SensorsHDT.t[i] );
       Serial.print( " \tTp:" );
       Serial.print( SensorsHDT.hic[i] );
+
+      Serial.print( " - H:" );
+      Serial.print( Slave.sensor[i] );
+      Serial.print( "\tT:" );
+      Serial.print( Slave.sensor[8+i] );
+      Serial.print( "\tTp:" );
+      Serial.print( Slave.sensor[8+i] );
+
     }
   }
   

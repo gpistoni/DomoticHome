@@ -1,28 +1,37 @@
 // Example: storing JSON configuration file in flash file system
-//
-// Uses ArduinoJson library by Benoit Blanchon.
-// https://github.com/bblanchon/ArduinoJson
-//
-// Created Aug 10, 2015 by Ivan Grokhotkov.
-//
-// This example code is in the public domain.
 
-//#include <ArduinoJson.h>
+#include <ArduinoJson.h>
 #include "FS.h"
 
-class DHConfig
+class DHFile
 {
+    File m_File;
+    StaticJsonBuffer<200> jsonBuffer;
+
   public:
-  /*
-    bool loadConfig() {
-      File configFile = SPIFFS.open("/config.json", "r");
-      if (!configFile) {
+    JsonObject&  root()
+    {
+      return jsonBuffer.createObject();
+    }
+
+    bool LoadFile( String filename = "/config.json" )
+    {
+      Serial.print("Mounting FS....");
+
+      if (!SPIFFS.begin())
+
+        Serial.println("Success");
+
+      m_File = SPIFFS.open(filename, "r");
+      if (!m_File)
+      {
         Serial.println("Failed to open config file");
         return false;
       }
 
-      size_t size = configFile.size();
-      if (size > 1024) {
+      size_t size = m_File.size();
+      if (size > 1024)
+      {
         Serial.println("Config file size is too large");
         return false;
       }
@@ -33,67 +42,54 @@ class DHConfig
       // We don't use String here because ArduinoJson library requires the input
       // buffer to be mutable. If you don't use ArduinoJson, you may as well
       // use configFile.readString instead.
-      configFile.readBytes(buf.get(), size);
-
-      StaticJsonBuffer<200> jsonBuffer;
-      JsonObject& json = jsonBuffer.parseObject(buf.get());
-
-      if (!json.success()) {
-        Serial.println("Failed to parse config file");
-        return false;
-      }
-
-      const char* serverName = json["serverName"];
-      const char* accessToken = json["accessToken"];
-
-      // Real world application would store these values in some variables for
-      // later use.
-
-      Serial.print("Loaded serverName: ");
-      Serial.println(serverName);
-      Serial.print("Loaded accessToken: ");
-      Serial.println(accessToken);
-      return true;
+      m_File.readBytes(buf.get(), size);
+      jsonBuffer.parseObject(buf.get());
     }
 
-    bool saveConfig()
+    String ReadValue( String param )
     {
-      StaticJsonBuffer<200> jsonBuffer;
-      JsonObject& json = jsonBuffer.createObject();
-      json["serverName"] = "api.example.com";
-      json["accessToken"] = "128du9as8du12eoue8da98h123ueh9h98";
+      JsonObject& root = jsonBuffer.createObject();
 
-      File configFile = SPIFFS.open("/config.json", "w");
-      if (!configFile) {
+      if (!root.success())
+        return root[ param ];
+      return "";
+    }
+
+    bool WriteValue(String param, String value, bool save)
+    {
+      JsonObject& root = jsonBuffer.createObject();
+
+      root[ param ] = value;
+    }
+
+    bool SaveFile(String filename = "/config.json" )
+    {
+      File configFile = SPIFFS.open(filename, "w");
+      if (!configFile)
+      {
         Serial.println("Failed to open config file for writing");
         return false;
       }
 
-      json.printTo(configFile);
+      JsonObject& root = jsonBuffer.createObject();
+      root.printTo(configFile);
       return true;
     }
+
+
+    /*
+        const char* serverName = json["serverName"];
+        const char* accessToken = json["accessToken"];
+
+        // Real world application would store these values in some variables for
+        // later use.
+
+        Serial.print("Loaded serverName: ");
+        Serial.println(serverName);
+        Serial.print("Loaded accessToken: ");
+        Serial.println(accessToken);
+        return true;
     */
 
-    void setup() {
-      if (!SPIFFS.begin()) {
-        Serial.println("Failed to mount file system");
-        return;
-      }
-      Serial.println("File system OK");
-      /*
-
-            if (!saveConfig()) {
-              Serial.println("Failed to save config");
-            } else {
-              Serial.println("Config saved");
-            }
-
-            if (!loadConfig()) {
-              Serial.println("Failed to load config");
-            } else {
-              Serial.println("Config loaded");
-            }
-            */
-    }
 
 };

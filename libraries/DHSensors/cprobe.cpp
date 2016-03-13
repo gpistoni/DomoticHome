@@ -3,7 +3,7 @@
 
 void CProbe::setup( int in0, int in1, int in2, int in3, int in4, int in5, int in6, int in7)
 {
-  ds[0].setup( in0);
+  ds[0].setup(in0);
   if (in1) ds[1].setup( in1 );
   if (in2) ds[2].setup( in2 );
   if (in3) ds[3].setup( in3 );
@@ -31,12 +31,12 @@ float CProbe::_getTemp(int n) {
   byte type_s;
   byte data[12];
   byte addr[8];
-  float celsius, fahrenheit;
+  float celsius;
 
   if ( !ds[n].search(addr)) {
     //no more sensors on chain, reset search
     ds[n].reset_search();
-    delay(10);
+    delay(50);
     return -1000;
   }
 
@@ -68,7 +68,7 @@ float CProbe::_getTemp(int n) {
   ds[n].select(addr);
   ds[n].write(0x44, 1); // start conversion, with parasite power on at the end
 
-  delay(40);  //maybe ?
+  delay(100);  //maybe ?
 
   byte present = ds[n].reset();
   ds[n].select(addr);
@@ -113,8 +113,6 @@ float CProbe::_getTemp(int n) {
     //// default is 12 bit resolution, 750 ms conversion time
   }
   celsius = (float)raw / 16.0;
-  fahrenheit = celsius * 1.8 + 32.0;
-
 
   return celsius ;
 }
