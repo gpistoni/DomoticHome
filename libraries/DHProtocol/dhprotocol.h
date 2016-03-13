@@ -1,3 +1,5 @@
+// versione 20160313
+
 #ifndef dhprotocol_h
 #define dhprotocol_h
 
@@ -35,7 +37,7 @@ class DHProtocol
 
   private:
     bool _waitData( int msec );
-    bool _waitHeaderAndData( int msec );
+    bool _waitHeader( int msec );
     bool _writeByte(byte value );
     byte _readByte();
     void _writeShort(short value);
