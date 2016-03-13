@@ -3,13 +3,13 @@ extern DHProtocol T[8];
 
 String readString;
 
-void listenForEthernetClients()
+bool listenForEthernetClients()
 {
   // listen for incoming clients
   EthernetClient client = server.available();
   if (client)
   {
-    OUTLN("Got a client");
+    OUTLN("\nGot a client");
 
     // an http request ends with a blank line
     while (client.connected())
@@ -26,21 +26,25 @@ void listenForEthernetClients()
         // if you've gotten to the end of the line (received a newline
         // character) and the line is blank, the http request has ended,
         // so you can send a reply
-        if (c == '\n')
+        if ( c == '\n')
         {
-          OUTLN( readString.c_str() );
+          OUT( readString.c_str() );
           int idx;
           //*************************************
           // comandi speciali
           idx = readString.indexOf("@debug");
           if (idx > 0)
           {
-            for (int c = 0; c < 8; c++)
+            for (int c = 1; c < 8; c++)
             {
               client.print( "T" + String(c) + ": " );
-              client.print( T[ c ].lastRequest);
+              if( c==1)  client.print( "Temperature Stanze  \t" );
+              if( c==3)  client.print( "Rele Caldaia        \t" );
+              if( c==4)  client.print( "Temperature Caldaia \t" );
+              if( c==5)  client.print( "Rele Ev Pavimento   \t" );
+              client.print( T[ c ].lastRequest % 100000);
               client.print( " / " );
-              client.println( T[ c ].lastRecived);
+              client.println( T[ c ].lastRecived % 100000);
               for (int i = 0; i < 24; i++)
               {
                 if (i != 0) client.print(',');
@@ -103,7 +107,7 @@ void listenForEthernetClients()
           client.println("Sintax error");
 
           //***************************************
-          break;
+          break; // while
         }
       }
     }
@@ -114,8 +118,10 @@ void listenForEthernetClients()
     // close the connection:
     readString = "";
     client.stop();
-    OUTLN("client disconnected");
+    OUTLN("client byed");
+    return true;
   }
+  return false;
 }
 
 

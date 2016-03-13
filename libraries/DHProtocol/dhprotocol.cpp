@@ -1,3 +1,5 @@
+// versione 20160313
+
 #include "dhprotocol.h"
 #include "SoftwareSerial.h"
 
@@ -93,7 +95,7 @@ void DHProtocol::_writeHeader()
   swSerial->write('#');
 }
 
-bool DHProtocol::_waitHeaderAndData( int msec )
+bool DHProtocol::_waitHeader( int msec )
 {
   if ( _waitData( msec ) )
   {
@@ -128,6 +130,9 @@ bool DHProtocol::_waitHeaderAndData( int msec )
 //********************************************************************************/
 void DHProtocol::sendRequest( )
 {
+  //clear buffer
+  while ( swSerial->available() ) swSerial->read();
+  
   _writeHeader();
 
   OUTLN(" ");
@@ -147,7 +152,7 @@ void DHProtocol::sendRequest( )
 
   _writeByte('$');
   OUT('$ ');
-  lastRequest = millis();
+  lastRequest = millis() - random(100);
 }
 
 //********************************************************************************/
@@ -155,7 +160,7 @@ bool DHProtocol::waitRequest( int timeout)
 {
   bool r = false;
 
-  if ( _waitHeaderAndData( timeout ))
+  if ( _waitHeader( timeout ))
   {
     byte temp[12];
     for (int i = 0; i < 12 ; i++)
@@ -212,7 +217,7 @@ bool DHProtocol::waitData( int timeout)
   bool r = false;
   byte b;
  
-  if ( _waitHeaderAndData( timeout ))
+  if ( _waitHeader( timeout ))
   {
     short temp[24];
     for (int i = 0; i < 24 ; i++)
@@ -233,6 +238,14 @@ bool DHProtocol::waitData( int timeout)
       r = true;
       lastRecived = millis();
     }
+    else
+    { 
+	for (int i = 0; i < 24 ; i++)
+	      {
+		OUT( sensor[i] );
+		OUT(",");
+	      }
+	}
   }
   else if ( millis() - lastRecived > 60000)
   {

@@ -1,4 +1,4 @@
-#include <dhprotocol.h>
+#include "dhprotocol.h"
 
 #include <SoftwareSerial.h>
 #include <SPI.h>
@@ -27,24 +27,31 @@ IPAddress subnet(255, 255, 255, 0);                   //<<-- SUBNET
 EthernetServer server(80);
 
 #define ETHERNET_SELECT 10
+
 #define ACTIVITY 13
 
 void setup()
 {
   Serial.begin(9600);
-  // while (!Serial);
 
   OUTLN("System Start");
 
   T[1].setup(0, 1, &mySerial );  // temp stanze
   T[2].setup(0, 2, &mySerial );  // --
-  T[3].setup(0, 3, &mySerial );  // rele' pdc
+  T[3].setup(0, 3, &mySerial );  // rele'caldaia
   T[4].setup(0, 4, &mySerial );  // temp caldaie
   T[5].setup(0, 5, &mySerial );  // rele pavimento
   T[6].setup(0, 6, &mySerial );  // --
   T[7].setup(0, 7, &mySerial );  // --
 
   //************************************************************
+  pinMode( 2, OUTPUT);
+  pinMode( 3, OUTPUT);
+  pinMode( 4, OUTPUT);
+  pinMode( 5, OUTPUT);
+  pinMode( 6, OUTPUT);
+  pinMode( 7, OUTPUT);
+  pinMode( 8, OUTPUT);
   pinMode(ACTIVITY, OUTPUT);
 
   //ethernet ************************************************************
@@ -63,31 +70,18 @@ void loop()
 {
   for (int t = 1; t < 8; t++)
   {
-    if ( T[t].checkTiming(5000) )
-<<<<<<< HEAD
-    {      
-      digitalWrite(ACTIVITY, HIGH ); 
-      T[t].sendRequest();
-      if ( T[t].waitData( 100 ) ) 
-       {
-          digitalWrite(ACTIVITY, LOW ); 
-       }
-=======
+    if ( T[t].checkTiming(10000 + t*10 ) )
     {
+      digitalWrite( t + 1, LOW);
       T[t].sendRequest();
       if ( T[t].waitData( 100 ) )
       {
         digitalWrite(ACTIVITY, HIGH);
-      }
-      delay(100);
->>>>>>> 17927587b259ced6950892206de1d54a7e0b322c
-    };
-    OUT("- ");
+        digitalWrite( t + 1, HIGH );
+      }      
+    };    
     listenForEthernetClients();
-<<<<<<< HEAD
-=======
     digitalWrite(ACTIVITY, LOW );
->>>>>>> 17927587b259ced6950892206de1d54a7e0b322c
   };
 
   if ( Ethernet.localIP() != ip)
@@ -98,8 +92,8 @@ void loop()
     OUT("RECONNECT server is at ");
     OUTLN( Ethernet.localIP() );
   };
-  
-  delay(10);
+
+  delay(5);
 }
 
 
