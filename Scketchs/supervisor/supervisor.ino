@@ -74,7 +74,7 @@ void loop()
   {
     // UpdateAll();
   }
-  Alarm.delay(100);
+  Alarm.delay(10);
   digitalWrite(ACT, 0);
   UpdateAll();
 }
@@ -208,27 +208,27 @@ void winterPP_Manager()
       DT.m_log.add("Condizione tCucina " + String(DT.tCucina) + " < " + String(DT.tCucina.setPoint()) );
       cucina = true;
     }
-    if ( DT.tCameraS < DT.tCameraS.setPoint() )
+    if ( !sala2 && DT.tCameraS < DT.tCameraS.setPoint() )
     {
       DT.m_log.add("Condizione tCameraS " + String(DT.tCameraS) + " < " + String(DT.tCameraS.setPoint()) );
       cameraS = true;
     }
-    if ( DT.tCameraD < DT.tCameraD.setPoint() )
+    if (  !sala2 && DT.tCameraD < DT.tCameraD.setPoint() )
     {
       DT.m_log.add("Condizione tCameraD " + String(DT.tCameraD) + " < " + String(DT.tCameraD.setPoint()) );
       cameraD = true;
     }
-    if ( DT.tCameraD < DT.tCameraD.setPoint() - 1 )
+    if ( !sala2 && DT.tCameraD < DT.tCameraD.setPoint() - 1 )
     {
       DT.m_log.add("Condizione tCameraD2 " + String(DT.tCameraD) + " << " + String(DT.tCameraD.setPoint()) );
       cameraD2 = true;
     }
-    if ( DT.tCameraM < DT.tCameraM.setPoint() )
+    if ( !sala2 && DT.tCameraM < DT.tCameraM.setPoint() )
     {
       DT.m_log.add("Condizione tCameraM " + String(DT.tCameraM) + " < " + String(DT.tCameraM.setPoint()) );
       cameraM = true;
     }
-    if ( DT.tCameraM < DT.tCameraM.setPoint() - 1 )
+    if ( !sala2 && DT.tCameraM < DT.tCameraM.setPoint() - 1 )
     {
       DT.m_log.add("Condizione tCameraM " + String(DT.tCameraM) + " << " + String(DT.tCameraM.setPoint()) );
       cameraM2 = true;
@@ -242,7 +242,7 @@ void winterPP_Manager()
 
   bool needCalore = sala || cucina || bagno || cameraS || cameraD || cameraM;
 
-  if ( DT.tPufferLow > 47 )   // emergenza
+  if ( DT.tPufferLow > 48 )   // emergenza
     {
        DT.m_log.add("Emergenza tPufferLow > 48 ");
       needCalore = sala = cucina = cameraS = cameraD = cameraM = true;

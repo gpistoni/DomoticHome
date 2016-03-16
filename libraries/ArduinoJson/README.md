@@ -15,8 +15,7 @@ Features
 * JSON decoding (comments are supported)
 * JSON encoding (with optional indentation)
 * Elegant API, very easy to use
-* Fixed memory allocation (zero malloc)
-* No data duplication (zero copy)
+* Efficient (no malloc, nor copy)
 * Portable (written in C++98)
 * Self-contained (no external dependency)
 * Small footprint
@@ -117,7 +116,6 @@ Special thanks to the following persons and companies who made generous donation
 * A B Doodkorte
 * Scott Smith
 * Johann Stieger
-* Gustavo Donizeti Gini
 
 ---
 

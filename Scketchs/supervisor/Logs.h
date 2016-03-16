@@ -34,4 +34,9 @@ class BufferString
         str += m_queue[i];
       return str;
     }
+
+    String get( int i )
+    {
+      return  m_queue[i];
+    }
 };

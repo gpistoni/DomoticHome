@@ -10,7 +10,8 @@ void S_header( WiFiClient &client);
 void S_page1( WiFiClient &client);
 void S_page2( WiFiClient &client);
 void S_page3( WiFiClient &client);
-void S_page4( WiFiClient &client, JsonObject& json );
+void S_page4( WiFiClient &client);
+void S_page5( WiFiClient &client, JsonObject& json );
 
 void initHttpServer()
 {
@@ -80,9 +81,14 @@ bool handleHttpServer()
   }
   else if (readString.indexOf("/page4") != -1)
   {
-    JsonObject& root = Config.root();    
     S_header( client );
-    S_page4( client, root );
+    S_page4( client );
+  }
+  else if (readString.indexOf("/page5") != -1)
+  {
+    JsonObject& root = Config.root();
+    S_header( client );
+    S_page5( client, root );
   }
   else
   {
@@ -160,7 +166,8 @@ void S_page1( WiFiClient &client)
 {
   String page;
   //***************************************************************************************************************/
-  page =  "\n<h1> Stanze </h1>"
+  page =  "<h2><a href=page2> |-->> </a></h2>"
+          "\n<h1> Stanze </h1>"
           "<table>"
           "<tbody>"
           "<tr>"
@@ -201,8 +208,7 @@ void S_page1( WiFiClient &client)
   //***************************************************************************************************************/
 
   page =  "</tbody>"
-          "</table>"
-          "<a href=page2> -->> </a>";
+          "</table>"  ;
   client.println(page);
   //***************************************************************************************************************/
 }
@@ -212,7 +218,8 @@ void S_page2( WiFiClient &client)
 {
   String page;
   //***************************************************************************************************************/
-  page =  "\n<h1> Attuatori Pavimento </h1>"
+  page =  "<h2><a href=page1> <<--| </a><a href=page3> |-->> </a></h2>"
+          "\n<h1> Attuatori Pavimento </h1>"
           "<table>"
           "<tbody>"
           "<tr>"
@@ -221,7 +228,6 @@ void S_page2( WiFiClient &client)
           "</tr>";
   client.println(page);
   //***************************************************************************************************************/
-
   page = "\n<tr>"
          "<td>Bagno</td>";
   if (DT.rPdc == true)
@@ -252,6 +258,9 @@ void S_page2( WiFiClient &client)
           "<th>Stato"
           "<th>Forzato"
           "</tr>";
+  client.println(page);
+  //***************************************************************************************************************/
+  page = "";
   for (int i = 0; i < 10; i++)
   {
     if (DT.webVar[30 + i])
@@ -268,24 +277,23 @@ void S_page2( WiFiClient &client)
   page += "</table>";
   client.println(page);
   //***************************************************************************************************************/
-
-  page =  "<a href=page1> <<-- </a>"
-          "<a href=page3> -->> </a>";
-  client.println(page);
-  //***************************************************************************************************************/
 }
 
 void S_page3( WiFiClient &client)
 {
   String page;
   //***************************************************************************************************************/
-  page +=  "\n<h1> Caldaia </h1>"
-           "<table>"
-           "<tbody>"
-           "<tr>"
-           "<th>Sonda"
-           "<th>Temperatura"
-           "</tr>";
+  page += "<h2><a href=page2> <<--| </a> <a href=page4> Log </a></h2>"
+          "\n<h1> Caldaia </h1>"
+          "<table>"
+          "<tbody>"
+          "<tr>"
+          "<th>Sonda"
+          "<th>Temperatura"
+          "</tr>";
+  client.println(page);
+  //***************************************************************************************************************/
+  page = "";
   for (int i = 0; i < 10; i++)
   {
     if (DT.webVar[40 + i])
@@ -296,20 +304,26 @@ void S_page3( WiFiClient &client)
       page += "</tr>";
     }
   }
-  page += "  </tbody>"
+  page += "</tbody>"
           "</table>";
   //***************************************************************************************************************/
-  page +=  "<a href=page2> <<-- </a>"
-          "<a href=page4> Config </a>";
   client.println(page);
 }
 
-void S_page4( WiFiClient& client, JsonObject& json)
+void S_page4( WiFiClient& client)
 {
-  client.println("HTTP/1.1 200 OK");
-  client.println("Content-Type: application/json");
-  client.println("Connection: close");
-  client.println();
+  String page;
+  page = "<h2><a href=page2> <<--| </a> <a href=page4> Log </a></h2>"
+         "\n<h1> Log </h1>";
+  client.println(page);
+  //***************************************************************************************************************/
+  for (int i = 0; i < 60; i++)
+    client.println( DT.m_log.get(i) + "<br>" );
 
+  //json.prettyPrintTo(client);
+}
+
+void S_page5( WiFiClient& client, JsonObject& json)
+{
   json.prettyPrintTo(client);
 }
