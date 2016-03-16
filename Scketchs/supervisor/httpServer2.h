@@ -313,7 +313,7 @@ void S_page3( WiFiClient &client)
 void S_page4( WiFiClient& client)
 {
   String page;
-  page = "<h2><a href=page2> <<--| </a> <a href=page4> Log </a></h2>"
+  page = "<h2><a href=page3><<--</a>|<a href=page5>Json</a></h2>"
          "\n<h1> Log </h1>";
   client.println(page);
   //***************************************************************************************************************/
@@ -325,5 +325,11 @@ void S_page4( WiFiClient& client)
 
 void S_page5( WiFiClient& client, JsonObject& json)
 {
+  String page;
+  page = "<h2><a href=page4> Log </a>|</h2>"
+         "\n<h1> Json </h1>";
+  client.println(page);
+  //***************************************************************************************************************/
+
   json.prettyPrintTo(client);
 }
