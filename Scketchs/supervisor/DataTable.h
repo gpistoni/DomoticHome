@@ -39,6 +39,7 @@ class cDataTable
     cBool rPompaPianoPrimo;
     cBool rPompaPianoTerra;
     cBool rBoilerSanitaria;
+    cBool rPompaCamino;
 
     // terminal 4
     cFloat tPufferHi;
@@ -77,6 +78,8 @@ class cDataTable
       tCucina.setAdjust(-0.5);
       tSala.setAdjust(1.5);
       tBagno.setAdjust(2);
+      tCameraD.setAdjust(1);
+      tCameraM.setAdjust(1);
 
       webVar[8 + 0] = hCucina.setup         ( T1, 8 + 0, "hCucina"  );
       webVar[8 + 1] = hSala.setup           ( T1, 8 + 1, "hSala"    );
@@ -100,6 +103,7 @@ class cDataTable
       webVar[34] = rPompaPianoPrimo.setup  ( T3, 4, "PompaPianoPrimo");
       webVar[35] = rPompaPianoTerra.setup  ( T3, 5, "PompaPianoTerra");
       webVar[36] = rBoilerSanitaria.setup  ( T3, 6, "BoilerSanitaria");
+      webVar[36] = rPompaCamino.setup      ( T3, 7, "PompaCamino");
 
       webVar[40] = tPufferHi.setup         ( T4, 0, "tPufferHi");
       webVar[41] = tPufferLow.setup        ( T4, 1, "tPufferLow");
@@ -160,6 +164,7 @@ class cDataTable
       rPompaPianoPrimo.update( strs );
       rPompaPianoTerra.update( strs );
       rBoilerSanitaria.update( strs );
+      rPompaCamino.update( strs );
     };
 
     void UpdateT4( String strs)

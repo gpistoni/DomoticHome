@@ -16,7 +16,7 @@
 DHwifi dhWifi;
 
 cDataTable DT;
-DHFile   Config;
+DHFile     Config;
 
 WiFiServer httpServer(80);
 
@@ -47,6 +47,9 @@ void setup()
 
   Config.LoadFile();
   DT.setup();
+
+  Config.ReadValue("T1");
+  Config.SaveFile();
 
   UpdateTime();      // update system time
 
@@ -93,7 +96,7 @@ void UpdateAll()
   if ( millis() - last < 15000 ) return;
   last = millis();
 
-  DT.m_log.add("-- UpdateAll --");
+  //DT.m_log.add("-- UpdateAll --");
 
   if (year() < 2000 )
     UpdateTime();
@@ -156,7 +159,7 @@ void BoilerSanitaria_Manager(int sec)
 
   //digitalWrite(ACT, 0);
   digitalClockDisplay();
-  DT.m_log.add("-- BoilerSanitaria_Manager --");
+  //DT.m_log.add("-- BoilerSanitaria_Manager --");
 
   bool boilerACS = false;
 
@@ -186,7 +189,7 @@ void winterPP_Manager(int sec)
 
   //digitalWrite(ACT, 0);
   digitalClockDisplay();
- DT.m_log.add("-- winterPP_Manager --");
+  //DT.m_log.add("-- winterPP_Manager --");
 
   bool sala = false;
   bool sala2 = false;
@@ -267,7 +270,7 @@ void winterPP_Manager(int sec)
     DT.m_log.add("Condizione needCalore Puffer");
     needPompa_pp = needCalore;
 
-    if ( ( DT.tInletFloor - DT.tReturnFloor ) <= 2 && random(10) > 2 )  // troppo poco delta
+    if ( ( DT.tInletFloor - DT.tReturnFloor ) <= 2 && random(10) > 1 )  // troppo poco delta
     {
       DT.m_log.add("Stop Pompa: Delta temp insufficiente");
       DT.m_log.add("DT.tInletFloor " + String(DT.tInletFloor) + " - " + "DT.tReturnFloor " + String(DT.tReturnFloor) + " - " );
@@ -280,13 +283,14 @@ void winterPP_Manager(int sec)
       needPompa_pp = false;
     }
   }
+
+  bool needPCamino = false;
   //////////////////////////////////////////////////////////////////////////////////
-  // else if ( DT.rPdc.setPoint() == 1  && DT.tExternal > 5  )
-  // {
-  //   DT.m_log.add("Condizione needCalore PDC tExternal: "  + String(DT.tExternal) );
-  //  needPdc = needCalore;  // accendo PDC
-  // }
-  //////////////////////////////////////////////////////////////////////////////////
+  if ( DT.tPufferLow < 45 && DT.tReturnFireplace > DT.tPufferLow + 4 )
+  {
+    DT.m_log.add("Condizione Pompa Camino: DT.tReturnFireplace " + String(DT.tReturnFireplace) + " - " + "DT.tPufferLow " + String(DT.tPufferLow) + " - " );
+    needPCamino = true;
+  }
 
   // attuatori
   DT.evCameraM1.set(cameraM);
@@ -327,6 +331,10 @@ void winterPP_Manager(int sec)
   //night
   DT.rPdcNightMode.manualCheck( needPdc );
   DT.rPdcNightMode.send(&dhWifi, DT.m_log );
+  
+  //camino
+  DT.rPompaCamino.manualCheck( needPCamino );
+  DT.rPompaCamino.send(&dhWifi, DT.m_log );
 }
 
 /**************************************************************************************************/
@@ -337,7 +345,7 @@ void winterPT_Manager(int sec)
   last = millis();
 
   digitalClockDisplay();
-  DT.m_log.add("-- winterPT_Manager --");
+  //DT.m_log.add("-- winterPT_Manager --");
 
   bool needPompa_pt = false;
 
