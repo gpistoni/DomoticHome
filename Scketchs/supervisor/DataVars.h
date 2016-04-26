@@ -187,9 +187,6 @@ class cBool: public cVar
     void update( String stringlist )
     {
       m_value = strValueB(stringlist, ',', m_s);
-      //Serial.print(m_descr );
-      //Serial.print(":");
-      //Serial.println( m_value );
     }
 
     operator bool()
@@ -204,7 +201,7 @@ class cBool: public cVar
 
     void manualCheck( bool autoValue )
     {
-      if ( setPoint() == 1 )   set( true );       //manual mode
+      if ( setPoint() == 1 )        set( true );       //manual mode
       else if ( setPoint() == 2 )   set( false );
       else set( autoValue );
     }

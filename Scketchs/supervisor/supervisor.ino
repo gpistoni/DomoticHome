@@ -9,7 +9,6 @@
 #include "dhconfig.h"
 #include "DataTable.h"
 #include "functions.h"
-#include "httpServer.h"
 #include "httpServer2.h"
 
 
@@ -83,7 +82,7 @@ void loop()
 void UpdateTime()
 {
   DT.m_log.add("-- UpdateTime --");
-  
+
   time_t epoch = dhWifi.GetSystemTime();
   if (epoch > 0) setTime( epoch );
 }
@@ -157,25 +156,24 @@ void BoilerSanitaria_Manager(int sec)
   if ( millis() - last < sec * 1000 ) return;
   last = millis();
 
-  //digitalWrite(ACT, 0);
   digitalClockDisplay();
-  //DT.m_log.add("-- BoilerSanitaria_Manager --");
 
   bool boilerACS = false;
-
-  //decido se accendere il boiler solo di notte e solo se il camino non funziona
-  if ( hour() >= 20 || hour() < 7)
+  
+ // if (DT.progBoilerSanitaria == 1 )  //********************************************************************************************
   {
-    if ( DT.tReturnFireplace < 30 )
+    DT.m_log.add("-- BoilerSanitaria_Manager --");
+    //decido se accendere il boiler solo di notte e solo se il camino non funziona
+    if ( hour() < 7 &&  DT.tReturnFireplace < 30 )
     {
       DT.m_log.add("Boiler ACS Acceso hour:" + String( hour() ) + " tReturnFireplace: " + String( DT.tReturnFireplace ) );
       boilerACS = true;
     }
-  }
+  } //***********************************************************************************************************************
 
   //manual mode
   DT.rBoilerSanitaria.manualCheck( boilerACS );
-  DT.rBoilerSanitaria.send(&dhWifi, DT.m_log);
+  DT.rBoilerSanitaria.send( &dhWifi, DT.m_log);
 }
 
 /**************************************************************************************************/
@@ -227,7 +225,7 @@ void winterPP_Manager(int sec)
     }
     if (  !sala2 && DT.tCameraD < DT.tCameraD.setPoint() )
     {
-     str += " tCameraD " + String(DT.tCameraD) + " < " + String(DT.tCameraD.setPoint());
+      str += " tCameraD " + String(DT.tCameraD) + " < " + String(DT.tCameraD.setPoint());
       cameraD = true;
     }
     if ( !sala2 && DT.tCameraD < DT.tCameraD.setPoint() - 1 )
@@ -237,7 +235,7 @@ void winterPP_Manager(int sec)
     }
     if ( !sala2 && DT.tCameraM < DT.tCameraM.setPoint() )
     {
-     str += " tCameraM " + String(DT.tCameraM) + " < " + String(DT.tCameraM.setPoint());
+      str += " tCameraM " + String(DT.tCameraM) + " < " + String(DT.tCameraM.setPoint());
       cameraM = true;
     }
     if ( !sala2 && DT.tCameraM < DT.tCameraM.setPoint() - 1 )
@@ -250,7 +248,7 @@ void winterPP_Manager(int sec)
       str += " tBagno " + String(DT.tBagno) + " < " + String(DT.tBagno.setPoint());
       bagno = true;
     }
-     DT.m_log.add(str);
+    DT.m_log.add(str);
   }
 
   bool needCalore = sala || cucina || bagno || cameraS || cameraD || cameraM;
@@ -270,7 +268,7 @@ void winterPP_Manager(int sec)
     DT.m_log.add("Condizione needCalore Puffer");
     needPompa_pp = needCalore;
 
-    if ( ( DT.tInletFloor - DT.tReturnFloor ) <= 2 && random(10) > 1 )  // troppo poco delta
+    if ( ( DT.tInletFloor - DT.tReturnFloor ) <= 2 && DT.tInletFloor > 23 )  // troppo poco delta
     {
       DT.m_log.add("Stop Pompa: Delta temp insufficiente");
       DT.m_log.add("DT.tInletFloor " + String(DT.tInletFloor) + " - " + "DT.tReturnFloor " + String(DT.tReturnFloor) + " - " );
@@ -293,22 +291,14 @@ void winterPP_Manager(int sec)
   }
 
   // attuatori
-  DT.evCameraM1.set(cameraM);
-  DT.evCameraM1.send(&dhWifi, DT.m_log);
-  DT.evCameraM2.set(cameraM2);
-  DT.evCameraM2.send(&dhWifi, DT.m_log);
-  DT.evSala1.set(sala);
-  DT.evSala1.send(&dhWifi, DT.m_log);
-  DT.evSala2.set(sala2);
-  DT.evSala2.send(&dhWifi, DT.m_log);
-  DT.evCucina.set(cucina);
-  DT.evCucina.send(&dhWifi, DT.m_log);
-  DT.evCameraS.set(cameraS);
-  DT.evCameraS.send(&dhWifi, DT.m_log);
-  DT.evCameraD1.set(cameraD);
-  DT.evCameraD1.send(&dhWifi, DT.m_log);
-  DT.evCameraD2.set(cameraD2);
-  DT.evCameraD2.send(&dhWifi, DT.m_log);
+  DT.evCameraM1.set(cameraM && needPompa_pp);   DT.evCameraM1.send(&dhWifi, DT.m_log);
+  DT.evCameraM2.set(cameraM2 && needPompa_pp);  DT.evCameraM2.send(&dhWifi, DT.m_log);
+  DT.evSala1.set(sala && needPompa_pp);         DT.evSala1.send(&dhWifi, DT.m_log);
+  DT.evSala2.set(sala2 && needPompa_pp);        DT.evSala2.send(&dhWifi, DT.m_log);
+  DT.evCucina.set(cucina && needPompa_pp);      DT.evCucina.send(&dhWifi, DT.m_log);
+  DT.evCameraS.set(cameraS && needPompa_pp);    DT.evCameraS.send(&dhWifi, DT.m_log);
+  DT.evCameraD1.set(cameraD && needPompa_pp);   DT.evCameraD1.send(&dhWifi, DT.m_log);
+  DT.evCameraD2.set(cameraD2 && needPompa_pp);  DT.evCameraD2.send(&dhWifi, DT.m_log);
 
 
   // comandi semimanuali ---------------------------------------------------------------
@@ -331,7 +321,7 @@ void winterPP_Manager(int sec)
   //night
   DT.rPdcNightMode.manualCheck( needPdc );
   DT.rPdcNightMode.send(&dhWifi, DT.m_log );
-  
+
   //camino
   DT.rPompaCamino.manualCheck( needPCamino );
   DT.rPompaCamino.send(&dhWifi, DT.m_log );

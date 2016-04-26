@@ -7,6 +7,7 @@ extern DHFile Config;
 String LastPage;
 
 void S_header( WiFiClient &client);
+void S_page0( WiFiClient &client);
 void S_page1( WiFiClient &client);
 void S_page2( WiFiClient &client);
 void S_page3( WiFiClient &client);
@@ -64,7 +65,12 @@ bool handleHttpServer()
     readString = LastPage;
   }
 
-  if (readString.indexOf("/page1") != -1)
+  if (readString.indexOf("/page0") != -1)
+  {
+    S_header( client );
+    S_page0( client );
+  }
+  else if (readString.indexOf("/page1") != -1)
   {
     S_header( client );
     S_page1( client );
@@ -161,12 +167,41 @@ void S_header( WiFiClient &client)
   //***************************************************************************************************************/
 }
 
+void S_page0( WiFiClient &client)
+{
+  String page;
+  //***************************************************************************************************************/
+  page =  "<h2><a href=page1> Stanze </a></h2>"
+          "\n<h1> Programmi </h1>"
+          "<table>"
+          "<tbody>"
+          "<tr>"
+          "<th>Stanze"
+          "<th>Stato"
+          "<th>Forzato"
+          "</tr>";
+  client.println(page);
+  //***************************************************************************************************************/
+
+  page = "\n<tr>";
+  page += DT.progBoilerSanitaria.td_descr();
+  page += DT.progBoilerSanitaria.td_bulb();
+  page += DT.progBoilerSanitaria.td_star();
+  page += "</tr>";
+  client.println(page);
+  //***************************************************************************************************************/
+
+  page =  "</tbody>"
+          "</table>"  ;
+  client.println(page);
+  //***************************************************************************************************************/
+}
 
 void S_page1( WiFiClient &client)
 {
   String page;
   //***************************************************************************************************************/
-  page =  "<h2><a href=page2> Attuatori </a></h2>"
+  page =  "<h2><a href=page0> Programmi </a> | <a href=page2> Attuatori </a></h2>"
           "\n<h1> Stanze </h1>"
           "<table>"
           "<tbody>"
