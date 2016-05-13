@@ -65,14 +65,19 @@ void loop()
   if ( handleHttpServer() )
   {
     summerPP_Manager(5);
-    winterPP_Manager(5);
+    //winterPP_Manager(5);
+    winterPDC_Manager( 60 );
+    
     winterPT_Manager(5);
   }
   digitalWrite(ACT, 0);
   UpdateAll();
 
   summerPP_Manager( 60 );
-  winterPP_Manager( 60 );
+  
+  //winterPP_Manager( 60 );
+  winterPDC_Manager( 60 );
+  
   winterPT_Manager( 60 );
   BoilerSanitaria_Manager( 600 );
 }
@@ -159,8 +164,8 @@ void BoilerSanitaria_Manager(int sec)
   digitalClockDisplay();
 
   bool boilerACS = false;
-  
- // if (DT.progBoilerSanitaria == 1 )  //********************************************************************************************
+
+  // if (DT.progBoilerSanitaria == 1 )  //********************************************************************************************
   {
     DT.m_log.add("-- BoilerSanitaria_Manager --");
     //decido se accendere il boiler solo di notte e solo se il camino non funziona
@@ -185,7 +190,7 @@ void winterPP_Manager(int sec)
 
   if ( month() == 6 || month() == 7 || month() == 8 || month() == 9 ) return;  // estate
 
-  //digitalWrite(ACT, 0);
+  digitalWrite(ACT, 0);
   digitalClockDisplay();
   //DT.m_log.add("-- winterPP_Manager --");
 
@@ -200,56 +205,54 @@ void winterPP_Manager(int sec)
   bool bagno = false;
 
   //decido se accendere le stanze
-  if ( hour() > 5 )
+  String str = "Condizione";
+  if ( DT.tSala < DT.tSala.setPoint() )
   {
-    String str = "Condizione";
-    if ( DT.tSala < DT.tSala.setPoint() )
-    {
-      str += " tSala " + String(DT.tSala) + " < " + String(DT.tSala.setPoint());
-      sala = true;
-    }
-    if ( DT.tSala < DT.tSala.setPoint() - 1 )
-    {
-      str += " tSala2 " + String(DT.tSala) + " << " + String(DT.tSala.setPoint());
-      sala2 = true;
-    }
-    if ( DT.tCucina < DT.tCucina.setPoint() )
-    {
-      str += " tCucina " + String(DT.tCucina) + " < " + String(DT.tCucina.setPoint());
-      cucina = true;
-    }
-    if ( !sala2 && DT.tCameraS < DT.tCameraS.setPoint() )
-    {
-      str += " tCameraS " + String(DT.tCameraS) + " < " + String(DT.tCameraS.setPoint());
-      cameraS = true;
-    }
-    if (  !sala2 && DT.tCameraD < DT.tCameraD.setPoint() )
-    {
-      str += " tCameraD " + String(DT.tCameraD) + " < " + String(DT.tCameraD.setPoint());
-      cameraD = true;
-    }
-    if ( !sala2 && DT.tCameraD < DT.tCameraD.setPoint() - 1 )
-    {
-      str += " tCameraD2 " + String(DT.tCameraD) + " << " + String(DT.tCameraD.setPoint());
-      cameraD2 = true;
-    }
-    if ( !sala2 && DT.tCameraM < DT.tCameraM.setPoint() )
-    {
-      str += " tCameraM " + String(DT.tCameraM) + " < " + String(DT.tCameraM.setPoint());
-      cameraM = true;
-    }
-    if ( !sala2 && DT.tCameraM < DT.tCameraM.setPoint() - 1 )
-    {
-      str += " tCameraM " + String(DT.tCameraM) + " << " + String(DT.tCameraM.setPoint()) ;
-      cameraM2 = true;
-    }
-    if ( DT.tBagno < DT.tBagno.setPoint() )
-    {
-      str += " tBagno " + String(DT.tBagno) + " < " + String(DT.tBagno.setPoint());
-      bagno = true;
-    }
-    DT.m_log.add(str);
+    str += " tSala " + String(DT.tSala) + " < " + String(DT.tSala.setPoint());
+    sala = true;
   }
+  if ( DT.tSala < DT.tSala.setPoint() - 1 )
+  {
+    str += " tSala2 " + String(DT.tSala) + " << " + String(DT.tSala.setPoint());
+    sala2 = true;
+  }
+  if ( DT.tCucina < DT.tCucina.setPoint() )
+  {
+    str += " tCucina " + String(DT.tCucina) + " < " + String(DT.tCucina.setPoint());
+    cucina = true;
+  }
+  if ( !sala2 && DT.tCameraS < DT.tCameraS.setPoint() )
+  {
+    str += " tCameraS " + String(DT.tCameraS) + " < " + String(DT.tCameraS.setPoint());
+    cameraS = true;
+  }
+  if (  !sala2 && DT.tCameraD < DT.tCameraD.setPoint() )
+  {
+    str += " tCameraD " + String(DT.tCameraD) + " < " + String(DT.tCameraD.setPoint());
+    cameraD = true;
+  }
+  if ( !sala2 && DT.tCameraD < DT.tCameraD.setPoint() - 1 )
+  {
+    str += " tCameraD2 " + String(DT.tCameraD) + " << " + String(DT.tCameraD.setPoint());
+    cameraD2 = true;
+  }
+  if ( !sala2 && DT.tCameraM < DT.tCameraM.setPoint() )
+  {
+    str += " tCameraM " + String(DT.tCameraM) + " < " + String(DT.tCameraM.setPoint());
+    cameraM = true;
+  }
+  if ( !sala2 && DT.tCameraM < DT.tCameraM.setPoint() - 1 )
+  {
+    str += " tCameraM " + String(DT.tCameraM) + " << " + String(DT.tCameraM.setPoint()) ;
+    cameraM2 = true;
+  }
+  if ( DT.tBagno < DT.tBagno.setPoint() )
+  {
+    str += " tBagno " + String(DT.tBagno) + " < " + String(DT.tBagno.setPoint());
+    bagno = true;
+  }
+  DT.m_log.add(str);
+
 
   bool needCalore = sala || cucina || bagno || cameraS || cameraD || cameraM;
 
@@ -260,7 +263,6 @@ void winterPP_Manager(int sec)
   }
 
   bool needPompa_pp = false;
-  bool needPdc = false;
 
   //////////////////////////////////////////////////////////////////////////////////
   if ( DT.tInputMixer > 23 || DT.tPufferHi > 23 || DT.tReturnFireplace > 30 )
@@ -307,6 +309,120 @@ void winterPP_Manager(int sec)
   DT.rPompaPianoPrimo.send(&dhWifi, DT.m_log );
 
   // accendo PDC
+  DT.rPdc.manualCheck( false );
+  DT.rPdc.send(&dhWifi, DT.m_log );
+
+  // heat
+  DT.rPdcHeat.manualCheck( false );
+  DT.rPdcHeat.send(&dhWifi, DT.m_log );
+
+  //pompa
+  DT.rPdcPompa.manualCheck( false );
+  DT.rPdcPompa.send(&dhWifi, DT.m_log );
+
+  //night
+  DT.rPdcNightMode.manualCheck( false );
+  DT.rPdcNightMode.send(&dhWifi, DT.m_log );
+
+  //camino
+  DT.rPompaCamino.manualCheck( needPCamino );
+  DT.rPompaCamino.send(&dhWifi, DT.m_log );
+}
+
+/**************************************************************************************************/
+void winterPDC_Manager(int sec)
+{
+  static unsigned long last = 0;
+  if ( millis() - last < sec * 1000 ) return;
+  last = millis();
+
+  digitalWrite(ACT, 0);
+  digitalClockDisplay();
+  DT.m_log.add("-- winterPDC_Manager --");
+
+  bool sala = false;
+  bool sala2 = false;
+  bool cucina = false;
+  bool cameraS = false;
+  bool cameraD = false;
+  bool cameraD2 = false;
+  bool cameraM = false;
+  bool cameraM2 = false;
+  bool bagno = false;
+
+  //decido se accendere le stanze
+  String str = "Condizione";
+  if ( DT.tSala < DT.tSala.setPoint() )
+  {
+    str += " tSala " + String(DT.tSala) + " < " + String(DT.tSala.setPoint());
+    sala = true;
+  }
+  if ( DT.tSala < DT.tSala.setPoint() - 1 )
+  {
+    str += " tSala2 " + String(DT.tSala) + " << " + String(DT.tSala.setPoint());
+    sala2 = true;
+  }
+//  if ( DT.tCucina < DT.tCucina.setPoint() )
+//  {
+//    str += " tCucina " + String(DT.tCucina) + " < " + String(DT.tCucina.setPoint());
+//    cucina = true;
+//  }
+//  if ( !sala2 && DT.tCameraS < DT.tCameraS.setPoint() )
+//  {
+//    str += " tCameraS " + String(DT.tCameraS) + " < " + String(DT.tCameraS.setPoint());
+//    cameraS = true;
+//  }
+//  if ( !sala2 && DT.tCameraD < DT.tCameraD.setPoint() )
+//  {
+//    str += " tCameraD " + String(DT.tCameraD) + " < " + String(DT.tCameraD.setPoint());
+//    cameraD = true;
+//  }
+//  if ( !sala2 && DT.tCameraD < DT.tCameraD.setPoint() - 1 )
+//  {
+//    str += " tCameraD2 " + String(DT.tCameraD) + " << " + String(DT.tCameraD.setPoint());
+//    cameraD2 = true;
+//  }
+//  if ( !sala2 && DT.tCameraM < DT.tCameraM.setPoint() )
+//  {
+//    str += " tCameraM " + String(DT.tCameraM) + " < " + String(DT.tCameraM.setPoint());
+//    cameraM = true;
+//  }
+//  if ( !sala2 && DT.tCameraM < DT.tCameraM.setPoint() - 1 )
+//  {
+//    str += " tCameraM " + String(DT.tCameraM) + " << " + String(DT.tCameraM.setPoint()) ;
+//    cameraM2 = true;
+//  }
+  if ( DT.tBagno < DT.tBagno.setPoint() )
+  {
+    str += " tBagno " + String(DT.tBagno) + " < " + String(DT.tBagno.setPoint());
+    bagno = true;
+  }
+  DT.m_log.add(str);
+
+  bool needPdc = sala || cucina || bagno || cameraS || cameraD || cameraM;
+
+  if ( DT.tPufferHi > 20 )   // non ho bisogno della pdc, grazie
+  {
+    DT.m_log.add("Evito PDC tPufferHi > 20 ");
+    needPdc = false;
+  }
+
+  // attuatori
+  DT.evCameraM1.set(cameraM && needPdc);   DT.evCameraM1.send(&dhWifi, DT.m_log);
+  DT.evCameraM2.set(cameraM2 && needPdc);  DT.evCameraM2.send(&dhWifi, DT.m_log);
+  DT.evSala1.set(sala && needPdc);         DT.evSala1.send(&dhWifi, DT.m_log);
+  DT.evSala2.set(sala2 && needPdc);        DT.evSala2.send(&dhWifi, DT.m_log);
+  DT.evCucina.set(cucina && needPdc);      DT.evCucina.send(&dhWifi, DT.m_log);
+  DT.evCameraS.set(cameraS && needPdc);    DT.evCameraS.send(&dhWifi, DT.m_log);
+  DT.evCameraD1.set(cameraD && needPdc);   DT.evCameraD1.send(&dhWifi, DT.m_log);
+  DT.evCameraD2.set(cameraD2 && needPdc);  DT.evCameraD2.send(&dhWifi, DT.m_log);
+
+  // comandi semimanuali ---------------------------------------------------------------
+  // accendo pompa
+  DT.rPompaPianoPrimo.manualCheck( 0 );
+  DT.rPompaPianoPrimo.send(&dhWifi, DT.m_log );
+
+  // accendo PDC
   DT.rPdc.manualCheck( needPdc );
   DT.rPdc.send(&dhWifi, DT.m_log );
 
@@ -321,10 +437,6 @@ void winterPP_Manager(int sec)
   //night
   DT.rPdcNightMode.manualCheck( needPdc );
   DT.rPdcNightMode.send(&dhWifi, DT.m_log );
-
-  //camino
-  DT.rPompaCamino.manualCheck( needPCamino );
-  DT.rPompaCamino.send(&dhWifi, DT.m_log );
 }
 
 /**************************************************************************************************/

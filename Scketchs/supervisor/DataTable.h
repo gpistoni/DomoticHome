@@ -130,11 +130,6 @@ class cDataTable
 
       webVar[90] = progBoilerSanitaria.setup ( -1, 0, "progBoilerSanitaria");
       progBoilerSanitaria.set(1);
-      
-      //progWinterPP = true;
-      //progWinterPT = true;
-      //progSummerPP = false;
-
     };
 
     void UpdateT1( String strs )
