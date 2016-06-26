@@ -181,16 +181,19 @@ void S_page0( WiFiClient &client)
           "<th>Forzato"
           "</tr>";
   client.println(page);
+  
   //***************************************************************************************************************/
-
-  page = "\n<tr>";
-  page += DT.progBoilerSanitaria.td_descr();
-  page += DT.progBoilerSanitaria.td_bulb();
-  page += DT.progBoilerSanitaria.td_star();
-  page += "</tr>";
-  client.println(page);
+  for (int i = 90; i < 92; i++)
+  {
+    page = "\n<tr>";
+    page += DT.webVar[i]->td_descr();
+    page += DT.webVar[i]->td_bulb();
+    page += DT.webVar[i]->td_star();
+    page += "</tr>";
+    client.println(page);
+  }
   //***************************************************************************************************************/
-
+ 
   page =  "</tbody>"
           "</table>"  ;
   client.println(page);
