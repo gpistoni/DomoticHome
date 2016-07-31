@@ -2,9 +2,9 @@
 
 void  DHwifi::setup( IPAddress ip, IPAddress gateway, IPAddress subnet, String remoteServer )
 {
-  char ssid[] = "PistoniHome";     	  // your network SSID (name)
-  char pass[] = "giaco.iren.dario";   // your network password
-  unsigned int localPortUDP = 2390;      // local port to listen for UDP packets
+  char ssid[] = "PistoniHomeT";     	  // your network SSID (name)
+  char pass[] = "giaco.iren.dario";     // your network password
+  unsigned int localPortUDP = 2390;     // local port to listen for UDP packets
 
   m_host = remoteServer;
 

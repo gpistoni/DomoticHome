@@ -6,7 +6,7 @@ class cDataTable
 {
   public:
     cBool progBoilerSanitaria;
-    cBool progSummerEco;
+    cBool progSummerAC;
     
     cBool progWinterPP;
     cBool progWinterPT;
@@ -134,8 +134,8 @@ class cDataTable
       webVar[90] = progBoilerSanitaria.setup ( PROG, 0, "progBoilerSanitaria");
       progBoilerSanitaria.set(1);
 
-      webVar[91] = progSummerEco.setup ( PROG, 0, "progSummerEco");
-      progSummerEco.set(0);
+      webVar[91] = progSummerAC.setup ( PROG, 0, "progSummerAC");
+      progSummerAC.set(0);
       
     };
 
