@@ -12,12 +12,12 @@ class DHwifi
     static const int NTP_PACKET_SIZE = 48;  	// NTP time stamp is in the first 48 bytes of the message
     byte packetBuffer[ NTP_PACKET_SIZE];  	  // buffer to hold incoming and outgoing packets
 
-    String m_host;
+    String m_remoteServer;
 
   public:
     DHwifi() {};
 
-    void setup( IPAddress ip, IPAddress gateway, IPAddress subnet, String remoteServer = "192.168.0.200" );
+    void setup( IPAddress ip, IPAddress gateway, IPAddress subnet, String ssid, String pass,  String remoteServer = "192.168.0.200" );
     String HttpRequest( String req );
     time_t GetSystemTime();
 

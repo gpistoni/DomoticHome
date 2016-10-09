@@ -1,26 +1,24 @@
 #include "dhwifi.h"
 
-void  DHwifi::setup( IPAddress ip, IPAddress gateway, IPAddress subnet, String remoteServer )
+void  DHwifi::setup( IPAddress ip, IPAddress gateway, IPAddress subnet, String ssid, String pass, String remoteServer )
 {
-  char ssid[] = "PistoniHomeT";     	  // your network SSID (name)
-  char pass[] = "giaco.iren.dario";     // your network password
   unsigned int localPortUDP = 2390;     // local port to listen for UDP packets
 
-  m_host = remoteServer;
+  m_remoteServer = remoteServer;
 
   // We start by connecting to a WiFi network
-  Serial.print("Connecting to ");
+  Serial.print("WIFI LINK to ");
   Serial.println(ssid);
 
   WiFi.config(ip, gateway, subnet);
-  WiFi.begin(ssid, pass);
+  WiFi.begin(ssid.c_str(), pass.c_str());
 
   while (WiFi.status() != WL_CONNECTED)
   {
-    delay(500);
-    Serial.print(".");
+    delay(1000);
+    Serial.println(ssid + " not Linked.");
   }
-  Serial.println("");
+  Serial.println(ssid + " Linked.");
 
   Serial.print("WiFi connected. ");
   Serial.println("IP address: ");
@@ -82,7 +80,7 @@ String DHwifi::HttpRequest( String req )
   WiFiClient client;
 
   char host[99];
-  m_host.toCharArray( host, 99);
+  m_remoteServer.toCharArray( host, 99);
   const int httpPort = 80;
 
   if (!client.connect(host, httpPort))

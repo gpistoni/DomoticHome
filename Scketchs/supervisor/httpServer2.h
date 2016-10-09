@@ -34,7 +34,7 @@ bool handleHttpServer()
   }
 
   // Wait until the client sends some data
-  Serial.println("new client");
+  //Serial.println("new client");
   int i = 0;
   while (!client.available())
   {
@@ -45,7 +45,7 @@ bool handleHttpServer()
 
   // Read the first line of the request
   String readString = client.readStringUntil('\r');
-  Serial.println(readString);
+  //Serial.println(readString);
   client.flush();
 
   // Match the request
@@ -58,8 +58,8 @@ bool handleHttpServer()
     String name = readString.substring(idxSET + 5, idxSET2);
     String val = readString.substring(idxSET2 + 1, 999);
 
-    Serial.println(name);
-    Serial.println(val);
+    //Serial.println(name);
+    //Serial.println(val);
     DT.setPars( name, val );
 
     readString = LastPage;
@@ -183,7 +183,7 @@ void S_page0( WiFiClient &client)
   client.println(page);
   
   //***************************************************************************************************************/
-  for (int i = 90; i < 92; i++)
+  for (int i = 90; i < 96; i++)
   {
     page = "\n<tr>";
     page += DT.webVar[i]->td_descr();

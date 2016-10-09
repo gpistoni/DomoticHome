@@ -7,13 +7,13 @@ class cDataTable
   public:
     cBool progBoilerSanitaria;
     cBool progSummerAC;
-    
-    cBool progWinterPP;
-    cBool progWinterPT;
-    cBool progSummerPP;
-        
-     enum { PROG= -1, T0 = 0, T1 = 1, T2 = 2, T3 = 3, T4 = 4, T5 = 5, T6 = 6, T7 = 7 };
-    
+    cBool progWinterFIRE;
+    cBool progWinterPDC;
+    cBool prog4;
+    cBool prog5;
+
+    enum { PROG = -1, T0 = 0, T1 = 1, T2 = 2, T3 = 3, T4 = 4, T5 = 5, T6 = 6, T7 = 7 };
+
   public:
     // terminal 1
     cFloat tCucina;
@@ -132,11 +132,23 @@ class cDataTable
       webVar[57] = evCameraD2.setup        ( T5, 7, "evCameraD2");
 
       webVar[90] = progBoilerSanitaria.setup ( PROG, 0, "progBoilerSanitaria");
-      progBoilerSanitaria.set(1);
+      progBoilerSanitaria.set(0);
 
       webVar[91] = progSummerAC.setup ( PROG, 0, "progSummerAC");
       progSummerAC.set(0);
-      
+
+      webVar[92] = progWinterFIRE.setup ( PROG, 0, "progWinterFIRE");
+      progWinterFIRE.set(0);
+
+      webVar[93] = progWinterPDC.setup ( PROG, 0, "progWinterPDC");
+      progWinterPDC.set(0);
+
+      webVar[94] = prog4.setup ( PROG, 0, "prog4");
+      prog4.set(0);
+
+      webVar[95] = prog5.setup ( PROG, 0, "prog5");
+      prog5.set(0);
+
     };
 
     void UpdateT1( String strs )
