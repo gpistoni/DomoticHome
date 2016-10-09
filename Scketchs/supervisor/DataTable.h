@@ -11,9 +11,9 @@ class cDataTable
     cBool progWinterPP;
     cBool progWinterPT;
     cBool progSummerPP;
-
         
-    enum { PROG= -1, T0 = 0, T1 = 1, T2 = 2, T3 = 3, T4 = 4, T5 = 5, T6 = 6, T7 = 7 };
+     enum { PROG= -1, T0 = 0, T1 = 1, T2 = 2, T3 = 3, T4 = 4, T5 = 5, T6 = 6, T7 = 7 };
+    
   public:
     // terminal 1
     cFloat tCucina;

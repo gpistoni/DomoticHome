@@ -29,6 +29,7 @@ void winterPP_Manager();
 void winterPT_Manager();
 void BoilerSanitaria_Manager();
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup()
 {
   pinMode(ACT, OUTPUT);
@@ -42,7 +43,7 @@ void setup()
   IPAddress subnet(255, 255, 255, 0);
 
   dhWifi.setup( ip, gateway, subnet );
-  delay (1000);
+
 
   Config.LoadFile();
   DT.setup();
@@ -61,7 +62,7 @@ void setup()
 
 }
 
-/**************************************************************************************************/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void loop()
 {
   digitalWrite(ACT, 1);
@@ -73,30 +74,26 @@ void loop()
     //winterPP_Manager(5);
     //winterPDC_Manager( 5 );
     //winterPT_Manager(5);
+    return;
   }
 
-  UpdateAll();
+  delay (100);
   digitalWrite(ACT, 0);
+  UpdateAll();
 
-  //  summerPP_Manager( 60 );
-
-  //winterPP_Manager( 60 );
-  //winterPDC_Manager( 60 );
-
-  //  winterPT_Manager( 60 );
+  // summerPP_Manager( 60 );
+  // winterPP_Manager( 60 );
+  // winterPDC_Manager( 60 );
+  // winterPT_Manager( 60 );
 
   DT.progBoilerSanitaria.manualCheck( false );
   DT.progSummerAC.manualCheck( false );
 
-  if (DT.progBoilerSanitaria)
-    BoilerSanitaria_Manager( 600 );
-  if (DT.progSummerAC)
-    SummerAC_Manager( 600 );
-
+  if (DT.progBoilerSanitaria)   BoilerSanitaria_Manager( 600 );
+  if (DT.progSummerAC)          SummerAC_Manager( 600 );
 }
 
-
-/**************************************************************************************************/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UpdateTime()
 {
   DT.m_log.add("-- UpdateTime --");
@@ -106,7 +103,7 @@ void UpdateTime()
 }
 
 
-/**************************************************************************************************/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UpdateAll()
 {
   static unsigned long last = 0;
@@ -128,8 +125,7 @@ void UpdateAll()
   i++;
 }
 
-
-/**************************************************************************************************/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void summerPP_Manager(int sec)
 {
   static unsigned long last = 0;
@@ -167,7 +163,7 @@ void summerPP_Manager(int sec)
   //  dhWifi.HttpRequest( DT.rPdcNightMode.getS() );
 }
 
-/**************************************************************************************************/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void BoilerSanitaria_Manager(int sec)
 {
   static unsigned long last = 0;
@@ -176,25 +172,27 @@ void BoilerSanitaria_Manager(int sec)
 
   digitalClockDisplay();
 
-  bool boilerACS = false;
+  static bool boilerACS = false;
   /**************************************************************************************************/
+  //decido se accendere il boiler solo di notte e solo se il camino non funziona
+  if ( hour() < 7 &&  DT.tReturnFireplace < 30  + boilerACS*2 )  //isteresi
   {
-    //decido se accendere il boiler solo di notte e solo se il camino non funziona
-    if ( hour() < 7 &&  DT.tReturnFireplace < 30 )
-    {
-      boilerACS = true;
-    }
+    boilerACS = true;
+  }
+  else
+  {
+    boilerACS = false;
   }
   /**************************************************************************************************/
 
-  DT.m_log.add("Boiler ACS :" + String(boilerACS) + "  hour:" + String( hour() ) + " tReturnFireplace: " + String( DT.tReturnFireplace ) );
+  DT.m_log.add("BoilerACS :" + String(boilerACS) + "  hour:" + String( hour() ) + " tReturnFireplace: " + String( DT.tReturnFireplace ) );
 
   // boiler
   DT.rBoilerSanitaria.manualCheck( boilerACS );
   DT.rBoilerSanitaria.send( &dhWifi, DT.m_log);
 }
 
-/******************************************************************************************************************************************************************/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void SummerAC_Manager(int sec)
 {
   static unsigned long last = 0;
@@ -203,34 +201,35 @@ void SummerAC_Manager(int sec)
 
   digitalClockDisplay();
 
-  bool summerAC = false;
+  static bool summerAC = false;
 
   /**************************************************************************************************/
   // decido se accendere le pompe
-  if ( DT.tExternal > 24 && DT.tSala > 26 && DT.tReturnFloor > 20 )
+  if ( DT.tExternal > 24 && DT.tSala > 26 &&  DT.tReturnFloor > 20 - summerAC*1 ) //isteresi
   {
-    summerAC = true;
+      summerAC = true;
   }
   else
   {
-    DT.progSummerAC.set(false);
+    summerAC = false;
   }
   /**************************************************************************************************/
 
-  DT.m_log.add("SummerEco:" +  String(summerAC) + " tExternal: " + String( DT.tExternal ) + " tSala: " + String( DT.tSala ) + " tReturnFloor: " + String( DT.tReturnFloor ));
+  DT.m_log.add("summerAC:" +  String(summerAC) + " tExternal: " + String( DT.tExternal ) + " tSala: " + String( DT.tSala ) + " tReturnFloor: " + String( DT.tReturnFloor ));
 
   // attuatori
   DT.evCameraM1.set(summerAC);   DT.evCameraM1.send(&dhWifi, DT.m_log);
   DT.evSala1.set(summerAC);      DT.evSala1.send(&dhWifi, DT.m_log);
+  DT.evSala2.set(summerAC);      DT.evSala2.send(&dhWifi, DT.m_log);
   DT.evCucina.set(summerAC);     DT.evCucina.send(&dhWifi, DT.m_log);
   DT.evCameraS.set(summerAC);    DT.evCameraS.send(&dhWifi, DT.m_log);
   DT.evCameraD1.set(summerAC);   DT.evCameraD1.send(&dhWifi, DT.m_log);
 
   // accendo PDC
   DT.rPdc.manualCheck( summerAC );           DT.rPdc.send(&dhWifi, DT.m_log );
-  DT.rPdcHeat.set( false );                   DT.rPdcHeat.send(&dhWifi, DT.m_log );
+  DT.rPdcHeat.set( false );                  DT.rPdcHeat.send(&dhWifi, DT.m_log );
   DT.rPdcPompa.set( summerAC );              DT.rPdcPompa.send(&dhWifi, DT.m_log );
-  DT.rPdcNightMode.manualCheck( true );       DT.rPdcNightMode.send(&dhWifi, DT.m_log );
+  DT.rPdcNightMode.manualCheck( true );      DT.rPdcNightMode.send(&dhWifi, DT.m_log );
 }
 
 /******************************************************************************************************************************************************************/
