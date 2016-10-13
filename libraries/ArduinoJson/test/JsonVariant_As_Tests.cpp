@@ -32,6 +32,11 @@ TEST(JsonVariant_As_Tests, DoubleAsLong) {
   ASSERT_EQ(4L, variant.as<long>());
 }
 
+TEST(JsonVariant_As_Tests, DoubleAsUnsigned) {
+  JsonVariant variant = 4.2;
+  ASSERT_EQ(4U, variant.as<unsigned>());
+}
+
 TEST(JsonVariant_As_Tests, DoubleZeroAsBool) {
   JsonVariant variant = 0.0;
   ASSERT_FALSE(variant.as<bool>());
@@ -92,9 +97,14 @@ TEST(JsonVariant_As_Tests, LongZeroAsBool) {
   ASSERT_FALSE(variant.as<bool>());
 }
 
-TEST(JsonVariant_As_Tests, LongAsDouble) {
+TEST(JsonVariant_As_Tests, PositiveLongAsDouble) {
   JsonVariant variant = 42L;
   ASSERT_EQ(42.0, variant.as<double>());
+}
+
+TEST(JsonVariant_As_Tests, NegativeLongAsDouble) {
+  JsonVariant variant = -42L;
+  ASSERT_EQ(-42.0, variant.as<double>());
 }
 
 TEST(JsonVariant_As_Tests, LongAsString) {
@@ -203,4 +213,22 @@ TEST(JsonVariant_As_Tests, ArrayAsString) {
 
   JsonVariant variant = arr;
   ASSERT_EQ(String("[4,2]"), variant.as<String>());
+}
+
+TEST(JsonVariant_As_Tests, ArrayAsJsonArray) {
+  DynamicJsonBuffer buffer;
+  JsonArray& arr = buffer.createArray();
+
+  JsonVariant variant = arr;
+  ASSERT_EQ(&arr, &variant.as<JsonArray&>());
+  ASSERT_EQ(&arr, &variant.as<JsonArray>());  // <- shorthand
+}
+
+TEST(JsonVariant_As_Tests, ObjectAsJsonObject) {
+  DynamicJsonBuffer buffer;
+  JsonObject& arr = buffer.createObject();
+
+  JsonVariant variant = arr;
+  ASSERT_EQ(&arr, &variant.as<JsonObject&>());
+  ASSERT_EQ(&arr, &variant.as<JsonObject>());  // <- shorthand
 }

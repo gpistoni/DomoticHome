@@ -14,15 +14,13 @@ class cVar
     String m_descr;
     float m_value;
     float m_setpoint;
-    bool m_modified;
 
   public:
     cVar():
       m_t(0),
       m_s(0),
       m_value(0),
-      m_setpoint(0),
-      m_modified(false)
+      m_setpoint(0)
     {
     }
 
@@ -36,14 +34,9 @@ class cVar
       return this;
     }
 
-
     void set( float value )
     {
-      if ( m_value != value)
-      {
         m_value = value;
-        m_modified = true;
-      }
     }
 
     void setSetPoint( float value )
@@ -56,13 +49,9 @@ class cVar
 
     void send( DHwifi *wifi, BufferString &log)
     {
-      if (m_modified)
-      {
         String s =  String("@set(") + String(m_t) + "," + String(m_s) + "=" + String(m_value)  + ")";
         wifi->HttpRequest( s );
-        m_modified = false;
-        log.add( String("Send Value ") + m_descr + ":" + String(m_value) );
-      }
+       // log.add( String("Send Value ") + m_descr + ":" + String(m_value) );
     }
 
     float value()
@@ -177,11 +166,7 @@ class cBool: public cVar
 
     void set( bool value )
     {
-      if (  m_value != value)
-      {
-        m_value = value;
-        m_modified = true;
-      }
+      m_value = value;
     }
 
     void update( String stringlist )

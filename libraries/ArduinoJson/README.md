@@ -20,6 +20,7 @@ Features
 * Portable (written in C++98)
 * Self-contained (no external dependency)
 * Small footprint
+* Header-only library
 * MIT License
 
 Works on
@@ -28,7 +29,7 @@ Works on
 * All Arduino boards (Uno, Due, Mini, Micro, Yun...)
 * ESP8266
 * Teensy
-* Intel Edison
+* Intel Edison and Galileo
 * PlatformIO
 * Energia
 * RedBearLab boards (BLE Nano...)
@@ -85,9 +86,6 @@ From Arduino's Forum user `jflaplante`:
 > I tried aJson json-arduino before trying your library. I always ran into memory problem after a while.
 > I have no such problem so far with your library. It is working perfectly with my web services.
 
-From Arduino's Forum user `gbathree`:
-> Thanks so much - this is an awesome library!  If you want to see what we're doing with it - the project is located at www.photosynq.org.
-
 From StackOverflow user `thegreendroid`:
 > It has a really elegant, simple API and it works like a charm on embedded and Windows/Linux platforms. We recently started using this on an embedded project and I can vouch for its quality.
 
@@ -110,14 +108,20 @@ Donators
 
 Special thanks to the following persons and companies who made generous donations to the library author:
 
-* Robert Murphy
-* Surge Communications
-* Alex Scott
-* Firepick Services LLC
-* A B Doodkorte
-* Scott Smith
-* Johann Stieger
-* Gustavo Donizeti Gini
+* Robert Murphy <img alt='USA' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1fa-1f1f8.svg' width='18' height='18'>
+* Surge Communications <img alt='USA' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1fa-1f1f8.svg' width='18' height='18'>
+* Alex Scott <img alt='United Kingdom' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1ec-1f1e7.svg' width='18' height='18'>
+* Firepick Services LLC <img alt='USA' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1fa-1f1f8.svg' width='18' height='18'>
+* A B Doodkorte <img alt='Netherlands' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1f3-1f1f1.svg' width='18' height='18'>
+* Scott Smith <img alt='USA' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1fa-1f1f8.svg' width='18' height='18'>
+* Johann Stieger <img alt='Austria' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1e6-1f1f9.svg' width='18' height='18'>
+* Gustavo Donizeti Gini <img alt='Brazil' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1e7-1f1f7.svg' width='18' height='18'>
+* Charles-Henri Hallard <img alt='France' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1eb-1f1f7.svg' width='18' height='18'>
+* Martijn van den Burg <img alt='Netherlands' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1f3-1f1f1.svg' width='18' height='18'>
+* Nick Koumaris <img alt='Greece' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1ec-1f1f7.svg' width='18' height='18'>
+* Jon Williams <img alt='USA' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1fa-1f1f8.svg' width='18' height='18'>
+* Kestutis Liaugminas <img alt='Lithuania' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1f1-1f1f9.svg' width='18' height='18'>
+* Darlington Adibe <img alt='Nigeria' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1f3-1f1ec.svg' width='18' height='18'>
 
 ---
 
