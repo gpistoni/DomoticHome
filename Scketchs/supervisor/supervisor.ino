@@ -72,9 +72,9 @@ void loop()
     Winter_Manager( 20 );
     return;
   }
-  
+
   RollingSendValues();
-  
+
   digitalWrite(ACT, 0);
   UpdateAll();
 
@@ -146,9 +146,9 @@ void RollingSendValues()
   if ( i % n == 14 )   DT.evCameraS.send(&dhWifi, DT.m_log );
   if ( i % n == 15 )   DT.evCameraD1.send(&dhWifi, DT.m_log );
   if ( i % n == 16 )   DT.evCameraD2.send(&dhWifi, DT.m_log );
-       
+
   i++;
- }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Summer_Manager(int sec)
@@ -231,18 +231,18 @@ void SummerAC_Manager(int sec)
   DT.m_log.add("summerAC [" +  String(summerAC) + "] tExternal: " + String( DT.tExternal ) + " tSala: " + String( DT.tSala ) + " tReturnFloor: " + String( DT.tReturnFloor ));
 
   // attuatori
-  DT.evCameraM1.set(summerAC);  
-  DT.evSala1.set(summerAC);     
-  DT.evSala2.set(summerAC);      
-  DT.evCucina.set(summerAC);     
-  DT.evCameraS.set(summerAC);    
-  DT.evCameraD1.set(summerAC);   
+  DT.evCameraM1.set(summerAC);
+  DT.evSala1.set(summerAC);
+  DT.evSala2.set(summerAC);
+  DT.evCucina.set(summerAC);
+  DT.evCameraS.set(summerAC);
+  DT.evCameraD1.set(summerAC);
 
   // accendo PDC
-  DT.rPdc.manualCheck( summerAC );           
-  DT.rPdcHeat.set( false );                 
-  DT.rPdcPompa.set( summerAC );              
-  DT.rPdcNightMode.manualCheck( true );      
+  DT.rPdc.manualCheck( summerAC );
+  DT.rPdcHeat.set( false );
+  DT.rPdcPompa.set( summerAC );
+  DT.rPdcNightMode.manualCheck( true );
 }
 
 /******************************************************************************************************************************************************************/
@@ -319,18 +319,18 @@ void Winter_Manager( int sec )
     DT.m_log.add("Emergenza tPufferLow > 48 ");
     needPompa_pp = sala = cucina = cameraS = cameraD = cameraM = true;
   }
-  if ( DT.tInputMixer > 23 || DT.tPufferHi > 23 || DT.tInputMixer > 30 )
-  {
-    DT.m_log.add("Condizione Pompa PP: tInputMixer " + String(DT.tInputMixer) + " - " + "tPufferHi " + String(DT.tPufferHi) + " - " + "tInputMixer " + String(DT.tInputMixer) );
 
-    if ( DT.tReturnFloor > 26 )  // ritorno troppo alto - non ne ho bisogno
+  DT.m_log.add("Condizione Pompa PP: tInputMixer:" + String(DT.tInputMixer) + " tPufferHi:" + String(DT.tPufferHi) + " tReturnFireplace:" + String(DT.tReturnFireplace) );
+  if ( DT.tInputMixer > 25 || DT.tPufferHi > 25 || DT.tReturnFireplace > 25 )
+  {
+    if ( DT.tReturnFloor > 28 )  // ritorno troppo alto - non ne ho bisogno
     {
-      DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor " + String(DT.tReturnFloor) );
+      DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor:" + String(DT.tReturnFloor) + " > 28" );
       needPompa_pp = false;
     }
     if ( DT.tInletFloor > 35 )  // 35 è la sicurezza, 29 la t massima dopo al quale spengo la pompa
     {
-      DT.m_log.add("Stop Pompa: Sicurezza temp ingreso impianto: tInletFloor " + String(DT.tInletFloor) + " - " + "tReturnFloor " + String(DT.tReturnFloor) );
+      DT.m_log.add("Stop Pompa: Sicurezza temp ingreso impianto: tInletFloor:" + String(DT.tInletFloor) + " > 35" );
       needPompa_pp = false;
     }
   }
@@ -366,7 +366,7 @@ void Winter_Manager( int sec )
   {
     needPompa_pt = true;
   }
-  DT.m_log.add( "NeedPompa_pp: [" + String(needPompa_pt) + "]" );
+  DT.m_log.add( "NeedPompa_pt: [" + String(needPompa_pt) + "]" );
 
 
   bool AllIn = DT.prog4;
@@ -381,14 +381,14 @@ void Winter_Manager( int sec )
   cameraD2  = (cameraD2 && ( needPompa_pp )) || AllIn;
 
   // attuatori -----------------------------------------------------------------------
-  DT.evCameraM1.set(cameraM);   
-  DT.evCameraM2.set(cameraM2); 
-  DT.evSala1.set(sala);        
-  DT.evSala2.set(sala2);       
-  DT.evCucina.set(cucina);      
-  DT.evCameraS.set(cameraS);    
-  DT.evCameraD1.set(cameraD);  
-  DT.evCameraD2.set(cameraD2);  
+  DT.evCameraM1.set(cameraM);
+  DT.evCameraM2.set(cameraM2);
+  DT.evSala1.set(sala);
+  DT.evSala2.set(sala2);
+  DT.evCucina.set(cucina);
+  DT.evCameraS.set(cameraS);
+  DT.evCameraD1.set(cameraD);
+  DT.evCameraD2.set(cameraD2);
 
   // comandi semimanuali centrale -----------------------------------------------------
   // accendo pompa
@@ -399,7 +399,7 @@ void Winter_Manager( int sec )
 
   // heat
   DT.rPdcHeat.manualCheck( needPdc );
-  
+
   //pompa
   DT.rPdcPompa.manualCheck( needPdc );
 
