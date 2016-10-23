@@ -171,8 +171,7 @@ void S_page0( WiFiClient &client)
 {
   String page;
   //***************************************************************************************************************/
-  page =  "<h2><a href=page1> Stanze </a></h2>"
-          "\n<h1> Programmi </h1>"
+  page =  "<h2> Programmi | <a href=page1> Stanze </a> | <a href=page2> Attuatori </a></h2>"
           "<table>"
           "<tbody>"
           "<tr>"
@@ -204,7 +203,7 @@ void S_page1( WiFiClient &client)
 {
   String page;
   //***************************************************************************************************************/
-  page =  "<h2><a href=page0> Programmi </a> | <a href=page2> Attuatori </a></h2>"
+  page =  "<h2><a href=page0> Programmi </a> | <a href=page2> Attuatori </a> | <a href=page3> Caldaia </a></h2>"
           "\n<h1> Stanze </h1>"
           "<table>"
           "<tbody>"
@@ -256,7 +255,7 @@ void S_page2( WiFiClient &client)
 {
   String page;
   //***************************************************************************************************************/
-  page =  "<h2><a href=page1> Stanze </a> | <a href=page3> Caldaia </a></h2>"
+  page =  "<h2><a href=page1> Stanze </a> | <a href=page3> Caldaia </a> | <a href=page4> Log </a></h2>"
           "\n<h1> Attuatori Pavimento </h1>"
           "<table>"
           "<tbody>"
@@ -321,7 +320,7 @@ void S_page3( WiFiClient &client)
 {
   String page;
   //***************************************************************************************************************/
-  page += "<h2><a href=page2> Attuatori </a> | <a href=page4> Log </a></h2>"
+  page += "<h2><a href=page2> Attuatori </a> | <a href=page4> Log </a> | <a href=page5>Json</a></h2>"
           "\n<h1> Caldaia </h1>"
           "<table>"
           "<tbody>"

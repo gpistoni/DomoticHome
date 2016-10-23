@@ -51,12 +51,12 @@ void setup()
 
   UpdateTime();      // update system time
 
-  //  initWebServer();
-  initHttpServer();
+   initHttpServer();
 
-  UpdateAll( );
+  RollingUpdateTerminals( 0 );
 
   DT.progBoilerSanitaria.set(1);
+  
   if ( month() >= 9 || month() < 4) DT.progWinterFIRE.set(1);
 
 }
@@ -65,24 +65,25 @@ void setup()
 void loop()
 {
   digitalWrite(ACT, 1);
+
   if ( handleHttpServer() )
   {
-    BoilerSanitaria_Manager( 20 );
-    Summer_Manager( 20 );
-    Winter_Manager( 20 );
+    if (DT.progBoilerSanitaria)                        BoilerSanitaria_Manager( 20 );
+    if (DT.progSummerAC)                               Summer_Manager( 20 );
+    if (DT.progWinterFIRE || DT.progWinterPDC )        Winter_Manager( 20 );
     return;
   }
 
-  RollingSendValues();
-
+  RollingSendValues( 1 );
+  RollingUpdateTerminals( 15 );
   digitalWrite(ACT, 0);
-  UpdateAll();
+
 
   DT.progBoilerSanitaria.manualCheck(  DT.progBoilerSanitaria );
   DT.progSummerAC.manualCheck( DT.progSummerAC );
   DT.progWinterFIRE.manualCheck( DT.progWinterFIRE );
   DT.progWinterPDC.manualCheck( DT.progWinterPDC );
-  DT.prog4.manualCheck( DT.prog4 );
+  DT.progAllRooms.manualCheck( DT.progAllRooms );
   DT.prog5.manualCheck( DT.prog5 );
 
   if (DT.progWinterFIRE) DT.progSummerAC.set(0);
@@ -104,13 +105,9 @@ void UpdateTime()
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void UpdateAll()
+void RollingUpdateTerminals( int sec )
 {
-  static unsigned long last = 0;
-  if ( millis() - last < 15000 ) return;
-  last = millis();
-
-  //DT.m_log.add("-- UpdateAll --");
+   _CHECK_TIME_;
 
   if (year() < 2000 )
     UpdateTime();
@@ -125,8 +122,9 @@ void UpdateAll()
   i++;
 }
 
-void RollingSendValues()
+void RollingSendValues( int sec )
 {
+  _CHECK_TIME_;
   static unsigned int i = 0;
   static unsigned int n = 20;
 
@@ -196,7 +194,7 @@ void BoilerSanitaria_Manager(int sec)
   static bool boilerACS = false;
   /**************************************************************************************************/
   //decido se accendere il boiler solo di notte e solo se il camino non funziona
-  if ( hour() < 7 &&  DT.tReturnFireplace < 30  + boilerACS * 2 ) //isteresi
+  if ( hour() < 7 &&  DT.tReturnFireplace < 30  + boilerACS * 5 ) //isteresi
   {
     boilerACS = true;
   }
@@ -369,7 +367,7 @@ void Winter_Manager( int sec )
   DT.m_log.add( "NeedPompa_pt: [" + String(needPompa_pt) + "]" );
 
 
-  bool AllIn = DT.prog4;
+  bool AllIn = DT.progAllRooms;
 
   cameraM   = (cameraM && ( needPompa_pp )) || AllIn;
   cameraM2  = (cameraM2 && ( needPompa_pp )) || AllIn;
@@ -410,7 +408,7 @@ void Winter_Manager( int sec )
   DT.rPompaCamino.manualCheck( needPCamino );
 
   //piano terra
-  DT.rPompaPianoTerra.manualCheck(needPompa_pt);
+  DT.rPompaPianoTerra.manualCheck( needPompa_pt );
 }
 
 
