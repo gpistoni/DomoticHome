@@ -51,12 +51,12 @@ void setup()
 
   UpdateTime();      // update system time
 
-   initHttpServer();
+  initHttpServer();
 
   RollingUpdateTerminals( 0 );
 
   DT.progBoilerSanitaria.set(1);
-  
+
   if ( month() >= 9 || month() < 4) DT.progWinterFIRE.set(1);
 
 }
@@ -78,13 +78,12 @@ void loop()
   RollingUpdateTerminals( 15 );
   digitalWrite(ACT, 0);
 
-
-  DT.progBoilerSanitaria.manualCheck(  DT.progBoilerSanitaria );
-  DT.progSummerAC.manualCheck( DT.progSummerAC );
-  DT.progWinterFIRE.manualCheck( DT.progWinterFIRE );
-  DT.progWinterPDC.manualCheck( DT.progWinterPDC );
-  DT.progAllRooms.manualCheck( DT.progAllRooms );
-  DT.prog5.manualCheck( DT.prog5 );
+  DT.progBoilerSanitaria.manualCheck();
+  DT.progSummerAC.manualCheck();
+  DT.progWinterFIRE.manualCheck();
+  DT.progWinterPDC.manualCheck();
+  DT.progAllRooms.manualCheck();
+  DT.prog5.manualCheck();
 
   if (DT.progWinterFIRE) DT.progSummerAC.set(0);
   if (DT.progWinterPDC)  DT.progSummerAC.set(0);
@@ -107,7 +106,7 @@ void UpdateTime()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void RollingUpdateTerminals( int sec )
 {
-   _CHECK_TIME_;
+  _CHECK_TIME_;
 
   if (year() < 2000 )
     UpdateTime();
@@ -115,7 +114,7 @@ void RollingUpdateTerminals( int sec )
   static unsigned int i = 0;
 
   if ( i % 4 == 0 || i == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
-  if ( i % 4 == 1 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
+ // if ( i % 4 == 1 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
   if ( i % 4 == 2 || i == 0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
   if ( i % 4 == 3 || i == 0 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
 
@@ -127,6 +126,15 @@ void RollingSendValues( int sec )
   _CHECK_TIME_;
   static unsigned int i = 0;
   static unsigned int n = 20;
+
+  DT.rPdc.manualCheck();
+  DT.rPdcHeat.manualCheck();
+  DT.rPdcPompa.manualCheck();
+  DT.rPdcNightMode.manualCheck();
+  DT.rPompaPianoPrimo.manualCheck();
+  DT.rPompaPianoTerra.manualCheck();
+  DT.rBoilerSanitaria.manualCheck();
+  DT.rPompaCamino.manualCheck();
 
   if ( i % n == 0 )   DT.rPdc.send(&dhWifi, DT.m_log );
   if ( i % n == 1 )   DT.rPdcHeat.send(&dhWifi, DT.m_log );
@@ -207,7 +215,7 @@ void BoilerSanitaria_Manager(int sec)
   DT.m_log.add("BoilerACS [" + String(boilerACS) + "]  hour:" + String( hour() ) + " tReturnFireplace: " + String( DT.tReturnFireplace ) );
 
   // boiler
-  DT.rBoilerSanitaria.manualCheck( boilerACS );
+  DT.rBoilerSanitaria.set( boilerACS );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -220,7 +228,7 @@ void SummerAC_Manager(int sec)
 
   /**************************************************************************************************/
   // decido se accendere le pompe
-  if ( DT.tExternal > 24 && DT.tSala > 26 &&  DT.tReturnFloor > 20 - summerAC * 1 ) //isteresi
+  if ( DT.tExternal > 24 && DT.tSala > 26 &&  DT.tReturnFloor > 20 - summerAC * 1 ) // isteresi
   {
     summerAC = true;
   }
@@ -237,10 +245,10 @@ void SummerAC_Manager(int sec)
   DT.evCameraD1.set(summerAC);
 
   // accendo PDC
-  DT.rPdc.manualCheck( summerAC );
+  DT.rPdc.set( summerAC );
   DT.rPdcHeat.set( false );
   DT.rPdcPompa.set( summerAC );
-  DT.rPdcNightMode.manualCheck( true );
+  DT.rPdcNightMode.set( true );
 }
 
 /******************************************************************************************************************************************************************/
@@ -389,26 +397,21 @@ void Winter_Manager( int sec )
   DT.evCameraD2.set(cameraD2);
 
   // comandi semimanuali centrale -----------------------------------------------------
-  // accendo pompa
-  DT.rPompaPianoPrimo.manualCheck( needPompa_pp );
-
+  // accendo pompa pp
+  DT.rPompaPianoPrimo.set( needPompa_pp );
+    //piano terra
+  DT.rPompaPianoTerra.set( needPompa_pt );
   // accendo PDC
-  DT.rPdc.manualCheck( needPdc );
-
+  DT.rPdc.set( needPdc );
   // heat
-  DT.rPdcHeat.manualCheck( needPdc );
-
+  DT.rPdcHeat.set( needPdc );
   //pompa
-  DT.rPdcPompa.manualCheck( needPdc );
-
+  DT.rPdcPompa.set( needPdc );
   //night
-  DT.rPdcNightMode.manualCheck( needPdc );
+  DT.rPdcNightMode.set( needPdc );
+  //camino 
+  DT.rPompaCamino.set( needPCamino );
 
-  //camino ----------------------------------------------------------------------------------
-  DT.rPompaCamino.manualCheck( needPCamino );
-
-  //piano terra
-  DT.rPompaPianoTerra.manualCheck( needPompa_pt );
 }
 
 

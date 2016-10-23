@@ -164,11 +164,6 @@ class cBool: public cVar
     {
     }
 
-    void set( bool value )
-    {
-      m_value = value;
-    }
-
     void update( String stringlist )
     {
       m_value = strValueB(stringlist, ',', m_s);
@@ -181,14 +176,13 @@ class cBool: public cVar
 
     int setPoint()
     {
-      return (int)m_setpoint;
+      return (int)m_setpoint + 0.5;
     }
 
-    void manualCheck( bool autoValue )
+    void manualCheck( )
     {
-      if ( setPoint() == 1 )        set( true );       //manual mode
-      else if ( setPoint() == 2 )   set( false );
-      else set( autoValue );
+      if ( setPoint() == 1 )   set( 1 );       //manual ON mode
+      if ( setPoint() == 2 )   set( 0 );      //manual OFF mode
     }
 };
 
