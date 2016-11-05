@@ -40,6 +40,11 @@ class cDataTable
     cFloat thBagno;
     cFloat thLavanderia;
 
+    cBool lightCorner;
+    cBool lightSide;
+    cBool lightLamp;
+    cBool lightExtra; 
+
     // terminal 3
     cBool rPdc;
     cBool rPdcHeat;
@@ -103,6 +108,11 @@ class cDataTable
       webVar[16 + 3] = thCameraD.setup      ( T1, 16 + 3, "thCameraD", 18);
       webVar[16 + 4] = thCameraM.setup      ( T1, 16 + 4, "thCameraM", 18);
       webVar[16 + 5] = thBagno.setup        ( T1, 16 + 5, "thBagno",   22);
+
+      webVar[20] = lightCorner.setup       ( T2, 0, "LuciAngoli");
+      webVar[21] = lightSide.setup          ( T2, 1, "LuciLati");
+      webVar[22] = lightLamp.setup         ( T2, 2, "Lampione");
+      webVar[23] = lightExtra.setup     ( T3, 3, "Altro");
 
       webVar[30] = rPdc.setup              ( T3, 0, "PDC");
       webVar[31] = rPdcHeat.setup          ( T3, 1, "PdcHeat");

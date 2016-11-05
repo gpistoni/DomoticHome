@@ -1,5 +1,5 @@
-// MODULO 05
-// sonde temperatura locale caldaia
+// MODULO 04
+// luci esterne
 // rev: 10 nov 2016
 
 #include <dhprotocol.h>
@@ -16,7 +16,7 @@ void setup()
 {
   Slave.setup(4, 0, &mySerial);     // Terminal ID
 
-  pinMode(2, OUTPUT);     // 2-10 relay.
+  pinMode(2, OUTPUT);     // 2-5 relay.
   pinMode(3, OUTPUT);
   pinMode(4, OUTPUT);
   pinMode(5, OUTPUT);

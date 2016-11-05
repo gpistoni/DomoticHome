@@ -6,7 +6,6 @@
 
 #include "webserver.h"
 
-
 // terminali
 DHProtocol T[8];
 
@@ -37,7 +36,7 @@ void setup()
   OUTLN("System Start");
 
   T[1].setup(0, 1, &mySerial );  // temp stanze
-  T[2].setup(0, 2, &mySerial );  // --
+  T[2].setup(0, 2, &mySerial );  // luci esterne
   T[3].setup(0, 3, &mySerial );  // rele'caldaia
   T[4].setup(0, 4, &mySerial );  // temp caldaie
   T[5].setup(0, 5, &mySerial );  // rele pavimento
