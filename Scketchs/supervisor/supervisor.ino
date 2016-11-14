@@ -320,18 +320,18 @@ void Winter_Manager( int sec )
 
   //////////////////////////////////////////////////////////////////////////////////
   bool needPompa_pp = ( sala || cucina || bagno || cameraS || cameraD || cameraM );
-  if ( DT.tPufferLow > 48 )   // emergenza
+  if ( DT.tPufferLow > 50 )   // emergenza
   {
-    DT.m_log.add("Emergenza tPufferLow > 48 ");
+    DT.m_log.add("Emergenza tPufferLow > 50 ");
     needPompa_pp = sala = cucina = cameraS = cameraD = cameraM = true;
   }
 
   DT.m_log.add("Condizione Pompa PP: tInputMixer:" + String(DT.tInputMixer) + " tPufferHi:" + String(DT.tPufferHi) + " tReturnFireplace:" + String(DT.tReturnFireplace) );
   if ( DT.tInputMixer > 25 || DT.tPufferHi > 25 || DT.tReturnFireplace > 25 )
   {
-    if ( DT.tReturnFloor > 28 )  // ritorno troppo alto - non ne ho bisogno
+    if ( DT.tReturnFloor > 27 && minute()%5==0 )  // ritorno troppo alto - non ne ho bisogno
     {
-      DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor:" + String(DT.tReturnFloor) + " > 28" );
+      DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor:" + String(DT.tReturnFloor) + " > 27" );
       needPompa_pp = false;
     }
     if ( DT.tInletFloor > 35 )  // 35 è la sicurezza, 29 la t massima dopo al quale spengo la pompa
@@ -358,7 +358,7 @@ void Winter_Manager( int sec )
   //////////////////////////////////////////////////////////////////////////////////
   bool needPCamino = false;
   DT.m_log.add("Condizione Pompa Camino: tReturnFireplace " + String(DT.tReturnFireplace) + " - " + "tPufferLow " + String(DT.tPufferLow) + " - " );
-  if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 40 && DT.tReturnFireplace > DT.tPufferLow + 5 )
+  if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 38 && DT.tReturnFireplace > DT.tPufferLow + 3 )
   {
     needPCamino = true;
   }
@@ -411,7 +411,6 @@ void Winter_Manager( int sec )
   DT.rPdcNightMode.set( needPdc );
   //camino 
   DT.rPompaCamino.set( needPCamino );
-
 }
 
 
