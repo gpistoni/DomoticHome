@@ -12,20 +12,21 @@
 #include <OneWire.h>
 #include <SoftwareSerial.h>
 
-
 CProbe  Probes;
 
 DHProtocol Slave;
 SoftwareSerial mySerial(10, 12, TRUE);          // RX 10, TX 12 Serial, inverse logic
 
-
 void setup()
 {
-  Slave.setup(4, 0, &mySerial);     		// Terminal ID
-  Probes.setup(2,3,4,5,6,7,8,9);        	// 4 temp
- 
-  Serial.begin(9600);                     	// disabilito le seriali 
-  Serial.print( "Setup-- SLAVE ID: " );
+  Serial.begin(9600);                       // disabilito le seriali 
+  Serial.println( "Setup-slave-" );
+  delay(100);
+  Slave.setup(2, 0, &mySerial);     		// Terminal ID
+  Serial.println( "Setup-probes" );
+  Probes.setup(2,3,4,5,6,7,8);        	// 4 temp
+
+  Serial.println( "Setup Complete-- SLAVE ID: " );
   Serial.print( Slave.m_id );
 }
 
@@ -41,7 +42,7 @@ void loop()
   
 /*******************************************************************************/
   unsigned long now = millis();               // Terminal ID
-  if ( now - old_Read >= 10000)  //leggo probe ogni 2 secondi
+  if ( now - old_Read >= 10000)              //leggo probe ogni 10 secondi
   {
     old_Read = now;
 
@@ -55,6 +56,14 @@ void loop()
       Serial.print( "Probe:" );
       Serial.print( Slave.sensor[i] );
      }
+
+     int sensorA0 = analogRead(A0);
+     Slave.sensor[7]= sensorA0;
+
+     Serial.println( "");
+     Serial.print( "Probe A0:" );
+     Serial.print( Slave.sensor[7] );
+    
   }
   /*****************************************************************************/
 };

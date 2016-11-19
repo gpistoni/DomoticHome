@@ -14,6 +14,9 @@
 #define OUTLN(x)
 #endif
 
+#define NSENS 24
+#define NRELAY 12
+
 class SoftwareSerial;
 
 class DHProtocol
@@ -29,8 +32,8 @@ class DHProtocol
     unsigned long lastRecived;
 
     //dati
-    short sensor[24];
-    byte relay[12];
+    short sensor[NSENS];
+    byte relay[NRELAY];
 
     DHProtocol() {};
     void setup( int myId, int otherId, SoftwareSerial *myserial );

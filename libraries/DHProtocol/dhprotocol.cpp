@@ -27,11 +27,11 @@ void DHProtocol::setup( int myId, int otherId, SoftwareSerial *myserial)
   m_id = myId;
   m_otherid = otherId;
 
-  for (int i = 0; i < 28; i++)
+  for (int i = 0; i < NSENS; i++)
   {
     sensor[i] = 0;
   }
-  for (int i = 0; i < 16; i++)
+  for (int i = 0; i < NRELAY; i++)
   {
     relay[i] = 0;
   }
@@ -144,7 +144,7 @@ void DHProtocol::sendRequest( )
   OUT('#');
 
   //send the data -- relay value
-  for (int i = 0; i < 12; i++ )
+  for (int i = 0; i < NRELAY; i++ )
   {
     _writeByte( relay[i] );
     OUT( relay[i] );
@@ -163,7 +163,7 @@ bool DHProtocol::waitRequest( int timeout)
   if ( _waitHeader( timeout ))
   {
     byte temp[12];
-    for (int i = 0; i < 12 ; i++)
+    for (int i = 0; i < NRELAY ; i++)
     {
       temp[i] = _readByte();
       OUT(temp[i] );
@@ -173,7 +173,7 @@ bool DHProtocol::waitRequest( int timeout)
     {
       OUT("$");
       r = true;
-      for (int i = 0; i < 12 ; i++)
+      for (int i = 0; i < NRELAY ; i++)
       {
         relay[i] = temp[i];
       }
@@ -200,7 +200,7 @@ void DHProtocol::sendData( )
   OUT( '#' );
 
   //send the data -- sensor value
-  for (int i = 0; i < 24; i++ )
+  for (int i = 0; i < NSENS; i++ )
   {
     _writeShort( sensor[i] );
     OUT( sensor[i] );
@@ -220,7 +220,7 @@ bool DHProtocol::waitData( int timeout)
   if ( _waitHeader( timeout ))
   {
     short temp[24];
-    for (int i = 0; i < 24 ; i++)
+    for (int i = 0; i < NSENS ; i++)
     {
       temp[i] = _readShort();
     }
@@ -228,7 +228,7 @@ bool DHProtocol::waitData( int timeout)
     // verifico il finale
     if ( _readByte() == '$')
     {
-      for (int i = 0; i < 24 ; i++)
+      for (int i = 0; i < NSENS ; i++)
       {
         sensor[i] = temp[i];
         OUT( sensor[i] );
@@ -240,7 +240,7 @@ bool DHProtocol::waitData( int timeout)
     }
     else
     { 
-	for (int i = 0; i < 24 ; i++)
+	for (int i = 0; i < NSENS ; i++)
 	      {
 		OUT( sensor[i] );
 		OUT(",");
@@ -250,7 +250,7 @@ bool DHProtocol::waitData( int timeout)
   else if ( millis() - lastRecived > 60000)
   {
     OUT(" Timeout ");
-    for (int i = 0; i < 24 ; i++)
+    for (int i = 0; i < NSENS ; i++)
     {
       sensor[i] = 0; 
     }
