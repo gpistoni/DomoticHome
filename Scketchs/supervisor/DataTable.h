@@ -63,6 +63,7 @@ class cDataTable
     cFloat tReturnFloor;
     cFloat tInletFloor;
     cFloat tExternal;
+    cFloat lightExternal;
 
     // terminal 5
     cBool evCameraM1;
@@ -131,6 +132,7 @@ class cDataTable
       webVar[44] = tReturnFloor.setup      ( T4, 4, "tReturnFloor");
       webVar[45] = tInletFloor.setup       ( T4, 5, "tInletFloor");
       webVar[46] = tExternal.setup         ( T4, 6, "tExternal");
+      webVar[47] = lightExternal.setup     ( T4, 8, "lightExternal");
 
       webVar[50] = evCameraM1.setup        ( T5, 0, "evCameraM1");
       webVar[51] = evCameraM2.setup        ( T5, 1, "evCameraM2");
@@ -216,6 +218,7 @@ class cDataTable
       tReturnFloor.update( strs );
       tInletFloor.update( strs );
       tExternal.update( strs );
+      lightExternal.update( strs );
     };
 
     void UpdateT5( String strs)

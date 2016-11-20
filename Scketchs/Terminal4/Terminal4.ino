@@ -22,9 +22,9 @@ void setup()
   Serial.begin(9600);                       // disabilito le seriali 
   Serial.println( "Setup-slave-" );
   delay(100);
-  Slave.setup(2, 0, &mySerial);     		// Terminal ID
+  Slave.setup(4, 0, &mySerial);     		// Terminal ID
   Serial.println( "Setup-probes" );
-  Probes.setup(2,3,4,5,6,7,8);        	// 4 temp
+  Probes.setup(2,3,4,5,6,7,8,9);        	// 4 temp
 
   Serial.println( "Setup Complete-- SLAVE ID: " );
   Serial.print( Slave.m_id );
@@ -41,8 +41,8 @@ void loop()
   }
   
 /*******************************************************************************/
-  unsigned long now = millis();               // Terminal ID
-  if ( now - old_Read >= 10000)              //leggo probe ogni 10 secondi
+  unsigned long now = millis();              // Terminal ID
+  if ( now - old_Read >= 10000)              // leggo probe ogni 10 secondi
   {
     old_Read = now;
 
@@ -52,17 +52,15 @@ void loop()
     {
       Slave.sensor[i] = Probes.t[i] * 10;
     
-      Serial.println( "");
       Serial.print( "Probe:" );
-      Serial.print( Slave.sensor[i] );
+      Serial.println( Slave.sensor[i] );
      }
 
      int sensorA0 = analogRead(A0);
-     Slave.sensor[7]= sensorA0;
+     Slave.sensor[8]= sensorA0;
 
-     Serial.println( "");
      Serial.print( "Probe A0:" );
-     Serial.print( Slave.sensor[7] );
+     Serial.print( Slave.sensor[0] );
     
   }
   /*****************************************************************************/

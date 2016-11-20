@@ -167,20 +167,29 @@ void S_header( WiFiClient &client)
   //***************************************************************************************************************/
 }
 
-void S_page0( WiFiClient &client)
+String Menu()
 {
   String page;
   //***************************************************************************************************************/
-  page =  "<h2> Programmi | <a href=page1> Stanze </a> | <a href=page2> Attuatori </a></h2>"
-          "<table>"
-          "<tbody>"
-          "<tr>"
-          "<th>Stanze"
-          "<th>Stato"
-          "<th>Forzato"
-          "</tr>";
+  page =  "<h2><a href=page0> Programmi </a> | <a href=page1> Stanze </a> | <a href=page2> Attuatori </a> | <a href=page3> Caldaia </a></h2>";
+}
+
+
+void S_page0( WiFiClient &client)
+{
+  String page = Menu();
+  //***************************************************************************************************************/
+  page +=  "<h2> Programmi | <a href=page1> Stanze </a> | <a href=page2> Attuatori </a></h2>"
+           "\n<h1> Programmi </h1>"
+           "<table>"
+           "<tbody>"
+           "<tr>"
+           "<th>Stanze"
+           "<th>Stato"
+           "<th>Forzato"
+           "</tr>";
   client.println(page);
-  
+
   //***************************************************************************************************************/
   for (int i = 90; i < 96; i++)
   {
@@ -192,7 +201,7 @@ void S_page0( WiFiClient &client)
     client.println(page);
   }
   //***************************************************************************************************************/
- 
+
   page =  "</tbody>"
           "</table>"  ;
   client.println(page);
