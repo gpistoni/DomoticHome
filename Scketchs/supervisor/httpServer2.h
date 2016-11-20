@@ -171,7 +171,14 @@ String Menu()
 {
   String page;
   //***************************************************************************************************************/
-  page =  "<h2><a href=page0> Programmi </a> | <a href=page1> Stanze </a> | <a href=page2> Attuatori </a> | <a href=page3> Caldaia </a></h2>";
+  page = "<h3><a href=page0> Programmi </a> |"
+          "<a href=page1> Stanze </a> |"
+          "<a href=page2> Attuatori </a> |"
+          "<a href=page3> Caldaia </a> |"
+          "<a href=page4> Log </a> |"
+          "<a href=page5> Json </a> |"
+          "</h3>";
+  return page;
 }
 
 
@@ -179,8 +186,7 @@ void S_page0( WiFiClient &client)
 {
   String page = Menu();
   //***************************************************************************************************************/
-  page +=  "<h2> Programmi | <a href=page1> Stanze </a> | <a href=page2> Attuatori </a></h2>"
-           "\n<h1> Programmi </h1>"
+  page +=  "\n<h2> Programmi </h1>"
            "<table>"
            "<tbody>"
            "<tr>"
@@ -191,14 +197,17 @@ void S_page0( WiFiClient &client)
   client.println(page);
 
   //***************************************************************************************************************/
-  for (int i = 90; i < 96; i++)
+  for (int i = 90; i < 99; i++)
   {
+    if ( DT.webVar[i] )
+    {
     page = "\n<tr>";
     page += DT.webVar[i]->td_descr();
     page += DT.webVar[i]->td_bulb();
     page += DT.webVar[i]->td_star();
     page += "</tr>";
     client.println(page);
+  }
   }
   //***************************************************************************************************************/
 
@@ -210,10 +219,9 @@ void S_page0( WiFiClient &client)
 
 void S_page1( WiFiClient &client)
 {
-  String page;
-  //***************************************************************************************************************/
-  page =  "<h2><a href=page0> Programmi </a> | <a href=page2> Attuatori </a> | <a href=page3> Caldaia </a></h2>"
-          "\n<h1> Stanze </h1>"
+  String page = Menu();
+  /***************************************************************************************************************/
+  page =  "\n<h1> Stanze </h1>"
           "<table>"
           "<tbody>"
           "<tr>"
@@ -262,10 +270,9 @@ void S_page1( WiFiClient &client)
 
 void S_page2( WiFiClient &client)
 {
-  String page;
+  String page = Menu();
   //***************************************************************************************************************/
-  page =  "<h2><a href=page1> Stanze </a> | <a href=page3> Caldaia </a> | <a href=page4> Log </a></h2>"
-          "\n<h1> Attuatori Pavimento </h1>"
+  page =  "\n<h1> Attuatori Pavimento </h1>"
           "<table>"
           "<tbody>"
           "<tr>"
@@ -281,13 +288,13 @@ void S_page2( WiFiClient &client)
   else
     page += DT.rPompaPianoPrimo.td_bulb();
   page += "</tr>";
-  for (int i = 0; i < 10; i++)
+  for (int i = 50; i < 60; i++)
   {
-    if (DT.webVar[50 + i])
+    if (DT.webVar[i])
     {
       page += "\n<tr>";
-      page += DT.webVar[50 + i]->td_descr();
-      page += DT.webVar[50 + i]->td_bulb();
+      page += DT.webVar[i]->td_descr();
+      page += DT.webVar[i]->td_bulb();
       page += "</tr>";
     }
   }
@@ -307,15 +314,15 @@ void S_page2( WiFiClient &client)
   client.println(page);
   //***************************************************************************************************************/
   page = "";
-  for (int i = 0; i < 10; i++)
+  for (int i = 30; i < 40; i++)
   {
-    if (DT.webVar[30 + i])
+    if (DT.webVar[i])
     {
       page += "\n<tr>";
-      page += DT.webVar[30 + i]->td_descr();
-      page += DT.webVar[30 + i]->td_bulb();
-      if ( DT.webVar[30 + i] )
-        page += DT.webVar[30 + i]->td_star();
+      page += DT.webVar[i]->td_descr();
+      page += DT.webVar[i]->td_bulb();
+      if ( DT.webVar[i] )
+        page += DT.webVar[i]->td_star();
       page += "</tr>";
     }
   }
@@ -327,10 +334,9 @@ void S_page2( WiFiClient &client)
 
 void S_page3( WiFiClient &client)
 {
-  String page;
+  String page = Menu();
   //***************************************************************************************************************/
-  page += "<h2><a href=page2> Attuatori </a> | <a href=page4> Log </a> | <a href=page5>Json</a></h2>"
-          "\n<h1> Caldaia </h1>"
+  page += "\n<h1> Caldaia </h1>"
           "<table>"
           "<tbody>"
           "<tr>"
@@ -340,13 +346,13 @@ void S_page3( WiFiClient &client)
   client.println(page);
   //***************************************************************************************************************/
   page = "";
-  for (int i = 0; i < 10; i++)
+  for (int i = 40; i < 50; i++)
   {
-    if (DT.webVar[40 + i])
+    if (DT.webVar[i])
     {
       page += "\n<tr>";
-      page += DT.webVar[40 + i]->td_descr();
-      page += DT.webVar[40 + i]->td_valueF();
+      page += DT.webVar[i]->td_descr();
+      page += DT.webVar[i]->td_valueF();
       page += "</tr>";
     }
   }
@@ -358,22 +364,22 @@ void S_page3( WiFiClient &client)
 
 void S_page4( WiFiClient& client)
 {
-  String page;
-  page = "<h2><a href=page3><<--</a>|<a href=page5>Json</a></h2>"
-         "\n<h1> Log </h1>";
+  String page  = Menu();
+  page = "\n<h1> Log </h1>";
+
   client.println(page);
   //***************************************************************************************************************/
   for (int i = 0; i < 60; i++)
     client.println( DT.m_log.get(i) + "<br>" );
 
-  //json.prettyPrintTo(client);
 }
 
 void S_page5( WiFiClient& client, JsonObject& json)
 {
-  String page;
-  page = "<h2><a href=page4> Log </a>|</h2>"
-         "\n<h1> Json </h1>";
+  String page  = Menu();
+
+  page = "\n<h1> Json </h1>";
+  
   client.println(page);
   //***************************************************************************************************************/
 

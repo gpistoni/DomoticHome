@@ -190,6 +190,10 @@ class cDataTable
       thBagno.update( strs );
     };
 
+    void UpdateT2( String strs )
+    {      
+    };
+    
     void UpdateT3( String strs )
     {
       Serial.print( "T3: " );
@@ -235,7 +239,16 @@ class cDataTable
       evCameraD1.update( strs );
       evCameraD2.update( strs );
     };
+    
+    void UpdateT6( String strs )
+    {      
+    };
 
+    void UpdateT7( String strs )
+    {      
+    };
+
+    
     void setPars( String &label, String &value)
     {
       for ( int i = 0; i < 100; i++ )
