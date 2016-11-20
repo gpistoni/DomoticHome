@@ -26,7 +26,6 @@ void setup()
   Serial.begin(9600);
   Serial.print( "Setup-- SLAVE ID: " );
   Serial.print( Slave.m_id );
-  
 }
 
 unsigned long old_ReadHDT = 0;
@@ -40,7 +39,7 @@ void loop()
   
 /*******************************************************************************/
   unsigned long now = millis();               // Terminal ID
-  if ( now - old_ReadHDT >= 6000)  //leggo probe ogni 2 secondi
+  if ( now - old_ReadHDT >= 6000)             // leggo probe ogni 2 secondi
   {
     old_ReadHDT = now;
 
@@ -54,25 +53,23 @@ void loop()
       if (SensorsHDT.h[i]>0)
         Slave.sensor[8+i] = Slave.sensor[8+i]* 0.9 + SensorsHDT.h[i];
       if (SensorsHDT.hic[i]>0)
-        Slave.sensor[16+i] = Slave.sensor[16+i] * 0.9 + SensorsHDT.t[i];
-
+        Slave.sensor[16+i] = Slave.sensor[16+i] * 0.9 + SensorsHDT.hic[i];
 
       Serial.println("");
       Serial.print( i );
-      Serial.print( " - H:" );
-      Serial.print( SensorsHDT.h[i] );
-      Serial.print( " \tT:" );
+      Serial.print( " - T:" );
       Serial.print( SensorsHDT.t[i] );
-      Serial.print( " \tTp:" );
+      Serial.print( " H:" );
+      Serial.print( SensorsHDT.h[i] );
+      Serial.print( " Tp:" );
       Serial.print( SensorsHDT.hic[i] );
 
-      Serial.print( " - H:" );
+      Serial.print( " \t- T:" );
       Serial.print( Slave.sensor[i] );
-      Serial.print( "\tT:" );
+      Serial.print( " H:" );
       Serial.print( Slave.sensor[8+i] );
-      Serial.print( "\tTp:" );
-      Serial.print( Slave.sensor[8+i] );
-
+      Serial.print( " Tp:" );
+      Serial.print( Slave.sensor[16+i] );
     }
   }
   

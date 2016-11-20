@@ -1,7 +1,8 @@
+#define LOG_LEN 100
 
 class BufferString
 {
-    String m_queue[60];
+    String m_queue[LOG_LEN];
     unsigned int index;
 
   public:
@@ -21,17 +22,17 @@ class BufferString
         Serial.println(dataString);
         m_queue[index] = dataString + "\n";
         index++;
-        if (index >= 60) index = 0;
+        if (index >= LOG_LEN) index = 0;
       }
     }
 
-    String get( )
+    String getHTML( )
     {
       String str;
-      for (int i = index; i < 60; i++)
-        str += m_queue[i];
-      for (int i = 0; i < index; i++)
-        str += m_queue[i];
+      for (int i = index-1; i>=0; i--)
+        str += m_queue[i] + "<br>";
+       for (int i = LOG_LEN-1; i>index; i--)
+        str += m_queue[i] + "<br>";
       return str;
     }
 

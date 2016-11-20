@@ -5,7 +5,7 @@
 class cDataTable
 {
   public:
-    cBool progBoilerSanitaria;
+    cBool progBoilerACS;
     cBool progSummerAC;
     cBool progWinterFIRE;
     cBool progWinterPDC;
@@ -40,6 +40,7 @@ class cDataTable
     cFloat thBagno;
     cFloat thLavanderia;
 
+     // terminal 2
     cBool lightCorner;
     cBool lightSide;
     cBool lightLamp;
@@ -52,7 +53,7 @@ class cDataTable
     cBool rPdcNightMode;
     cBool rPompaPianoPrimo;
     cBool rPompaPianoTerra;
-    cBool rBoilerSanitaria;
+    cBool rBoilerACS;
     cBool rPompaCamino;
 
     // terminal 4
@@ -110,10 +111,10 @@ class cDataTable
       webVar[16 + 4] = thCameraM.setup      ( T1, 16 + 4, "thCameraM", 18);
       webVar[16 + 5] = thBagno.setup        ( T1, 16 + 5, "thBagno",   22);
 
-      webVar[20] = lightCorner.setup       ( T2, 0, "LuciAngoli");
+      webVar[20] = lightCorner.setup        ( T2, 0, "LuciAngoli");
       webVar[21] = lightSide.setup          ( T2, 1, "LuciLati");
-      webVar[22] = lightLamp.setup         ( T2, 2, "Lampione");
-      webVar[23] = lightExtra.setup     ( T3, 3, "Altro");
+      webVar[22] = lightLamp.setup          ( T2, 2, "Lampione");
+      webVar[23] = lightExtra.setup         ( T3, 3, "Altro");
 
       webVar[30] = rPdc.setup              ( T3, 0, "PDC");
       webVar[31] = rPdcHeat.setup          ( T3, 1, "PdcHeat");
@@ -122,8 +123,8 @@ class cDataTable
 
       webVar[34] = rPompaPianoPrimo.setup  ( T3, 4, "PompaPianoPrimo");
       webVar[35] = rPompaPianoTerra.setup  ( T3, 5, "PompaPianoTerra");
-      webVar[36] = rBoilerSanitaria.setup  ( T3, 6, "BoilerSanitaria");
-      webVar[36] = rPompaCamino.setup      ( T3, 7, "PompaCamino");
+      webVar[36] = rBoilerACS.setup  ( T3, 6, "BoilerACS");
+      webVar[37] = rPompaCamino.setup      ( T3, 7, "PompaCamino");
 
       webVar[40] = tPufferHi.setup         ( T4, 0, "tPufferHi");
       webVar[41] = tPufferLow.setup        ( T4, 1, "tPufferLow");
@@ -143,8 +144,8 @@ class cDataTable
       webVar[56] = evCameraD1.setup        ( T5, 6, "evCameraD1");
       webVar[57] = evCameraD2.setup        ( T5, 7, "evCameraD2");
 
-      webVar[90] = progBoilerSanitaria.setup ( PROG, 0, "progBoilerSanitaria");
-      progBoilerSanitaria.set(0);
+      webVar[90] = progBoilerACS.setup ( PROG, 0, "progBoilerACS");
+      progBoilerACS.set(0);
 
       webVar[91] = progSummerAC.setup ( PROG, 0, "progSummerAC");
       progSummerAC.set(0);
@@ -167,6 +168,7 @@ class cDataTable
     {
       Serial.print( "T1: " );
       Serial.println( strs);
+      //m_log.add("Readed T1:" + strs); 
 
       tCucina.update( strs );
       tSala.update( strs );
@@ -206,7 +208,7 @@ class cDataTable
 
       rPompaPianoPrimo.update( strs );
       rPompaPianoTerra.update( strs );
-      rBoilerSanitaria.update( strs );
+      rBoilerACS.update( strs );
       rPompaCamino.update( strs );
     };
 
