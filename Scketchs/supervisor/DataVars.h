@@ -133,6 +133,7 @@ class cFloat: public cVar
       float fval = strValueD(stringlist, ',', m_s);
       fval += m_adjust;
       m_value = fval;
+      
       //Serial.print(m_value);
       //Serial.println(m_descr);
     }

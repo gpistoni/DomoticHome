@@ -26,12 +26,18 @@ class BufferString
       }
     }
 
-    String getHTML( )
+    String getHTML1( )
     {
       String str;
-      for (int i = index-1; i>=0; i--)
+      for (int i = index - 1; i >= 0; i--)
         str += m_queue[i] + "<br>";
-       for (int i = LOG_LEN-1; i>index; i--)
+      return str;
+    }
+
+    String getHTML2( )
+    {
+      String str;
+      for (int i = LOG_LEN - 1; i > index; i--)
         str += m_queue[i] + "<br>";
       return str;
     }

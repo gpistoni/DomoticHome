@@ -252,9 +252,8 @@ void S_page1( WiFiClient &client)
 
       page += DT.webVar[i]->td_setpointF();
 
-      String req_m = DT.webVar[ i]->descrSetPoint() + "=" + String(DT.webVar[ i]->setPoint() - 0.5 );
+      String req_m = DT.webVar[ i]->descrSetPoint() + "=" + String(DT.webVar[i]->setPoint() - 0.5 );
       page += "<td><button onclick='myButton(\"" + req_m + "\")'> DW </td>";
-
       page += "</tr>";
     }
   }
@@ -395,7 +394,9 @@ void S_page4( WiFiClient& client)
   page += "\n<h1> Log </h1>";
 
   client.println(page);
-  client.println( DT.m_log.getHTML() );
+  client.println( DT.m_log.getHTML1() );
+  client.println( DT.m_log.getHTML2() );
+
   //***************************************************************************************************************/
 }
 

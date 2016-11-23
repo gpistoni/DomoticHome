@@ -40,11 +40,11 @@ class cDataTable
     cFloat thBagno;
     cFloat thLavanderia;
 
-     // terminal 2
+    // terminal 2
     cBool lightCorner;
     cBool lightSide;
     cBool lightLamp;
-    cBool lightExtra; 
+    cBool lightExtra;
 
     // terminal 3
     cBool rPdc;
@@ -93,9 +93,10 @@ class cDataTable
       webVar[5] = tBagno.setup            ( T1, 5, "tBagno",   22);
       tCucina.setAdjust(-0.5);
       tSala.setAdjust(1.5);
-      tBagno.setAdjust(2);
+      tCameraS.setAdjust(0);
       tCameraD.setAdjust(1);
       tCameraM.setAdjust(1);
+      tBagno.setAdjust(2);
 
       webVar[8 + 0] = hCucina.setup         ( T1, 8 + 0, "hCucina"  );
       webVar[8 + 1] = hSala.setup           ( T1, 8 + 1, "hSala"    );
@@ -116,59 +117,47 @@ class cDataTable
       webVar[22] = lightLamp.setup          ( T2, 2, "Lampione");
       webVar[23] = lightExtra.setup         ( T3, 3, "Altro");
 
-      webVar[30] = rPdc.setup              ( T3, 0, "PDC");
-      webVar[31] = rPdcHeat.setup          ( T3, 1, "PdcHeat");
-      webVar[32] = rPdcPompa.setup         ( T3, 2, "PdcPompa");
-      webVar[33] = rPdcNightMode.setup     ( T3, 3, "PdcNightMode");
+      webVar[30] = rPdc.setup               ( T3, 0, "PDC");
+      webVar[31] = rPdcHeat.setup           ( T3, 1, "PdcHeat");
+      webVar[32] = rPdcPompa.setup          ( T3, 2, "PdcPompa");
+      webVar[33] = rPdcNightMode.setup      ( T3, 3, "PdcNightMode");
 
-      webVar[34] = rPompaPianoPrimo.setup  ( T3, 4, "PompaPianoPrimo");
-      webVar[35] = rPompaPianoTerra.setup  ( T3, 5, "PompaPianoTerra");
-      webVar[36] = rBoilerACS.setup  ( T3, 6, "BoilerACS");
-      webVar[37] = rPompaCamino.setup      ( T3, 7, "PompaCamino");
+      webVar[34] = rPompaPianoPrimo.setup   ( T3, 4, "PompaPianoPrimo");
+      webVar[35] = rPompaPianoTerra.setup   ( T3, 5, "PompaPianoTerra");
+      webVar[36] = rBoilerACS.setup         ( T3, 6, "BoilerACS");
+      webVar[37] = rPompaCamino.setup       ( T3, 7, "PompaCamino");
 
-      webVar[40] = tPufferHi.setup         ( T4, 0, "tPufferHi");
-      webVar[41] = tPufferLow.setup        ( T4, 1, "tPufferLow");
-      webVar[42] = tInputMixer.setup       ( T4, 2, "tInputMixer");
-      webVar[43] = tReturnFireplace.setup  ( T4, 3, "tReturnFireplace");
-      webVar[44] = tReturnFloor.setup      ( T4, 4, "tReturnFloor");
-      webVar[45] = tInletFloor.setup       ( T4, 5, "tInletFloor");
-      webVar[46] = tExternal.setup         ( T4, 6, "tExternal");
-      webVar[47] = lightExternal.setup     ( T4, 8, "lightExternal");
+      webVar[40] = tPufferHi.setup          ( T4, 0, "tPufferHi");
+      webVar[41] = tPufferLow.setup         ( T4, 1, "tPufferLow");
+      webVar[42] = tInputMixer.setup        ( T4, 2, "tInputMixer");
+      webVar[43] = tReturnFireplace.setup   ( T4, 3, "tReturnFireplace");
+      webVar[44] = tReturnFloor.setup       ( T4, 4, "tReturnFloor");
+      webVar[45] = tInletFloor.setup        ( T4, 5, "tInletFloor");
+      webVar[46] = tExternal.setup          ( T4, 6, "tExternal");
+      webVar[47] = lightExternal.setup      ( T4, 8, "lightExternal");
 
-      webVar[50] = evCameraM1.setup        ( T5, 0, "evCameraM1");
-      webVar[51] = evCameraM2.setup        ( T5, 1, "evCameraM2");
-      webVar[52] = evCucina.setup          ( T5, 2, "evCucina");
-      webVar[53] = evSala1.setup           ( T5, 3, "evSala1");
-      webVar[54] = evSala2.setup           ( T5, 4, "evSala2");
-      webVar[55] = evCameraS.setup         ( T5, 5, "evCameraS");
-      webVar[56] = evCameraD1.setup        ( T5, 6, "evCameraD1");
-      webVar[57] = evCameraD2.setup        ( T5, 7, "evCameraD2");
+      webVar[50] = evCameraM1.setup         ( T5, 0, "evCameraM1");
+      webVar[51] = evCameraM2.setup         ( T5, 1, "evCameraM2");
+      webVar[52] = evCucina.setup           ( T5, 2, "evCucina");
+      webVar[53] = evSala1.setup            ( T5, 3, "evSala1");
+      webVar[54] = evSala2.setup            ( T5, 4, "evSala2");
+      webVar[55] = evCameraS.setup          ( T5, 5, "evCameraS");
+      webVar[56] = evCameraD1.setup         ( T5, 6, "evCameraD1");
+      webVar[57] = evCameraD2.setup         ( T5, 7, "evCameraD2");
 
-      webVar[90] = progBoilerACS.setup ( PROG, 0, "progBoilerACS");
-      progBoilerACS.set(0);
-
-      webVar[91] = progSummerAC.setup ( PROG, 0, "progSummerAC");
-      progSummerAC.set(0);
-
-      webVar[92] = progWinterFIRE.setup ( PROG, 0, "progWinterFIRE");
-      progWinterFIRE.set(0);
-
-      webVar[93] = progWinterPDC.setup ( PROG, 0, "progWinterPDC");
-      progWinterPDC.set(0);
-
-      webVar[94] = progAllRooms.setup ( PROG, 0, "progAllRooms");
-      progAllRooms.set(0);
-
-      webVar[95] = prog5.setup ( PROG, 0, "prog5");
-      prog5.set(0);
+      webVar[90] = progBoilerACS.setup      ( PROG, 0, "progBoilerACS");
+      webVar[91] = progSummerAC.setup       ( PROG, 0, "progSummerAC");
+      webVar[92] = progWinterFIRE.setup     ( PROG, 0, "progWinterFIRE");
+      webVar[93] = progWinterPDC.setup      ( PROG, 0, "progWinterPDC");
+      webVar[94] = progAllRooms.setup       ( PROG, 0, "progAllRooms");
+      webVar[95] = prog5.setup              ( PROG, 0, "prog5");
 
     };
 
     void UpdateT1( String strs )
     {
-      Serial.print( "T1: " );
-      Serial.println( strs);
-      //m_log.add("Readed T1:" + strs); 
+      m_log.add("**T1** ");
+      m_log.add(strs);
 
       tCucina.update( strs );
       tSala.update( strs );
@@ -193,13 +182,15 @@ class cDataTable
     };
 
     void UpdateT2( String strs )
-    {      
+    {
+      m_log.add("**T2** ");
+      m_log.add(strs);
     };
-    
+
     void UpdateT3( String strs )
     {
-      Serial.print( "T3: " );
-      Serial.println( strs);
+      m_log.add("**T3** ");
+      m_log.add(strs);
 
       rPdc.update( strs );
       rPdcHeat.update( strs );
@@ -214,8 +205,8 @@ class cDataTable
 
     void UpdateT4( String strs)
     {
-      Serial.print( "T4: " );
-      Serial.println( strs);
+      m_log.add("**T4** ");
+      m_log.add(strs);
 
       tPufferHi.update( strs );
       tPufferLow.update( strs );
@@ -229,8 +220,8 @@ class cDataTable
 
     void UpdateT5( String strs)
     {
-      Serial.print( "T5: " );
-      Serial.println( strs);
+      m_log.add("**T5** ");
+      m_log.add(strs);
 
       evCameraM1.update( strs );
       evCameraM2.update( strs );
@@ -241,16 +232,20 @@ class cDataTable
       evCameraD1.update( strs );
       evCameraD2.update( strs );
     };
-    
+
     void UpdateT6( String strs )
-    {      
+    {
+      m_log.add("**T6** ");
+      m_log.add(strs);
     };
 
     void UpdateT7( String strs )
-    {      
+    {
+      m_log.add("**T7** ");
+      m_log.add(strs);
     };
 
-    
+
     void setPars( String &label, String &value)
     {
       for ( int i = 0; i < 100; i++ )
