@@ -192,15 +192,15 @@ class cDataTable
       m_log.add("**T3** ");
       m_log.add(strs);
 
-      rPdc.update( strs );
-      rPdcHeat.update( strs );
-      rPdcPompa.update( strs );
-      rPdcNightMode.update( strs );
+      //rPdc.update( strs );
+      //rPdcHeat.update( strs );
+      //rPdcPompa.update( strs );
+      //rPdcNightMode.update( strs );
 
-      rPompaPianoPrimo.update( strs );
-      rPompaPianoTerra.update( strs );
-      rBoilerACS.update( strs );
-      rPompaCamino.update( strs );
+      //rPompaPianoPrimo.update( strs );
+      //rPompaPianoTerra.update( strs );
+      //rBoilerACS.update( strs );
+      //rPompaCamino.update( strs );
     };
 
     void UpdateT4( String strs)
@@ -223,14 +223,14 @@ class cDataTable
       m_log.add("**T5** ");
       m_log.add(strs);
 
-      evCameraM1.update( strs );
-      evCameraM2.update( strs );
-      evCucina.update( strs );
-      evSala1.update( strs );
-      evSala2.update( strs );
-      evCameraS.update( strs );
-      evCameraD1.update( strs );
-      evCameraD2.update( strs );
+      //evCameraM1.update( strs );
+      //evCameraM2.update( strs );
+      //evCucina.update( strs );
+      //evSala1.update( strs );
+      //evSala2.update( strs );
+      //evCameraS.update( strs );
+      //evCameraD1.update( strs );
+      //evCameraD2.update( strs );
     };
 
     void UpdateT6( String strs )

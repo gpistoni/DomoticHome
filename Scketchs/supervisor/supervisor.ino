@@ -149,13 +149,13 @@ void RollingSendValues( int sec )
   if ( i % nnn == 1 )   DT.rPdcHeat.send(&dhWifi, DT.m_log );
   if ( i % nnn == 2 )   DT.rPdcPompa.send(&dhWifi, DT.m_log );
   if ( i % nnn == 3 )   DT.rPdcNightMode.send(&dhWifi, DT.m_log );
-  if ( i % n == 4 )   DT.rPompaPianoPrimo.send(&dhWifi, DT.m_log );
-  if ( i % n == 5 )   DT.rPompaPianoTerra.send(&dhWifi, DT.m_log );
+  if ( i % n == 4 )     DT.rPompaPianoPrimo.send(&dhWifi, DT.m_log );
+  if ( i % n == 5 )     DT.rPompaPianoTerra.send(&dhWifi, DT.m_log );
   if ( i % nnn == 6 )   DT.rBoilerACS.send(&dhWifi, DT.m_log );
-  if ( i % n == 7 )   DT.rPompaCamino.send(&dhWifi, DT.m_log );
+  if ( i % n == 7 )     DT.rPompaCamino.send(&dhWifi, DT.m_log );
 
-  if ( i % n == 8 )   DT.evCameraM1.send(&dhWifi, DT.m_log );
-  if ( i % n == 9 )   DT.evCameraM2.send(&dhWifi, DT.m_log );
+  if ( i % n == 8 )    DT.evCameraM1.send(&dhWifi, DT.m_log );
+  if ( i % n == 9 )    DT.evCameraM2.send(&dhWifi, DT.m_log );
   if ( i % n == 11 )   DT.evSala1.send(&dhWifi, DT.m_log );
   if ( i % n == 12 )   DT.evSala2.send(&dhWifi, DT.m_log );
   if ( i % n == 13 )   DT.evCucina.send(&dhWifi, DT.m_log );
@@ -212,8 +212,8 @@ void BoilerACS_Manager(int sec)
   static bool boilerACS = false;
   /**************************************************************************************************/
   //decido se accendere il boiler solo di notte e solo se il camino non funziona
-  DT.m_log.add("Condizione Pompa PP:   hour:" + String( hour() ) + " tReturnFireplace: " + String( DT.tReturnFireplace ) );
-  if ( hour() < 7 &&  DT.tReturnFireplace < 30  + 5 * DT.rBoilerACS ) //isteresi
+  DT.m_log.add("Condizione BoilerACS:   hour:" + String( hour() ) + " tReturnFireplace: " + String( DT.tReturnFireplace ) );
+  if ( hour() < 7 && DT.tReturnFireplace < 30  + 5 * DT.rBoilerACS )                //isteresi
   {
     boilerACS = true;
   }
@@ -363,7 +363,7 @@ void Winter_Manager( int sec )
   //////////////////////////////////////////////////////////////////////////////////
   bool needPCamino = false;
   DT.m_log.add("Condizione Pompa Camino: tReturnFireplace " + String(DT.tReturnFireplace) + " - " + "tPufferLow " + String(DT.tPufferLow) );
-  if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 35 && DT.tReturnFireplace > DT.tPufferLow + 4 )
+  if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 35 && DT.tReturnFireplace > DT.tPufferLow + 3 )
   {
     needPCamino = true;
   }
