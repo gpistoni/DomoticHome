@@ -1,6 +1,6 @@
 // MODULO 02
 // luci esterne
-// rev: 10 nov 2016
+// rev 4 dic 2016
 
 #include <dhprotocol.h>
 
@@ -16,11 +16,13 @@ void setup()
 {
   Slave.setup(2, 0, &mySerial);     // Terminal ID
 
-  pinMode(2, OUTPUT);     // 2-5 relay.
-  pinMode(3, OUTPUT);
-  pinMode(4, OUTPUT);
-  pinMode(5, OUTPUT);
+  for (int i = 0; i < 8; i++)   // 2-10 relay.
+  {
+    pinMode(2 + i, OUTPUT);
+    digitalWrite(2 + i, 1);
+  }
   
+  Serial.begin(9600);
   Serial.print( "Setup-- SLAVE ID: " );
   Serial.print( Slave.m_id );
 }
@@ -28,15 +30,15 @@ void setup()
 bool b;
 
 void loop()
-{  
+{
   /*******************************************************************************/
   if ( Slave.waitRequest(50) )
   {
     Slave.relay[0] = !Slave.relay[0];
-     
+
     Serial.print( "\nSet Relay: " );
 
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 8; i++)
     {
       Slave.sensor[i] = Slave.relay[i];
       digitalWrite(2 + i, !Slave.relay[i] );
@@ -44,6 +46,6 @@ void loop()
       Serial.print( Slave.relay[i] );
     }
     Slave.sendData();
-  } 
+  }
 };
 
