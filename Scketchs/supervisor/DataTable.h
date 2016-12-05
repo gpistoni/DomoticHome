@@ -10,7 +10,7 @@ class cDataTable
     cBool progWinterFIRE;
     cBool progWinterPDC;
     cBool progAllRooms;
-    cBool prog5;
+    cBool progExternalLight;
 
     enum { PROG = -1, T0 = 0, T1 = 1, T2 = 2, T3 = 3, T4 = 4, T5 = 5, T6 = 6, T7 = 7 };
 
@@ -150,7 +150,7 @@ class cDataTable
       webVar[92] = progWinterFIRE.setup     ( PROG, 0, "progWinterFIRE");
       webVar[93] = progWinterPDC.setup      ( PROG, 0, "progWinterPDC");
       webVar[94] = progAllRooms.setup       ( PROG, 0, "progAllRooms");
-      webVar[95] = prog5.setup              ( PROG, 0, "prog5");
+      webVar[95] = progExternalLight.setup  ( PROG, 0, "progExternalLight");
 
     };
 
