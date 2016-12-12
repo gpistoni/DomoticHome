@@ -115,13 +115,12 @@ class cDataTable
       webVar[20] = lightCorner.setup        ( T2, 0, "LuciAngoli");
       webVar[21] = lightSide.setup          ( T2, 1, "LuciLati");
       webVar[22] = lightLamp.setup          ( T2, 2, "Lampione");
-      webVar[23] = lightExtra.setup         ( T3, 3, "Altro");
+      webVar[23] = lightExtra.setup         ( T2, 3, "Altro");
 
       webVar[30] = rPdc.setup               ( T3, 0, "PDC");
       webVar[31] = rPdcHeat.setup           ( T3, 1, "PdcHeat");
       webVar[32] = rPdcPompa.setup          ( T3, 2, "PdcPompa");
       webVar[33] = rPdcNightMode.setup      ( T3, 3, "PdcNightMode");
-
       webVar[34] = rPompaPianoPrimo.setup   ( T3, 4, "PompaPianoPrimo");
       webVar[35] = rPompaPianoTerra.setup   ( T3, 5, "PompaPianoTerra");
       webVar[36] = rBoilerACS.setup         ( T3, 6, "BoilerACS");
@@ -156,7 +155,7 @@ class cDataTable
 
     void UpdateT1( String strs )
     {
-      m_log.add("**T1** ");
+      m_log.add("**T1-Stanze** ");
       m_log.add(strs);
 
       tCucina.update( strs );
@@ -183,29 +182,19 @@ class cDataTable
 
     void UpdateT2( String strs )
     {
-      m_log.add("**T2** ");
+      m_log.add("**T2-Luci** ");
       m_log.add(strs);
     };
 
     void UpdateT3( String strs )
     {
-      m_log.add("**T3** ");
+      m_log.add("**T3-Caldaia** ");
       m_log.add(strs);
-
-      //rPdc.update( strs );
-      //rPdcHeat.update( strs );
-      //rPdcPompa.update( strs );
-      //rPdcNightMode.update( strs );
-
-      //rPompaPianoPrimo.update( strs );
-      //rPompaPianoTerra.update( strs );
-      //rBoilerACS.update( strs );
-      //rPompaCamino.update( strs );
     };
 
     void UpdateT4( String strs)
     {
-      m_log.add("**T4** ");
+      m_log.add("**T4-TCaldaia** ");
       m_log.add(strs);
 
       tPufferHi.update( strs );
@@ -220,17 +209,8 @@ class cDataTable
 
     void UpdateT5( String strs)
     {
-      m_log.add("**T5** ");
+      m_log.add("**T5-EvStanze** ");
       m_log.add(strs);
-
-      //evCameraM1.update( strs );
-      //evCameraM2.update( strs );
-      //evCucina.update( strs );
-      //evSala1.update( strs );
-      //evSala2.update( strs );
-      //evCameraS.update( strs );
-      //evCameraD1.update( strs );
-      //evCameraD2.update( strs );
     };
 
     void UpdateT6( String strs )

@@ -77,8 +77,6 @@ void loop()
     return;
   }
 
-  RollingSendValues( 2 );
-  RollingUpdateTerminals( 15 );
   digitalWrite(ACT, 0);
 
   DT.progBoilerACS.manualCheck();
@@ -95,6 +93,9 @@ void loop()
   if (DT.progSummerAC)                               Summer_Manager( 60 );
   if (DT.progWinterFIRE || DT.progWinterPDC)         Winter_Manager( 60 );
   if (DT.progExternalLight)                          ExternalLight_Manager( 60 );
+
+  RollingSendValues( 1 );
+  RollingUpdateTerminals( 15 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,7 +132,7 @@ void RollingSendValues( int sec )
 {
   _CHECK_TIME_;
   static unsigned int i = 0;
-  unsigned int n = 25;
+  unsigned int n = 18;
   unsigned int nnn = 200;
 
   DT.rPdc.manualCheck();
@@ -155,24 +156,24 @@ void RollingSendValues( int sec )
   if ( i % nnn == 10 ) DT.rPdcHeat.send(&dhWifi, DT.m_log );
   if ( i % nnn == 20 ) DT.rPdcPompa.send(&dhWifi, DT.m_log );
   if ( i % nnn == 30 ) DT.rPdcNightMode.send(&dhWifi, DT.m_log );
-  if ( i % n == 4 )    DT.rPompaPianoPrimo.send(&dhWifi, DT.m_log );
-  if ( i % n == 5 )    DT.rPompaPianoTerra.send(&dhWifi, DT.m_log );
+  if ( i % n == 1 )    DT.rPompaPianoPrimo.send(&dhWifi, DT.m_log );
+  if ( i % n == 2 )    DT.rPompaPianoTerra.send(&dhWifi, DT.m_log );
   if ( i % nnn == 60 ) DT.rBoilerACS.send(&dhWifi, DT.m_log );
-  if ( i % n == 7 )    DT.rPompaCamino.send(&dhWifi, DT.m_log );
+  if ( i % n == 3 )    DT.rPompaCamino.send(&dhWifi, DT.m_log );
 
-  if ( i % n == 8 )    DT.evCameraM1.send(&dhWifi, DT.m_log );
-  if ( i % n == 9 )    DT.evCameraM2.send(&dhWifi, DT.m_log );
-  if ( i % n == 11 )   DT.evSala1.send(&dhWifi, DT.m_log );
-  if ( i % n == 12 )   DT.evSala2.send(&dhWifi, DT.m_log );
-  if ( i % n == 13 )   DT.evCucina.send(&dhWifi, DT.m_log );
-  if ( i % n == 14 )   DT.evCameraS.send(&dhWifi, DT.m_log );
-  if ( i % n == 15 )   DT.evCameraD1.send(&dhWifi, DT.m_log );
-  if ( i % n == 16 )   DT.evCameraD2.send(&dhWifi, DT.m_log );
+  if ( i % n == 5 )    DT.evCameraM1.send(&dhWifi, DT.m_log );
+  if ( i % n == 6 )    DT.evCameraM2.send(&dhWifi, DT.m_log );
+  if ( i % n == 7 )   DT.evSala1.send(&dhWifi, DT.m_log );
+  if ( i % n == 8 )   DT.evSala2.send(&dhWifi, DT.m_log );
+  if ( i % n == 9 )   DT.evCucina.send(&dhWifi, DT.m_log );
+  if ( i % n == 10 )   DT.evCameraS.send(&dhWifi, DT.m_log );
+  if ( i % n == 11 )   DT.evCameraD1.send(&dhWifi, DT.m_log );
+  if ( i % n == 12 )   DT.evCameraD2.send(&dhWifi, DT.m_log );
 
-  if ( i % n == 17 )   DT.lightCorner.send(&dhWifi, DT.m_log );
-  if ( i % n == 18 )   DT.lightSide.send(&dhWifi, DT.m_log );
-  if ( i % n == 19 )   DT.lightLamp.send(&dhWifi, DT.m_log );
-  if ( i % n == 20 )   DT.lightExtra.send(&dhWifi, DT.m_log );
+  if ( i % n == 13 )   DT.lightCorner.send(&dhWifi, DT.m_log );
+  if ( i % n == 14 )   DT.lightSide.send(&dhWifi, DT.m_log );
+  if ( i % n == 15 )   DT.lightLamp.send(&dhWifi, DT.m_log );
+  if ( i % n == 16 )   DT.lightExtra.send(&dhWifi, DT.m_log );
 
   i++;
 }
@@ -337,7 +338,7 @@ void Winter_Manager( int sec )
   //////////////////////////////////////////////////////////////////////////////////
   bool needPompa_pp = ( sala || cucina || bagno || cameraS || cameraD || cameraM );
   DT.m_log.add("Condizione Pompa PP: tInputMixer: " + String(DT.tInputMixer) + " tPufferHi: " + String(DT.tPufferHi) + " tReturnFireplace: " + String(DT.tReturnFireplace) );
-  if ( DT.tInputMixer > 25 || DT.tPufferHi > 25 || DT.tReturnFireplace > 25 )
+  if ( DT.tInputMixer > 24 || DT.tPufferHi > 24 || DT.tReturnFireplace > 24 )
   {
     if ( DT.tReturnFloor > 29 && minute() % 5 == 0 ) // ritorno troppo alto - non ne ho bisogno
     {
@@ -350,16 +351,17 @@ void Winter_Manager( int sec )
       needPompa_pp = false;
     }
   }
-  else
-  { // non ho temperatura
+  else // non ho temperatura
+  { 
     needPompa_pp = false;
   }
-  if ( hour() < 5 )
-  { // non ho temperatura
+  
+  if ( hour() < 5 ) // fuori oario
+  { 
     DT.m_log.add("Stop Pompa: orario " + String( hour() ) + " < 5 " );
     needPompa_pp = false;
   }
-  if ( DT.tPufferLow > 55 )   // emergenza
+    if ( DT.tPufferLow > 55 )   // emergenza
   {
     DT.m_log.add("Emergenza tPufferLow > 50 ");
     needPompa_pp = sala = cucina = cameraS = cameraD = cameraM = true;
@@ -444,12 +446,12 @@ void ExternalLight_Manager(int sec)
 
   /**************************************************************************************************/
   // decido se accendere le pompe
-  if ( DT.lightExternal < 10 + 10 * DT.lightSide ) // isteresi
+  if ( DT.lightExternal < (5 + 10 * DT.lightSide) ) // isteresi
   {
     lightSide = true;
+    if (hour() <= 1) lightLamp = true;
+    if (hour() > 18) lightLamp = true;
   }
-  if ( lightSide && hour() < 1) lightLamp = true;
-  if ( lightSide && hour() > 18) lightLamp = true;
   /**************************************************************************************************/
 
   DT.m_log.add("LightSide [" +  String(lightSide) + "] tExternal: " + String(DT.tExternal) + " lightExternal: " + String(DT.lightExternal) );
@@ -459,5 +461,5 @@ void ExternalLight_Manager(int sec)
   DT.lightCorner.set(lightSide);
   DT.lightSide.set(lightSide);
   DT.lightLamp.set(lightLamp);
-  DT.lightExtra.set(0);
+  DT.lightExtra.set(lightLamp);
 }

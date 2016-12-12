@@ -1,4 +1,4 @@
-#define LOG_LEN 100
+#define LOG_LEN 120
 
 class BufferString
 {
