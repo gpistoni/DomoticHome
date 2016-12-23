@@ -225,9 +225,13 @@ void BoilerACS_Manager(int sec)
   /**************************************************************************************************/
   //decido se accendere il boiler solo di notte e solo se il camino non funziona
   DT.m_log.add("Condizione BoilerACS:   hour:" + String( hour() ) + " tReturnFireplace: " + String( DT.tReturnFireplace ) );
-  if ( hour() < 7 && DT.tReturnFireplace < (30  + 5 * DT.rBoilerACS) )                //isteresi
+  if ( hour() < 7 )               
   {
     boilerACS = true;
+  }
+  if ( DT.tReturnFireplace > 25 )         
+  {
+    boilerACS = false;
   }
   /**************************************************************************************************/
   DT.m_log.add("BoilerACS [" + String(boilerACS) + "]");
@@ -352,16 +356,16 @@ void Winter_Manager( int sec )
     }
   }
   else // non ho temperatura
-  { 
+  {
     needPompa_pp = false;
   }
-  
+
   if ( hour() < 5 ) // fuori oario
-  { 
+  {
     DT.m_log.add("Stop Pompa: orario " + String( hour() ) + " < 5 " );
     needPompa_pp = false;
   }
-    if ( DT.tPufferLow > 55 )   // emergenza
+  if ( DT.tPufferLow > 55 )   // emergenza
   {
     DT.m_log.add("Emergenza tPufferLow > 50 ");
     needPompa_pp = sala = cucina = cameraS = cameraD = cameraM = true;
