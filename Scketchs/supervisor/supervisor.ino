@@ -77,8 +77,6 @@ void loop()
     return;
   }
 
-  digitalWrite(ACT, 0);
-
   DT.progBoilerACS.manualCheck();
   DT.progSummerAC.manualCheck();
   DT.progWinterFIRE.manualCheck();
@@ -95,6 +93,7 @@ void loop()
   ExternalLight_Manager( 60 );
 
   RollingSendValues( 1 );
+  digitalWrite(ACT, 0);
   RollingUpdateTerminals( 5 );
 }
 
@@ -285,8 +284,6 @@ void Winter_Manager( int sec )
   _CHECK_TIME_;
   DT.m_log.add("-------------------- Winter_Manager --");
 
-  digitalWrite(ACT, 0);
-
   bool sala = false;
   bool sala2 = false;
   bool cucina = false;
@@ -351,16 +348,18 @@ void Winter_Manager( int sec )
   DT.m_log.add("Condizione Pompa PP: tInputMixer: " + String(DT.tInputMixer) + " tPufferHi: " + String(DT.tPufferHi) + " tReturnFireplace: " + String(DT.tReturnFireplace) );
   if ( DT.tInputMixer > 24 || DT.tPufferHi > 24 || DT.tReturnFireplace > 24 )
   {
-    if ( DT.tReturnFloor > 29 && minute() % 5 != 0 ) // ritorno troppo alto - non ne ho bisogno
-    {
+    /*
+      if ( DT.tReturnFloor > 29 && minute() % 5 != 0 ) // ritorno troppo alto - non ne ho bisogno
+      {
       DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor: " + String(DT.tReturnFloor) + " > 29" );
       needPompa_pp = false;
-    }
-    if ( DT.tInletFloor > 25 && DT.tInletFloor - DT.tReturnFloor < 2 && minute() % 5 != 0 )  // ritorno troppo alto - non ne ho bisogno
-    {
+      }
+      if ( DT.tInletFloor > 25 && DT.tInletFloor - DT.tReturnFloor < 2 && minute() % 5 != 0 )  // ritorno troppo alto - non ne ho bisogno
+      {
       DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor: " + String(DT.tReturnFloor) + " tInletFloor: " + String(DT.tInletFloor) );
       needPompa_pp = false;
-    }
+      }
+    */
     if ( DT.tInletFloor > 35 )  // 35 è la sicurezza, 29 la t massima dopo al quale spengo la pompa
     {
       DT.m_log.add("Stop Pompa: Sicurezza temp ingreso impianto: tInletFloor: " + String(DT.tInletFloor) + " > 35" );
@@ -396,7 +395,7 @@ void Winter_Manager( int sec )
   //////////////////////////////////////////////////////////////////////////////////
   bool needPCamino = false;
   DT.m_log.add("Condizione Pompa Camino: tReturnFireplace " + String(DT.tReturnFireplace) + " - " + "tPufferLow " + String(DT.tPufferLow) );
-  if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 38 && DT.tReturnFireplace > DT.tPufferLow + 4 )
+  if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 35 && DT.tReturnFireplace > DT.tPufferLow + 4 )
   {
     needPCamino = true;
   }
