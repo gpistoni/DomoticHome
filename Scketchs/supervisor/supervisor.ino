@@ -132,7 +132,7 @@ void RollingSendValues( int sec )
 {
   _CHECK_TIME_;
   static unsigned int i = 0;
-  unsigned int n = 18;
+  unsigned int n = 20;
   unsigned int nnn = 200;
 
   DT.rPdc.manualCheck();
@@ -163,9 +163,9 @@ void RollingSendValues( int sec )
 
   if ( i % n == 5 )    DT.evCameraM1.send(&dhWifi, DT.m_log );
   if ( i % n == 6 )    DT.evCameraM2.send(&dhWifi, DT.m_log );
-  if ( i % n == 7 )   DT.evSala1.send(&dhWifi, DT.m_log );
-  if ( i % n == 8 )   DT.evSala2.send(&dhWifi, DT.m_log );
-  if ( i % n == 9 )   DT.evCucina.send(&dhWifi, DT.m_log );
+  if ( i % n == 7 )    DT.evSala1.send(&dhWifi, DT.m_log );
+  if ( i % n == 8 )    DT.evSala2.send(&dhWifi, DT.m_log );
+  if ( i % n == 9 )    DT.evCucina.send(&dhWifi, DT.m_log );
   if ( i % n == 10 )   DT.evCameraS.send(&dhWifi, DT.m_log );
   if ( i % n == 11 )   DT.evCameraD1.send(&dhWifi, DT.m_log );
   if ( i % n == 12 )   DT.evCameraD2.send(&dhWifi, DT.m_log );
@@ -182,7 +182,7 @@ void RollingSendValues( int sec )
 void Summer_Manager(int sec)
 {
   _CHECK_TIME_;
-  DT.m_log.add("-------------------- SummerPP_Manager --");
+  DT.m_log.add("-------------------- Summer_Manager --");
 
   if (DT.progSummerAC)
   {
@@ -229,14 +229,19 @@ void BoilerACS_Manager(int sec)
   if (DT.progBoilerACS)
   {
     //decido se accendere il boiler solo di notte e solo se il camino non funziona
-    DT.m_log.add("Condizione BoilerACS:   hour:" + String( hour() ) + " tReturnFireplace: " + String( DT.tReturnFireplace ) );
-    if ( hour() < 7 && DT.tReturnFireplace < 30 )                //isteresi
+    if ( hour() < 7 )
     {
       boilerACS = true;
+      DT.m_log.add("Condizione ON hour:" + String( hour() ) + "< 7");
+    }
+    if ( DT.tReturnFireplace > 30 )
+    {
+      boilerACS = false;
+      DT.m_log.add("Condizione OFF DT.ReturnFireplace:" + String( DT.tReturnFireplace ) + "> 30");
     }
   }
   /**************************************************************************************************/
-  DT.m_log.add("BoilerACS [" + String(boilerACS) + "]");
+  DT.m_log.add("BoilerACS [" + String( boilerACS ) + "]");
 
   // boiler
   DT.rBoilerACS.set( boilerACS );
@@ -278,7 +283,7 @@ void SummerAC_Manager(int sec)
 void Winter_Manager( int sec )
 {
   _CHECK_TIME_;
-  DT.m_log.add("-------------------- WinterPP_Manager --");
+  DT.m_log.add("-------------------- Winter_Manager --");
 
   digitalWrite(ACT, 0);
 
@@ -299,7 +304,7 @@ void Winter_Manager( int sec )
     str += " tSala " + String(DT.tSala) + " < " + String(DT.tSala.setPoint());
     sala = true;
   }
-  if ( DT.tSala < DT.tSala.setPoint() - 1 )
+  if ( DT.tSala < DT.tSala.setPoint() - 2 )
   {
     str += " tSala2 " + String(DT.tSala) + " << " + String(DT.tSala.setPoint());
     sala2 = true;
@@ -319,7 +324,7 @@ void Winter_Manager( int sec )
     str += " tCameraD " + String(DT.tCameraD) + " < " + String(DT.tCameraD.setPoint());
     cameraD = true;
   }
-  if ( !sala2 && DT.tCameraD < DT.tCameraD.setPoint() - 1 )
+  if ( !sala2 && DT.tCameraD < DT.tCameraD.setPoint() - 2 )
   {
     str += " tCameraD2 " + String(DT.tCameraD) + " << " + String(DT.tCameraD.setPoint());
     cameraD2 = true;
@@ -329,7 +334,7 @@ void Winter_Manager( int sec )
     str += " tCameraM " + String(DT.tCameraM) + " < " + String(DT.tCameraM.setPoint());
     cameraM = true;
   }
-  if ( !sala2 && DT.tCameraM < DT.tCameraM.setPoint() - 1 )
+  if ( !sala2 && DT.tCameraM < DT.tCameraM.setPoint() - 2 )
   {
     str += " tCameraM " + String(DT.tCameraM) + " << " + String(DT.tCameraM.setPoint()) ;
     cameraM2 = true;
@@ -346,9 +351,14 @@ void Winter_Manager( int sec )
   DT.m_log.add("Condizione Pompa PP: tInputMixer: " + String(DT.tInputMixer) + " tPufferHi: " + String(DT.tPufferHi) + " tReturnFireplace: " + String(DT.tReturnFireplace) );
   if ( DT.tInputMixer > 24 || DT.tPufferHi > 24 || DT.tReturnFireplace > 24 )
   {
-    if ( DT.tReturnFloor > 29 && minute() % 5 == 0 ) // ritorno troppo alto - non ne ho bisogno
+    if ( DT.tReturnFloor > 29 && minute() % 5 != 0 ) // ritorno troppo alto - non ne ho bisogno
     {
       DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor: " + String(DT.tReturnFloor) + " > 29" );
+      needPompa_pp = false;
+    }
+    if ( DT.tInletFloor > 25 && DT.tInletFloor - DT.tReturnFloor < 2 && minute() % 5 != 0 )  // ritorno troppo alto - non ne ho bisogno
+    {
+      DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor: " + String(DT.tReturnFloor) + " tInletFloor: " + String(DT.tInletFloor) );
       needPompa_pp = false;
     }
     if ( DT.tInletFloor > 35 )  // 35 è la sicurezza, 29 la t massima dopo al quale spengo la pompa
@@ -386,7 +396,7 @@ void Winter_Manager( int sec )
   //////////////////////////////////////////////////////////////////////////////////
   bool needPCamino = false;
   DT.m_log.add("Condizione Pompa Camino: tReturnFireplace " + String(DT.tReturnFireplace) + " - " + "tPufferLow " + String(DT.tPufferLow) );
-  if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 35 && DT.tReturnFireplace > DT.tPufferLow + 3 )
+  if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 38 && DT.tReturnFireplace > DT.tPufferLow + 4 )
   {
     needPCamino = true;
   }
@@ -396,7 +406,7 @@ void Winter_Manager( int sec )
   bool needPompa_pt = false;
   //decido se accendere sulla lavanderia
   DT.m_log.add("Condizione tPufferLow " +  String(DT.tPufferHi)  + " > 48 ");
-  if ( DT.tPufferLow > 48 )
+  if ( DT.tPufferLow > 45 )
   {
     needPompa_pt = true;
   }
@@ -454,14 +464,13 @@ void ExternalLight_Manager(int sec)
   {
     /**************************************************************************************************/
     // decido se accendere le luci
-    if ( DT.lightExternal < (5 + 10 * DT.lightSide) ) // isteresi
+    if ( DT.lightExternal < 5 + 5 * DT.lightSide) ) // isteresi
     {
       lightSide = true;
-      if (hour() <= 1) lightLamp = true;
-      if (hour() > 18) lightLamp = true;
+      lightLamp = true;
     }
     /**************************************************************************************************/
-    DT.m_log.add("-- LightSide [" +  String(lightSide) + "] tExternal: " + String(DT.tExternal) + " lightExternal: " + String(DT.lightExternal) );
+    DT.m_log.add("-- LightSide [" +  String(lightSide) + "] + " lightExternal: " + String(DT.lightExternal) );
     DT.m_log.add("-- LightLamp [" +  String(lightLamp) + "]" );
   }
 
