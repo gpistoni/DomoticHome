@@ -234,7 +234,7 @@ void BoilerACS_Manager(int sec)
       boilerACS = true;
       DT.m_log.add("Condizione ON hour:" + String( hour() ) + "< 7");
     }
-    if ( DT.tReturnFireplace > 30 )
+    if ( DT.tReturnFireplace > 25 )
     {
       boilerACS = false;
       DT.m_log.add("Condizione OFF DT.ReturnFireplace:" + String( DT.tReturnFireplace ) + "> 30");
@@ -412,7 +412,6 @@ void Winter_Manager( int sec )
   }
   DT.m_log.add( "NeedPompa_pt: [" + String(needPompa_pt) + "]" );
 
-
   bool AllIn = DT.progAllRooms;
 
   cameraM   = (cameraM && ( needPompa_pp )) || AllIn;
@@ -464,13 +463,13 @@ void ExternalLight_Manager(int sec)
   {
     /**************************************************************************************************/
     // decido se accendere le luci
-    if ( DT.lightExternal < 5 + 5 * DT.lightSide) ) // isteresi
+    if ( DT.lightExternal < 5 + 5 * DT.lightSide ) // isteresi
     {
       lightSide = true;
       lightLamp = true;
     }
     /**************************************************************************************************/
-    DT.m_log.add("-- LightSide [" +  String(lightSide) + "] + " lightExternal: " + String(DT.lightExternal) );
+    DT.m_log.add("-- LightSide [" +  String(lightSide) + "] + lightExternal: " + String(DT.lightExternal) );
     DT.m_log.add("-- LightLamp [" +  String(lightLamp) + "]" );
   }
 
