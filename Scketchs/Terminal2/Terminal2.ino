@@ -1,9 +1,7 @@
 // MODULO 02
 // luci esterne
 // rev 4 dic 2016
-
 #include <dhprotocol.h>
-
 #include <OneWire.h>
 #include <SoftwareSerial.h>
 
@@ -34,8 +32,6 @@ void loop()
   /*******************************************************************************/
   if ( Slave.waitRequest(50) )
   {
-    Slave.relay[0] = !Slave.relay[0];
-
     Serial.print( "\nSet Relay: " );
 
     for (int i = 0; i < 8; i++)
