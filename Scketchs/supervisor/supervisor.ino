@@ -301,7 +301,7 @@ void Winter_Manager( int sec )
     str += " tSala " + String(DT.tSala) + " < " + String(DT.tSala.setPoint());
     sala = true;
   }
-  if ( DT.tSala < DT.tSala.setPoint() - 2 )
+  if ( DT.tSala < DT.tSala.setPoint() - 1 )
   {
     str += " tSala2 " + String(DT.tSala) + " << " + String(DT.tSala.setPoint());
     sala2 = true;
@@ -360,7 +360,7 @@ void Winter_Manager( int sec )
       needPompa_pp = false;
       }
     */
-    if ( DT.tInletFloor > 35 )  // 35 è la sicurezza, 29 la t massima dopo al quale spengo la pompa
+    if ( DT.tInletFloor > 34 )  // 35 è la sicurezza, 29 la t massima dopo al quale spengo la pompa
     {
       DT.m_log.add("Stop Pompa: Sicurezza temp ingreso impianto: tInletFloor: " + String(DT.tInletFloor) + " > 35" );
       needPompa_pp = false;
@@ -395,7 +395,7 @@ void Winter_Manager( int sec )
   //////////////////////////////////////////////////////////////////////////////////
   bool needPCamino = false;
   DT.m_log.add("Condizione Pompa Camino: tReturnFireplace " + String(DT.tReturnFireplace) + " - " + "tPufferLow " + String(DT.tPufferLow) );
-  if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 35 && DT.tReturnFireplace > DT.tPufferLow + 4 )
+  if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 38 && DT.tReturnFireplace > DT.tPufferLow + 4 )
   {
     needPCamino = true;
   }
