@@ -87,10 +87,10 @@ class cDataTable
 
       webVar[0] = tCucina.setup           ( T1, 0, "tCucina",  21);
       webVar[1] = tSala.setup             ( T1, 1, "tSala"  ,  23);
-      webVar[2] = tCameraS.setup          ( T1, 2, "tCameraS", 18);
-      webVar[3] = tCameraD.setup          ( T1, 3, "tCameraD", 18);
-      webVar[4] = tCameraM.setup          ( T1, 4, "tCameraM", 18);
-      webVar[5] = tBagno.setup            ( T1, 5, "tBagno",   22);
+      webVar[2] = tCameraS.setup          ( T1, 2, "tCameraS", 17);
+      webVar[3] = tCameraD.setup          ( T1, 3, "tCameraD", 17);
+      webVar[4] = tCameraM.setup          ( T1, 4, "tCameraM", 17);
+      webVar[5] = tBagno.setup            ( T1, 5, "tBagno",   23);
       tCucina.setAdjust(-0.5);
       tSala.setAdjust(1.5);
       tCameraS.setAdjust(0);
@@ -105,12 +105,12 @@ class cDataTable
       webVar[8 + 4] = hCameraM.setup        ( T1, 8 + 4, "hCameraM" );
       webVar[8 + 5] = hBagno.setup          ( T1, 8 + 5, "hBagno"   );
 
-      webVar[16 + 0] = thCucina.setup       ( T1, 16 + 0, "thCucina",  21);
-      webVar[16 + 1] = thSala.setup         ( T1, 16 + 1, "thSala",    22);
-      webVar[16 + 2] = thCameraS.setup      ( T1, 16 + 2, "thCameraS", 18);
-      webVar[16 + 3] = thCameraD.setup      ( T1, 16 + 3, "thCameraD", 18);
-      webVar[16 + 4] = thCameraM.setup      ( T1, 16 + 4, "thCameraM", 18);
-      webVar[16 + 5] = thBagno.setup        ( T1, 16 + 5, "thBagno",   22);
+      webVar[16 + 0] = thCucina.setup       ( T1, 16 + 0, "thCucina");
+      webVar[16 + 1] = thSala.setup         ( T1, 16 + 1, "thSala");
+      webVar[16 + 2] = thCameraS.setup      ( T1, 16 + 2, "thCameraS");
+      webVar[16 + 3] = thCameraD.setup      ( T1, 16 + 3, "thCameraD");
+      webVar[16 + 4] = thCameraM.setup      ( T1, 16 + 4, "thCameraM");
+      webVar[16 + 5] = thBagno.setup        ( T1, 16 + 5, "thBagno");
 
       webVar[20] = lightCorner.setup        ( T2, 0, "LuciAngoli");
       webVar[21] = lightSide.setup          ( T2, 1, "LuciLati");
