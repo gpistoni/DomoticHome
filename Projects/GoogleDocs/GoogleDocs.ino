@@ -12,12 +12,12 @@
 #include "HTTPSRedirect.h"
 
 // Replace with your network credentials
-const char* ssid = "<SSID>";
-const char* password = "<password>";
+const char* ssid = "PistoniHome";
+const char* password =  "giaco.iren.dario";
 
 const char* host = "script.google.com";
 const char* googleRedirHost = "script.googleusercontent.com";
-const char *GScriptId = "AKfycbzYw5G-oxvnwHpAJfDsS0PWNrO0KTBMiCW78lHUcEO6ZnFHvSw";
+const char *GScriptId = "AKfycbzLLZBfwAAm6qh1XuFL7cv101agoDb6v1ZIJyYwqy5OipTRFfM";
 
 const int httpsPort = 443;
 
@@ -28,6 +28,7 @@ const int httpsPort = 443;
 //const char* fingerprint = "94 2F 19 F7 A8 B4 5B 09 90 34 36 B2 2A C4 7F 17 06 AC 6A 2E";
 const char* fingerprint = "F0 5C 74 77 3F 6B 25 D7 3B 66 4D 43 2F 7E BC 5B E9 28 86 AD";
 const char* fingerprint2 = "94 64 D8 75 DE 5D 3A E6 3B A7 B6 15 52 72 CC 51 7A BA 2B BE";
+const char* fingerprint2 = "0D:9A:55:12:4E:A0:73:BE:DD:1C:02:36:B5:D1:BA:91:66:A6:42:39";
 
 // Write to Google Spreadsheet
 String url = String("/macros/s/") + GScriptId + "/exec?value=Hello";
@@ -36,7 +37,8 @@ String url2 = String("/macros/s/") + GScriptId + "/exec?cal";
 // Read from Google Spreadsheet
 String url3 = String("/macros/s/") + GScriptId + "/exec?read";
 
-void setup() {
+void setup() 
+{
   Serial.begin(9600);
   Serial.println();
   Serial.print("Connecting to wifi: ");
@@ -46,7 +48,8 @@ void setup() {
   Serial.flush();
 
   WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED) 
+  {
     delay(500);
     Serial.print(".");
   }
@@ -72,7 +75,8 @@ void setup() {
   }
   
   Serial.flush();
-  if (!flag){
+  if (!flag)
+  {
     Serial.print("Could not connect to server: ");
     Serial.println(host);
     Serial.println("Exiting...");
@@ -80,7 +84,8 @@ void setup() {
   }
   
   Serial.flush();
-  if (client.verify(fingerprint, host)) {
+  if (client.verify(fingerprint, host))
+  {
     Serial.println("Certificate match.");
   } else {
     Serial.println("Certificate mis-match");
@@ -101,7 +106,8 @@ void setup() {
 
 }
 
-void loop() {
+void loop() 
+{
   HTTPSRedirect client(httpsPort);
   if (!client.connected())
     client.connect(host, httpsPort);
