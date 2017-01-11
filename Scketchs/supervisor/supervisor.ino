@@ -310,7 +310,6 @@ void Winter_Manager( int sec )
     }
     if ( DT.tSala < DT.tSala.setPoint() - 1 )
     {
-      str += " tSala2 " + String(DT.tSala) + " << " + String(DT.tSala.setPoint());
       sala2 = true;
     }
     if ( DT.tCucina < DT.tCucina.setPoint() )
@@ -318,29 +317,27 @@ void Winter_Manager( int sec )
       str += " tCucina " + String(DT.tCucina) + " < " + String(DT.tCucina.setPoint());
       cucina = true;
     }
-    if ( !sala2 && DT.tCameraS < DT.tCameraS.setPoint() )
+    if ( DT.tCameraS < DT.tCameraS.setPoint() )
     {
       str += " tCameraS " + String(DT.tCameraS) + " < " + String(DT.tCameraS.setPoint());
       cameraS = true;
     }
-    if (  !sala2 && DT.tCameraD < DT.tCameraD.setPoint() )
+    if ( DT.tCameraD < DT.tCameraD.setPoint() )
     {
       str += " tCameraD " + String(DT.tCameraD) + " < " + String(DT.tCameraD.setPoint());
       cameraD = true;
     }
-    if ( !sala2 && DT.tCameraD < DT.tCameraD.setPoint() - 2 )
+    if ( DT.tCameraD < DT.tCameraD.setPoint() - 2 )
     {
-      str += " tCameraD2 " + String(DT.tCameraD) + " << " + String(DT.tCameraD.setPoint());
       cameraD2 = true;
     }
-    if ( !sala2 && DT.tCameraM < DT.tCameraM.setPoint() )
+    if ( DT.tCameraM < DT.tCameraM.setPoint() )
     {
       str += " tCameraM " + String(DT.tCameraM) + " < " + String(DT.tCameraM.setPoint());
       cameraM = true;
     }
-    if ( !sala2 && DT.tCameraM < DT.tCameraM.setPoint() - 2 )
+    if ( DT.tCameraM < DT.tCameraM.setPoint() - 2 )
     {
-      str += " tCameraM " + String(DT.tCameraM) + " << " + String(DT.tCameraM.setPoint()) ;
       cameraM2 = true;
     }
     if ( DT.tBagno < DT.tBagno.setPoint() )
@@ -353,9 +350,11 @@ void Winter_Manager( int sec )
     //////////////////////////////////////////////////////////////////////////////////
     needPompa_pp = ( sala || cucina || bagno || cameraS || cameraD || cameraM );
     DT.m_log.add("Condizione Pompa PP: tInputMixer: " + String(DT.tInputMixer) + " tPufferHi: " + String(DT.tPufferHi) + " tReturnFireplace: " + String(DT.tReturnFireplace) );
-    if ( DT.tInputMixer > 24 || DT.tPufferHi > 24 || DT.tReturnFireplace > 24 )
+    if ( DT.tInputMixer > 24 || DT.tPufferHi > 25 || DT.tReturnFireplace > 24 )
     {
-      if ( (DT.tInletFloor - DT.tReturnFloor) < 1.5 && minute() % 5 != 0 )  // ritorno troppo alto - non ne ho bisogno
+      DT.m_log.add("Condizione Pompa PP: tInletFloor: " + String(DT.tInletFloor) + " tReturnFloor: " + String(DT.tReturnFloor) );
+    
+      if ( (DT.tInletFloor - DT.tReturnFloor) < 2 && minute() % 10 != 0 )  // ritorno troppo alto - non ne ho bisogno
       {
         DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor: " + String(DT.tReturnFloor) + " tInletFloor: " + String(DT.tInletFloor) );
         needPompa_pp = false;
@@ -394,7 +393,7 @@ void Winter_Manager( int sec )
 
     //////////////////////////////////////////////////////////////////////////////////
     DT.m_log.add("Condizione Pompa Camino: tReturnFireplace " + String(DT.tReturnFireplace) + " - " + "tPufferLow " + String(DT.tPufferLow) );
-    if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 38 && DT.tReturnFireplace > DT.tPufferLow + 4 )
+    if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 38 && DT.tReturnFireplace > DT.tPufferLow + 3 )
     {
       needPCamino = true;
     }
@@ -403,7 +402,7 @@ void Winter_Manager( int sec )
     //////////////////////////////////////////////////////////////////////////////////
     //decido se accendere sulla lavanderia
     DT.m_log.add("Condizione tPufferLow " +  String(DT.tPufferHi)  + " > 46 ");
-    if ( DT.tPufferLow > 46 )
+    if ( DT.tPufferLow > 45 && DT.tReturnFireplace > 40 )
     {
       needPompa_pt = true;
     }
