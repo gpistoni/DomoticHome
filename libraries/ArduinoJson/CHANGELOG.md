@@ -1,6 +1,26 @@
 ArduinoJson: change log
 =======================
 
+v5.8.0
+------
+
+* Added operator `==` to compare `JsonVariant` and strings (issue #402)
+* Added support for `Stream` (issue #300)
+* Reduced memory consumption by not duplicating spaces and comments
+
+v5.7.3
+------
+
+* Added an `printTo(char[N])` and `prettyPrintTo(char[N])` (issue #292)
+* Added ability to set a nested value like this: `root["A"]["B"] = "C"` (issue #352)
+* Renamed `*.ipp` to `*Impl.hpp` because they were ignored by Arduino IDE (issue #396)
+
+v5.7.2
+------
+
+* Made PROGMEM available on more platforms (issue #381)
+* Fixed PROGMEM causing an exception on ESP8266 (issue #383)
+
 v5.7.1
 ------
 

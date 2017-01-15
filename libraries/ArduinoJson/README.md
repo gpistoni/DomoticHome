@@ -5,9 +5,10 @@ Arduino JSON library
 
 *An elegant and efficient JSON library for embedded systems.*
 
-It's designed to have the most intuitive API, the smallest footprint and works without any allocation on the heap (no malloc).
+It's designed to have the most intuitive API, the smallest footprint and is able to work without any allocation on the heap (no malloc).
 
 It has been written with Arduino in mind, but it isn't linked to Arduino libraries so you can use this library in any other C++ project.
+For instance, it supports Aduino's `String` and `Stream`, but also `std::string`, `std::istream` and `std::ostream`.
 
 Features
 --------
@@ -55,6 +56,8 @@ double latitude    = root["data"][0];
 double longitude   = root["data"][1];
 ```
 
+[See JsonParserExample.ino](examples/JsonParserExample/JsonParserExample.ino)
+
 #### Encoding / Generating
 
 ```c++
@@ -72,6 +75,8 @@ root.printTo(Serial);
 // This prints:
 // {"sensor":"gps","time":1351824120,"data":[48.756080,2.302038]}
 ```
+
+[See JsonGeneratorExample.ino](examples/JsonGeneratorExample/JsonGeneratorExample.ino)
 
 
 Documentation
@@ -103,6 +108,9 @@ From GitHub user `zacsketches`:
 [From Twitter user `@hemalchevli`](https://twitter.com/hemalchevli/status/715788439397011456):
 > ArduinoJson library should be used as a benchmark/reference for making libraries. Truly elegant.
 
+[From GitHub user `sticilface`](https://github.com/bblanchon/ArduinoJson/issues/381#issuecomment-260203594):
+> its a great lib:) and i use it in everything!
+
 Donators
 --------
 
@@ -123,6 +131,8 @@ Special thanks to the following persons and companies who made generous donation
 * Kestutis Liaugminas <img alt='Lithuania' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1f1-1f1f9.svg' width='18' height='18'>
 * Darlington Adibe <img alt='Nigeria' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1f3-1f1ec.svg' width='18' height='18'>
 * Yoeri Kroon <img alt='Netherlands' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1f3-1f1f1.svg' width='18' height='18'>
+* Andrew Melvin <img alt='United Kingdom' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1ec-1f1e7.svg' width='18' height='18'>
+* Doanh Luong <img alt ='Vietnam' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/svg/1f1fb-1f1f3.svg' width='18' height='18'>
 
 ---
 

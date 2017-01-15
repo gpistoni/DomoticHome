@@ -7,8 +7,9 @@
 
 #pragma once
 
-#include "Internals/JsonVariantAs.hpp"
+#include "Data/JsonVariantAs.hpp"
 #include "Polyfills/attributes.hpp"
+#include "Serialization/JsonPrintable.hpp"
 
 namespace ArduinoJson {
 
@@ -71,6 +72,7 @@ class JsonVariantBase : public Internals::JsonPrintable<TImpl> {
   // Returns the element at specified index if the variant is an array.
   // Returns JsonVariant::invalid() if the variant is not an array.
   FORCE_INLINE const JsonArraySubscript operator[](int index) const;
+  FORCE_INLINE JsonArraySubscript operator[](int index);
 
   // Mimics an object.
   // Returns the value associated with the specified key if the variant is
@@ -83,70 +85,17 @@ class JsonVariantBase : public Internals::JsonPrintable<TImpl> {
       operator[](const TString &key) const {
     return asObject()[key];
   }
+  template <typename TString>
+  FORCE_INLINE
+      typename TypeTraits::EnableIf<Internals::StringFuncs<TString>::has_equals,
+                                    JsonObjectSubscript<TString> >::type
+      operator[](const TString &key) {
+    return asObject()[key];
+  }
 
  private:
   const TImpl *impl() const {
     return static_cast<const TImpl *>(this);
   }
 };
-
-template <typename TImpl, typename TComparand>
-inline bool operator==(const JsonVariantBase<TImpl> &left, TComparand right) {
-  return left.template as<TComparand>() == right;
-}
-
-template <typename TImpl, typename TComparand>
-inline bool operator==(TComparand left, const JsonVariantBase<TImpl> &right) {
-  return left == right.template as<TComparand>();
-}
-
-template <typename TImpl, typename TComparand>
-inline bool operator!=(const JsonVariantBase<TImpl> &left, TComparand right) {
-  return left.template as<TComparand>() != right;
-}
-
-template <typename TImpl, typename TComparand>
-inline bool operator!=(TComparand left, const JsonVariantBase<TImpl> &right) {
-  return left != right.template as<TComparand>();
-}
-
-template <typename TImpl, typename TComparand>
-inline bool operator<=(const JsonVariantBase<TImpl> &left, TComparand right) {
-  return left.template as<TComparand>() <= right;
-}
-
-template <typename TImpl, typename TComparand>
-inline bool operator<=(TComparand left, const JsonVariantBase<TImpl> &right) {
-  return left <= right.template as<TComparand>();
-}
-
-template <typename TImpl, typename TComparand>
-inline bool operator>=(const JsonVariantBase<TImpl> &left, TComparand right) {
-  return left.template as<TComparand>() >= right;
-}
-
-template <typename TImpl, typename TComparand>
-inline bool operator>=(TComparand left, const JsonVariantBase<TImpl> &right) {
-  return left >= right.template as<TComparand>();
-}
-
-template <typename TImpl, typename TComparand>
-inline bool operator<(const JsonVariantBase<TImpl> &left, TComparand right) {
-  return left.template as<TComparand>() < right;
-}
-
-template <typename TImpl, typename TComparand>
-inline bool operator<(TComparand left, const JsonVariantBase<TImpl> &right) {
-  return left < right.template as<TComparand>();
-}
-
-template <typename TImpl, typename TComparand>
-inline bool operator>(const JsonVariantBase<TImpl> &left, TComparand right) {
-  return left.template as<TComparand>() > right;
-}
-
-template <typename TImpl, typename TComparand>
-inline bool operator>(TComparand left, const JsonVariantBase<TImpl> &right) {
-  return left > right.template as<TComparand>();
-}
 }

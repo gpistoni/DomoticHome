@@ -7,13 +7,13 @@
 
 #pragma once
 
-#include "Internals/JsonBufferAllocated.hpp"
-#include "Internals/JsonPrintable.hpp"
-#include "Internals/List.hpp"
-#include "Internals/ReferenceType.hpp"
-#include "Internals/StringFuncs.hpp"
-#include "Internals/ValueSetter.hpp"
+#include "Data/JsonBufferAllocated.hpp"
+#include "Data/List.hpp"
+#include "Data/ReferenceType.hpp"
+#include "Data/ValueSetter.hpp"
 #include "JsonPair.hpp"
+#include "Serialization/JsonPrintable.hpp"
+#include "StringTraits/StringTraits.hpp"
 #include "TypeTraits/ConstRefOrConstPtr.hpp"
 #include "TypeTraits/EnableIf.hpp"
 #include "TypeTraits/IsFloatingPoint.hpp"
@@ -165,4 +165,13 @@ class JsonObject : public Internals::JsonPrintable<JsonObject>,
                                                   value);
   }
 };
+
+namespace Internals {
+template <>
+struct JsonVariantDefault<JsonObject> {
+  static JsonObject& get() {
+    return JsonObject::invalid();
+  }
+};
+}
 }

@@ -15,7 +15,7 @@
 // efficient in term of code size, speed and memory usage.
 
 void setup() {
-#if ARDUINO_ARCH_AVR
+#ifdef PROGMEM
   DynamicJsonBuffer jsonBuffer;
 
   // You can use a Flash String as your JSON input.
@@ -39,9 +39,14 @@ void setup() {
   // JsonBuffer.
   root["sensor"] = F("gps");
 
+  // You can compare the content of a JsonVariant to a Flash String
+  if (root["sensor"] == F("gps")) {
+    // ...
+  }
+
 #else
 
-#warning PROGMEM is only supported on AVR architecture
+#warning PROGMEM is not supported on this platform
 
 #endif
 }
