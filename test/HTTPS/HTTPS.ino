@@ -21,14 +21,7 @@ const char* password =  "giaco.iren.dario";
 
 const char* host = "script.google.com";
 const int httpsPort = 443;
-
 const char *GScriptId = "AKfycbzLLZBfwAAm6qh1XuFL7cv101agoDb6v1ZIJyYwqy5OipTRFfM";
-
-
-String prepareStr(String ssheet, String sdatetime,  float svalue)
-{
-  return String("/macros/s/") + GScriptId + "/exec?sheet=" + ssheet + "&date=" + sdatetime + "&value=" + String(svalue);
-}
 
 // Use web browser to view and copy
 // SHA1 fingerprint of the certificate
@@ -66,9 +59,9 @@ int i = 1;
 void loop()
 {
   i++;
-  HTTPSCleint client;
+  HTTPSClient client;
   client.Connect(host, httpsPort, fingerprint);
-  String url = String("/macros/s/AKfycbzLLZBfwAAm6qh1XuFL7cv101agoDb6v1ZIJyYwqy5OipTRFfM/exec?sheet=temp") + "&value=" + i + "&date=" + day() + "/" + month() + "/" + year() + "&time=" + hour() + ":" + minute() + ":" + second();
+  String url = String("/macros/s/AKfycbzLLZBfwAAm6qh1XuFL7cv101agoDb6v1ZIJyYwqy5OipTRFfM/exec?sheet=temp") + "&value=" + i;
   client.Post(url);
   delay(10000);
 }

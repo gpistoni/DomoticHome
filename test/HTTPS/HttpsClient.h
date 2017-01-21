@@ -1,6 +1,6 @@
 #include <WiFiClientSecure.h>
 
-class HTTPSCleint : private WiFiClientSecure {
+class HTTPSClient : private WiFiClientSecure {
     String m_host;
 
   public:

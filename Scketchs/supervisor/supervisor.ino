@@ -13,6 +13,7 @@
 #include "DataTable.h"
 #include "functions.h"
 #include "httpServer2.h"
+#include "googleScript.h"
 
 DHwifi dhWifi;
 
@@ -23,6 +24,13 @@ WiFiServer httpServer(80);
 
 const int ACT = 2;
 
+//////////////////////////////////////////////////////////////////////////////////
+const char* host = "script.google.com";
+String GScriptId = "/macros/s/AKfycbzLLZBfwAAm6qh1XuFL7cv101agoDb6v1ZIJyYwqy5OipTRFfM/exec?";
+const char* fingerprint = "FD:8C:AC:55:64:BE:30:57:9A:27:53:52:62:E1:CD:26:82:15:A2:DB";
+
+GoogleScript GoogleClient;
+  
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup()
 {
@@ -32,7 +40,7 @@ void setup()
   Serial.begin(115200);
   Serial.println();
 
-  IPAddress ip(192, 168, 0, 201);
+  IPAddress ip(192, 168, 0, 202);
   IPAddress gateway(192, 168, 0, 254);
   IPAddress subnet(255, 255, 255, 0);
 
@@ -42,11 +50,7 @@ void setup()
 
   dhWifi.setup( ip, gateway, subnet, ssid, pass, remote );
 
-  Config.LoadFile();
   DT.setup();
-
-  Config.ReadValue("T1");
-  Config.SaveFile();
 
   UpdateTime();      // update system time
 
@@ -61,9 +65,12 @@ void setup()
   DT.progExternalLight.set(1);
 
   if ( month() >= 9 || month() < 4) DT.progWinterFIRE.set(1);
+
+  ScriptValuesLabels();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
 void loop()
 {
   digitalWrite(ACT, 1);
@@ -95,8 +102,15 @@ void loop()
   RollingSendValues( 2 );
   digitalWrite(ACT, 0);
   RollingUpdateTerminals( 5 );
-}
 
+  ScriptValues(60);
+}
+*/
+void loop()
+{
+  RollingUpdateTerminals( 30 );
+  ScriptValues(60*10);
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UpdateTime()
 {
@@ -178,12 +192,27 @@ void RollingSendValues( int sec )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void ScriptValuesLabels()
+{
+  GoogleClient.Connect(host, fingerprint);
+  String url = GScriptId + "&sheet=" + "temp" + "&v1=" + "T.External" + "&v2=" + "T.Sala" + "&v3=" + "T.Floor" + "&v4=" + "T.tPufferHi";
+  DT.m_log.add(url);
+  GoogleClient.Post(url);
+}
+
+void ScriptValues(int sec)
+{
+  _CHECK_TIME_;
+  String url = GScriptId + "&sheet=" + "temp" + "&v1=" + DT.tExternal + "&v2=" + DT.tSala + "&v3=" + DT.tInletFloor + "&v4=" + DT.tPufferHi;
+  DT.m_log.add(url);
+  GoogleClient.Post(url);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Summer_Manager(int sec)
 {
   _CHECK_TIME_;
   DT.m_log.add("-------------------- Summer_Manager --");
-
-
   {
     //if ( DT.pPDC_man ) return;
     //  digitalClockDisplay();
@@ -236,7 +265,7 @@ void BoilerACS_Manager(int sec)
     if ( DT.tReturnFireplace > 25 )
     {
       boilerACS = false;
-      DT.m_log.add("Condizione OFF DT.ReturnFireplace:" + String( DT.tReturnFireplace ) + "> 30");
+      DT.m_log.add("Condizione OFF DT.ReturnFireplace:" + String( DT.tReturnFireplace ) + "> 25");
     }
   }
   /**************************************************************************************************/
@@ -353,7 +382,7 @@ void Winter_Manager( int sec )
     if ( DT.tInputMixer > 24 || DT.tPufferHi > 25 || DT.tReturnFireplace > 24 )
     {
       DT.m_log.add("Condizione Pompa PP: tInletFloor: " + String(DT.tInletFloor) + " tReturnFloor: " + String(DT.tReturnFloor) );
-    
+
       if ( (DT.tInletFloor - DT.tReturnFloor) < 2 && minute() % 10 != 0 )  // ritorno troppo alto - non ne ho bisogno
       {
         DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor: " + String(DT.tReturnFloor) + " tInletFloor: " + String(DT.tInletFloor) );
@@ -393,7 +422,7 @@ void Winter_Manager( int sec )
 
     //////////////////////////////////////////////////////////////////////////////////
     DT.m_log.add("Condizione Pompa Camino: tReturnFireplace " + String(DT.tReturnFireplace) + " - " + "tPufferLow " + String(DT.tPufferLow) );
-    if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 38 && DT.tReturnFireplace > DT.tPufferLow + 3 )
+    if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 35 && DT.tReturnFireplace > DT.tPufferLow + 2 )
     {
       needPCamino = true;
     }
