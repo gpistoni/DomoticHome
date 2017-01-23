@@ -4,8 +4,6 @@
 
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
-#include <ESP8266mDNS.h>
-#include <WiFiUdp.h>
 #include <Time.h>
 
 #include "dhwifi.h"
@@ -29,8 +27,6 @@ const char* host = "script.google.com";
 String GScriptId = "/macros/s/AKfycbzLLZBfwAAm6qh1XuFL7cv101agoDb6v1ZIJyYwqy5OipTRFfM/exec?";
 const char* fingerprint = "FD:8C:AC:55:64:BE:30:57:9A:27:53:52:62:E1:CD:26:82:15:A2:DB";
 
-GoogleScript GoogleClient;
-  
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup()
 {
@@ -71,8 +67,8 @@ void setup()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
-void loop()
-{
+  void loop()
+  {
   digitalWrite(ACT, 1);
 
   if ( handleHttpServer() )
@@ -104,12 +100,12 @@ void loop()
   RollingUpdateTerminals( 5 );
 
   ScriptValues(60);
-}
+  }
 */
 void loop()
 {
   RollingUpdateTerminals( 30 );
-  ScriptValues(60*10);
+  ScriptValues(60 * 10);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UpdateTime()
@@ -194,8 +190,9 @@ void RollingSendValues( int sec )
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void ScriptValuesLabels()
 {
+  GoogleScript GoogleClient;
   GoogleClient.Connect(host, fingerprint);
-  String url = GScriptId + "&sheet=" + "temp" + "&v1=" + "T.External" + "&v2=" + "T.Sala" + "&v3=" + "T.Floor" + "&v4=" + "T.tPufferHi";
+  String url = GScriptId + "sheet=" + "temp" + "&v1=" + "tExternal" + "&v2=" + "tSala" + "&v3=" + "tFloorIN"  + "&v4=" + "tFloorRET" + "&v5=" + "tPufferHi" + "&v6=" + "tPufferLow" + "&v7=" + "tReturnFireplace";
   DT.m_log.add(url);
   GoogleClient.Post(url);
 }
@@ -203,9 +200,14 @@ void ScriptValuesLabels()
 void ScriptValues(int sec)
 {
   _CHECK_TIME_;
-  String url = GScriptId + "&sheet=" + "temp" + "&v1=" + DT.tExternal + "&v2=" + DT.tSala + "&v3=" + DT.tInletFloor + "&v4=" + DT.tPufferHi;
-  DT.m_log.add(url);
-  GoogleClient.Post(url);
+  if ( DT.tSala > 0 && DT.tInletFloor  > 0 && DT.tReturnFloor > 0 && DT.tPufferHi > 0)
+  {
+    GoogleScript GoogleClient;
+    GoogleClient.Connect(host, fingerprint);
+    String url = GScriptId + "sheet=" + "temp" + "&v1=" + DT.tExternal + "&v2=" + DT.tSala + "&v3=" + DT.tInletFloor + "&v4=" + DT.tReturnFloor + "&v5=" + DT.tPufferHi + "&v6=" + DT.tPufferLow + "&v7=" + DT.tReturnFireplace;
+    DT.m_log.add(url);
+    GoogleClient.Post(url);
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -422,7 +424,7 @@ void Winter_Manager( int sec )
 
     //////////////////////////////////////////////////////////////////////////////////
     DT.m_log.add("Condizione Pompa Camino: tReturnFireplace " + String(DT.tReturnFireplace) + " - " + "tPufferLow " + String(DT.tPufferLow) );
-    if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 35 && DT.tReturnFireplace > DT.tPufferLow + 2 )
+    if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 35 && DT.tReturnFireplace > DT.tPufferLow + 4 )
     {
       needPCamino = true;
     }

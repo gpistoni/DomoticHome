@@ -93,8 +93,8 @@ class cDataTable
       webVar[5] = tBagno.setup            ( T1, 5, "tBagno",   23);
       tCucina.setAdjust(-0.5);
       tSala.setAdjust(1.5);
-      tCameraS.setAdjust(0);
-      tCameraD.setAdjust(1);
+      tCameraS.setAdjust(1);
+      tCameraD.setAdjust(0.5);
       tCameraM.setAdjust(1);
       tBagno.setAdjust(2);
 

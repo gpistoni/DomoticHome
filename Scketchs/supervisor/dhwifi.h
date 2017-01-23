@@ -13,6 +13,10 @@ class DHwifi
     byte packetBuffer[ NTP_PACKET_SIZE];  	  // buffer to hold incoming and outgoing packets
 
     String m_remoteServer;
+    
+  private:
+    // send an NTP request to the time server at the given address
+    unsigned long sendNTPpacket(IPAddress& address);
 
   public:
     DHwifi() {};
@@ -20,10 +24,6 @@ class DHwifi
     void setup( IPAddress ip, IPAddress gateway, IPAddress subnet, String ssid, String pass,  String remoteServer = "192.168.0.200" );
     String HttpRequest( String req );
     time_t GetSystemTime();
-
-  private:
-    // send an NTP request to the time server at the given address
-    unsigned long sendNTPpacket(IPAddress& address);
 };
 
 #endif
