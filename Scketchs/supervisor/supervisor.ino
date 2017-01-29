@@ -36,7 +36,7 @@ void setup()
   Serial.begin(115200);
   Serial.println();
 
-  IPAddress ip(192, 168, 0, 202);
+  IPAddress ip(192, 168, 0, 201);
   IPAddress gateway(192, 168, 0, 254);
   IPAddress subnet(255, 255, 255, 0);
 
@@ -66,9 +66,8 @@ void setup()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-  void loop()
-  {
+void loop()
+{
   digitalWrite(ACT, 1);
 
   if ( handleHttpServer() )
@@ -95,18 +94,14 @@ void setup()
   Winter_Manager( 60 );
   ExternalLight_Manager( 60 );
 
-  RollingSendValues( 2 );
   digitalWrite(ACT, 0);
+
+  RollingSendValues( 2 );
   RollingUpdateTerminals( 5 );
 
-  ScriptValues(60);
-  }
-*/
-void loop()
-{
-  RollingUpdateTerminals( 30 );
-  ScriptValues(60 * 10);
+  ScriptValues(60*30);
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UpdateTime()
 {
@@ -140,6 +135,7 @@ void RollingUpdateTerminals( int sec )
 void RollingSendValues( int sec )
 {
   _CHECK_TIME_;
+
   static unsigned int i = 0;
   unsigned int n = 20;
   unsigned int nnn = 200;
@@ -192,7 +188,10 @@ void ScriptValuesLabels()
 {
   GoogleScript GoogleClient;
   GoogleClient.Connect(host, fingerprint);
-  String url = GScriptId + "sheet=" + "temp" + "&v1=" + "tExternal" + "&v2=" + "tSala" + "&v3=" + "tFloorIN"  + "&v4=" + "tFloorRET" + "&v5=" + "tPufferHi" + "&v6=" + "tPufferLow" + "&v7=" + "tReturnFireplace";
+  //String url = GScriptId + "sheet=" + "Log" + "&v1=" + "tExternal" + "&v2=" + "tSala" + "&v3=" + "tFloorIN"  + "&v4=" + "tFloorRET" + "&v5=" + "tPufferHi" + "&v6=" + "tPufferLow" + "&v7=" + "tReturnFireplace";
+  //DT.m_log.add(url);
+  //GoogleClient.Post(url);
+  String url = GScriptId + "sheet=" + "Log" + "&v1=" + "Setup";
   DT.m_log.add(url);
   GoogleClient.Post(url);
 }
@@ -204,7 +203,7 @@ void ScriptValues(int sec)
   {
     GoogleScript GoogleClient;
     GoogleClient.Connect(host, fingerprint);
-    String url = GScriptId + "sheet=" + "temp" + "&v1=" + DT.tExternal + "&v2=" + DT.tSala + "&v3=" + DT.tInletFloor + "&v4=" + DT.tReturnFloor + "&v5=" + DT.tPufferHi + "&v6=" + DT.tPufferLow + "&v7=" + DT.tReturnFireplace;
+    String url = GScriptId + "sheet=" + "Temp" + month() + "&v1=" + DT.tExternal + "&v2=" + DT.tSala + "&v3=" + DT.tInletFloor + "&v4=" + DT.tReturnFloor + "&v5=" + DT.tPufferHi + "&v6=" + DT.tPufferLow + "&v7=" + DT.tReturnFireplace;
     DT.m_log.add(url);
     GoogleClient.Post(url);
   }
@@ -491,11 +490,24 @@ void ExternalLight_Manager(int sec)
   {
     /**************************************************************************************************/
     // decido se accendere le luci
-    if ( DT.lightExternal < 1 + 2 * DT.lightSide ) // isteresi
+    if ( DT.lightExternal < 2 + 2 * DT.lightSide ) // isteresi
     {
       lightSide = true;
       lightLamp = true;
     }
+
+    if ( hour() >= 20 || hour() <= 5 )
+    {
+      lightSide = true;
+      lightLamp = true;
+    }
+
+    if ( hour() > 8 && hour() <= 18 )
+    {
+      lightSide = false;
+      lightLamp = false;
+    }
+
     /**************************************************************************************************/
     DT.m_log.add("-- LightSide [" +  String(lightSide) + "] + lightExternal: " + String(DT.lightExternal) );
     DT.m_log.add("-- LightLamp [" +  String(lightLamp) + "]" );
