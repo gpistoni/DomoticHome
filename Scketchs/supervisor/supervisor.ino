@@ -1,6 +1,7 @@
 #define _CHECK_TIME_   static unsigned long last = 0;\
   if ( millis() - last < sec * 1000 ) return;\
-  last = millis();
+  last = millis();\
+  if ( year() < 2000 ) UpdateTime();
 
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
@@ -23,9 +24,9 @@ WiFiServer httpServer(80);
 const int ACT = 2;
 
 //////////////////////////////////////////////////////////////////////////////////
-const char* host = "script.google.com";
+const char* GHost = "script.google.com";
 String GScriptId = "/macros/s/AKfycbzLLZBfwAAm6qh1XuFL7cv101agoDb6v1ZIJyYwqy5OipTRFfM/exec?";
-const char* fingerprint = "FD:8C:AC:55:64:BE:30:57:9A:27:53:52:62:E1:CD:26:82:15:A2:DB";
+const char* GFingerprint = "FD:8C:AC:55:64:BE:30:57:9A:27:53:52:62:E1:CD:26:82:15:A2:DB";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup()
@@ -63,6 +64,8 @@ void setup()
   if ( month() >= 9 || month() < 4) DT.progWinterFIRE.set(1);
 
   ScriptValuesLabels();
+
+  UpdateTime();      // update system time
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,7 +102,7 @@ void loop()
   RollingSendValues( 2 );
   RollingUpdateTerminals( 5 );
 
-  ScriptValues(60*30);
+  ScriptValues(60 * 60);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,9 +118,6 @@ void UpdateTime()
 void RollingUpdateTerminals( int sec )
 {
   _CHECK_TIME_;
-
-  if ( year() < 2000 )
-    UpdateTime();
 
   static unsigned int i = 0;
 
@@ -186,23 +186,21 @@ void RollingSendValues( int sec )
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void ScriptValuesLabels()
 {
-  GoogleScript GoogleClient;
-  GoogleClient.Connect(host, fingerprint);
-  //String url = GScriptId + "sheet=" + "Log" + "&v1=" + "tExternal" + "&v2=" + "tSala" + "&v3=" + "tFloorIN"  + "&v4=" + "tFloorRET" + "&v5=" + "tPufferHi" + "&v6=" + "tPufferLow" + "&v7=" + "tReturnFireplace";
-  //DT.m_log.add(url);
-  //GoogleClient.Post(url);
-  String url = GScriptId + "sheet=" + "Log" + "&v1=" + "Setup";
-  DT.m_log.add(url);
-  GoogleClient.Post(url);
+  GoogleScript GoogleClient(GHost, GFingerprint);
+  String url1 = GScriptId + "sheet=" + "Log" + "&v1=" + "tExternal" + "&v2=" + "tSala" + "&v3=" + "tFloorIN"  + "&v4=" + "tFloorRET" + "&v5=" + "tPufferHi" + "&v6=" + "tPufferLow" + "&v7=" + "tReturnFireplace";
+  DT.m_log.add(url1);
+  GoogleClient.Post(url1);
+  String url2 = GScriptId + "sheet=" + "Log" + "&v1=" + "Setup";
+  DT.m_log.add(url2);
+  GoogleClient.Post(url2);
 }
 
 void ScriptValues(int sec)
 {
   _CHECK_TIME_;
-  if ( DT.tSala > 0 && DT.tInletFloor  > 0 && DT.tReturnFloor > 0 && DT.tPufferHi > 0)
+  if ( DT.tSala > 0 && DT.tInletFloor > 0 && DT.tReturnFloor > 0 && DT.tPufferHi > 0)
   {
-    GoogleScript GoogleClient;
-    GoogleClient.Connect(host, fingerprint);
+    GoogleScript GoogleClient(GHost, GFingerprint);
     String url = GScriptId + "sheet=" + "Temp" + month() + "&v1=" + DT.tExternal + "&v2=" + DT.tSala + "&v3=" + DT.tInletFloor + "&v4=" + DT.tReturnFloor + "&v5=" + DT.tPufferHi + "&v6=" + DT.tPufferLow + "&v7=" + DT.tReturnFireplace;
     DT.m_log.add(url);
     GoogleClient.Post(url);
@@ -251,7 +249,7 @@ void Summer_Manager(int sec)
 void BoilerACS_Manager(int sec)
 {
   _CHECK_TIME_;
-  DT.m_log.add("-------------------- BoilerACS_Manager --");
+  DT.m_log.add("-------------------- BoilerACS_Manager ---------------");
 
   static bool boilerACS = false;
   /**************************************************************************************************/
