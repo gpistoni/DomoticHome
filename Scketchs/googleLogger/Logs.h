@@ -1,0 +1,1 @@
+/home/pistoni/Documenti/DomoticHome/Scketchs/supervisor/Logs.h
