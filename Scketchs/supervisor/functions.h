@@ -1,6 +1,11 @@
 #ifndef functions_h
 #define functions_h
 
+#define _CHECK_TIME_   static unsigned long last = 0;\
+  if ( millis() - last < sec * 1000 ) return;\
+  last = millis();\
+  if ( year() < 2000 ) UpdateTime();
+  
 void printDigits(int digits)
 {
     // utility function for digital clock display: prints preceding colon and leading 0

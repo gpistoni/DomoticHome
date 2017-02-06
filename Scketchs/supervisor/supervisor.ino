@@ -1,7 +1,4 @@
-#define _CHECK_TIME_   static unsigned long last = 0;\
-  if ( millis() - last < sec * 1000 ) return;\
-  last = millis();\
-  if ( year() < 2000 ) UpdateTime();
+//supervisor
 
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
@@ -12,7 +9,6 @@
 #include "DataTable.h"
 #include "functions.h"
 #include "httpServer2.h"
-#include "googleScript.h"
 
 DHwifi dhWifi;
 
@@ -23,12 +19,7 @@ WiFiServer httpServer(80);
 
 const int ACT = 2;
 
-//////////////////////////////////////////////////////////////////////////////////
-const char* GHost = "script.google.com";
-String GScriptId = "/macros/s/AKfycbzLLZBfwAAm6qh1XuFL7cv101agoDb6v1ZIJyYwqy5OipTRFfM/exec?";
-const char* GFingerprint = "FD:8C:AC:55:64:BE:30:57:9A:27:53:52:62:E1:CD:26:82:15:A2:DB";
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup()
 {
   pinMode(ACT, OUTPUT);
@@ -62,8 +53,6 @@ void setup()
   DT.progExternalLight.set(1);
 
   if ( month() >= 9 || month() < 4) DT.progWinterFIRE.set(1);
-
-  ScriptValuesLabels();
 
   UpdateTime();      // update system time
 }
@@ -102,7 +91,6 @@ void loop()
   RollingSendValues( 2 );
   RollingUpdateTerminals( 5 );
 
-  ScriptValues(60 * 60);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -181,30 +169,6 @@ void RollingSendValues( int sec )
   if ( i % n == 16 )   DT.lightExtra.send(&dhWifi, DT.m_log );
 
   i++;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void ScriptValuesLabels()
-{
-  GoogleScript GoogleClient(GHost, GFingerprint);
-  String url1 = GScriptId + "sheet=" + "Log" + "&v1=" + "tExternal" + "&v2=" + "tSala" + "&v3=" + "tFloorIN"  + "&v4=" + "tFloorRET" + "&v5=" + "tPufferHi" + "&v6=" + "tPufferLow" + "&v7=" + "tReturnFireplace";
-  DT.m_log.add(url1);
-  GoogleClient.Post(url1);
-  String url2 = GScriptId + "sheet=" + "Log" + "&v1=" + "Setup";
-  DT.m_log.add(url2);
-  GoogleClient.Post(url2);
-}
-
-void ScriptValues(int sec)
-{
-  _CHECK_TIME_;
-  if ( DT.tSala > 0 && DT.tInletFloor > 0 && DT.tReturnFloor > 0 && DT.tPufferHi > 0)
-  {
-    GoogleScript GoogleClient(GHost, GFingerprint);
-    String url = GScriptId + "sheet=" + "Temp" + month() + "&v1=" + DT.tExternal + "&v2=" + DT.tSala + "&v3=" + DT.tInletFloor + "&v4=" + DT.tReturnFloor + "&v5=" + DT.tPufferHi + "&v6=" + DT.tPufferLow + "&v7=" + DT.tReturnFireplace;
-    DT.m_log.add(url);
-    GoogleClient.Post(url);
-  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -377,27 +341,21 @@ void Winter_Manager( int sec )
 
     //////////////////////////////////////////////////////////////////////////////////
     needPompa_pp = ( sala || cucina || bagno || cameraS || cameraD || cameraM );
-    DT.m_log.add("Condizione Pompa PP: tInputMixer: " + String(DT.tInputMixer) + " tPufferHi: " + String(DT.tPufferHi) + " tReturnFireplace: " + String(DT.tReturnFireplace) );
-    if ( DT.tInputMixer > 24 || DT.tPufferHi > 25 || DT.tReturnFireplace > 24 )
+    if ( DT.tInputMixer < 25 && DT.tPufferHi < 25 && DT.tReturnFireplace < 25 )   // non ho temperatura
     {
-      DT.m_log.add("Condizione Pompa PP: tInletFloor: " + String(DT.tInletFloor) + " tReturnFloor: " + String(DT.tReturnFloor) );
-
-      if ( (DT.tInletFloor - DT.tReturnFloor) < 2 && minute() % 10 != 0 )  // ritorno troppo alto - non ne ho bisogno
-      {
-        DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor: " + String(DT.tReturnFloor) + " tInletFloor: " + String(DT.tInletFloor) );
-        needPompa_pp = false;
-      }
-      if ( DT.tInletFloor > 35 )  // 35 è la sicurezza dopo al quale spengo la pompa
-      {
-        DT.m_log.add("Stop Pompa: Sicurezza temp ingreso impianto: tInletFloor: " + String(DT.tInletFloor) + " > 35" );
-        needPompa_pp = false;
-      }
-    }
-    else // non ho temperatura
-    {
+      DT.m_log.add("Condizione Pompa PP insufficiente: tInletFloor: " + String(DT.tInletFloor) + " tReturnFloor: " + String(DT.tReturnFloor) );
       needPompa_pp = false;
     }
-
+    if ( (DT.tInletFloor - DT.tReturnFloor) < 2 && minute() % 10 != 0 )  // ritorno troppo alto - non ne ho bisogno
+    {
+      DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor: " + String(DT.tReturnFloor) + " tInletFloor: " + String(DT.tInletFloor) );
+      needPompa_pp = false;
+    }
+    if ( DT.tInletFloor > 35 )  // 35 è la sicurezza dopo al quale spengo la pompa
+    {
+      DT.m_log.add("Stop Pompa: Sicurezza temp ingreso impianto: tInletFloor: " + String(DT.tInletFloor) + " > 35" );
+      needPompa_pp = false;
+    }
     if ( hour() > 1 && hour() < 4 ) // fuori oario
     {
       DT.m_log.add("Stop Pompa: orario " + String( hour() ) );
@@ -429,7 +387,7 @@ void Winter_Manager( int sec )
 
     //////////////////////////////////////////////////////////////////////////////////
     //decido se accendere sulla lavanderia
-    DT.m_log.add("Condizione tPufferLow " +  String(DT.tPufferHi)  + " > 46 ");
+    DT.m_log.add("Condizione DT.tPufferLow > 45 && DT.tReturnFireplace > 40");
     if ( DT.tPufferLow > 45 && DT.tReturnFireplace > 40 )
     {
       needPompa_pt = true;

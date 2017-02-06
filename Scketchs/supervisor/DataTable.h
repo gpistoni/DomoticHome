@@ -89,7 +89,7 @@ class cDataTable
       webVar[1] = tSala.setup             ( T1, 1, "tSala"  ,  23);
       webVar[2] = tCameraS.setup          ( T1, 2, "tCameraS", 17.5);
       webVar[3] = tCameraD.setup          ( T1, 3, "tCameraD", 17.5);
-      webVar[4] = tCameraM.setup          ( T1, 4, "tCameraM", 17.5);
+      webVar[4] = tCameraM.setup          ( T1, 4, "tCameraM", 17);
       webVar[5] = tBagno.setup            ( T1, 5, "tBagno",   23);
       tCucina.setAdjust(-0.5);
       tSala.setAdjust(1.5);
@@ -112,10 +112,10 @@ class cDataTable
       webVar[16 + 4] = thCameraM.setup      ( T1, 16 + 4, "thCameraM");
       webVar[16 + 5] = thBagno.setup        ( T1, 16 + 5, "thBagno");
 
-      webVar[20] = lightCorner.setup        ( T2, 0, "LuciAngoli");
-      webVar[21] = lightSide.setup          ( T2, 1, "LuciLati");
-      webVar[22] = lightLamp.setup          ( T2, 2, "Lampione");
-      webVar[23] = lightExtra.setup         ( T2, 3, "Altro");
+      webVar[25] = lightCorner.setup        ( T2, 0, "LuciAngoli");
+      webVar[26] = lightSide.setup          ( T2, 1, "LuciLati");
+      webVar[27] = lightLamp.setup          ( T2, 2, "Lampione");
+      webVar[28] = lightExtra.setup         ( T2, 3, "Altro");
 
       webVar[30] = rPdc.setup               ( T3, 0, "PDC");
       webVar[31] = rPdcHeat.setup           ( T3, 1, "PdcHeat");
@@ -304,31 +304,3 @@ class cDataTable
       };
     };
 };
-
-//********************************************************************************************
-// scompatta una lista in campi
-String strValue(String data, char separator, int index)
-{
-  int found = 0;
-  int strIndex[] = {0, -1};
-  int maxIndex = data.length() - 1;
-
-  for (int i = 0; i <= maxIndex && found <= index; i++) {
-    if (data.charAt(i) == separator || i == maxIndex) {
-      found++;
-      strIndex[0] = strIndex[1] + 1;
-      strIndex[1] = (i == maxIndex) ? i + 1 : i;
-    }
-  }
-  return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
-}
-
-double strValueD(String data, char separator, int index)
-{
-  return strValue( data, separator, index).toInt() / 10.0;
-}
-
-bool strValueB(String data, char separator, int index)
-{
-  return strValue( data, separator, index).toInt() > 0;
-}
