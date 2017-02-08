@@ -6,13 +6,11 @@
 #include "dhconfig.h"
 #include "DataTable.h"
 #include "functions.h"
-#include "httpServer2.h"
 #include "googleScript.h"
 
 
 DHwifi dhWifi;
 cDataTable DT;
-WiFiServer httpServer(80);
 DHFile     Config;
 const int ACT = 2;
 
@@ -43,13 +41,13 @@ void setup()
   DT.setup();
 
   UpdateTime();      // update system time
-  initHttpServer();
   RollingUpdateTerminals( 0 );
 
   if ( month() >= 9 || month() < 4) DT.progWinterFIRE.set(1);
 
-  ScriptValuesLabels();
   UpdateTime();      // update system time
+
+  ScriptValuesLabels();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,13 +55,8 @@ void loop()
 {
   digitalWrite(ACT, 1);
 
-  if ( handleHttpServer() )
-  {
-    return;
-  }
-
-  digitalWrite(ACT, 0);
   RollingUpdateTerminals( 5 );
+  digitalWrite(ACT, 0);
   ScriptValues(60 * 10);
 }
 
@@ -97,9 +90,9 @@ void RollingUpdateTerminals( int sec )
 void ScriptValuesLabels()
 {
   GoogleScript GoogleClient(GHost, GFingerprint);
-  String url1 = GScriptId + "sheet=" + "Log" + "&v1=" + "tExternal" + "&v2=" + "tSala" + "&v3=" + "tFloorIN"  + "&v4=" + "tFloorRET" + "&v5=" + "tPufferHi" + "&v6=" + "tPufferLow" + "&v7=" + "tReturnFireplace";
-  DT.m_log.add(url1);
-  GoogleClient.Post(url1);
+        //String url1 = GScriptId + "sheet=" + "Log" + "&v1=" + "tExternal" + "&v2=" + "tSala" + "&v3=" + "tFloorIN"  + "&v4=" + "tFloorRET" + "&v5=" + "tPufferHi" + "&v6=" + "tPufferLow" + "&v7=" + "tReturnFireplace";
+        //DT.m_log.add(url1);
+        //GoogleClient.Post(url1);
   String url2 = GScriptId + "sheet=" + "Log" + "&v1=" + "Setup";
   DT.m_log.add(url2);
   GoogleClient.Post(url2);
