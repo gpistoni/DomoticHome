@@ -215,7 +215,7 @@ void BoilerACS_Manager(int sec)
   _CHECK_TIME_;
   DT.m_log.add("-------------------- BoilerACS_Manager ---------------");
 
-  static bool boilerACS = false;
+  bool boilerACS = false;
   /**************************************************************************************************/
   if (DT.progBoilerACS)
   {
@@ -244,7 +244,7 @@ void SummerAC_Manager(int sec)
   _CHECK_TIME_;
   DT.m_log.add("-------------------- SummerAC_Manager --");
 
-  static bool summerAC = false;
+  bool summerAC = false;
   /**************************************************************************************************/
   // decido se accendere le pompe
   if ( DT.tExternal > 24 && DT.tSala > 26 &&  DT.tReturnFloor > 20 - summerAC * 1 ) // isteresi
@@ -379,7 +379,7 @@ void Winter_Manager( int sec )
 
     //////////////////////////////////////////////////////////////////////////////////
     DT.m_log.add("Condizione Pompa Camino: tReturnFireplace " + String(DT.tReturnFireplace) + " - " + "tPufferLow " + String(DT.tPufferLow) );
-    if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 35 && DT.tReturnFireplace > DT.tPufferLow + 4 )
+    if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 40 && DT.tReturnFireplace > DT.tPufferLow + 4 )
     {
       needPCamino = true;
     }
@@ -446,23 +446,22 @@ void ExternalLight_Manager(int sec)
   {
     /**************************************************************************************************/
     // decido se accendere le luci
-    if ( DT.lightExternal < 2 + 2 * DT.lightSide ) // isteresi
-    {
-      lightSide = true;
-      lightLamp = true;
-    }
+    //if (DT.lightExternal < 2 + 2 * DT.lightSide ) // isteresi
+    //{
+    //  lightSide = true;
+    //  lightLamp = true;
+    //}
 
     if ( hour() >= 20 || hour() <= 5 )
     {
       lightSide = true;
+    }
+
+    if ( hour() >= 20 )
+    {
       lightLamp = true;
     }
 
-    if ( hour() > 8 && hour() <= 18 )
-    {
-      lightSide = false;
-      lightLamp = false;
-    }
 
     /**************************************************************************************************/
     DT.m_log.add("-- LightSide [" +  String(lightSide) + "] + lightExternal: " + String(DT.lightExternal) );
