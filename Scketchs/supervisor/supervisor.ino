@@ -446,22 +446,21 @@ void ExternalLight_Manager(int sec)
   {
     /**************************************************************************************************/
     // decido se accendere le luci
-    //if (DT.lightExternal < 2 + 2 * DT.lightSide ) // isteresi
-    //{
-    //  lightSide = true;
-    //  lightLamp = true;
-    //}
-
-    if ( hour() >= 20 || hour() <= 5 )
+    if ( DT.lightExternal > 10 + 1 * DT.lightSide ) // isteresi
     {
       lightSide = true;
-    }
-
-    if ( hour() >= 20 )
-    {
       lightLamp = true;
     }
 
+    if ( hour() > 7 && hour() < 18 )
+    {
+      lightSide = false;
+    }
+
+    if ( hour() < 18 )
+    {
+      lightLamp = false;
+    }
 
     /**************************************************************************************************/
     DT.m_log.add("-- LightSide [" +  String(lightSide) + "] + lightExternal: " + String(DT.lightExternal) );
