@@ -9,9 +9,9 @@ String strValue(String data, char separator, int index)
   int strIndex[] = {0, -1};
   int maxIndex = data.length() - 1;
 
-  for (int i = 0; i <= maxIndex && found <= index; i++) 
+  for (int i = 0; i <= maxIndex && found <= index; i++)
   {
-    if (data.charAt(i) == separator || i == maxIndex) 
+    if (data.charAt(i) == separator || i == maxIndex)
     {
       found++;
       strIndex[0] = strIndex[1] + 1;
@@ -77,7 +77,7 @@ class cVar
     {
       String s =  String("@set(") + String(m_t) + "," + String(m_signal) + "=" + String(m_value)  + ")";
       wifi->HttpRequest( s );
-     // log.add( String("Send Value ") + m_descr + ":" + String(m_value) );
+      // log.add( String("Send Value ") + m_descr + ":" + String(m_value) );
     }
 
     float value()
@@ -159,7 +159,20 @@ class cFloat: public cVar
       float fval = strValueD(stringlist, ',', m_signal);
       fval += m_adjust;
       m_value = fval;
-      
+
+      Serial.print(m_descr);
+      Serial.println(m_value);
+    }
+
+    void updateNz( String stringlist )
+    {
+      float fval = strValueD(stringlist, ',', m_signal);
+      if (fval > 0)
+      {
+        fval += m_adjust;
+        m_value = fval;
+      }
+
       Serial.print(m_descr);
       Serial.println(m_value);
     }
@@ -216,11 +229,11 @@ class cBool: public cVar
     {
       String s =  String("@set(") + String(m_t) + "," + String(m_signal) + "=" + String(m_value)  + ")";
       wifi->HttpRequest( s );
-     
-     //if (m_value != 0)
-     //   log.add( String("Send Value ") + m_descr + " (1)" );
-     // else
-     //   log.add( String("Send Value ") + m_descr + " (0)" );
+
+      //if (m_value != 0)
+      //   log.add( String("Send Value ") + m_descr + " (1)" );
+      // else
+      //   log.add( String("Send Value ") + m_descr + " (0)" );
     }
 };
 

@@ -52,9 +52,10 @@ void setup()
   DT.progAllRooms.set(0);
   DT.progExternalLight.set(1);
 
-  if ( month() >= 9 || month() < 4) DT.progWinterFIRE.set(1);
-
   UpdateTime();      // update system time
+
+  if ( month() >= 10 || month() <= 4) DT.progWinterFIRE.set(1);
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,9 +65,15 @@ void loop()
 
   if ( handleHttpServer() )
   {
+    if ( month() == 6 ||  month() == 7 || month() == 8 ) // solo estate
+    {
+      Summer_Manager( 20 );
+    }
+    else                               // solo inverno
+    {
+      Winter_Manager( 20 );
+    }
     BoilerACS_Manager( 20 );
-    Summer_Manager( 20 );
-    if (DT.progWinterFIRE || DT.progWinterPDC )        Winter_Manager( 20 );
     ExternalLight_Manager( 20 );
     return;
   }
@@ -82,15 +89,20 @@ void loop()
   if (DT.progWinterPDC)  DT.progSummerAC.set(0);
 
   BoilerACS_Manager( 60 );
-  Summer_Manager( 60 );
-  Winter_Manager( 60 );
   ExternalLight_Manager( 60 );
 
-  digitalWrite(ACT, 0);
+  if ( month() == 6 ||  month() == 7 || month() == 8 ) // solo estate
+  {
+    Summer_Manager( 60 );
+  }
+  else                               // solo inverno
+  {
+    Winter_Manager( 60 );
+  }
 
   RollingSendValues( 2 );
-  RollingUpdateTerminals( 5 );
-
+  digitalWrite(ACT, 0);
+  RollingUpdateTerminals( 4 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,10 +157,11 @@ void RollingSendValues( int sec )
 
   // le nnn sono a basso intervento 200 sec
 
-  if ( i % nnn == 0 )  DT.rPdc.send(&dhWifi, DT.m_log );
-  if ( i % nnn == 10 ) DT.rPdcHeat.send(&dhWifi, DT.m_log );
-  if ( i % nnn == 20 ) DT.rPdcPompa.send(&dhWifi, DT.m_log );
-  if ( i % nnn == 30 ) DT.rPdcNightMode.send(&dhWifi, DT.m_log );
+  if ( i % nnn == 10 )  DT.rPdc.send(&dhWifi, DT.m_log );
+  if ( i % nnn == 12 ) DT.rPdcHeat.send(&dhWifi, DT.m_log );
+  if ( i % nnn == 14 ) DT.rPdcPompa.send(&dhWifi, DT.m_log );
+  if ( i % nnn == 16 ) DT.rPdcNightMode.send(&dhWifi, DT.m_log );
+
   if ( i % n == 1 )    DT.rPompaPianoPrimo.send(&dhWifi, DT.m_log );
   if ( i % n == 2 )    DT.rPompaPianoTerra.send(&dhWifi, DT.m_log );
   if ( i % nnn == 60 ) DT.rBoilerACS.send(&dhWifi, DT.m_log );
@@ -175,38 +188,58 @@ void RollingSendValues( int sec )
 void Summer_Manager(int sec)
 {
   _CHECK_TIME_;
-  DT.m_log.add("-------------------- Summer_Manager --");
+  DT.m_log.add("-------------------- Summer_Manager ---------------");
+
+  bool summerAC_pdc  = false;
+  bool summerAC_pump = false;
+  bool needPompa_pp  = false;
+  /**************************************************************************************************/
+  if (DT.progSummerAC)
   {
-    //if ( DT.pPDC_man ) return;
-    //  digitalClockDisplay();
-    //  Serial.println("PDC_Manager");
-    //
-    //  DT.rPdc.set(0);
-    //  DT.rPdcPompa.set(0);
-    //
-    //  //decido se accendere la pdc
-    //  if ( month() == 6 ||  month() == 7 || month() == 8 ) // solo estate
-    //  {
-    //    if ( DT.tExternal > 30 && DT.tInletFloor > 20 )   // t esterne, minima t Acqua raffreddata
-    //    {
-    //      Serial.println("Condizione H1");
-    //      DT.rPdc.set(1);
-    //      DT.rPdcCool0_Heat1.set(0);
-    //      DT.rPdcPompa.set(1);
-    //      DT.rPdcNightMode.set(1);
-    //    }
-    //    if ( DT.tInletFloor < DT.tReturnFloor - 1 )
-    //    {
-    //      Serial.println("Condizione H2");
-    //      DT.rPdcPompa.set(1);
-    //    }
-    //  }
-    //
-    //  dhWifi.HttpRequest( DT.rPdc.getS() );
-    //  dhWifi.HttpRequest( DT.rPdcCool0_Heat1.getS() );
-    //  dhWifi.HttpRequest( DT.rPdcPompa.getS() );
-    //  dhWifi.HttpRequest( DT.rPdcNightMode.getS() );
+    /**************************************************************************************************/
+    // decido se accendere le pompe
+
+    if ( DT.tPufferHi < 23 )
+    {
+      needPompa_pp = true;      // economy
+    }
+    else
+    {
+      if ( DT.tInletFloor > 22 )  // minima t Acqua raffreddata
+      {
+        summerAC_pdc = true;
+        summerAC_pump = true;
+      }
+      if ( DT.tReturnFloor > 22 )
+      {
+        summerAC_pump = true;
+      }
+    }
+    /**************************************************************************************************/
+    DT.m_log.add("summerAC_pdc [" +  String(summerAC_pdc) + "] summerAC_pump [" +  String(summerAC_pump) + "] tInletFloor: " + String( DT.tInletFloor ) + " tSala: " + String( DT.tSala ) + " tReturnFloor: " + String( DT.tReturnFloor ));
+    DT.m_log.add("needPompa_pp [" +  String(needPompa_pp) + "] tPufferHi: " + String( DT.tPufferHi ));
   }
+  /**************************************************************************************************/
+  // attuatori
+  DT.evSala1.set(needPompa_pp);
+  DT.evSala2.set(needPompa_pp);
+  DT.evCucina.set(summerAC_pump || needPompa_pp);
+
+  DT.evCameraM1.set(summerAC_pump || needPompa_pp);
+  DT.evCameraM2.set(summerAC_pump || needPompa_pp);
+  DT.evCameraS.set (summerAC_pump || needPompa_pp);
+  DT.evCameraD1.set(summerAC_pump || needPompa_pp);
+  DT.evCameraD2.set(summerAC_pump || needPompa_pp);
+
+  DT.rPompaPianoPrimo.set( needPompa_pp );
+
+  /**************************************************************************************************/
+  // accendo PDC
+  DT.rPdc.set( summerAC_pdc );
+  DT.rPdcNightMode.set( summerAC_pdc );
+  DT.rPdcHeat.set( false );
+  DT.rPdcPompa.set( summerAC_pump );
+  /**************************************************************************************************/
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -238,43 +271,11 @@ void BoilerACS_Manager(int sec)
   DT.rBoilerACS.set( boilerACS );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void SummerAC_Manager(int sec)
-{
-  _CHECK_TIME_;
-  DT.m_log.add("-------------------- SummerAC_Manager --");
-
-  bool summerAC = false;
-  /**************************************************************************************************/
-  // decido se accendere le pompe
-  if ( DT.tExternal > 24 && DT.tSala > 26 &&  DT.tReturnFloor > 20 - summerAC * 1 ) // isteresi
-  {
-    summerAC = true;
-  }
-  /**************************************************************************************************/
-
-  DT.m_log.add("summerAC [" +  String(summerAC) + "] tExternal: " + String( DT.tExternal ) + " tSala: " + String( DT.tSala ) + " tReturnFloor: " + String( DT.tReturnFloor ));
-
-  // attuatori
-  DT.evCameraM1.set(summerAC);
-  DT.evSala1.set(summerAC);
-  DT.evSala2.set(summerAC);
-  DT.evCucina.set(summerAC);
-  DT.evCameraS.set(summerAC);
-  DT.evCameraD1.set(summerAC);
-
-  // accendo PDC
-  DT.rPdc.set( summerAC );
-  DT.rPdcHeat.set( false );
-  DT.rPdcPompa.set( summerAC );
-  DT.rPdcNightMode.set( true );
-}
-
 /******************************************************************************************************************************************************************/
 void Winter_Manager( int sec )
 {
   _CHECK_TIME_;
-  DT.m_log.add("-------------------- Winter_Manager --");
+  DT.m_log.add("-------------------- Winter_Manager --------------------");
 
   bool sala = false;
   bool sala2 = false;
@@ -437,7 +438,7 @@ void Winter_Manager( int sec )
 void ExternalLight_Manager(int sec)
 {
   _CHECK_TIME_;
-  DT.m_log.add("-------------------- ExternalLight_Manager --");
+  DT.m_log.add("-------------------- ExternalLight_Manager --------------------");
 
   bool lightSide = false;
   bool lightLamp = false;
@@ -446,17 +447,16 @@ void ExternalLight_Manager(int sec)
   {
     /**************************************************************************************************/
     // decido se accendere le luci
-    if ( DT.lightExternal > 10 + 1 * DT.lightSide ) // isteresi
+    if ( DT.lightExternal > 8 + 2 * DT.lightSide ) // isteresi
     {
       lightSide = true;
       lightLamp = true;
     }
 
-    if ( hour() > 7 && hour() < 18 )
+    if ( hour() > 21 || hour() < 5 )
     {
-      lightSide = false;
+      lightSide = true;
     }
-
     if ( hour() < 18 )
     {
       lightLamp = false;

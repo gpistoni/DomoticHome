@@ -158,26 +158,26 @@ class cDataTable
       m_log.add("**T1-Stanze** ");
       m_log.add(strs);
 
-      tCucina.update( strs );
-      tSala.update( strs );
-      tCameraS.update( strs );
-      tCameraD.update( strs );
-      tCameraM.update( strs );
-      tBagno.update( strs );
+      tCucina.updateNz( strs );
+      tSala.updateNz( strs );
+      tCameraS.updateNz( strs );
+      tCameraD.updateNz( strs );
+      tCameraM.updateNz( strs );
+      tBagno.updateNz( strs );
 
-      hCucina.update( strs );
-      hSala.update( strs );
-      hCameraS.update( strs );
-      hCameraD.update( strs );
-      hCameraM.update( strs );
-      hBagno.update( strs );
+      hCucina.updateNz( strs );
+      hSala.updateNz( strs );
+      hCameraS.updateNz( strs );
+      hCameraD.updateNz( strs );
+      hCameraM.updateNz( strs );
+      hBagno.updateNz( strs );
 
-      thCucina.update( strs );
-      thSala.update( strs );
-      thCameraS.update( strs );
-      thCameraD.update( strs );
-      thCameraM.update( strs );
-      thBagno.update( strs );
+      thCucina.updateNz( strs );
+      thSala.updateNz( strs );
+      thCameraS.updateNz( strs );
+      thCameraD.updateNz( strs );
+      thCameraM.updateNz( strs );
+      thBagno.updateNz( strs );
     };
 
     void UpdateT2( String strs )
@@ -197,14 +197,14 @@ class cDataTable
       m_log.add("**T4-TCaldaia** ");
       m_log.add(strs);
 
-      tPufferHi.update( strs );
-      tPufferLow.update( strs );
-      tInputMixer.update( strs );
-      tReturnFireplace.update( strs );
-      tReturnFloor.update( strs );
-      tInletFloor.update( strs );
-      tExternal.update( strs );
-      lightExternal.update( strs );
+      tPufferHi.updateNz( strs );
+      tPufferLow.updateNz( strs );
+      tInputMixer.updateNz( strs );
+      tReturnFireplace.updateNz( strs );
+      tReturnFloor.updateNz( strs );
+      tInletFloor.updateNz( strs );
+      tExternal.updateNz( strs );
+      lightExternal.updateNz( strs );
     };
 
     void UpdateT5( String strs)
