@@ -22,18 +22,18 @@ const int ACT = 2;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup()
 {
+  Serial.begin(115200);
+  Serial.println("SETUP");
+
   pinMode(ACT, OUTPUT);
   digitalWrite(ACT, 0);
-
-  Serial.begin(115200);
-  Serial.println();
 
   IPAddress ip(192, 168, 0, 201);
   IPAddress gateway(192, 168, 0, 254);
   IPAddress subnet(255, 255, 255, 0);
 
-  String ssid   = "PistoniHome";          // your network SSID (name)
-  String pass   = "giaco.iren.dario";     // your network password
+  String ssid   = "PistoniHomeT";          // your network SSID (name)
+  String pass   = "giaco1iren1dario";     // your network password
   String remote = "192.168.0.200";        // remote server
 
   dhWifi.setup( ip, gateway, subnet, ssid, pass, remote );
@@ -62,6 +62,7 @@ void setup()
 void loop()
 {
   digitalWrite(ACT, 1);
+  Serial.println("LOOP");
 
   if ( handleHttpServer() )
   {
@@ -77,6 +78,7 @@ void loop()
     ExternalLight_Manager( 20 );
     return;
   }
+  digitalWrite(ACT, 0);
 
   DT.progBoilerACS.manualCheck();
   DT.progSummerAC.manualCheck();
@@ -101,7 +103,6 @@ void loop()
   }
 
   RollingSendValues( 2 );
-  digitalWrite(ACT, 0);
   RollingUpdateTerminals( 4 );
 }
 
@@ -205,12 +206,12 @@ void Summer_Manager(int sec)
     }
     else
     {
-      if ( DT.tInletFloor > 22 )  // minima t Acqua raffreddata
+      if ( DT.tInletFloor > 20 )  // minima t Acqua raffreddata
       {
         summerAC_pdc = true;
         summerAC_pump = true;
       }
-      if ( DT.tReturnFloor > 22 )
+      if ( DT.tReturnFloor > 21 )
       {
         summerAC_pump = true;
       }
@@ -223,7 +224,7 @@ void Summer_Manager(int sec)
   // attuatori
   DT.evSala1.set(needPompa_pp);
   DT.evSala2.set(needPompa_pp);
-  DT.evCucina.set(summerAC_pump || needPompa_pp);
+  DT.evCucina.set(needPompa_pp);
 
   DT.evCameraM1.set(summerAC_pump || needPompa_pp);
   DT.evCameraM2.set(summerAC_pump || needPompa_pp);
@@ -447,13 +448,14 @@ void ExternalLight_Manager(int sec)
   {
     /**************************************************************************************************/
     // decido se accendere le luci
-    if ( DT.lightExternal > 8 + 2 * DT.lightSide ) // isteresi
+    if ( DT.lightExternal > 15 + 5 * DT.lightSide ) // isteresi
     {
       lightSide = true;
       lightLamp = true;
     }
 
-    if ( hour() > 21 || hour() < 5 )
+    /*
+     if ( hour() > 21 || hour() < 5 )
     {
       lightSide = true;
     }
@@ -461,6 +463,7 @@ void ExternalLight_Manager(int sec)
     {
       lightLamp = false;
     }
+    */
 
     /**************************************************************************************************/
     DT.m_log.add("-- LightSide [" +  String(lightSide) + "] + lightExternal: " + String(DT.lightExternal) );
