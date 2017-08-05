@@ -28,13 +28,13 @@ void setup()
   pinMode(ACT, OUTPUT);
   digitalWrite(ACT, 0);
 
-  IPAddress ip(192, 168, 0, 201);
-  IPAddress gateway(192, 168, 0, 254);
+  IPAddress ip(192, 168, 1, 201);
+  IPAddress gateway(192, 168, 1, 1);
   IPAddress subnet(255, 255, 255, 0);
 
-  String ssid   = "PistoniHomeT";          // your network SSID (name)
+  String ssid   = "PistoniHome";         // your network SSID (name)
   String pass   = "giaco1iren1dario";     // your network password
-  String remote = "192.168.0.200";        // remote server
+  String remote = "192.168.1.200";        // remote server (arduino ethernet home)
 
   dhWifi.setup( ip, gateway, subnet, ssid, pass, remote );
 
@@ -62,11 +62,11 @@ void setup()
 void loop()
 {
   digitalWrite(ACT, 1);
-  Serial.println("LOOP");
+  // Serial.println("LOOP");
 
   if ( handleHttpServer() )
   {
-    if ( month() == 6 ||  month() == 7 || month() == 8 ) // solo estate
+    if ( DT.progSummerAC ) // solo estate
     {
       Summer_Manager( 20 );
     }
@@ -93,7 +93,7 @@ void loop()
   BoilerACS_Manager( 60 );
   ExternalLight_Manager( 60 );
 
-  if ( month() == 6 ||  month() == 7 || month() == 8 ) // solo estate
+  if ( DT.progSummerAC ) // solo estate
   {
     Summer_Manager( 60 );
   }
@@ -103,7 +103,7 @@ void loop()
   }
 
   RollingSendValues( 2 );
-  RollingUpdateTerminals( 4 );
+  RollingUpdateTerminals( 5 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +112,9 @@ void UpdateTime()
   DT.m_log.add("-------------------- UpdateTime --");
 
   time_t epoch = dhWifi.GetSystemTime();
+
   if (epoch > 0) setTime( epoch );
+  DT.m_log.add( date_time() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,7 +160,7 @@ void RollingSendValues( int sec )
 
   // le nnn sono a basso intervento 200 sec
 
-  if ( i % nnn == 10 )  DT.rPdc.send(&dhWifi, DT.m_log );
+  if ( i % nnn == 10 ) DT.rPdc.send(&dhWifi, DT.m_log );
   if ( i % nnn == 12 ) DT.rPdcHeat.send(&dhWifi, DT.m_log );
   if ( i % nnn == 14 ) DT.rPdcPompa.send(&dhWifi, DT.m_log );
   if ( i % nnn == 16 ) DT.rPdcNightMode.send(&dhWifi, DT.m_log );
@@ -194,6 +196,8 @@ void Summer_Manager(int sec)
   bool summerAC_pdc  = false;
   bool summerAC_pump = false;
   bool needPompa_pp  = false;
+  bool allRoom = false;
+
   /**************************************************************************************************/
   if (DT.progSummerAC)
   {
@@ -203,6 +207,7 @@ void Summer_Manager(int sec)
     if ( DT.tPufferHi < 23 )
     {
       needPompa_pp = true;      // economy
+      allRoom = true;
     }
     else
     {
@@ -210,10 +215,12 @@ void Summer_Manager(int sec)
       {
         summerAC_pdc = true;
         summerAC_pump = true;
+        allRoom = DT.progAllRooms;
       }
       if ( DT.tReturnFloor > 21 )
       {
         summerAC_pump = true;
+        allRoom = DT.progAllRooms;
       }
     }
     /**************************************************************************************************/
@@ -222,15 +229,15 @@ void Summer_Manager(int sec)
   }
   /**************************************************************************************************/
   // attuatori
-  DT.evSala1.set(needPompa_pp);
-  DT.evSala2.set(needPompa_pp);
-  DT.evCucina.set(needPompa_pp);
-
-  DT.evCameraM1.set(summerAC_pump || needPompa_pp);
-  DT.evCameraM2.set(summerAC_pump || needPompa_pp);
-  DT.evCameraS.set (summerAC_pump || needPompa_pp);
-  DT.evCameraD1.set(summerAC_pump || needPompa_pp);
-  DT.evCameraD2.set(summerAC_pump || needPompa_pp);
+  DT.evSala1.set(allRoom);
+  DT.evSala2.set(allRoom);
+  DT.evCucina.set(summerAC_pump || allRoom);
+  
+  DT.evCameraM1.set(summerAC_pump || allRoom);
+  DT.evCameraM2.set(summerAC_pump || allRoom);
+  DT.evCameraS.set (summerAC_pump || allRoom);
+  DT.evCameraD1.set(summerAC_pump || allRoom);
+  DT.evCameraD2.set(summerAC_pump || allRoom);
 
   DT.rPompaPianoPrimo.set( needPompa_pp );
 
@@ -448,21 +455,21 @@ void ExternalLight_Manager(int sec)
   {
     /**************************************************************************************************/
     // decido se accendere le luci
-    if ( DT.lightExternal > 15 + 5 * DT.lightSide ) // isteresi
+    if ( DT.lightExternal > 20 + 10 * DT.lightSide ) // isteresi
     {
       lightSide = true;
       lightLamp = true;
     }
 
     /*
-     if ( hour() > 21 || hour() < 5 )
-    {
+      if ( hour() > 21 || hour() < 5 )
+      {
       lightSide = true;
-    }
-    if ( hour() < 18 )
-    {
+      }
+      if ( hour() < 18 )
+      {
       lightLamp = false;
-    }
+      }
     */
 
     /**************************************************************************************************/

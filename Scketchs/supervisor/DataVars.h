@@ -160,8 +160,8 @@ class cFloat: public cVar
       fval += m_adjust;
       m_value = fval;
 
-      Serial.print(m_descr);
-      Serial.println(m_value);
+      //Serial.print(m_descr);
+      //Serial.println(m_value);
     }
 
     void updateNz( String stringlist )
@@ -173,8 +173,8 @@ class cFloat: public cVar
         m_value = fval;
       }
 
-      Serial.print(m_descr);
-      Serial.println(m_value);
+      //Serial.print(m_descr);
+      //Serial.println(m_value);
     }
 
     operator float()

@@ -15,8 +15,8 @@ SoftwareSerial mySerial(8, 9, 1);  //RX, TX, inverse logic (signal=5v)
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEE };
 
 // IP address for the controller:  -----------------------------
-IPAddress ip(192, 168, 0, 200);                       //<<-- IP
-IPAddress gateway(192, 168, 0, 254);                  //<<-- GATEWAY
+IPAddress ip(192, 168, 1, 200);                       //<<-- IP
+IPAddress gateway(192, 168, 1, 1);                  //<<-- GATEWAY
 IPAddress subnet(255, 255, 255, 0);                   //<<-- SUBNET
 
 
@@ -69,16 +69,17 @@ void loop()
 {
   for (int t = 1; t < 8; t++)
   {
-    if ( T[t].checkTiming(10000 + t*10 ) )
+    if ( T[t].checkTiming( 5000 + t * 10 ) )
     {
       digitalWrite( t + 1, LOW);
       T[t].sendRequest();
-      if ( T[t].waitData( 100 ) )
+      listenForEthernetClients();
+      if ( T[t].waitData( 200 ) )
       {
         digitalWrite(ACTIVITY, HIGH);
         digitalWrite( t + 1, HIGH );
-      }      
-    };    
+      }
+    };
     listenForEthernetClients();
     digitalWrite(ACTIVITY, LOW );
   };

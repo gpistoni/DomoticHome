@@ -35,7 +35,8 @@ void  DHwifi::setup( IPAddress ip, IPAddress gateway, IPAddress subnet, String s
 time_t DHwifi::GetSystemTime()
 {
   IPAddress timeServerIP; // time.nist.gov NTP server address
-  const char* ntpServerName = "time.nist.gov";
+  //const char* ntpServerName = "time.nist.gov";
+  const char* ntpServerName = "it.pool.ntp.org";
 
   //get a random server from the pool
   WiFi.hostByName(ntpServerName, timeServerIP);
@@ -48,6 +49,7 @@ time_t DHwifi::GetSystemTime()
   if (!cb)
   {
     Serial.println("no packet yet");
+    Serial.println(timeServerIP);
   }
   else
   {
