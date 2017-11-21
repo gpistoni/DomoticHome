@@ -232,7 +232,7 @@ void Summer_Manager(int sec)
   DT.evSala1.set(allRoom);
   DT.evSala2.set(allRoom);
   DT.evCucina.set(summerAC_pump || allRoom);
-  
+
   DT.evCameraM1.set(summerAC_pump || allRoom);
   DT.evCameraM2.set(summerAC_pump || allRoom);
   DT.evCameraS.set (summerAC_pump || allRoom);
@@ -461,16 +461,10 @@ void ExternalLight_Manager(int sec)
       lightLamp = true;
     }
 
-    /*
-      if ( hour() > 21 || hour() < 5 )
-      {
+    if ( hour() > 21 || hour() < 5 )
+    {
       lightSide = true;
-      }
-      if ( hour() < 18 )
-      {
-      lightLamp = false;
-      }
-    */
+    }
 
     /**************************************************************************************************/
     DT.m_log.add("-- LightSide [" +  String(lightSide) + "] + lightExternal: " + String(DT.lightExternal) );
