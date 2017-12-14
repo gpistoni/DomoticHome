@@ -13,6 +13,7 @@ void  DHwifi::setup( IPAddress ip, IPAddress gateway, IPAddress subnet, String s
 
   WiFi.config(ip, gateway, subnet);
   WiFi.begin(ssid.c_str(), pass.c_str());
+  //WiFi.mode(WIFI_STA)
 
   while (WiFi.status() != WL_CONNECTED)
   {

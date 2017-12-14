@@ -1,4 +1,5 @@
 #include <ESP8266WiFi.h>
+//#include <page1.html.h>
 
 extern WiFiServer httpServer;
 extern cDataTable DT;
@@ -13,6 +14,11 @@ void S_page2( WiFiClient &client);
 void S_page3( WiFiClient &client);
 void S_page4( WiFiClient &client);
 void S_page5( WiFiClient &client, JsonObject& json );
+
+	//void handlePage1() {
+	// String s = HTML_page1; //Read HTML contents
+	// server.send(200, "text/html", s); //Send web page
+	//}
 
 void initHttpServer()
 {
@@ -64,6 +70,10 @@ bool handleHttpServer()
 
     readString = LastPage;
   }
+
+// server.on("/", handlePage1); //Which routine to handle at root location
+
+
 
   if (readString.indexOf("/page0") != -1)
   {
