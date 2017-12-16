@@ -1,3 +1,4 @@
+
 //supervisor
 
 #include <ESP8266WiFi.h>
@@ -61,6 +62,8 @@ void setup()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void loop()
 {
+  if ( year() < 2000 ) UpdateTime();
+
   digitalWrite(ACT, 1);
   // Serial.println("LOOP");
 
@@ -365,7 +368,7 @@ void Winter_Manager( int sec )
       DT.m_log.add("Stop Pompa: Sicurezza temp ingreso impianto: tInletFloor: " + String(DT.tInletFloor) + " > 35" );
       needPompa_pp = false;
     }
-    if ( hour() > 1 && hour() < 4 ) // fuori oario
+    if ( hour() < 4 ) // fuori oario
     {
       DT.m_log.add("Stop Pompa: orario " + String( hour() ) );
       needPompa_pp = false;
@@ -454,17 +457,25 @@ void ExternalLight_Manager(int sec)
   if (DT.progExternalLight)
   {
     /**************************************************************************************************/
-    // decido se accendere le luci
+
     if ( DT.lightExternal > 20 + 10 * DT.lightSide ) // isteresi
     {
       lightSide = true;
       lightLamp = true;
     }
 
-    if ( hour() > 21 || hour() < 5 )
+    // decido se accendere le luci
+    if ( (month() >= 11 || month() <= 2) && ( hour() > 17 || hour() < 6 ))
     {
       lightSide = true;
+      lightLamp = true;
     }
+
+    if ( hour() < 12 )
+    {
+      lightLamp = false;
+    }
+
 
     /**************************************************************************************************/
     DT.m_log.add("-- LightSide [" +  String(lightSide) + "] + lightExternal: " + String(DT.lightExternal) );

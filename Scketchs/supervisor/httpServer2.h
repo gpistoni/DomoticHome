@@ -126,12 +126,12 @@ void S_header( WiFiClient &client)
   client.println(""); //  do not forget this one
   page = "<!DOCTYPE html><html xmlns='http://www.w3.org/1999/xhtml' dir='ltr'>"
          "<head>"
-         "<meta http-equiv='refresh' content='10';url='http://192.168.0.201/' >"
+         "<meta http-equiv='refresh' content='10';url='http://192.168.1.201/' >"
          "<title>Home</title>"
          "\n<script>"
          "function myButton( str )"
          "{"
-         "window.location='http://192.168.0.201/set?' + str;"
+         "window.location='http://192.168.1.201/set?' + str;"
          "}"
          "</script>"
          // <!-- define on/off styles -->
