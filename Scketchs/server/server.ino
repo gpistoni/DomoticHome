@@ -40,7 +40,7 @@ void setup()
   T[3].setup(0, 3, &mySerial );  // rele'caldaia
   T[4].setup(0, 4, &mySerial );  // temp caldaie
   T[5].setup(0, 5, &mySerial );  // rele pavimento
-  T[6].setup(0, 6, &mySerial );  // --
+  T[6].setup(0, 6, &mySerial );  // Amperometri
   T[7].setup(0, 7, &mySerial );  // --
 
   //************************************************************
