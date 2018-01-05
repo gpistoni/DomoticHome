@@ -39,9 +39,12 @@ bool listenForEthernetClients()
             {
               client.print( "T" + String(c) + ": " );
               if( c==1)  client.print( "Temperature Stanze  \t" );
+              if( c==2)  client.print( "Luci Esterne   \t" );
               if( c==3)  client.print( "Rele Caldaia        \t" );
               if( c==4)  client.print( "Temperature Caldaia \t" );
               if( c==5)  client.print( "Rele Ev Pavimento   \t" );
+              if( c==6)  client.print( "Amperometri   \t" );
+              
               client.print( T[ c ].lastRequest % 100000);
               client.print( " / " );
               client.println( T[ c ].lastRecived % 100000);

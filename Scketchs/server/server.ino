@@ -15,9 +15,9 @@ SoftwareSerial mySerial(8, 9, 1);  //RX, TX, inverse logic (signal=5v)
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEE };
 
 // IP address for the controller:  -----------------------------
-IPAddress ip(192, 168, 1, 200);                       //<<-- IP
+IPAddress ip(192, 168, 1, 200);                     //<<-- IP
 IPAddress gateway(192, 168, 1, 1);                  //<<-- GATEWAY
-IPAddress subnet(255, 255, 255, 0);                   //<<-- SUBNET
+IPAddress subnet(255, 255, 255, 0);                 //<<-- SUBNET
 
 
 // Pins 10, 11, 12 and 13 are reserved for interfacing with the Ethernet module and should not be used otherwise
@@ -65,6 +65,7 @@ void setup()
   OUTLN( Ethernet.localIP() );
 }
 
+
 void loop()
 {
   for (int t = 1; t < 8; t++)
@@ -93,7 +94,7 @@ void loop()
     OUTLN( Ethernet.localIP() );
   };
 
-  delay(5);
+  listenForEthernetClients();
 }
 
 

@@ -9,6 +9,7 @@ class cDataTable
     cBool progSummerAC;
     cBool progWinterFIRE;
     cBool progWinterPDC;
+    cBool progWinterPDC_ECO;
     cBool progAllRooms;
     cBool progExternalLight;
 
@@ -75,6 +76,14 @@ class cDataTable
     cBool evCameraS;
     cBool evCameraD1;
     cBool evCameraD2;
+
+    // terminal 6
+    cFloat aTotal;
+    cFloat aL1;
+    cFloat aL2;
+    cFloat aL3;
+    cFloat aTavern;
+    cFloat aKitchen;
 
     // puntatori
     cVar* webVar[100];
@@ -144,18 +153,26 @@ class cDataTable
       webVar[56] = evCameraD1.setup         ( T5, 6, "evCameraD1");
       webVar[57] = evCameraD2.setup         ( T5, 7, "evCameraD2");
 
+      webVar[60] = aTotal.setup             ( T6, 0, "aTotal");
+      webVar[61] = aL1.setup                ( T6, 1, "aL1");
+      webVar[62] = aL2.setup                ( T6, 2, "aL2");
+      webVar[63] = aL3.setup                ( T6, 3, "aL3");
+      webVar[64] = aTavern.setup            ( T6, 4, "aTavern");
+      webVar[65] = aKitchen.setup           ( T6, 5, "aKitchen");
+
       webVar[90] = progBoilerACS.setup      ( PROG, 0, "progBoilerACS");
       webVar[91] = progSummerAC.setup       ( PROG, 0, "progSummerAC");
       webVar[92] = progWinterFIRE.setup     ( PROG, 0, "progWinterFIRE");
       webVar[93] = progWinterPDC.setup      ( PROG, 0, "progWinterPDC");
-      webVar[94] = progAllRooms.setup       ( PROG, 0, "progAllRooms");
-      webVar[95] = progExternalLight.setup  ( PROG, 0, "progExternalLight");
+      webVar[94] = progWinterPDC_ECO.setup  ( PROG, 0, "progWinterPDC_ECO");
+      webVar[95] = progAllRooms.setup       ( PROG, 0, "progAllRooms");
+      webVar[96] = progExternalLight.setup  ( PROG, 0, "progExternalLight");
 
     };
 
     void UpdateT1( String strs )
     {
-      m_log.add("**T1-Stanze** ");
+      m_log.add("**T1-GET-tStanze** ");
       m_log.add(strs);
 
       tCucina.updateNz( strs );
@@ -182,19 +199,19 @@ class cDataTable
 
     void UpdateT2( String strs )
     {
-      m_log.add("**T2-Luci** ");
+      m_log.add("**T2-SET-Luci** ");
       m_log.add(strs);
     };
 
     void UpdateT3( String strs )
     {
-      m_log.add("**T3-Caldaia** ");
+      m_log.add("**T3-SET-Caldaia** ");
       m_log.add(strs);
     };
 
     void UpdateT4( String strs)
     {
-      m_log.add("**T4-TCaldaia** ");
+      m_log.add("**T4-GET-tCaldaia** ");
       m_log.add(strs);
 
       tPufferHi.updateNz( strs );
@@ -209,14 +226,22 @@ class cDataTable
 
     void UpdateT5( String strs)
     {
-      m_log.add("**T5-EvStanze** ");
+      m_log.add("**T5-SET-EvStanze** ");
       m_log.add(strs);
     };
 
     void UpdateT6( String strs )
     {
-      m_log.add("**T6** ");
+      m_log.add("**T6-GET-Amperometri** ");
       m_log.add(strs);
+
+      aTotal.updateNz( strs );
+      aL1.updateNz( strs );
+      aL2.updateNz( strs );
+      aL3.updateNz( strs );
+      aTavern.updateNz( strs );
+      aKitchen.updateNz( strs );
+
     };
 
     void UpdateT7( String strs )

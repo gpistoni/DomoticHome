@@ -50,6 +50,7 @@ void setup()
   DT.progBoilerACS.set(1);
   DT.progSummerAC.set(0);
   DT.progWinterPDC.set(0);
+  DT.progWinterPDC_ECO.set(0);
   DT.progAllRooms.set(0);
   DT.progExternalLight.set(1);
 
@@ -87,11 +88,13 @@ void loop()
   DT.progSummerAC.manualCheck();
   DT.progWinterFIRE.manualCheck();
   DT.progWinterPDC.manualCheck();
+  DT.progWinterPDC_ECO.manualCheck();
   DT.progAllRooms.manualCheck();
   DT.progExternalLight.manualCheck();
 
   if (DT.progWinterFIRE) DT.progSummerAC.set(0);
   if (DT.progWinterPDC)  DT.progSummerAC.set(0);
+  if (DT.progWinterPDC_ECO)  DT.progSummerAC.set(0);
 
   BoilerACS_Manager( 60 );
   ExternalLight_Manager( 60 );
@@ -127,13 +130,13 @@ void RollingUpdateTerminals( int sec )
 
   static unsigned int i = 0;
 
-  if ( i % 6 == 0 || i == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
-  if ( i % 6 == 1 || i == 0 )   DT.UpdateT2( dhWifi.HttpRequest( "@get(2,99)") );
-  if ( i % 6 == 2 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
-  if ( i % 6 == 3 || i == 0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
-  if ( i % 6 == 4 || i == 0 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
-  if ( i % 6 == 5 || i == 0 )   DT.UpdateT6( dhWifi.HttpRequest( "@get(6,99)") );
-
+  if ( i % 7 == 0 || i == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
+  if ( i % 7 == 1 || i == 0 )   DT.UpdateT2( dhWifi.HttpRequest( "@get(2,99)") );
+  if ( i % 7 == 2 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
+  if ( i % 7 == 3 || i == 0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
+  if ( i % 7 == 4 || i == 0 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
+  if ( i % 7 == 5 || i == 0 )   DT.UpdateT6( dhWifi.HttpRequest( "@get(6,99)") );
+  if ( i % 7 == 6 || i == 0 )   DT.UpdateT7( dhWifi.HttpRequest( "@get(7,99)") );
   i++;
 }
 
@@ -303,7 +306,7 @@ void Winter_Manager( int sec )
   bool needPdc = false;
   bool needPCamino = false;
 
-  if (DT.progWinterFIRE || DT.progWinterPDC )
+  if (DT.progWinterFIRE || DT.progWinterPDC || DT.progWinterPDC_ECO)
   {
     //decido se accendere le stanze
     String str = "Condizione";
@@ -382,6 +385,8 @@ void Winter_Manager( int sec )
 
     //////////////////////////////////////////////////////////////////////////////////
     needPdc = DT.progWinterPDC && (sala || cucina || bagno);
+    needPdc = needPdc || ( DT.progWinterPDC_ECO && (sala || cucina || bagno) && DT.tExternal > 7 );
+
     if ( needPompa_pp )
     {
       DT.m_log.add("PDC suspended - Fire enought ");
