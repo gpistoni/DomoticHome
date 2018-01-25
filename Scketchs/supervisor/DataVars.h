@@ -128,17 +128,17 @@ class cVar
       if ( m_setpoint == 0  )
       {
         String href = "'/set?" + descrSetPoint() + "=1'";
-        return "<td><a href=" + href + "> <input type='button' id='btn' value='DIS'  class='fdis'/>";
+        return "<td><a href=" + href + "> <input type='button' id='btn' value='AUTOMATICO'  class='fdis'/>";
       }
       else if ( m_setpoint == 1  )
       {
         String href = "'/set?" + descrSetPoint() + "=2'";
-        return "<td><a href=" + href + ">  <input type='button' id='btn' value='ON' class='fon'/>";
+        return "<td><a href=" + href + ">  <input type='button' id='btn' value='FORCE ON' class='fon'/>";
       }
       else
       {
         String href = "'set?" + descrSetPoint() + "=0'";
-        return "<td><a href=" + href + ">  <input type='button' id='btn' value='OFF' class='foff'/>";
+        return "<td><a href=" + href + ">  <input type='button' id='btn' value='FORCE OFF' class='foff'/>";
       }
     }
 };

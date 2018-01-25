@@ -13,10 +13,9 @@
 DHProtocol Slave;
 SoftwareSerial mySerial(11, 12, TRUE);     // 11,12 Serial
 
-#define NUM_SENS 5
+#define NUM_SENS 6
 
 EnergyMonitor emon[6];
-int V_rete = 233.0;
 
 double K[6] =  {
   31.5,           // 100A
@@ -24,7 +23,7 @@ double K[6] =  {
   40,             // 15A
   40,             // 15A
   40,             // 15A
-  29  
+  29
 };
 
 
@@ -40,7 +39,7 @@ void setup()
   emon[4].current(A4, K[4]);
   emon[5].current(A5, K[5]);
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.print( "Setup-- SLAVE ID: " );
   Serial.print( Slave.m_id );
 
@@ -48,55 +47,61 @@ void setup()
 }
 
 unsigned long old_ReadHDT = 0;
-double totalwork=0;
+
+unsigned long read_t[8] = {millis(), millis(), millis(), millis(), millis(), millis(), millis(), millis()};
+
+double totalwork[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+double totalElapsed[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+
+int rolling_i = 0;
+const int V_rete = 233;
 
 void loop()
 {
-  digitalWrite(LED_BUILTIN, LOW); 
+  digitalWrite(LED_BUILTIN, LOW);
   if ( Slave.waitRequest( 50 ) )
   {
     digitalWrite(LED_BUILTIN, HIGH);
     Slave.sendData();
   }
-
-  /*******************************************************************************/
-  unsigned long now = millis();               // Terminal ID
-  unsigned long elapsed = now - old_ReadHDT;  // Elapsed
-
-  if ( elapsed >= 5000)             // leggo probe ogni 2 secondi
+  else
   {
-    old_ReadHDT = now;
+    /*******************************************************************************/
+    unsigned long now = millis();               // Terminal ID
 
-    Serial.println( "Readvalues" );
-    for ( int i = 0; i < NUM_SENS; i++)
-    {
-      double Irms = emon[i].calcIrms(1480);
-      double Pow = Irms * V_rete;
-      double Work = Pow * elapsed / 1000 / 3600;
+    int i = rolling_i++ % NUM_SENS;
+    int elapsed = millis() - read_t[i] ;
+    read_t[i] = millis();
 
-      totalwork+= Work;
+    double Irms = emon[i].calcIrms(1480);
+    double work = Irms * V_rete * elapsed / 1000 / 3600.0;
 
-      Slave.sensor[i] = Irms * 10;
-      Slave.sensor[8 + i] = Pow;
-      Slave.sensor[16 + i] = totalwork;
+    totalwork[i] += work;
+    totalElapsed[i] += elapsed;
 
-      Serial.print(i);
-      Serial.print(" K: ");
-      Serial.print(K[i]); // Irms
+    Slave.sensor[i] = Irms * 10.0;
+    Slave.sensor[8 + i] = totalwork[i];
+    Slave.sensor[16 + i] = totalElapsed[i];
 
-      Serial.print(" Corrente (A): ");
-      Serial.print(Slave.sensor[i] / 10.0 ); // Irms
+    if (i == 0) Serial.print("\n");
+    Serial.print("\n");
+    Serial.print(i);
+    Serial.print(" K: ");
+    Serial.print(K[i]); // Irms
 
-      Serial.print(" Potenza (w) : ");
-      Serial.print(Slave.sensor[8 + i]); //Scrivo sul monitor seriale Corrente*Tensione=Potenza
+    Serial.print("\t (A): ");
+    Serial.print(Slave.sensor[i] / 10.0); // Irms
+    Serial.print("\t (W) : ");
+    Serial.print(Slave.sensor[i] * V_rete / 10); //Scrivo sul monitor seriale Corrente*Tensione=Potenza
 
-      Serial.print(" Lavoro (wh) : ");
-      Serial.print( Work ); // Scrivo sul monitor seriale Corrente*Tensione=Potenza
-      Serial.print(" total (wh) : ");
-      Serial.println( totalwork ); // Scrivo sul monitor seriale Corrente*Tensione=Potenza
-    }
+    Serial.print("\t Lavoro (wh) : ");
+    Serial.print( work ); // Scrivo sul monitor seriale Corrente*Tensione=Potenza
+    Serial.print("\t Totale (wh) : ");
+    Serial.print( totalwork[i] ); // Scrivo sul monitor seriale kwh
+    Serial.print(" in (s) : ");
+    Serial.print( totalElapsed[i] / 1000 ); // Scrivo sul monitor seriale kwh
+
   }
-
   /*****************************************************************************/
 };
 

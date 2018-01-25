@@ -1,6 +1,4 @@
 
-//supervisor
-
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <Time.h>
@@ -130,13 +128,14 @@ void RollingUpdateTerminals( int sec )
 
   static unsigned int i = 0;
 
-  if ( i % 7 == 0 || i == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
-  if ( i % 7 == 1 || i == 0 )   DT.UpdateT2( dhWifi.HttpRequest( "@get(2,99)") );
-  if ( i % 7 == 2 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
-  if ( i % 7 == 3 || i == 0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
-  if ( i % 7 == 4 || i == 0 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
-  if ( i % 7 == 5 || i == 0 )   DT.UpdateT6( dhWifi.HttpRequest( "@get(6,99)") );
-  if ( i % 7 == 6 || i == 0 )   DT.UpdateT7( dhWifi.HttpRequest( "@get(7,99)") );
+  if ( i % 5 == 0 || i == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
+  if ( i % 5 == 1 || i == 0 )   DT.UpdateT2( dhWifi.HttpRequest( "@get(2,99)") );
+  if ( i % 5 == 2 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
+  if ( i % 5 == 3 || i == 0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
+  if ( i % 5 == 4 || i == 0 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
+
+  DT.UpdateT6( dhWifi.HttpRequest( "@get(6,99)") );
+  //DT.UpdateT7( dhWifi.HttpRequest( "@get(7,99)") );
   i++;
 }
 
@@ -361,9 +360,9 @@ void Winter_Manager( int sec )
       DT.m_log.add("Condizione Pompa PP insufficiente: tInletFloor: " + String(DT.tInletFloor) + " tReturnFloor: " + String(DT.tReturnFloor) );
       needPompa_pp = false;
     }
-    if ( (DT.tInletFloor > 25) && (DT.tInletFloor - DT.tReturnFloor) < 2 && minute() % 10 != 0 )  // ritorno troppo alto - non ne ho bisogno
+    if ( (DT.tInletFloor > 26) )  // ritorno troppo alto - non ne ho bisogno
     {
-      DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor: " + String(DT.tReturnFloor) + " tInletFloor: " + String(DT.tInletFloor) );
+      DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor: " + String(DT.tReturnFloor) );
       needPompa_pp = false;
     }
     if ( DT.tInletFloor > 35 )  // 35 è la sicurezza dopo al quale spengo la pompa
@@ -404,8 +403,8 @@ void Winter_Manager( int sec )
 
     //////////////////////////////////////////////////////////////////////////////////
     //decido se accendere sulla lavanderia
-    DT.m_log.add("Condizione DT.tPufferLow > 45 && DT.tReturnFireplace > 40");
-    if ( DT.tPufferLow > 45 && DT.tReturnFireplace > 40 )
+    //DT.m_log.add("Condizione DT.tPufferLow > 45 && DT.tReturnFireplace > 40");
+    if ( DT.tPufferLow > 40 && DT.tReturnFireplace > 40 )
     {
       needPompa_pt = true;
     }

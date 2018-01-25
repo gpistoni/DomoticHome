@@ -78,12 +78,12 @@ class cDataTable
     cBool evCameraD2;
 
     // terminal 6
-    cFloat aTotal;
-    cFloat aL1;
-    cFloat aL2;
-    cFloat aL3;
-    cFloat aTavern;
-    cFloat aKitchen;
+    cFloat aTotal[3];
+    cFloat aL1[3];
+    cFloat aL2[3];
+    cFloat aL3[3];
+    cFloat aM[3];
+    cFloat aN[3];
 
     // puntatori
     cVar* webVar[100];
@@ -153,12 +153,26 @@ class cDataTable
       webVar[56] = evCameraD1.setup         ( T5, 6, "evCameraD1");
       webVar[57] = evCameraD2.setup         ( T5, 7, "evCameraD2");
 
-      webVar[60] = aTotal.setup             ( T6, 0, "aTotal");
-      webVar[61] = aL1.setup                ( T6, 1, "aL1");
-      webVar[62] = aL2.setup                ( T6, 2, "aL2");
-      webVar[63] = aL3.setup                ( T6, 3, "aL3");
-      webVar[64] = aTavern.setup            ( T6, 4, "aTavern");
-      webVar[65] = aKitchen.setup           ( T6, 5, "aKitchen");
+      webVar[60] = aTotal[0].setup             ( T6, 0, "Total");
+      webVar[61] = aL1[0].setup                ( T6, 1, "L1");
+      webVar[62] = aL2[0].setup                ( T6, 2, "L2");
+      webVar[63] = aL3[0].setup                ( T6, 3, "L3");
+      webVar[64] = aM[0].setup                 ( T6, 4, "M");
+      webVar[65] = aN[0].setup                 ( T6, 5, "N");
+
+      webVar[60+8] = aTotal[1].setup             ( T6, 8 + 0, "wTotal");
+      webVar[61+8] = aL1[1].setup                ( T6, 8 + 1, "wL1");
+      webVar[62+8] = aL2[1].setup                ( T6, 8 + 2, "wL2");
+      webVar[63+8] = aL3[1].setup                ( T6, 8 + 3, "wL3");
+      webVar[64+8] = aM[1].setup                 ( T6, 8 + 4, "wM");
+      webVar[65+8] = aN[1].setup                 ( T6, 8 + 5, "wN");
+
+      webVar[60+16] = aTotal[2].setup             ( T6, 16 + 0, "whTotal");
+      webVar[61+16] = aL1[2].setup                ( T6, 16 + 1, "whL1");
+      webVar[62+16] = aL2[2].setup                ( T6, 16 + 2, "whL2");
+      webVar[63+16] = aL3[2].setup                ( T6, 16 + 3, "whL3");
+      webVar[64+16] = aM[2].setup                 ( T6, 16 + 4, "whM");
+      webVar[65+16] = aN[2].setup                 ( T6, 16 + 5, "whN");
 
       webVar[90] = progBoilerACS.setup      ( PROG, 0, "progBoilerACS");
       webVar[91] = progSummerAC.setup       ( PROG, 0, "progSummerAC");
@@ -235,13 +249,15 @@ class cDataTable
       m_log.add("**T6-GET-Amperometri** ");
       m_log.add(strs);
 
-      aTotal.updateNz( strs );
-      aL1.updateNz( strs );
-      aL2.updateNz( strs );
-      aL3.updateNz( strs );
-      aTavern.updateNz( strs );
-      aKitchen.updateNz( strs );
-
+      for (int i = 0; i < 3; i++)
+      {
+        aTotal[i].updateNz( strs );
+        aL1[i].updateNz( strs );
+        aL2[i].updateNz( strs );
+        aL3[i].updateNz( strs );
+        aM[i].updateNz( strs );
+        aN[i].updateNz( strs );
+      }
     };
 
     void UpdateT7( String strs )
