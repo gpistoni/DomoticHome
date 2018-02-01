@@ -8,17 +8,18 @@ extern DHFile Config;
 String LastPage;
 
 void S_header( WiFiClient &client);
-void S_page0( WiFiClient &client);
-void S_page1( WiFiClient &client);
+void S_page_progs( WiFiClient &client);
+void S_page_rooms( WiFiClient &client);
+void S_page_amp( WiFiClient &client);
 void S_page2( WiFiClient &client);
 void S_page3( WiFiClient &client);
-void S_page4( WiFiClient &client);
-void S_page5( WiFiClient &client, JsonObject& json );
+void S_page_log( WiFiClient &client);
+void S_page_json( WiFiClient &client, JsonObject& json );
 
-	//void handlePage1() {
-	// String s = HTML_page1; //Read HTML contents
-	// server.send(200, "text/html", s); //Send web page
-	//}
+//void handlePage1() {
+// String s = HTML_page1; //Read HTML contents
+// server.send(200, "text/html", s); //Send web page
+//}
 
 void initHttpServer()
 {
@@ -71,19 +72,20 @@ bool handleHttpServer()
     readString = LastPage;
   }
 
-// server.on("/", handlePage1); //Which routine to handle at root location
-
-
-
-  if (readString.indexOf("/page0") != -1)
+  if (readString.indexOf("/page_progs") != -1)
   {
     S_header( client );
-    S_page0( client );
+    S_page_progs( client );
   }
-  else if (readString.indexOf("/page1") != -1)
+  else if (readString.indexOf("/page_rooms") != -1)
   {
     S_header( client );
-    S_page1( client );
+    S_page_rooms( client );
+  }
+  else if (readString.indexOf("/page_amp") != -1)
+  {
+    S_header( client );
+    S_page_amp( client );
   }
   else if (readString.indexOf("/page2") != -1)
   {
@@ -95,22 +97,22 @@ bool handleHttpServer()
     S_header( client );
     S_page3( client );
   }
-  else if (readString.indexOf("/page4") != -1)
+  else if (readString.indexOf("/page_log") != -1)
   {
     S_header( client );
-    S_page4( client );
+    S_page_log( client );
   }
-  else if (readString.indexOf("/page5") != -1)
+  else if (readString.indexOf("/page_json") != -1)
   {
     JsonObject& root = Config.root();
     S_header( client );
-    S_page5( client, root );
+    S_page_json( client, root );
   }
   else
   {
     readString = "/page1";
     S_header(  client );
-    S_page1( client );
+    S_page_rooms( client );
   }
 
   LastPage = readString;
@@ -126,12 +128,12 @@ void S_header( WiFiClient &client)
   client.println(""); //  do not forget this one
   page = "<!DOCTYPE html><html xmlns='http://www.w3.org/1999/xhtml' dir='ltr'>"
          "<head>"
-         "<meta http-equiv='refresh' content='10';url='http://192.168.0.201/' >"
+         "<meta http-equiv='refresh' content='4';url='http://192.168.1.201/' >"
          "<title>Home</title>"
          "\n<script>"
          "function myButton( str )"
          "{"
-         "window.location='http://192.168.0.201/set?' + str;"
+         "window.location='http://192.168.1.201/set?' + str;"
          "}"
          "</script>"
          // <!-- define on/off styles -->
@@ -181,18 +183,19 @@ String Menu()
 {
   String page;
   //***************************************************************************************************************/
-  page = "<h3><a href=page0> Programmi </a> |"
-         "<a href=page1> Stanze </a> |"
+  page = "<h3><a href=page_progs> Programmi </a> |"
+         "<a href=page_rooms> Stanze </a> |"
+         "<a href=page_amp> Consumi </a> |"
          "<a href=page2> Attuatori </a> |"
          "<a href=page3> Caldaia </a> |"
-         "<a href=page4> Log </a> |"
-         "<a href=page5> Json </a> |"
+         "<a href=page_log> Log </a> |"
+         //    "<a href=page_json> Json </a> |"
          "</h3>";
   return page;
 }
 
 
-void S_page0( WiFiClient &client)
+void S_page_progs( WiFiClient &client)
 {
   String page = Menu();
   //***************************************************************************************************************/
@@ -202,7 +205,7 @@ void S_page0( WiFiClient &client)
            "<tr>"
            "<th>Stanze"
            "<th>Stato"
-           "<th>Forzato"
+           "<th>Manual"
            "</tr>";
   client.println(page);
 
@@ -227,7 +230,7 @@ void S_page0( WiFiClient &client)
   //***************************************************************************************************************/
 }
 
-void S_page1( WiFiClient &client)
+void S_page_rooms( WiFiClient &client)
 {
   String page = Menu();
   /***************************************************************************************************************/
@@ -249,7 +252,7 @@ void S_page1( WiFiClient &client)
   page = "";
   for (int i = 0; i < 8; i++)
   {
-   if ( DT.webVar[i] )
+    if ( DT.webVar[i] )
     {
       page += "\n<tr>";
       page += DT.webVar[i]->td_descr();
@@ -258,12 +261,59 @@ void S_page1( WiFiClient &client)
       page += DT.webVar[16 + i]->td_valueF();
 
       String req_p = DT.webVar[i]->descrSetPoint() + "=" + String(DT.webVar[i]->setPoint() + 0.5 );
-      page += "<td><button onclick='myButton(\"" + req_p + "\")'> UP </button></td>";
+      page += "<td><button onclick='myButton(\"" + req_p + "\")'> -UP- </button></td>";
 
       page += DT.webVar[i]->td_setpointF();
 
       String req_m = DT.webVar[i]->descrSetPoint() + "=" + String(DT.webVar[i]->setPoint() - 0.5 );
-      page += "<td><button onclick='myButton(\"" + req_m + "\")'> DW </td>";
+      page += "<td><button onclick='myButton(\"" + req_m + "\")'> -DW- </td>";
+      page += "</tr>";
+    }
+  }
+  client.println(page);
+  //***************************************************************************************************************/
+
+  page =  "</tbody>"
+          "</table>"  ;
+  client.println(page);
+  //***************************************************************************************************************/
+}
+
+void S_page_amp( WiFiClient &client)
+{
+  String page = Menu();
+  /***************************************************************************************************************/
+  page +=  "\n<h1> Consumi </h1>"
+           "<table>"
+           "<tbody>"
+           "<tr>"
+           "<th>Settore"
+           "<th>Ampere"
+           "<th>Watt"
+           "<th>KWh"
+           "<th>h"
+           "<th>Euro"
+           "<th>"
+           "</tr>";
+  client.println(page);
+  //***************************************************************************************************************/
+
+  page = "";
+  for (int i = 60; i <= 65; i++)
+  {
+    if ( DT.webVar[i] )
+    {
+      float a = DT.webVar[i]->value();
+      float wh = DT.webVar[8 + i]->value();
+      float t = DT.webVar[16 + i]->value();
+
+      page += "\n<tr>";
+      page += DT.webVar[i]->td_descr();         // descr
+      page += String("<td>") + a;               // A
+      page += String("<td>") + a * 233;         // W
+      page += String("<td>") + wh;              // KWH
+      page += String("<td>") + t;               // time
+      page += String("<td>") + wh * 0.22;
       page += "</tr>";
     }
   }
@@ -292,11 +342,13 @@ void S_page2( WiFiClient &client)
   //***************************************************************************************************************/
   page = "\n<tr>"
          "<td>Bagno</td>";
+
   if (DT.rPdc == true)
     page += DT.rPdc.td_bulb();
   else
     page += DT.rPompaPianoPrimo.td_bulb();
   page += "</tr>";
+
   for (int i = 50; i < 60; i++)
   {
     if (DT.webVar[i])
@@ -398,7 +450,7 @@ void S_page3( WiFiClient &client)
   //***************************************************************************************************************/
 }
 
-void S_page4( WiFiClient& client)
+void S_page_log( WiFiClient& client)
 {
   String page  = Menu();
   page += "\n<h1> Log </h1>";
@@ -410,7 +462,7 @@ void S_page4( WiFiClient& client)
   //***************************************************************************************************************/
 }
 
-void S_page5( WiFiClient& client, JsonObject& json)
+void S_page_json( WiFiClient& client, JsonObject& json)
 {
   String page  = Menu();
   page += "\n<h1> Json </h1>";

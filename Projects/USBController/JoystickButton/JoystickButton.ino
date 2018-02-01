@@ -13,6 +13,8 @@
 void setup() 
 {
   // Initialize Button Pins
+  pinMode(0, INPUT_PULLUP);
+  pinMode(1, INPUT_PULLUP);
   pinMode(2, INPUT_PULLUP);
   pinMode(3, INPUT_PULLUP);
   pinMode(4, INPUT_PULLUP);
@@ -33,18 +35,20 @@ void setup()
 
 int sensorPin = A0;
 // Last state of the button
-int lastButtonState[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+int lastButtonState[14] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 void loop() 
 {
   // Read PIN values
-  for (int index = 0; index < 12 ; index++)
+  for (int index = 0; index < 14 ; index++)
   {
-    int currentButtonState = !digitalRead(index + 2);
+    int currentButtonState = !digitalRead(index);
     if (currentButtonState != lastButtonState[index])
     {
       Joystick.setButton(index, currentButtonState);
       lastButtonState[index] = currentButtonState;
+      Serial.print("button");
+      Serial.println(index);
     }
   }
   
@@ -54,6 +58,6 @@ void loop()
   sensorValue /= 4;
   Joystick.setZAxis(sensorValue);
 
-  delay(2);
+  delay(1);
 }
 

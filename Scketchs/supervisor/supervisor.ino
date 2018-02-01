@@ -1,4 +1,3 @@
-//supervisor
 
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
@@ -49,6 +48,7 @@ void setup()
   DT.progBoilerACS.set(1);
   DT.progSummerAC.set(0);
   DT.progWinterPDC.set(0);
+  DT.progWinterPDC_ECO.set(0);
   DT.progAllRooms.set(0);
   DT.progExternalLight.set(1);
 
@@ -61,6 +61,8 @@ void setup()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void loop()
 {
+  if ( year() < 2000 ) UpdateTime();
+
   digitalWrite(ACT, 1);
   // Serial.println("LOOP");
 
@@ -84,11 +86,13 @@ void loop()
   DT.progSummerAC.manualCheck();
   DT.progWinterFIRE.manualCheck();
   DT.progWinterPDC.manualCheck();
+  DT.progWinterPDC_ECO.manualCheck();
   DT.progAllRooms.manualCheck();
   DT.progExternalLight.manualCheck();
 
   if (DT.progWinterFIRE) DT.progSummerAC.set(0);
   if (DT.progWinterPDC)  DT.progSummerAC.set(0);
+  if (DT.progWinterPDC_ECO)  DT.progSummerAC.set(0);
 
   BoilerACS_Manager( 60 );
   ExternalLight_Manager( 60 );
@@ -124,13 +128,14 @@ void RollingUpdateTerminals( int sec )
 
   static unsigned int i = 0;
 
-  if ( i % 6 == 0 || i == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
-  if ( i % 6 == 1 || i == 0 )   DT.UpdateT2( dhWifi.HttpRequest( "@get(2,99)") );
-  if ( i % 6 == 2 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
-  if ( i % 6 == 3 || i == 0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
-  if ( i % 6 == 4 || i == 0 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
-  if ( i % 6 == 5 || i == 0 )   DT.UpdateT6( dhWifi.HttpRequest( "@get(6,99)") );
+  if ( i % 5 == 0 || i == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
+  if ( i % 5 == 1 || i == 0 )   DT.UpdateT2( dhWifi.HttpRequest( "@get(2,99)") );
+  if ( i % 5 == 2 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
+  if ( i % 5 == 3 || i == 0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
+  if ( i % 5 == 4 || i == 0 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
 
+  DT.UpdateT6( dhWifi.HttpRequest( "@get(6,99)") );
+  //DT.UpdateT7( dhWifi.HttpRequest( "@get(7,99)") );
   i++;
 }
 
@@ -300,7 +305,7 @@ void Winter_Manager( int sec )
   bool needPdc = false;
   bool needPCamino = false;
 
-  if (DT.progWinterFIRE || DT.progWinterPDC )
+  if (DT.progWinterFIRE || DT.progWinterPDC || DT.progWinterPDC_ECO)
   {
     //decido se accendere le stanze
     String str = "Condizione";
@@ -355,9 +360,9 @@ void Winter_Manager( int sec )
       DT.m_log.add("Condizione Pompa PP insufficiente: tInletFloor: " + String(DT.tInletFloor) + " tReturnFloor: " + String(DT.tReturnFloor) );
       needPompa_pp = false;
     }
-    if ( (DT.tInletFloor > 25) && (DT.tInletFloor - DT.tReturnFloor) < 2 && minute() % 10 != 0 )  // ritorno troppo alto - non ne ho bisogno
+    if ( (DT.tInletFloor > 26) )  // ritorno troppo alto - non ne ho bisogno
     {
-      DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor: " + String(DT.tReturnFloor) + " tInletFloor: " + String(DT.tInletFloor) );
+      DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor: " + String(DT.tReturnFloor) );
       needPompa_pp = false;
     }
     if ( DT.tInletFloor > 35 )  // 35 è la sicurezza dopo al quale spengo la pompa
@@ -365,7 +370,7 @@ void Winter_Manager( int sec )
       DT.m_log.add("Stop Pompa: Sicurezza temp ingreso impianto: tInletFloor: " + String(DT.tInletFloor) + " > 35" );
       needPompa_pp = false;
     }
-    if ( hour() > 1 && hour() < 4 ) // fuori oario
+    if ( hour() < 4 ) // fuori oario
     {
       DT.m_log.add("Stop Pompa: orario " + String( hour() ) );
       needPompa_pp = false;
@@ -379,6 +384,8 @@ void Winter_Manager( int sec )
 
     //////////////////////////////////////////////////////////////////////////////////
     needPdc = DT.progWinterPDC && (sala || cucina || bagno);
+    needPdc = needPdc || ( DT.progWinterPDC_ECO && (sala || cucina || bagno) && DT.tExternal > 7 );
+
     if ( needPompa_pp )
     {
       DT.m_log.add("PDC suspended - Fire enought ");
@@ -396,8 +403,8 @@ void Winter_Manager( int sec )
 
     //////////////////////////////////////////////////////////////////////////////////
     //decido se accendere sulla lavanderia
-    DT.m_log.add("Condizione DT.tPufferLow > 45 && DT.tReturnFireplace > 40");
-    if ( DT.tPufferLow > 45 && DT.tReturnFireplace > 40 )
+    //DT.m_log.add("Condizione DT.tPufferLow > 45 && DT.tReturnFireplace > 40");
+    if ( DT.tPufferLow > 40 && DT.tReturnFireplace > 40 )
     {
       needPompa_pt = true;
     }
@@ -454,17 +461,25 @@ void ExternalLight_Manager(int sec)
   if (DT.progExternalLight)
   {
     /**************************************************************************************************/
-    // decido se accendere le luci
+
     if ( DT.lightExternal > 20 + 10 * DT.lightSide ) // isteresi
     {
       lightSide = true;
       lightLamp = true;
     }
 
-    if ( hour() > 21 || hour() < 5 )
+    // decido se accendere le luci
+    if ( (month() >= 11 || month() <= 2) && ( hour() > 17 || hour() < 6 ))
     {
       lightSide = true;
+      lightLamp = true;
     }
+
+    if ( hour() < 12 )
+    {
+      lightLamp = false;
+    }
+
 
     /**************************************************************************************************/
     DT.m_log.add("-- LightSide [" +  String(lightSide) + "] + lightExternal: " + String(DT.lightExternal) );

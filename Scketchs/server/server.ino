@@ -15,9 +15,9 @@ SoftwareSerial mySerial(8, 9, 1);  //RX, TX, inverse logic (signal=5v)
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEE };
 
 // IP address for the controller:  -----------------------------
-IPAddress ip(192, 168, 1, 200);                       //<<-- IP
+IPAddress ip(192, 168, 1, 200);                     //<<-- IP
 IPAddress gateway(192, 168, 1, 1);                  //<<-- GATEWAY
-IPAddress subnet(255, 255, 255, 0);                   //<<-- SUBNET
+IPAddress subnet(255, 255, 255, 0);                 //<<-- SUBNET
 
 
 // Pins 10, 11, 12 and 13 are reserved for interfacing with the Ethernet module and should not be used otherwise
@@ -40,7 +40,7 @@ void setup()
   T[3].setup(0, 3, &mySerial );  // rele'caldaia
   T[4].setup(0, 4, &mySerial );  // temp caldaie
   T[5].setup(0, 5, &mySerial );  // rele pavimento
-  T[6].setup(0, 6, &mySerial );  // --
+  T[6].setup(0, 6, &mySerial );  // Amperometri
   T[7].setup(0, 7, &mySerial );  // --
 
   //************************************************************
@@ -64,6 +64,7 @@ void setup()
   OUT("server is at ");
   OUTLN( Ethernet.localIP() );
 }
+
 
 void loop()
 {
@@ -93,7 +94,7 @@ void loop()
     OUTLN( Ethernet.localIP() );
   };
 
-  delay(5);
+  listenForEthernetClients();
 }
 
 
