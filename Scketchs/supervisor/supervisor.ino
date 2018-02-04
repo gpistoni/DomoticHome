@@ -25,7 +25,6 @@ void setup()
   Serial.println("SETUP");
 
   pinMode(ACT, OUTPUT);
-  digitalWrite(ACT, 0);
 
   IPAddress ip(192, 168, 1, 201);
   IPAddress gateway(192, 168, 1, 1);
@@ -63,9 +62,6 @@ void loop()
 {
   if ( year() < 2000 ) UpdateTime();
 
-  digitalWrite(ACT, 1);
-  // Serial.println("LOOP");
-
   if ( handleHttpServer() )
   {
     if ( DT.progSummerAC ) // solo estate
@@ -80,7 +76,7 @@ void loop()
     ExternalLight_Manager( 20 );
     return;
   }
-  digitalWrite(ACT, 0);
+  digitalWrite(ACT, 1);
 
   DT.progBoilerACS.manualCheck();
   DT.progSummerAC.manualCheck();
@@ -105,9 +101,28 @@ void loop()
   {
     Winter_Manager( 60 );
   }
-
+  //----------------------------------------------------------------------------
   RollingSendValues( 2 );
+  //----------------------------------------------------------------------------
+  if ( handleHttpServer() )
+  {
+    if ( DT.progSummerAC ) // solo estate
+    {
+      Summer_Manager( 20 );
+    }
+    else                               // solo inverno
+    {
+      Winter_Manager( 20 );
+    }
+    BoilerACS_Manager( 20 );
+    ExternalLight_Manager( 20 );
+    return;
+  }
+
+  digitalWrite(ACT, 0);
+  //----------------------------------------------------------------------------
   RollingUpdateTerminals( 5 );
+  //----------------------------------------------------------------------------
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -360,7 +375,7 @@ void Winter_Manager( int sec )
       DT.m_log.add("Condizione Pompa PP insufficiente: tInletFloor: " + String(DT.tInletFloor) + " tReturnFloor: " + String(DT.tReturnFloor) );
       needPompa_pp = false;
     }
-    if ( (DT.tInletFloor > 26) )  // ritorno troppo alto - non ne ho bisogno
+    if ( (DT.tReturnFloor > 28) )  // ritorno troppo alto - non ne ho bisogno
     {
       DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor: " + String(DT.tReturnFloor) );
       needPompa_pp = false;
@@ -370,7 +385,7 @@ void Winter_Manager( int sec )
       DT.m_log.add("Stop Pompa: Sicurezza temp ingreso impianto: tInletFloor: " + String(DT.tInletFloor) + " > 35" );
       needPompa_pp = false;
     }
-    if ( hour() < 4 ) // fuori oario
+    if ( DT.tReturnFireplace < 35 && hour() < 5 ) // fuori oario
     {
       DT.m_log.add("Stop Pompa: orario " + String( hour() ) );
       needPompa_pp = false;
@@ -403,9 +418,9 @@ void Winter_Manager( int sec )
 
     //////////////////////////////////////////////////////////////////////////////////
     //decido se accendere sulla lavanderia
-    //DT.m_log.add("Condizione DT.tPufferLow > 45 && DT.tReturnFireplace > 40");
-    if ( DT.tPufferLow > 40 && DT.tReturnFireplace > 40 )
+    if ( DT.tPufferLow > 45 && DT.tReturnFireplace > 45 )
     {
+      //DT.m_log.add("Condizione DT.tPufferLow > 45 && DT.tReturnFireplace > 40");
       needPompa_pt = true;
     }
     DT.m_log.add( "NeedPompa_pt: [" + String(needPompa_pt) + "]" );
@@ -469,7 +484,13 @@ void ExternalLight_Manager(int sec)
     }
 
     // decido se accendere le luci
-    if ( (month() >= 11 || month() <= 2) && ( hour() > 17 || hour() < 6 ))
+    if ( (month() >= 11 || month() <= 1) && ( hour() > 17 || hour() < 6 ))
+    {
+      lightSide = true;
+      lightLamp = true;
+    }
+    
+    if ( (month() == 2 ) && ( hour() > 18 || hour() < 6 ))
     {
       lightSide = true;
       lightLamp = true;
