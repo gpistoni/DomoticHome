@@ -43,80 +43,77 @@ bool handleHttpServer()
   // Wait until the client sends some data
   //Serial.println("new client");
   int i = 0;
-  while (!client.available())
+  if (!client.available())
   {
-    delay(1);
-    i++;
-    if (i > 1000) return false;
-  }
 
-  // Read the first line of the request
-  String readString = client.readStringUntil('\r');
-  //Serial.println(readString);
-  client.flush();
+    // Read the first line of the request
+    String readString = client.readStringUntil('\r');
+    //Serial.println(readString);
+    client.flush();
 
-  // Match the request
-  int value = 0;
-  if (readString.indexOf("/set?") != -1)
-  {
-    int idxSET = readString.indexOf("/set?");
-    int idxSET2 = readString.indexOf("=", idxSET);
+    // Match the request
+    int value = 0;
+    if (readString.indexOf("/set?") != -1)
+    {
+      int idxSET = readString.indexOf("/set?");
+      int idxSET2 = readString.indexOf("=", idxSET);
 
-    String name = readString.substring(idxSET + 5, idxSET2);
-    String val = readString.substring(idxSET2 + 1, 999);
+      String name = readString.substring(idxSET + 5, idxSET2);
+      String val = readString.substring(idxSET2 + 1, 999);
 
-    //Serial.println(name);
-    //Serial.println(val);
-    DT.setPars( name, val );
+      //Serial.println(name);
+      //Serial.println(val);
+      DT.setPars( name, val );
 
-    readString = LastPage;
-  }
+      readString = LastPage;
+    }
 
-  if (readString.indexOf("/page_progs") != -1)
-  {
-    S_header( client );
-    S_page_progs( client );
+    if (readString.indexOf("/page_progs") != -1)
+    {
+      S_header( client );
+      S_page_progs( client );
+    }
+    else if (readString.indexOf("/page_rooms") != -1)
+    {
+      S_header( client );
+      S_page_rooms( client );
+    }
+    else if (readString.indexOf("/page_amp") != -1)
+    {
+      S_header( client );
+      S_page_amp( client );
+    }
+    else if (readString.indexOf("/page2") != -1)
+    {
+      S_header( client );
+      S_page2( client );
+    }
+    else if (readString.indexOf("/page3") != -1)
+    {
+      S_header( client );
+      S_page3( client );
+    }
+    else if (readString.indexOf("/page_log") != -1)
+    {
+      S_header( client );
+      S_page_log( client );
+    }
+    else if (readString.indexOf("/page_json") != -1)
+    {
+      JsonObject& root = Config.root();
+      S_header( client );
+      S_page_json( client, root );
+    }
+    else
+    {
+      readString = "/page1";
+      S_header(  client );
+      S_page_rooms( client );
+    }
+      LastPage = readString;
+      return true;
   }
-  else if (readString.indexOf("/page_rooms") != -1)
-  {
-    S_header( client );
-    S_page_rooms( client );
-  }
-  else if (readString.indexOf("/page_amp") != -1)
-  {
-    S_header( client );
-    S_page_amp( client );
-  }
-  else if (readString.indexOf("/page2") != -1)
-  {
-    S_header( client );
-    S_page2( client );
-  }
-  else if (readString.indexOf("/page3") != -1)
-  {
-    S_header( client );
-    S_page3( client );
-  }
-  else if (readString.indexOf("/page_log") != -1)
-  {
-    S_header( client );
-    S_page_log( client );
-  }
-  else if (readString.indexOf("/page_json") != -1)
-  {
-    JsonObject& root = Config.root();
-    S_header( client );
-    S_page_json( client, root );
-  }
-  else
-  {
-    readString = "/page1";
-    S_header(  client );
-    S_page_rooms( client );
-  }
-
-  LastPage = readString;
-  return true;
+  return false;  
 }
 
 void S_header( WiFiClient &client)

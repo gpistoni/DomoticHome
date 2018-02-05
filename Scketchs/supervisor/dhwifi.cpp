@@ -73,7 +73,7 @@ time_t DHwifi::GetSystemTime()
     // subtract seventy years:
     unsigned long epoch = secsSince1900 - seventyYears;
 
-    return epoch + 3600 + 3600;
+    return epoch + 3600;
 
   }
   // wait ten seconds before asking for the time again
