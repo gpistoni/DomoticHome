@@ -370,7 +370,7 @@ void Winter_Manager( int sec )
 
     //////////////////////////////////////////////////////////////////////////////////
     needPompa_pp = ( sala || cucina || bagno || cameraS || cameraD || cameraM );
-    if ( DT.tInputMixer < 25 && DT.tPufferHi < 25 && DT.tReturnFireplace < 25 )   // non ho temperatura
+    if ( DT.tInputMixer < 26 && DT.tPufferHi < 26 && DT.tReturnFireplace < 26 )   // non ho temperatura
     {
       DT.m_log.add("Condizione Pompa PP insufficiente: tInletFloor: " + String(DT.tInletFloor) + " tReturnFloor: " + String(DT.tReturnFloor) );
       needPompa_pp = false;
@@ -410,7 +410,7 @@ void Winter_Manager( int sec )
 
     //////////////////////////////////////////////////////////////////////////////////
     DT.m_log.add("Condizione Pompa Camino: tReturnFireplace " + String(DT.tReturnFireplace) + " - " + "tPufferLow " + String(DT.tPufferLow) );
-    if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 40 && DT.tReturnFireplace > DT.tPufferLow + 4 )
+    if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 35 && DT.tReturnFireplace > DT.tPufferLow + 5 )
     {
       needPCamino = true;
     }
