@@ -410,7 +410,7 @@ void Winter_Manager( int sec )
 
     //////////////////////////////////////////////////////////////////////////////////
     DT.m_log.add("Condizione Pompa Camino: tReturnFireplace " + String(DT.tReturnFireplace) + " - " + "tPufferLow " + String(DT.tPufferLow) );
-    if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 35 && DT.tReturnFireplace > DT.tPufferLow + 5 )
+    if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 34 && DT.tReturnFireplace > DT.tPufferLow + 5 )
     {
       needPCamino = true;
     }
@@ -420,7 +420,7 @@ void Winter_Manager( int sec )
     //decido se accendere sulla lavanderia
     if ( DT.tPufferLow > 45 && DT.tReturnFireplace > 45 )
     {
-      //DT.m_log.add("Condizione DT.tPufferLow > 45 && DT.tReturnFireplace > 40");
+      DT.m_log.add("Condizione DT.tPufferLow > 45 && DT.tReturnFireplace > 45");
       needPompa_pt = true;
     }
     DT.m_log.add( "NeedPompa_pt: [" + String(needPompa_pt) + "]" );
