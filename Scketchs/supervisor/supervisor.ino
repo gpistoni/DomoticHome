@@ -21,7 +21,7 @@ const int ACT = 2;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("SETUP");
 
   pinMode(ACT, OUTPUT);
@@ -51,7 +51,7 @@ void setup()
   DT.progAllRooms.set(0);
   DT.progExternalLight.set(1);
 
-  UpdateTime(0);      // update system time
+  UpdateTime(0);  // update system time
 
   if ( month() >= 10 || month() <= 4) DT.progWinterFIRE.set(1);
 
@@ -64,7 +64,7 @@ void loop()
 
   if ( handleHttpServer() )
   {
-    if ( DT.progSummerAC ) // solo estate
+    if ( DT.progSummerAC )            // solo estate
     {
       Summer_Manager( 20 );
     }
@@ -90,10 +90,7 @@ void loop()
   if (DT.progWinterPDC)  DT.progSummerAC.set(0);
   if (DT.progWinterPDC_ECO)  DT.progSummerAC.set(0);
 
-  BoilerACS_Manager( 60 );
-  ExternalLight_Manager( 60 );
-
-  if ( DT.progSummerAC ) // solo estate
+  if ( DT.progSummerAC )             // solo estate
   {
     Summer_Manager( 60 );
   }
@@ -101,23 +98,9 @@ void loop()
   {
     Winter_Manager( 60 );
   }
+
   //----------------------------------------------------------------------------
   RollingSendValues( 2 );
-  //----------------------------------------------------------------------------
-  if ( handleHttpServer() )
-  {
-    if ( DT.progSummerAC ) // solo estate
-    {
-      Summer_Manager( 20 );
-    }
-    else                               // solo inverno
-    {
-      Winter_Manager( 20 );
-    }
-    BoilerACS_Manager( 20 );
-    ExternalLight_Manager( 20 );
-    return;
-  }
 
   digitalWrite(ACT, 0);
   //----------------------------------------------------------------------------
@@ -440,7 +423,7 @@ void Winter_Manager( int sec )
     {
       NeedEv = true;
     }
-    DT.m_log.add( "NeedPompa_pt: [" + String(needPompa_pt) + "]" );
+    DT.m_log.add( "NeedEv: [" + String(NeedEv) + "]" );
 
     cameraM   = (cameraM &&  NeedEv) || AllIn;
     cameraM2  = (cameraM2 && NeedEv) || AllIn;
