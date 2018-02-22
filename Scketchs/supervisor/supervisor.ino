@@ -21,7 +21,7 @@ const int ACT = 2;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println("SETUP");
 
   pinMode(ACT, OUTPUT);
@@ -30,7 +30,7 @@ void setup()
   IPAddress gateway(192, 168, 1, 1);
   IPAddress subnet(255, 255, 255, 0);
 
-  String ssid   = "PistoniHome";         // your network SSID (name)
+  String ssid   = "PistoniHome";          // your network SSID (name)
   String pass   = "giaco1iren1dario";     // your network password
   String remote = "192.168.1.200";        // remote server (arduino ethernet home)
 
@@ -38,7 +38,7 @@ void setup()
 
   DT.setup();
 
-  UpdateTime();      // update system time
+  UpdateTime(0);      // update system time
 
   initHttpServer();
 
@@ -51,7 +51,7 @@ void setup()
   DT.progAllRooms.set(0);
   DT.progExternalLight.set(1);
 
-  UpdateTime();      // update system time
+  UpdateTime(0);      // update system time
 
   if ( month() >= 10 || month() <= 4) DT.progWinterFIRE.set(1);
 
@@ -60,7 +60,7 @@ void setup()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void loop()
 {
-  if ( year() < 2000 ) UpdateTime();
+  UpdateTime( 100 );
 
   if ( handleHttpServer() )
   {
@@ -126,8 +126,9 @@ void loop()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void UpdateTime()
+void UpdateTime( int sec )
 {
+  _CHECK_TIME_;
   DT.m_log.add("-------------------- UpdateTime --");
 
   time_t epoch = dhWifi.GetSystemTime();
@@ -143,14 +144,13 @@ void RollingUpdateTerminals( int sec )
 
   static unsigned int i = 0;
 
-  if ( i % 5 == 0 || i == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
-  if ( i % 5 == 1 || i == 0 )   DT.UpdateT2( dhWifi.HttpRequest( "@get(2,99)") );
-  if ( i % 5 == 2 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
-  if ( i % 5 == 3 || i == 0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
-  if ( i % 5 == 4 || i == 0 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
+  if ( i % 6 == 0 || i == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
+  if ( i % 6 == 1 || i == 0 )   DT.UpdateT2( dhWifi.HttpRequest( "@get(2,99)") );
+  if ( i % 6 == 2 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
+  if ( i % 6 == 3 || i == 0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
+  if ( i % 6 == 4 || i == 0 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
 
-  DT.UpdateT6( dhWifi.HttpRequest( "@get(6,99)") );
-  //DT.UpdateT7( dhWifi.HttpRequest( "@get(7,99)") );
+  if ( i % 3 == 0 || i == 0 )   DT.UpdateT6( dhWifi.HttpRequest( "@get(6,99)") );
   i++;
 }
 
@@ -322,6 +322,7 @@ void Winter_Manager( int sec )
 
   if (DT.progWinterFIRE || DT.progWinterPDC || DT.progWinterPDC_ECO)
   {
+    //////////////////////////////////////////////////////////////////////////////////
     //decido se accendere le stanze
     String str = "Condizione";
     if ( DT.tSala < DT.tSala.setPoint() )
@@ -369,8 +370,9 @@ void Winter_Manager( int sec )
     DT.m_log.add(str);
 
     //////////////////////////////////////////////////////////////////////////////////
+    // decido se accendere/spegnere pompa piano primo
     needPompa_pp = ( sala || cucina || bagno || cameraS || cameraD || cameraM );
-    if ( DT.tInputMixer < 26 && DT.tPufferHi < 26 && DT.tReturnFireplace < 26 )   // non ho temperatura
+    if ( DT.tInputMixer < 28 && DT.tPufferHi < 28 && DT.tReturnFireplace < 28 )   // non ho temperatura
     {
       DT.m_log.add("Condizione Pompa PP insufficiente: tInletFloor: " + String(DT.tInletFloor) + " tReturnFloor: " + String(DT.tReturnFloor) );
       needPompa_pp = false;
@@ -398,7 +400,8 @@ void Winter_Manager( int sec )
     DT.m_log.add( "NeedPompa_pp: [" + String(needPompa_pp) + "]" );
 
     //////////////////////////////////////////////////////////////////////////////////
-    needPdc = DT.progWinterPDC && (sala || cucina || bagno);
+    //decido se accendere PDC
+    needPdc = DT.progWinterPDC && ( sala || cucina || bagno );
     needPdc = needPdc || ( DT.progWinterPDC_ECO && (sala || cucina || bagno) && DT.tExternal > 7 );
 
     if ( needPompa_pp )
@@ -409,6 +412,7 @@ void Winter_Manager( int sec )
     DT.m_log.add( "NeedPdc: [" + String(needPdc) + "]" );
 
     //////////////////////////////////////////////////////////////////////////////////
+    // decido se accendere pompa camino
     DT.m_log.add("Condizione Pompa Camino: tReturnFireplace " + String(DT.tReturnFireplace) + " - " + "tPufferLow " + String(DT.tPufferLow) );
     if ( DT.tPufferLow < 45 && DT.tReturnFireplace > 34 && DT.tReturnFireplace > DT.tPufferLow + 5 )
     {
@@ -417,26 +421,35 @@ void Winter_Manager( int sec )
     DT.m_log.add( "NeedPCamino: [" + String(needPCamino) + "]" );
 
     //////////////////////////////////////////////////////////////////////////////////
-    //decido se accendere sulla lavanderia
+    // decido se accendere piano terra
     if ( DT.tPufferLow > 45 && DT.tReturnFireplace > 45 )
     {
       DT.m_log.add("Condizione DT.tPufferLow > 45 && DT.tReturnFireplace > 45");
       needPompa_pt = true;
     }
     DT.m_log.add( "NeedPompa_pt: [" + String(needPompa_pt) + "]" );
+
+    //////////////////////////////////////////////////////////////////////////////////
+    // decido se attivare le elettrovalbole primo piano
+    bool NeedEv = false;
+    if ( DT.tInletFloor > 25 )
+    {
+      NeedEv = false;
+    }
+    bool AllIn = DT.progAllRooms;
+    DT.m_log.add( "NeedPompa_pt: [" + String(needPompa_pt) + "]" );
+
+    cameraM   = (cameraM &&  NeedEv) || AllIn;
+    cameraM2  = (cameraM2 && NeedEv) || AllIn;
+    sala      = (sala && NeedEv) || AllIn;
+    sala2     = (sala2 && NeedEv) || AllIn;
+    cucina    = (cucina && NeedEv) || AllIn;
+    cameraS   = (cameraS && NeedEv) || AllIn;
+    cameraD   = (cameraD && NeedEv) || AllIn;
+    cameraD2  = (cameraD2 && NeedEv) || AllIn;
   }
 
-  bool AllIn = DT.progAllRooms;
-
-  cameraM   = (cameraM && ( needPompa_pp )) || AllIn;
-  cameraM2  = (cameraM2 && ( needPompa_pp )) || AllIn;
-  sala      = (sala && ( needPompa_pp || needPdc )) || AllIn;
-  sala2     = (sala2 && ( needPompa_pp || needPdc )) || AllIn;
-  cucina    = (cucina && ( needPompa_pp || needPdc )) || AllIn;
-  cameraS   = (cameraS && ( needPompa_pp || needPdc )) || AllIn;
-  cameraD   = (cameraD && ( needPompa_pp || needPdc )) || AllIn;
-  cameraD2  = (cameraD2 && ( needPompa_pp )) || AllIn;
-
+  //**********************************************************************
   // attuatori -----------------------------------------------------------------------
   DT.evCameraM1.set(cameraM);
   DT.evCameraM2.set(cameraM2);
@@ -489,7 +502,7 @@ void ExternalLight_Manager(int sec)
       lightSide = true;
       lightLamp = true;
     }
-    
+
     if ( (month() == 2 ) && ( hour() > 18 || hour() < 6 ))
     {
       lightSide = true;

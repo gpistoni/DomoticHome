@@ -3,8 +3,7 @@
 
 #define _CHECK_TIME_   static unsigned long last = 0;\
   if ( millis() - last < sec * 1000 ) return;\
-  last = millis();\
-  if ( year() < 2000 && second()==0  ) UpdateTime();
+  last = millis();
 
 void printDigits(int digits)
 {
