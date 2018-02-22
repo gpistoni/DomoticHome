@@ -320,6 +320,8 @@ void Winter_Manager( int sec )
   bool needPdc = false;
   bool needPCamino = false;
 
+  bool AllIn = DT.progAllRooms;
+
   if (DT.progWinterFIRE || DT.progWinterPDC || DT.progWinterPDC_ECO)
   {
     //////////////////////////////////////////////////////////////////////////////////
@@ -394,8 +396,10 @@ void Winter_Manager( int sec )
     }
     if ( DT.tPufferLow > 55 )   // emergenza
     {
-      DT.m_log.add("Emergenza tPufferLow > 50 ");
-      needPompa_pp = sala = sala2 = cucina = cameraS = cameraD = cameraM = true;
+      DT.m_log.add("Emergenza tPufferLow > 55 ");
+      needPompa_pp = true;
+      needPompa_pt = true;
+      AllIn = true;
     }
     DT.m_log.add( "NeedPompa_pp: [" + String(needPompa_pp) + "]" );
 
@@ -434,9 +438,8 @@ void Winter_Manager( int sec )
     bool NeedEv = false;
     if ( DT.tInletFloor > 25 )
     {
-      NeedEv = false;
+      NeedEv = true;
     }
-    bool AllIn = DT.progAllRooms;
     DT.m_log.add( "NeedPompa_pt: [" + String(needPompa_pt) + "]" );
 
     cameraM   = (cameraM &&  NeedEv) || AllIn;
