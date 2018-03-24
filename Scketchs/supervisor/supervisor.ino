@@ -64,18 +64,9 @@ void loop()
 
   if ( handleHttpServer() )
   {
-    if ( DT.progSummerAC ) // solo estate
-    {
-      Summer_Manager( 20 );
-    }
-    else                               // solo inverno
-    {
-      Winter_Manager( 20 );
-    }
-    BoilerACS_Manager( 20 );
-    ExternalLight_Manager( 20 );
     return;
   }
+  
   digitalWrite(ACT, 1);
 
   DT.progBoilerACS.manualCheck();
@@ -90,22 +81,8 @@ void loop()
   if (DT.progWinterPDC)  DT.progSummerAC.set(0);
   if (DT.progWinterPDC_ECO)  DT.progSummerAC.set(0);
 
-  BoilerACS_Manager( 60 );
-  ExternalLight_Manager( 60 );
-
-  if ( DT.progSummerAC ) // solo estate
-  {
-    Summer_Manager( 60 );
-  }
-  else                               // solo inverno
-  {
-    Winter_Manager( 60 );
-  }
-  //----------------------------------------------------------------------------
-  RollingSendValues( 2 );
-  //----------------------------------------------------------------------------
-  if ( handleHttpServer() )
-  {
+  {// Run Managers
+    
     if ( DT.progSummerAC ) // solo estate
     {
       Summer_Manager( 20 );
@@ -116,6 +93,14 @@ void loop()
     }
     BoilerACS_Manager( 20 );
     ExternalLight_Manager( 20 );
+  }
+
+  //----------------------------------------------------------------------------
+  RollingSendValues( 2 );
+  //----------------------------------------------------------------------------
+  
+  if ( handleHttpServer() )
+  {
     return;
   }
 
@@ -123,6 +108,7 @@ void loop()
   //----------------------------------------------------------------------------
   RollingUpdateTerminals( 5 );
   //----------------------------------------------------------------------------
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,13 +130,13 @@ void RollingUpdateTerminals( int sec )
 
   static unsigned int i = 0;
 
-  if ( i % 6 == 0 || i == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
-  if ( i % 6 == 1 || i == 0 )   DT.UpdateT2( dhWifi.HttpRequest( "@get(2,99)") );
-  if ( i % 6 == 2 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
-  if ( i % 6 == 3 || i == 0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
-  if ( i % 6 == 4 || i == 0 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
-
-  if ( i % 3 == 0 || i == 0 )   DT.UpdateT6( dhWifi.HttpRequest( "@get(6,99)") );
+  if ( i % 10 == 0 || i == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
+  if ( i % 10 == 2 || i == 0 )   DT.UpdateT2( dhWifi.HttpRequest( "@get(2,99)") );
+  if ( i % 10 == 4 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
+  if ( i % 10 == 6 || i == 0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
+  if ( i % 10 == 8 || i == 0 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
+  
+  if ( i % 4 == 1 || i == 0 )   DT.UpdateT6( dhWifi.HttpRequest( "@get(6,99)") ); //amperometri
   i++;
 }
 
@@ -160,8 +146,6 @@ void RollingSendValues( int sec )
   _CHECK_TIME_;
 
   static unsigned int i = 0;
-  unsigned int n = 20;
-  unsigned int nnn = 200;
 
   DT.rPdc.manualCheck();
   DT.rPdcHeat.manualCheck();
@@ -179,30 +163,32 @@ void RollingSendValues( int sec )
   DT.lightExtra.manualCheck();
 
   // le nnn sono a basso intervento 200 sec
+  unsigned int i_hi =  i % 20;
+  unsigned int i_low =  i % 200;
 
-  if ( i % nnn == 10 ) DT.rPdc.send(&dhWifi, DT.m_log );
-  if ( i % nnn == 12 ) DT.rPdcHeat.send(&dhWifi, DT.m_log );
-  if ( i % nnn == 14 ) DT.rPdcPompa.send(&dhWifi, DT.m_log );
-  if ( i % nnn == 16 ) DT.rPdcNightMode.send(&dhWifi, DT.m_log );
+  if ( i_low == 10 ) DT.rPdc.sendRequest(&dhWifi, DT.m_log );
+  if ( i_low == 12 ) DT.rPdcHeat.sendRequest(&dhWifi, DT.m_log );
+  if ( i_low == 14 ) DT.rPdcPompa.sendRequest(&dhWifi, DT.m_log );
+  if ( i_low == 16 ) DT.rPdcNightMode.sendRequest(&dhWifi, DT.m_log );
 
-  if ( i % n == 1 )    DT.rPompaPianoPrimo.send(&dhWifi, DT.m_log );
-  if ( i % n == 2 )    DT.rPompaPianoTerra.send(&dhWifi, DT.m_log );
-  if ( i % nnn == 60 ) DT.rBoilerACS.send(&dhWifi, DT.m_log );
-  if ( i % n == 3 )    DT.rPompaCamino.send(&dhWifi, DT.m_log );
+  if ( i_hi == 1 )    DT.rPompaPianoPrimo.sendRequest(&dhWifi, DT.m_log );
+  if ( i_hi == 2 )    DT.rPompaPianoTerra.sendRequest(&dhWifi, DT.m_log );
+  if ( i_low == 20 )  DT.rBoilerACS.sendRequest(&dhWifi, DT.m_log );
+  if ( i_hi == 3 )    DT.rPompaCamino.sendRequest(&dhWifi, DT.m_log );
 
-  if ( i % n == 5 )    DT.evCameraM1.send(&dhWifi, DT.m_log );
-  if ( i % n == 6 )    DT.evCameraM2.send(&dhWifi, DT.m_log );
-  if ( i % n == 7 )    DT.evSala1.send(&dhWifi, DT.m_log );
-  if ( i % n == 8 )    DT.evSala2.send(&dhWifi, DT.m_log );
-  if ( i % n == 9 )    DT.evCucina.send(&dhWifi, DT.m_log );
-  if ( i % n == 10 )   DT.evCameraS.send(&dhWifi, DT.m_log );
-  if ( i % n == 11 )   DT.evCameraD1.send(&dhWifi, DT.m_log );
-  if ( i % n == 12 )   DT.evCameraD2.send(&dhWifi, DT.m_log );
+  if ( i_hi == 5 )    DT.evCameraM1.sendRequest(&dhWifi, DT.m_log );
+  if ( i_hi == 6 )    DT.evCameraM2.sendRequest(&dhWifi, DT.m_log );
+  if ( i_hi == 7 )    DT.evSala1.sendRequest(&dhWifi, DT.m_log );
+  if ( i_hi == 8 )    DT.evSala2.sendRequest(&dhWifi, DT.m_log );
+  if ( i_hi == 9 )    DT.evCucina.sendRequest(&dhWifi, DT.m_log );
+  if ( i_hi == 10 )   DT.evCameraS.sendRequest(&dhWifi, DT.m_log );
+  if ( i_hi == 11 )   DT.evCameraD1.sendRequest(&dhWifi, DT.m_log );
+  if ( i_hi == 12 )   DT.evCameraD2.sendRequest(&dhWifi, DT.m_log );
 
-  if ( i % n == 13 )   DT.lightCorner.send(&dhWifi, DT.m_log );
-  if ( i % n == 14 )   DT.lightSide.send(&dhWifi, DT.m_log );
-  if ( i % n == 15 )   DT.lightLamp.send(&dhWifi, DT.m_log );
-  if ( i % n == 16 )   DT.lightExtra.send(&dhWifi, DT.m_log );
+  if ( i_hi == 13 )   DT.lightCorner.sendRequest(&dhWifi, DT.m_log );
+  if ( i_hi == 14 )   DT.lightSide.sendRequest(&dhWifi, DT.m_log );
+  if ( i_hi == 15 )   DT.lightLamp.sendRequest(&dhWifi, DT.m_log );
+  if ( i_hi == 16 )   DT.lightExtra.sendRequest(&dhWifi, DT.m_log );
 
   i++;
 }
@@ -492,21 +478,8 @@ void ExternalLight_Manager(int sec)
   if (DT.progExternalLight)
   {
     /**************************************************************************************************/
-
-    if ( DT.lightExternal > 20 + 10 * DT.lightSide ) // isteresi
-    {
-      lightSide = true;
-      lightLamp = true;
-    }
-
-    // decido se accendere le luci
-    if ( (month() >= 11 || month() <= 1) && ( hour() > 17 || hour() < 6 ))
-    {
-      lightSide = true;
-      lightLamp = true;
-    }
-
-    if ( (month() == 2 ) && ( hour() > 18 || hour() < 6 ))
+    DT.m_log.add("-- darkExternal: " + String(DT.lightExternal) + " Request [" + String( 10 + 10 * DT.lightSide) + "]" );
+    if ( DT.lightExternal > 10 + 10 * DT.lightSide ) // isteresi
     {
       lightSide = true;
       lightLamp = true;
@@ -517,10 +490,8 @@ void ExternalLight_Manager(int sec)
       lightLamp = false;
     }
 
-
     /**************************************************************************************************/
-    DT.m_log.add("-- LightSide [" +  String(lightSide) + "] + lightExternal: " + String(DT.lightExternal) );
-    DT.m_log.add("-- LightLamp [" +  String(lightLamp) + "]" );
+    DT.m_log.add("-- LightLamp [" +  String(lightLamp) + "]  LightSide [" +  String(lightSide) + "]" );
   }
 
   // attuatori

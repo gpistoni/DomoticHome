@@ -160,19 +160,19 @@ class cDataTable
       webVar[64] = aM[0].setup                 ( T6, 4, "M");
       webVar[65] = aN[0].setup                 ( T6, 5, "N");
 
-      webVar[60+8] = aTotal[1].setup             ( T6, 8 + 0, "wTotal");
-      webVar[61+8] = aL1[1].setup                ( T6, 8 + 1, "wL1");
-      webVar[62+8] = aL2[1].setup                ( T6, 8 + 2, "wL2");
-      webVar[63+8] = aL3[1].setup                ( T6, 8 + 3, "wL3");
-      webVar[64+8] = aM[1].setup                 ( T6, 8 + 4, "wM");
-      webVar[65+8] = aN[1].setup                 ( T6, 8 + 5, "wN");
+      webVar[60 + 8] = aTotal[1].setup             ( T6, 8 + 0, "wTotal");
+      webVar[61 + 8] = aL1[1].setup                ( T6, 8 + 1, "wL1");
+      webVar[62 + 8] = aL2[1].setup                ( T6, 8 + 2, "wL2");
+      webVar[63 + 8] = aL3[1].setup                ( T6, 8 + 3, "wL3");
+      webVar[64 + 8] = aM[1].setup                 ( T6, 8 + 4, "wM");
+      webVar[65 + 8] = aN[1].setup                 ( T6, 8 + 5, "wN");
 
-      webVar[60+16] = aTotal[2].setup             ( T6, 16 + 0, "whTotal");
-      webVar[61+16] = aL1[2].setup                ( T6, 16 + 1, "whL1");
-      webVar[62+16] = aL2[2].setup                ( T6, 16 + 2, "whL2");
-      webVar[63+16] = aL3[2].setup                ( T6, 16 + 3, "whL3");
-      webVar[64+16] = aM[2].setup                 ( T6, 16 + 4, "whM");
-      webVar[65+16] = aN[2].setup                 ( T6, 16 + 5, "whN");
+      webVar[60 + 16] = aTotal[2].setup             ( T6, 16 + 0, "whTotal");
+      webVar[61 + 16] = aL1[2].setup                ( T6, 16 + 1, "whL1");
+      webVar[62 + 16] = aL2[2].setup                ( T6, 16 + 2, "whL2");
+      webVar[63 + 16] = aL3[2].setup                ( T6, 16 + 3, "whL3");
+      webVar[64 + 16] = aM[2].setup                 ( T6, 16 + 4, "whM");
+      webVar[65 + 16] = aN[2].setup                 ( T6, 16 + 5, "whN");
 
       webVar[90] = progBoilerACS.setup      ( PROG, 0, "progBoilerACS");
       webVar[91] = progSummerAC.setup       ( PROG, 0, "progSummerAC");
@@ -274,6 +274,17 @@ class cDataTable
         if ( webVar[i] != 0 && webVar[i]->descrSetPoint() == label  )
         {
           webVar[i]->setSetPoint( value.toFloat() );
+        }
+      }
+    }
+
+    float getPars( String &label)
+    {
+      for ( int i = 0; i < 100; i++ )
+      {
+        if ( webVar[i] != 0 && webVar[i]->descrSetPoint() == label  )
+        {
+          return webVar[i]->value();
         }
       }
     }

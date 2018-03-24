@@ -1,5 +1,4 @@
 #include <ESP8266WiFi.h>
-//#include <page1.html.h>
 
 extern WiFiServer httpServer;
 extern cDataTable DT;

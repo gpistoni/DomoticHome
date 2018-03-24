@@ -2,7 +2,7 @@
 #define functions_h
 
 #define _CHECK_TIME_   static unsigned long last = 0;\
-  if ( millis() - last < sec * 1000 ) return;\
+  if ( millis() - last < sec * 1000 ) return; \
   last = millis();
 
 void printDigits(int digits)
