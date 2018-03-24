@@ -21,7 +21,7 @@ const int ACT = 2;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("SETUP");
 
   pinMode(ACT, OUTPUT);
@@ -51,7 +51,7 @@ void setup()
   DT.progAllRooms.set(0);
   DT.progExternalLight.set(1);
 
-  UpdateTime(0);      // update system time
+  UpdateTime(0);  // update system time
 
   if ( month() >= 10 || month() <= 4) DT.progWinterFIRE.set(1);
 
@@ -426,7 +426,7 @@ void Winter_Manager( int sec )
     {
       NeedEv = true;
     }
-    DT.m_log.add( "NeedPompa_pt: [" + String(needPompa_pt) + "]" );
+    DT.m_log.add( "NeedEv: [" + String(NeedEv) + "]" );
 
     cameraM   = (cameraM &&  NeedEv) || AllIn;
     cameraM2  = (cameraM2 && NeedEv) || AllIn;
