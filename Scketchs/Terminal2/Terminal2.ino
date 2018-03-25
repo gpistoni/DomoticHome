@@ -1,6 +1,7 @@
 // MODULO 02
 // luci esterne
-// rev 4 dic 2016
+// rev 22 mar 2018
+
 #include <dhprotocol.h>
 #include <OneWire.h>
 #include <SoftwareSerial.h>
@@ -17,10 +18,9 @@ void setup()
   for (int i = 0; i < 8; i++)   // 2-10 relay.
   {
     pinMode(2 + i, OUTPUT);
-    digitalWrite(2 + i, 1);
   }
 
-  Serial.begin(9600);
+  Serial.begin(57600);
   Serial.print( "Setup-- SLAVE ID: " );
   Serial.print( Slave.m_id );
 }
@@ -34,8 +34,8 @@ void loop()
   if ( Slave.waitRequest(50) )
   {
     digitalWrite(LED_BUILTIN, HIGH);
-    Serial.print( "\nSet Relay: " );
-
+    
+    Serial.print( "Current Relay State: " );
     for (int i = 0; i < 8; i++)
     {
       Slave.sensor[i] = Slave.relay[i];
