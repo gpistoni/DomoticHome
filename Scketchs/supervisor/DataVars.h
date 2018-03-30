@@ -73,11 +73,11 @@ class cVar
       Serial.println(m_setpoint);
     }
 
-    void send( DHwifi *wifi, BufferString &log)
+    void sendRequest( DHwifi *wifi, BufferString &log)
     {
       String s =  String("@set(") + String(m_t) + "," + String(m_signal) + "=" + String(m_value)  + ")";
       wifi->HttpRequest( s );
-      // log.add( String("Send Value ") + m_descr + ":" + String(m_value) );
+      //log.add( String("Send Value ") + m_descr + ":" + String(m_value) );
     }
 
     float value()
@@ -225,15 +225,17 @@ class cBool: public cVar
       if ( setPoint() == 2 )   set( 0 );      //manual OFF mode
     }
 
-    void send( DHwifi *wifi, BufferString &log)
+    void sendRequest( DHwifi *wifi, BufferString &log)
     {
       String s =  String("@set(") + String(m_t) + "," + String(m_signal) + "=" + String(m_value)  + ")";
       wifi->HttpRequest( s );
 
-      //if (m_value != 0)
-      //   log.add( String("Send Value ") + m_descr + " (1)" );
-      // else
-      //   log.add( String("Send Value ") + m_descr + " (0)" );
+      // log.add(s);
+
+      /* if (m_value != 0)
+          log.add( String("Send Value ") + m_descr + " (1)" );
+        else
+          log.add( String("Send Value ") + m_descr + " (0)" );*/
     }
 };
 

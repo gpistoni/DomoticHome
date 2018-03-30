@@ -101,7 +101,8 @@ bool DHProtocol::_waitHeader( int msec )
   {
     if ( _readByte() == '#')
     {
-      OUT("\nRecived: #");
+  OUTLN("");
+      OUT("Recived: #");
 
       byte sendId = _readByte();
       OUT(sendId);
@@ -135,7 +136,6 @@ void DHProtocol::sendRequest( )
   
   _writeHeader();
 
-  OUTLN(" ");
   OUT( "sendRequest: " );
   OUT('#');
   OUT(m_id);
@@ -151,7 +151,7 @@ void DHProtocol::sendRequest( )
   }
 
   _writeByte('$');
-  OUT('$ ');
+  OUTLN('$');
   lastRequest = millis() - random(100);
 }
 
@@ -162,16 +162,17 @@ bool DHProtocol::waitRequest( int timeout)
 
   if ( _waitHeader( timeout ))
   {
-    byte temp[12];
+     byte temp[NRELAY];
     for (int i = 0; i < NRELAY ; i++)
     {
       temp[i] = _readByte();
-      OUT(temp[i] );
+      OUT( temp[i] );
     }
+
     // copio da temp a relay
     if (_readByte() == '$')
     {
-      OUT("$");
+      OUTLN("$");
       r = true;
       for (int i = 0; i < NRELAY ; i++)
       {
@@ -208,18 +209,17 @@ void DHProtocol::sendData( )
   }
 
   _writeByte('$');
-  OUTLN('$');
+  OUT('$');
 }
 
 //********************************************************************************/
 bool DHProtocol::waitData( int timeout)
 {
   bool r = false;
-  byte b;
  
   if ( _waitHeader( timeout ))
   {
-    short temp[24];
+    short temp[NSENS];
     for (int i = 0; i < NSENS ; i++)
     {
       temp[i] = _readShort();
@@ -234,7 +234,7 @@ bool DHProtocol::waitData( int timeout)
         OUT( sensor[i] );
         OUT(",");
       }
-      OUT("$ ");
+      OUTLN("$ ");
       r = true;
       lastRecived = millis();
     }
@@ -247,9 +247,9 @@ bool DHProtocol::waitData( int timeout)
 	      }
 	}
   }
-  else if ( millis() - lastRecived > 60000)
+  else if ( millis() - lastRecived > 30000)
   {
-    OUT(" Timeout ");
+    OUTLN(" timeout error ");
     for (int i = 0; i < NSENS ; i++)
     {
       sensor[i] = 0; 

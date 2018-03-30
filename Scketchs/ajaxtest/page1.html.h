@@ -1,4 +1,10 @@
-const char HTML_page1[] PROGMEM = R"=====(
+const char HTML_page1[] = "<!DOCTYPE html><html xmlns='http://www.w3.org/1999/xhtml' dir='ltr'>"
+         "<head>"
+         "<meta http-equiv='refresh' content='4';url='http://192.168.1.202/' >"
+         "<title>Home</title>";
+
+/*
+"=====(e
 <!DOCTYPE html>
 <html>
     <head>
@@ -74,3 +80,4 @@ const char HTML_page1[] PROGMEM = R"=====(
 	</div>
 </html>
 )=====";
+*/

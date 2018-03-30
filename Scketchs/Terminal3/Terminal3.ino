@@ -4,9 +4,9 @@
 // risposta: stato rele
 // rev: 23 ago 2015
 // rev 4 dic 2016
+// rev 23 mar 2018 
 
 #include <dhprotocol.h>
-
 #include <OneWire.h>
 #include <SoftwareSerial.h>
 
@@ -25,7 +25,7 @@ void setup()
     digitalWrite(2 + i, 1);
   }
 
-  Serial.begin(9600);
+  Serial.begin(57600);
   Serial.print( "Setup-- SLAVE ID: " );
   Serial.print( Slave.m_id );
 }
@@ -33,21 +33,20 @@ void setup()
 
 void loop()
 {
+  digitalWrite(LED_BUILTIN, LOW);
   /*******************************************************************************/
   if ( Slave.waitRequest(50) )
   {
-    Serial.print( "\nSet Relay: " );
-
+    digitalWrite(LED_BUILTIN, HIGH);
+    
+    Serial.print( "Current Relay State: " );
     for (int i = 0; i < 8; i++)
     {
       Slave.sensor[i] = Slave.relay[i];
       digitalWrite(2 + i, !Slave.relay[i] );
       if (i != 0)  Serial.print( "," );
       Serial.print( Slave.relay[i] );
-    }
+    }    
     Slave.sendData();
   }
-  /*****************************************************************************/
-  delay(10);
 };
-

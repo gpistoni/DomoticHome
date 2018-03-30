@@ -27,11 +27,9 @@ EthernetServer server(80);
 
 #define ETHERNET_SELECT 10
 
-#define ACTIVITY 13
-
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(57600);
 
   OUTLN("System Start");
 
@@ -43,16 +41,6 @@ void setup()
   T[6].setup(0, 6, &mySerial );  // Amperometri
   T[7].setup(0, 7, &mySerial );  // --
 
-  //************************************************************
-  pinMode( 2, OUTPUT);
-  pinMode( 3, OUTPUT);
-  pinMode( 4, OUTPUT);
-  pinMode( 5, OUTPUT);
-  pinMode( 6, OUTPUT);
-  pinMode( 7, OUTPUT);
-  pinMode( 8, OUTPUT);
-  pinMode(ACTIVITY, OUTPUT);
-
   //ethernet ************************************************************
 
   Ethernet.begin(mac, ip);
@@ -63,6 +51,12 @@ void setup()
 
   OUT("server is at ");
   OUTLN( Ethernet.localIP() );
+
+  for (int t = 1; t < 8; t++)
+  {
+     T[t].sendRequest();
+     delay(500);
+  }
 }
 
 
@@ -70,19 +64,13 @@ void loop()
 {
   for (int t = 1; t < 8; t++)
   {
-    if ( T[t].checkTiming( 5000 + t * 10 ) )
+    if ( T[t].checkTiming( 4000 ) )
     {
-      digitalWrite( t + 1, LOW);
       T[t].sendRequest();
       listenForEthernetClients();
-      if ( T[t].waitData( 200 ) )
-      {
-        digitalWrite(ACTIVITY, HIGH);
-        digitalWrite( t + 1, HIGH );
-      }
+      T[t].waitData( 200 );
     };
     listenForEthernetClients();
-    digitalWrite(ACTIVITY, LOW );
   };
 
   if ( Ethernet.localIP() != ip)

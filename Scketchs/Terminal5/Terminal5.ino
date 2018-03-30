@@ -19,16 +19,12 @@ void setup()
 {
   Slave.setup(5, 0, &mySerial);     // Terminal ID
 
-  pinMode(2, OUTPUT);     // 2-10 relay.
-  pinMode(3, OUTPUT);
-  pinMode(4, OUTPUT);
-  pinMode(5, OUTPUT);
-  pinMode(6, OUTPUT);
-  pinMode(7, OUTPUT);
-  pinMode(8, OUTPUT);
-  pinMode(9, OUTPUT);
+  for (int i = 0; i < 8; i++)   // 2-10 relay.
+  {
+    pinMode(2 + i, OUTPUT);
+  }
 
-  Serial.begin(9600);
+  Serial.begin(57600);
   Serial.print( "Setup-- SLAVE ID: " );
   Serial.print( Slave.m_id );
 }

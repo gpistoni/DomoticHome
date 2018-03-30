@@ -32,8 +32,8 @@ void setup()
   IPAddress gateway(192, 168, 0, 254);
   IPAddress subnet(255, 255, 255, 0);
 
-  String ssid   = "PistoniHome";          // your network SSID (name)
-  String pass   = "giaco.iren.dario";     // your network password
+  String ssid   = "PistoniHome1";          // your network SSID (name)
+  String pass   = "giaco1iren1dario";     // your network password
   String remote = "192.168.0.200";        // remote server
 
   dhWifi.setup( ip, gateway, subnet, ssid, pass, remote );
@@ -56,7 +56,9 @@ void loop()
   digitalWrite(ACT, 1);
 
   RollingUpdateTerminals( 5 );
+  
   digitalWrite(ACT, 0);
+  
   ScriptValues(60 * 30);
 }
 

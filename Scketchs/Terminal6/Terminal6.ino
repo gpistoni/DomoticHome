@@ -2,6 +2,7 @@
 // Amperometri
 // scheda 6 SCt-013
 // rev: 30 dic 2017
+// rev 21 mar 2018
 
 #include <dhprotocol.h>
 #include <cprobe.h>
@@ -39,7 +40,7 @@ void setup()
   emon[4].current(A4, K[4]);
   emon[5].current(A5, K[5]);
 
-  Serial.begin(115200);
+  Serial.begin(57600);
   Serial.print( "Setup-- SLAVE ID: " );
   Serial.print( Slave.m_id );
 
@@ -77,13 +78,14 @@ void loop()
     double work = Irms * V_rete * elapsed / 1000 / 3600.0;
 
     totalwork[i] += work;
-    totalElapsed[i] += elapsed;
+    totalElapsed[i] += elapsed/1000.0;
 
     Slave.sensor[i] = Irms * 10.0;
-    Slave.sensor[8 + i] = totalwork[i];
-    Slave.sensor[16 + i] = totalElapsed[i];
+    Slave.sensor[8 + i] = (int)totalwork[i];
+    Slave.sensor[16 + i] = (int)totalElapsed[i];
 
-    if (i == 0) Serial.print("\n");
+    if (i == 0) 
+    {
     Serial.print("\n");
     Serial.print(i);
     Serial.print(" K: ");
@@ -99,8 +101,11 @@ void loop()
     Serial.print("\t Totale (wh) : ");
     Serial.print( totalwork[i] ); // Scrivo sul monitor seriale kwh
     Serial.print(" in (s) : ");
-    Serial.print( totalElapsed[i] / 1000 ); // Scrivo sul monitor seriale kwh
-
+    Serial.print( totalElapsed[i] ); // Scrivo sul monitor seriale kwh
+    
+    Serial.print(" (  wh / h ) : ");
+    Serial.print( totalwork[i] * 3600.0 /  totalElapsed[i] ); // Scrivo sul monitor seriale kwh
+    }
   }
   /*****************************************************************************/
 };
