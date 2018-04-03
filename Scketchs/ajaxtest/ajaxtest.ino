@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
-#include <ESP8266WebServer.h>
+//#include <ESP8266WebServer.h>
 #include <Time.h>
+#include <ESPAsyncWebServer.h>
 
 #include "dhwifi.h"
 #include "dhconfig.h"
@@ -14,14 +15,15 @@ DHwifi dhWifi;
 cDataTable DT;
 DHFile     Config;
 
-WiFiServer httpServer(80);
+//WiFiServer httpServer(80);
+AsyncWebServer server(80);
 
 const int ACT = 2;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(57600);
   Serial.println("SETUP");
 
   pinMode(ACT, OUTPUT);
@@ -39,9 +41,16 @@ void setup()
   DT.setup();
 
   UpdateTime();       // update system time
-  
-  initHttpServer();   // start web server
-  
+
+  ///initHttpServer();   // start web server
+
+  server.on("/html", HTTP_GET, [](AsyncWebServerRequest * request)  {
+    request->send(200, "text/html", HTML_page1);
+  });
+
+  server.begin();
+
+
   RollingUpdateTerminals( 0 );
 
   if ( month() >= 9 || month() < 4) DT.progWinterFIRE.set(1);
@@ -56,10 +65,10 @@ void loop()
   digitalWrite(ACT, 1);
 
   RollingUpdateTerminals( 50 );
-    
+
   digitalWrite(ACT, 0);
 
-  if ( handleHttpServer() )
+  // if ( handleHttpServer() )
   {
     //DT.m_log.add("handleHttpServer");
   }

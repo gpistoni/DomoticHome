@@ -1,23 +1,21 @@
 #include <ESP8266WiFi.h>
 #include "page1.html.h"
 
-extern WiFiServer httpServer;
+//extern WiFiServer httpServer;
 extern cDataTable DT;
 extern DHFile Config;
 
 String LastPage;
-
+/*
 void S_page( WiFiClient &client)
 {
-  String page;
-  page = "HTTP/1.1 200 OK"
-         "Content-Type: text/html";
-  "Connection: close"
-  "Refresh: 5";
-  client.println(page);
+   client.println("HTTP/1.1 200 OK");
+  client.println("Content-Type: text/xml");
+  client.println("Connection: keep-alive");
+   client.println("Refresh: 5");
   client.println(""); //  do not forget this one
   client.println(HTML_page1);
-}
+}*/
 
 void S_value( WiFiClient &client, float val)
 {
@@ -33,14 +31,39 @@ void S_value( WiFiClient &client, float val)
   client.print("</out>");
 }
 
+// send the XML file with switch statuses and analog value
+void XML_response(WiFiClient cl)
+{
+    int analog_val;
+    
+    cl.print("<?xml version = \"1.0\" ?>");
+    cl.print("<inputs>");
+    cl.print("<button1>");
+      cl.print("ON");
+    cl.print("</button1>");
+    cl.print("<button2>");
+        cl.print("ON");
+    cl.print("</button2>");
+    // read analog pin A2
+    analog_val = analogRead(2);
+    cl.print("<analog1>");
+    cl.print(analog_val);
+    cl.print("</analog1>");
+    cl.print("</inputs>");
+}
+
 void S_ajax( WiFiClient &client)
 {
   Serial.println("HTTP ajax");
+                       
 
   client.println("HTTP/1.1 200 OK");
   client.println("Content-Type: text/xml");
   client.println("Connection: keep-alive");
   client.println("");
+
+  XML_response( client) ;
+  /*
   client.print("<?xml version = \"1.0\" ?>");
   client.print("<data>");
   client.print("<value1>");
@@ -70,12 +93,13 @@ void S_ajax( WiFiClient &client)
   Serial.print("30");
   Serial.print("</value3>");
   Serial.print("</data>");
+  */
 }
 
 
 void initHttpServer()
 {
-  httpServer.begin();
+//  httpServer.begin();
 
   Serial.println("HTTP server started");
   Serial.print("Use this URL to connect: ");
@@ -83,7 +107,7 @@ void initHttpServer()
   Serial.print(WiFi.localIP());
   Serial.println("/");
 }
-
+/*
 bool handleHttpServer()
 {
   // Check if a client has connected
@@ -155,5 +179,5 @@ bool handleHttpServer()
   }
   return false;
 }
-
+*/
 

@@ -50,6 +50,10 @@ class cVar
     {
     }
 
+    ~cVar()
+    {
+    }
+
     cVar* setup(byte t, byte signal, String descr, float setpoint = 0)
     {
       m_t = t;
