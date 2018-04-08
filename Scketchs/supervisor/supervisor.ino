@@ -477,8 +477,8 @@ void ExternalLight_Manager(int sec)
   if (DT.progExternalLight)
   {
     /**************************************************************************************************/
-    DT.m_log.add("-- darkExternal: " + String(DT.lightExternal) + " Request [" + String( 40 + 20 * DT.lightSide) + "]" );
-    if ( DT.lightExternal > 40 + 20 * DT.lightSide ) // isteresi
+    DT.m_log.add("-- darkExternal: " + String(DT.lightExternal) + " Request [" + String( 30 - 10 * DT.lightSide) + "]" );
+    if ( DT.lightExternal > 30 - 10 * DT.lightSide ) // isteresi
     {
       lightSide = true;
       lightLamp = true;
