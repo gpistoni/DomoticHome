@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+          <style>
+          .table{
+            width: 100%;
+            background: #eeeeee;
+            line-height: 32px;
+            border: 1px solid black;
+          }
+          .bars { 
+            float: left;
+            height: 30px;
+            line-height: 30px;
+            border: 1px solid black;
+            padding-left: 10px;
+            padding-right: 10px;
+            background: #FFFF33;
+            color: #000000;
+            }
+          .row{
+            width: 100%;
+            clear: both;
+          }
+
+        </style>
+
+        <script>		
+	function GetArduinoInputs()
+        {
+            nocache = "&nocache=" + Math.random() * 1000000;
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function()
+            {
+              if (this.readyState == 4 && this.status == 200) 
+              {	 
+              document.getElementById("serverState").innerHTML = "Connected";                       
+              document.getElementById("tCucina").innerHTML = this.responseXML.getElementsByTagName('tCucina')[0].childNodes[0].nodeValue;
+              document.getElementById("tSala").innerHTML = this.responseXML.getElementsByTagName('tSala')[0].childNodes[0].nodeValue;
+              document.getElementById("V3").innerHTML = this.responseXML.getElementsByTagName('value3')[0].childNodes[0].nodeValue;
+              }
+            }			
+            
+            request.ontimeout = function()
+	    {		
+	    document.getElementById("serverState").innerHTML = "Disconnected";			
+            }
+            
+            request.open("GET", "ajax", true);        
+            request.send(null);
+            setTimeout('GetArduinoInputs()', 1000);
+        }
+        </script>
+    </head>
+    <body onload="GetArduinoInputs()">
+	 <title>Ajax with eXML</title>
+        <h1>-HOME-</h1>
+        <div id="serverState"> </div>
+        <h1>-val-</h1>
+        <p id="txtxt">Switch state: Not requested...</p>
+        <span id="va"> ..... </span>
+         <h1>-tab-</h1>
+		<div class="table">
+            <div class="row"><div class="bars">Cucina </div>   <div class="bars" id="tCucina">0</div></div><br>
+            <div class="row"><div class="bars">Sala </div>     <div class="bars" id="V2">0</div></div><br>
+            <div class="row"><div class="bars">Bagno </div>    <div class="bars" id="V3">0</div></div><br>
+	   </div>
+        </body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+    <head>
+          <style>
+          .table{
+            width: 100%;
+            line-height: 32px;
+          }
+          .bars { 
+            float: left;
+            height: 30px;
+            width: 100px;
+            line-height: 30px;
+            border: 1px solid black;
+            padding-left: 10px;
+            padding-right: 10px;
+            background: #FFFF99;
+            text-align: center;
+            }
+          .bars0 { 
+            float: left;
+            height: 30px;
+            width: 150px;
+            line-height: 30px;
+            border: 1px solid black;
+            padding-left: 10px;
+            padding-right: 10px;
+            background: #FFFF44;
+            }
+          .row{
+            width: 100%;
+            clear: both;            
+            color: #000000;
+            clear: both; 
+            font-weight: normal;
+          }
+           .rowhead{
+            width: 100%;
+            clear: both; 
+            background: #FFFF44;
+            color: #ff0000;
+            font-weight: bold;
+          }
+              
+            .fon { background:blue; }
+            .foff { background:red; }
+            .fauto { background:gray; }
+              
+        </style>
+
+        <script>		
+		function GetAllData()
+        {
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function()
+			{
+               if (this.readyState == 4 && this.status == 200) {	
+                   
+                document.getElementById("state").innerHTML = "Connected";	
+                   
+                // get XML 
+                var xml = this.responseXML;
+
+                // get answers
+                var answers= xml.getElementsByTagName("Programmi")[0];
+                for (var i = 0; i < answers.childNodes.length; i++) 
+                {   
+                var name = answers.childNodes[i].nodeName;
+                document.getElementById("state").innerHTML = name;                   
+                var value = this.responseXML.getElementsByTagName("Values")[0].getElementsByTagName(name)[0].childNodes[0].nodeValue;
+                document.getElementById(name).innerHTML = value;
+                if ( value == 0)
+                    document.getElementById(name).style.color = "blue";
+                else
+                    document.getElementById(name).style.color = "red";                    
+                } 
+                   
+                // get answers
+                var answers= xml.getElementsByTagName("Stanze")[0];
+                for (var i = 0; i < answers.childNodes.length; i++) 
+                {   
+                var name = answers.childNodes[i].nodeName;
+                document.getElementById("state").innerHTML = name;                   
+                var value = this.responseXML.getElementsByTagName("Values")[0].getElementsByTagName(name)[0].childNodes[0].nodeValue;
+                document.getElementById(name).innerHTML = value;
+                if ( value == 0)
+                    document.getElementById(name).style.color = "gray";
+                else 
+                    document.getElementById(name).style.color = "blue";                   
+                }                   
+            }			
+             }
+            request.ontimeout = function()
+			{		
+				document.getElementById("state").innerHTML = "NOT Connected";			
+			}
+            
+            request.open("GET", "ajax", true);        
+            request.send();
+			setTimeout('GetAllData()', 5000);
+        }
+        </script>
+    </head>
+    <body onload="GetAllData()">
+	 <title>Ajax with eXML</title>
+	<! ************************************************************** !>
+        <h1>-HOME-</h1>
+        <span id="state"> ..... </span>
+        <h1>Programmi</h1>
+        <div class="table">
+            <div class="rowhead">
+                <div class="bars0">Programma </div>
+                <div class="bars">Stato</div></div>
+            <div class="row">
+                <div class="bars0">progBoilerACS </div>
+                <div class="bars" id="progBoilerACS"> 0 </div>
+                <div class="bars"> <a href='/set?progBoilerACS=0'> <input type='button' id='btn' value='FORCE OFF' class='foff'/> </a></div>
+                <div class="bars"> <a href='/set?progBoilerACS=1'> <input type='button' id='btn' value='AUTO'      class='fauto'/></a></div>
+                <div class="bars"> <a href='/set?progBoilerACS=2'> <input type='button' id='btn' value='FORCE ON'  class='fon'/></a></div></div>
+            <div class="row">
+                <div class="bars0">progSummerAC </div>
+                <div class="bars" id="progSummerAC">0</div></div>
+            <div class="row">
+                <div class="bars0">progWinterFIRE </div>
+                <div class="bars" id="progWinterFIRE">0</div></div>
+            <div class="row">
+                <div class="bars0">progWinterPDC     </div>
+                <div class="bars" id="progWinterFIRE">0</div></div>
+            <div class="row">
+                <div class="bars0">progWinterPDC_ECO </div>
+                <div class="bars" id="progWinterFIRE">0</div></div>
+            <div class="row">
+                <div class="bars0">progAllRooms </div>
+                <div class="bars" id="progWinterFIRE">0</div></div>
+            <div class="row">
+                <div class="bars0">progExternalLight </div>
+                <div class="bars" id="progWinterFIRE">0</div></div>
+	    </div>
+        <br>
+        <h1>Stanze</h1>
+		<div class="table">
+             <div class="rowhead">
+                <div class="bars0">Stanza </div>
+                <div class="bars">T</div></div>
+            <div class="row">
+                <div class="bars0">Cucina </div>
+                <div class="bars" id="tCucina">0</div></div>
+            <div class="row">
+                <div class="bars0">Sala </div>
+                <div class="bars" id="tSala">0</div></div>
+            <div class="row">
+                <div class="bars0">Bagno </div>
+                 <div class="bars" id="tBagno">0</div></div>
+	   </div>
+        </body>
+</html>
