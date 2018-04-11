@@ -5,111 +5,25 @@
 extern cDataTable DT;
 extern DHFile Config;
 
-String LastPage;
+String AjaxResponse()
+{
+  String str;
+  str += "<?xml version = \"1.0\" ?>";
+  str += "<data>";
+  str += "<struct>";
+  str += DT.printSTRUCT();
+  str += "</struct>";
+  str += "<values>";
+  str += DT.printXML();
+  str += "</values>";
+  str += "</data>";
+  return str;
+}
+
+
 /*
-void S_page( WiFiClient &client)
-{
-   client.println("HTTP/1.1 200 OK");
-  client.println("Content-Type: text/xml");
-  client.println("Connection: keep-alive");
-   client.println("Refresh: 5");
-  client.println(""); //  do not forget this one
-  client.println(HTML_page1);
-}*/
-
-void S_value( WiFiClient &client, float val)
-{
-  client.println("HTTP/1.1 200 OK");
-  client.println("Content-Type: text/xml");
-  client.println("Connection: keep-alive");
-  client.println();
-  client.print("<?xml version = \"1.0\" ?>");
-  client.print("<out>");
-  client.print("<value>");
-  client.print(val);
-  client.print("</value>");
-  client.print("</out>");
-}
-
-// send the XML file with switch statuses and analog value
-void XML_response(WiFiClient cl)
-{
-    int analog_val;
-    
-    cl.print("<?xml version = \"1.0\" ?>");
-    cl.print("<inputs>");
-    cl.print("<button1>");
-      cl.print("ON");
-    cl.print("</button1>");
-    cl.print("<button2>");
-        cl.print("ON");
-    cl.print("</button2>");
-    // read analog pin A2
-    analog_val = analogRead(2);
-    cl.print("<analog1>");
-    cl.print(analog_val);
-    cl.print("</analog1>");
-    cl.print("</inputs>");
-}
-
-void S_ajax( WiFiClient &client)
-{
-  Serial.println("HTTP ajax");
-                       
-
-  client.println("HTTP/1.1 200 OK");
-  client.println("Content-Type: text/xml");
-  client.println("Connection: keep-alive");
-  client.println("");
-
-  XML_response( client) ;
-  /*
-  client.print("<?xml version = \"1.0\" ?>");
-  client.print("<data>");
-  client.print("<value1>");
-  client.print("11");
-  client.print("</value1>");
-  client.print("<value2>");
-  client.print("20");
-  client.print("</value2>");
-  client.print("<value3>");
-  client.print("30");
-  client.print("</value3>");
-  client.print("</data>");
-
-  Serial.println("HTTP/1.1 200 OK");
-  Serial.println("Content-Type: text/xml");
-  Serial.println("Connection: keep-alive");
-  Serial.println("");
-  Serial.print("<?xml version = \"1.0\" ?>");
-  Serial.print("<data>");
-  Serial.print("<value1>");
-  Serial.print("10");
-  Serial.print("</value1>");
-  Serial.print("<value2>");
-  Serial.print("20");
-  Serial.print("</value2>");
-  Serial.print("<value3>");
-  Serial.print("30");
-  Serial.print("</value3>");
-  Serial.print("</data>");
-  */
-}
-
-
-void initHttpServer()
-{
-//  httpServer.begin();
-
-  Serial.println("HTTP server started");
-  Serial.print("Use this URL to connect: ");
-  Serial.print("http://");
-  Serial.print(WiFi.localIP());
-  Serial.println("/");
-}
-/*
-bool handleHttpServer()
-{
+  bool handleHttpServer()
+  {
   // Check if a client has connected
   WiFiClient client = httpServer.available();
   if (!client)
@@ -178,6 +92,6 @@ bool handleHttpServer()
     return true;
   }
   return false;
-}
+  }
 */
 

@@ -23,12 +23,12 @@ const int ACT = 2;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup()
 {
-  Serial.begin(57600);
+  Serial.begin(9600);
   Serial.println("SETUP");
 
   pinMode(ACT, OUTPUT);
 
-  IPAddress ip(192, 168, 1, 202);
+  IPAddress ip(192, 168, 1, 209);
   IPAddress gateway(192, 168, 1, 1);
   IPAddress subnet(255, 255, 255, 0);
 
@@ -45,9 +45,13 @@ void setup()
   ///initHttpServer();   // start web server
 
   server.on("/html", HTTP_GET, [](AsyncWebServerRequest * request)  {
-    request->send(200, "text/html", HTML_page1);
+    request->send(200, "text/html", HTML_page1 );
   });
 
+  server.on("/ajax", HTTP_GET, [](AsyncWebServerRequest * request)  {
+    request->send(200, "text/xml", AjaxResponse() );
+  });
+  
   server.begin();
 
 
@@ -64,14 +68,9 @@ void loop()
 {
   digitalWrite(ACT, 1);
 
-  RollingUpdateTerminals( 50 );
+  RollingUpdateTerminals( 5 );
 
   digitalWrite(ACT, 0);
-
-  // if ( handleHttpServer() )
-  {
-    //DT.m_log.add("handleHttpServer");
-  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

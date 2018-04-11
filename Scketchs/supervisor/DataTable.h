@@ -153,12 +153,12 @@ class cDataTable
       webVar[56] = evCameraD1.setup         ( T5, 6, "evCameraD1");
       webVar[57] = evCameraD2.setup         ( T5, 7, "evCameraD2");
 
-      webVar[60] = aTotal[0].setup             ( T6, 0, "Total");
-      webVar[61] = aL1[0].setup                ( T6, 1, "L1");
-      webVar[62] = aL2[0].setup                ( T6, 2, "L2");
-      webVar[63] = aL3[0].setup                ( T6, 3, "L3");
-      webVar[64] = aM[0].setup                 ( T6, 4, "M");
-      webVar[65] = aN[0].setup                 ( T6, 5, "N");
+      webVar[60] = aTotal[0].setup             ( T6, 0, "aTotal");
+      webVar[61] = aL1[0].setup                ( T6, 1, "aL1");
+      webVar[62] = aL2[0].setup                ( T6, 2, "aL2");
+      webVar[63] = aL3[0].setup                ( T6, 3, "aL3");
+      webVar[64] = aM[0].setup                 ( T6, 4, "aM");
+      webVar[65] = aN[0].setup                 ( T6, 5, "aN");
 
       webVar[60 + 8] = aTotal[1].setup             ( T6, 8 + 0, "wTotal");
       webVar[61 + 8] = aL1[1].setup                ( T6, 8 + 1, "wL1");
@@ -354,5 +354,63 @@ class cDataTable
           readable += webVar[i]->setPoint();
         }
       };
+    };
+
+    String printXML(  )
+    {
+      String str;
+      for ( int i = 0; i < 100; i++ )
+      {
+        if ( webVar[i] != 0 )
+        {
+          str += "<";
+          str += webVar[i]->descr();
+          str += ">";
+          str += webVar[i]->value();
+          str += "</";
+          str += webVar[i]->descr();
+          str += ">\n";
+        }
+      }
+      /* for ( int i = 0; i < 100; i++ )
+        {
+         if ( webVar[i] != 0 )
+         {
+           readable += "\n(";
+           readable += i;
+           readable += ") ";
+           readable += webVar[i]->descrSetPoint();
+           readable += " = ";
+           readable += webVar[i]->setPoint();
+         }
+        };*/
+      return str;
+    };
+
+    String printSTRUCT()
+    {
+      String str;
+      //-----------------------------------------------------------------
+      str += "<Programmi>";
+      for ( int i = 90; i < 100; i++ )
+        if ( webVar[i] != 0 )
+        {
+          str += "<";
+          str += webVar[i]->descr();
+          str += "/>";
+        }
+      str += "</Programmi>";
+      //-----------------------------------------------------------------
+      str += "<Stanze>";
+      for ( int i = 0; i < 10; i++ )
+        if ( webVar[i] != 0 )
+        {
+          str += "<";
+          str += webVar[i]->descr();
+          str += "/>";
+        }
+      str += "</Stanze>";
+      //-----------------------------------------------------------------
+      return str;
     };
 };
