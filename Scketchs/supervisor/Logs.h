@@ -16,7 +16,7 @@ class BufferString
       if (str.length() > 0)
       {
         String dataString;
-        dataString = short_time();
+        dataString = date_time();
         dataString += str;
 
         Serial.println(dataString);

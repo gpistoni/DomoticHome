@@ -1,8 +1,8 @@
 #include <ESP8266WiFi.h>
-#include <ESP8266WebServer.h>
+//#include <ESP8266WebServer.h>
 #include <Time.h>
-//#include <ESPAsyncWebServer.h>
-//#include "AsyncJson.h"
+#include <ESPAsyncWebServer.h>
+#include "AsyncJson.h"
 #include "ArduinoJson.h"
 
 #include "dhwifi.h"
@@ -17,8 +17,8 @@ DHwifi dhWifi;
 cDataTable DT;
 DHFile     Config;
 
-WiFiServer httpServer(80);
-//AsyncWebServer server(80);
+//WiFiServer httpServer(80);
+AsyncWebServer server(80);
 
 const int ACT = 2;
 
@@ -30,7 +30,7 @@ void setup()
 
   pinMode(ACT, OUTPUT);
 
-  IPAddress ip(192, 168, 1, 209);
+  IPAddress ip(192, 168, 1, 202);
   IPAddress gateway(192, 168, 1, 1);
   IPAddress subnet(255, 255, 255, 0);
 
@@ -42,10 +42,10 @@ void setup()
   
   DT.setup();
 
-  UpdateTime();       // update system time
+  UpdateTime(0);       // update system time
 
-  initHttpServer();   // start web server
-/*
+  //initHttpServer();   // start web server
+
   server.on("/html", [](AsyncWebServerRequest * request)  {
     request->send(200, "text/html", HTML_page1 );
   });
@@ -54,52 +54,29 @@ void setup()
     request->send(200, "application/json", JsonResponse() );
   });
 
-  
-    server.on("/json", [](AsyncWebServerRequest * request)  {
-
-      printf("Trace: Json Request\n");
-
-      AsyncJsonResponse * response = new AsyncJsonResponse();
-      response->addHeader("Server", "ESP Async Web Server");
-      response->addHeader("Connection", "close");
-      JsonObject& root = response->getRoot();
-      root["heap"] = "hh";
-      root["ssid"] = "1223";
-      response->setLength();
-      request->send(response);
-
-      printf("Trace: Json Response\n");
-
-      /*
-          String s = Prepare_JsonResponse();
-          AsyncWebServerResponse *response = request->beginResponse_P(200, "application/json", s.c_str() );
-          response->addHeader("Access-Control-Allow-Origin:","*");
-          response->addHeader("Cache-Control:","private");
-          request->send(response);
-
-
-    });*/
-
-//  server.begin();
+  server.begin();
   RollingUpdateTerminals( 0 );
 
   if ( month() >= 9 || month() < 4) DT.progWinterFIRE.set(1);
-  UpdateTime();      // update system time
+  UpdateTime(0);      // update system time
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void loop()
 {
   digitalWrite(ACT, 1);
-handleHttpServer();
+//handleHttpServer();
+
   RollingUpdateTerminals( 5 );
+  UpdateTime(300); 
 
   digitalWrite(ACT, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void UpdateTime()
+void UpdateTime( int sec)
 {
+    _CHECK_TIME_;
   DT.m_log.add("-------------------- UpdateTime --");
 
   time_t epoch = dhWifi.GetSystemTime();

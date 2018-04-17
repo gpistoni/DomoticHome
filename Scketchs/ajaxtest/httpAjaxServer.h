@@ -3,10 +3,10 @@
 
 #include "ArduinoJson.h"
 
-extern WiFiServer httpServer;
+//extern WiFiServer httpServer;
 extern cDataTable DT;
 extern DHFile Config;
-
+/*
 String AjaxResponse()
 {
   String str;
@@ -50,7 +50,7 @@ void S_json(WiFiClient client )
   writeResponse(client, json);
 }
 
-/*
+
   String JsonResponse()
   {
   StaticJsonBuffer<500> jsonBuffer;
@@ -70,21 +70,21 @@ void S_json(WiFiClient client )
   return json;
   }
 */
-/*
+
   String JsonResponse()
   {
   printf("Trace: JsonResponse\n");
 
   StaticJsonBuffer<500> jsonBuffer;
   JsonObject &root = jsonBuffer.createObject();
-  root["heap"] = "A";
-  root["ssid"] = "123";
+  root["tCucina"] = "19.5";
+  root["tBagno"] = "22.1";
 
   String json;
   root.prettyPrintTo(json);
   return json;
   }
-
+/*
   String XmlResponse()
   {
   String str;
@@ -94,7 +94,7 @@ void S_json(WiFiClient client )
   str += "</members>";
   return str;
   }
-*/
+  
 void initHttpServer()
 {
   httpServer.begin();
@@ -168,5 +168,5 @@ bool handleHttpServer()
     return true;
   }
   return false;
-}
+}*/
 
