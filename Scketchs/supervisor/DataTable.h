@@ -413,4 +413,48 @@ class cDataTable
       //-----------------------------------------------------------------
       return str;
     };
+    /*
+       "definitions": {
+            "diskDevice": {},
+            "diskUUID": {},
+            "nfs": {},
+            "tmpfs": {}
+        }
+    */
+    String printSTRUCT_json()
+    {
+      String str;
+      //-----------------------------------------------------------------
+      str += "\"";
+      str += "Programmi";
+      str += "\"";
+      str += ": {\n";
+      bool first = true;
+      for ( int i = 90; i < 100; i++ )
+      {        
+        if ( webVar[i] != 0 )
+        {
+          if (!first) str += ",\n";
+          str += "\"";
+          str += webVar[i]->descr();
+          str += "\"";
+          str += ": {}";
+          first = false;
+        }
+      }
+      str += "}\n";
+      //-----------------------------------------------------------------
+      //      str += "<Stanze>";
+      //      for ( int i = 0; i < 10; i++ )
+      //        if ( webVar[i] != 0 )
+      //        {
+      //          str += "<";
+      //          str += webVar[i]->descr();
+      //          str += "/>";
+      //        }
+      //      str += "</Stanze>";
+      //-----------------------------------------------------------------
+      return str;
+    };
+
 };

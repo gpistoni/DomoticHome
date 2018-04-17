@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> 
+    </head>
+    <body>
+        <title>JsonL</title>
+        <span id="state"> ..... </span>
+
+        <body>
+            <label for="zip">ZIP:</label>
+            <input type="text" name="zip" id="zip"/>
+
+            <label for="city">City:</label>
+            <input type="text" name="city" id="city" />
+        </body>
+
+        <script type="text/javascript">	
+            $(document).ready(function(){   
+
+                //url: "http://echo.jsontest.com/key/value/one/two",
+                // url: "http://192.168.1.109/datatable",
+                var url =  "http://192.168.1.209/datatable";
+                $.getJSON( url, null, function (resultt) {                   
+                    if (result.city)
+                        $("#city").val(result.city);
+                    alert(result);
+                });
+            });
+        </script>
+    </body> 
+</html>

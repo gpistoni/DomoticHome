@@ -1,7 +1,9 @@
 #include <ESP8266WiFi.h>
 #include "page1.html.h"
 
-//extern WiFiServer httpServer;
+#include "ArduinoJson.h"
+
+extern WiFiServer httpServer;
 extern cDataTable DT;
 extern DHFile Config;
 
@@ -20,10 +22,91 @@ String AjaxResponse()
   return str;
 }
 
+JsonObject& prepareResponse(JsonBuffer& jsonBuffer) {
+  JsonObject& root = jsonBuffer.createObject();
+  root["heap"] = "A";
+  root["ssid"] = "123";
+
+  return root;
+}
+
+void writeResponse(WiFiClient& client, JsonObject& json) {
+  client.println("HTTP/1.1 200 OK");
+  client.println("Access-Control-Allow-Origin: *");
+  client.println("Cache-Control: private");
+  client.println("Content-Type: text/html");
+  client.println("Connection: close");
+  client.println("");
+  client.println();
+  json.prettyPrintTo(client);
+    
+  json.prettyPrintTo(Serial);
+}
+
+void S_json(WiFiClient client )
+{
+  StaticJsonBuffer<500> jsonBuffer;
+  JsonObject& json = prepareResponse(jsonBuffer);
+  writeResponse(client, json);
+}
 
 /*
-  bool handleHttpServer()
+  String JsonResponse()
   {
+  StaticJsonBuffer<500> jsonBuffer;
+
+  JsonObject &root = jsonBuffer.createObject();
+  JsonArray &tempValues = root.createNestedArray("temperature");
+  tempValues.add(22);
+  JsonArray &humiValues = root.createNestedArray("humidity");
+  humiValues.add(50);
+  JsonArray &dewpValues = root.createNestedArray("dewpoint");
+  dewpValues.add(1);
+  JsonArray &EsPvValues = root.createNestedArray("systemv");
+  EsPvValues.add(200, 3);
+
+  String json;
+  root.prettyPrintTo(json);
+  return json;
+  }
+*/
+/*
+  String JsonResponse()
+  {
+  printf("Trace: JsonResponse\n");
+
+  StaticJsonBuffer<500> jsonBuffer;
+  JsonObject &root = jsonBuffer.createObject();
+  root["heap"] = "A";
+  root["ssid"] = "123";
+
+  String json;
+  root.prettyPrintTo(json);
+  return json;
+  }
+
+  String XmlResponse()
+  {
+  String str;
+  str += "<members>";
+  str +=   "<id>3422345</id>";
+  str +=  "<name>Bill Gates</name>";
+  str += "</members>";
+  return str;
+  }
+*/
+void initHttpServer()
+{
+  httpServer.begin();
+  Serial.println("HTTP server started");
+  Serial.print("Use this URL to connect: ");
+  Serial.print("http://");
+  Serial.print(WiFi.localIP());
+  Serial.println("/");
+}
+
+bool handleHttpServer()
+{
   // Check if a client has connected
   WiFiClient client = httpServer.available();
   if (!client)
@@ -59,8 +142,6 @@ String AjaxResponse()
       String val = readString.substring(idxSET2 + 1, 999);
 
       DT.setPars( name, val );
-
-      readString = LastPage;
     }
     else if (readString.indexOf("/get?") != -1)
     {
@@ -71,27 +152,21 @@ String AjaxResponse()
 
       float getval =  DT.getPars( name );
 
-      S_value( client, getval);
+      // S_value( client, getval);
     }
-    else if (readString.indexOf("/ajax") != -1)
+    else if (readString.indexOf("/datatable") != -1)
     {
-      int idxGET = readString.indexOf("/ajax");
+      int idxGET = readString.indexOf("/datatable");
       int idxGET2 = readString.indexOf(" ", idxGET);
 
-      String name = readString.substring(idxGET + 5, idxGET2);
-
-      float getval =  DT.getPars( name );
-
-      S_ajax( client);
+      S_json( client);
     }
     else if (readString.indexOf("/page") != -1)
     {
-      S_page( client );
+      //S_page( client );
     }
-    LastPage = readString;
     return true;
   }
   return false;
-  }
-*/
+}
 

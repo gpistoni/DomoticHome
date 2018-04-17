@@ -28,36 +28,42 @@ th {border:2px groove black; padding:7px; background-color:#ffffcc}
 var xDoc;
 
 // verify that browser supports XML features and load external .xml file
-function verifySupport(xFile) {
-    if (document.implementation && document.implementation.createDocument) {
+function verifySupport(xFile) 
+    {
+    if (document.implementation && document.implementation.createDocument)
+    {
         // this is the W3C DOM way, supported so far only in NN6+
         xDoc = document.implementation.createDocument("", "theXdoc", null);
-    } else if (typeof ActiveXObject != "undefined") {
+    } 
+        else if (typeof ActiveXObject != "undefined")
+        {
         // make sure real object is supported (sorry, IE5/Mac)
         if (document.getElementById("msxml").async) {
             xDoc = new ActiveXObject("Msxml.DOMDocument");
         }
     }
-    if (xDoc && typeof xDoc.load != "undefined") {
-        // load external file (from same domain)
-        xDoc.load(xFile);
-        return true;
-    } else {
-        var reply = confirm("This example requires a browser with XML support, " +
-            "such as IE5+/Windows or Netscape 6+.\n \nGo back to previous page?");
-        if (reply) {
-            history.back();
-        }
-    }
-    return false;
+    return true;
 }
 
 // Draw table from xDoc document tree data
-function drawTable(tbody) {
+function drawTable(tb)
+    {
+        var x = new XMLHttpRequest();
+        x.open("GET", "http://192.168.1.209/ajax", true);
+        x.onreadystatechange = function ()            
+             {
+  if (x.readyState == 4 && x.status == 200)
+  {
+    var doc = x.responseXML;
+    // …
+  }
+};
+            
+
     var tr, td, i, j, oneRecord;
-    tbody = document.getElementById(tbody);
+    tbody = document.getElementById(tb);
     // node tree
-    var data = xDoc.getElementsByTagName("worldcup")[0];
+    var data = xDoc.getElementsByTagName("struct")[0];
     // for td class attributes
     var classes = ["ctr","","","","ctr"];
     for (i = 0; i < data.childNodes.length; i++) {
@@ -67,7 +73,7 @@ function drawTable(tbody) {
             oneRecord = data.childNodes[i];
             tr = tbody.insertRow(tbody.rows.length);
             td = tr.insertCell(tr.cells.length);
-            td.setAttribute("class",classes[tr.cells.length-1]);
+            td.setAttribute("class", classes[tr.cells.length-1]);
             td.innerHTML = 
               oneRecord.getElementsByTagName("year")[0].firstChild.nodeValue;
             td = tr.insertCell(tr.cells.length);
@@ -126,81 +132,5 @@ function init(xFile) {
 </body>
 </html>
 
-<!-- File:worldCupFinals.xml
-<?xml version="1.0"?> 
-<worldcup>
-    <final>
-        <location>Uruguay</location>
-        <year>1930</year>
-        <winner>Uruguay</winner>
-        <winscore>4</winscore>
-        <loser>Argentina</loser>
-        <losscore>2</losscore>
-    </final>
-    <final>
-        <location>Italy</location>
-        <year>1934</year>
-        <winner>Italy</winner>
-        <winscore>2</winscore>
-        <loser>Czechoslovakia</loser>
-        <losscore>1</losscore>
-    </final>
-    <final>
-        <location>France</location>
-        <year>1938</year>
-        <winner>Italy</winner>
-        <winscore>4</winscore>
-        <loser>Hungary</loser>
-        <losscore>2</losscore>
-    </final>
-    <final>
-        <location>Brazil</location>
-        <year>1950</year>
-        <winner>Uruguay</winner>
-        <winscore>2</winscore>
-        <loser>Brazil</loser>
-        <losscore>1</losscore>
-    </final>
-    <final>
-        <location>Switzerland</location>
-        <year>1954</year>
-        <winner>West Germany</winner>
-        <winscore>3</winscore>
-        <loser>Hungary</loser>
-        <losscore>2</losscore>
-    </final>
-    <final>
-        <location>Sweden</location>
-        <year>1958</year>
-        <winner>Brazil</winner>
-        <winscore>5</winscore>
-        <loser>Sweden</loser>
-        <losscore>2</losscore>
-    </final>
-    <final>
-        <location>Chile</location>
-        <year>1962</year>
-        <winner>Brazil</winner>
-        <winscore>3</winscore>
-        <loser>Czechoslovakia</loser>
-        <losscore>1</losscore>
-    </final>
-    <final>
-        <location>England</location>
-        <year>1966</year>
-        <winner>England</winner>
-        <winscore>4</winscore>
-        <loser>West Germany</loser>
-        <losscore>2</losscore>
-    </final>
-    <final>
-        <location>Mexico</location>
-        <year>1970</year>
-        <winner>Brazil</winner>
-        <winscore>4</winscore>
-        <loser>Italy</loser>
-        <losscore>1</losscore>
-    </final>
-</worldcup>
 
--->
+   

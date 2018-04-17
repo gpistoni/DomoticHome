@@ -14,7 +14,7 @@ const char HTML_page1[] PROGMEM  =
 "            line-height: 32px;\n"
 "          }\n"
 "          .bars { \n"
-"            float: left;\n"
+"            float: left;\n"  
 "            height: 30px;\n"
 "            width: 100px;\n"
 "            line-height: 30px;\n"
