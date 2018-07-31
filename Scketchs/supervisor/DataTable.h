@@ -7,6 +7,7 @@ class cDataTable
   public:
     cBool progBoilerACS;
     cBool progSummerAC;
+    cBool progSummerAC_NIGHT;
     cBool progWinterFIRE;
     cBool progWinterPDC;
     cBool progWinterPDC_ECO;
@@ -65,7 +66,7 @@ class cDataTable
     cFloat tReturnFloor;
     cFloat tInletFloor;
     cFloat tExternal;
-    cFloat lightExternal;
+    cFloat darkExternal;
 
     // terminal 5
     cBool evCameraM1;
@@ -142,7 +143,7 @@ class cDataTable
       webVar[44] = tReturnFloor.setup       ( T4, 4, "tReturnFloor");
       webVar[45] = tInletFloor.setup        ( T4, 5, "tInletFloor");
       webVar[46] = tExternal.setup          ( T4, 6, "tExternal");
-      webVar[47] = lightExternal.setup      ( T4, 8, "lightExternal");
+      webVar[47] = darkExternal.setup      ( T4, 8, "darkExternal");
 
       webVar[50] = evCameraM1.setup         ( T5, 0, "evCameraM1");
       webVar[51] = evCameraM2.setup         ( T5, 1, "evCameraM2");
@@ -176,11 +177,12 @@ class cDataTable
 
       webVar[90] = progBoilerACS.setup      ( PROG, 0, "progBoilerACS");
       webVar[91] = progSummerAC.setup       ( PROG, 0, "progSummerAC");
-      webVar[92] = progWinterFIRE.setup     ( PROG, 0, "progWinterFIRE");
-      webVar[93] = progWinterPDC.setup      ( PROG, 0, "progWinterPDC");
-      webVar[94] = progWinterPDC_ECO.setup  ( PROG, 0, "progWinterPDC_ECO");
-      webVar[95] = progAllRooms.setup       ( PROG, 0, "progAllRooms");
-      webVar[96] = progExternalLight.setup  ( PROG, 0, "progExternalLight");
+      webVar[92] = progSummerAC_NIGHT.setup ( PROG, 0, "progSummerAC_NIGHT");
+      webVar[93] = progWinterFIRE.setup     ( PROG, 0, "progWinterFIRE");
+      webVar[94] = progWinterPDC.setup      ( PROG, 0, "progWinterPDC");
+      webVar[95] = progWinterPDC_ECO.setup  ( PROG, 0, "progWinterPDC_ECO");
+      webVar[96] = progAllRooms.setup       ( PROG, 0, "progAllRooms");
+      webVar[97] = progExternalLight.setup  ( PROG, 0, "progExternalLight");
 
     };
 
@@ -235,7 +237,7 @@ class cDataTable
       tReturnFloor.updateNz( strs );
       tInletFloor.updateNz( strs );
       tExternal.updateNz( strs );
-      lightExternal.updateNz( strs );
+      darkExternal.updateNz( strs );
     };
 
     void UpdateT5( String strs)

@@ -51,9 +51,6 @@ void setup()
   DT.progExternalLight.set(1);
 
   UpdateTime(0);  // update system time
-
-  if ( month() >= 10 || month() <= 4) DT.progWinterFIRE.set(1);
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,19 +62,25 @@ void loop()
   {
     return;
   }
-  
-  digitalWrite(ACT, 1);
 
+  digitalWrite(ACT, 1);
+  
   DT.progBoilerACS.manualCheck();
   DT.progSummerAC.manualCheck();
+  DT.progSummerAC_NIGHT.manualCheck();
   DT.progWinterFIRE.manualCheck();
   DT.progWinterPDC.manualCheck();
   DT.progWinterPDC_ECO.manualCheck();
   DT.progAllRooms.manualCheck();
   DT.progExternalLight.manualCheck();
 
-  if (DT.progWinterFIRE) DT.progSummerAC.set(0);
-  if (DT.progWinterPDC)  DT.progSummerAC.set(0);
+  if ( hour() > 7 && hour() < 19 ) DT.progSummerAC_NIGHT.set(0);
+  if ( month() >= 10 || month() <= 4) DT.progWinterFIRE.set(1);
+
+  if (DT.progSummerAC_NIGHT) DT.progSummerAC.set(1);
+  
+  if (DT.progWinterFIRE)     DT.progSummerAC.set(0);
+  if (DT.progWinterPDC)      DT.progSummerAC.set(0);
   if (DT.progWinterPDC_ECO)  DT.progSummerAC.set(0);
 
   {// Run Managers
@@ -236,7 +239,7 @@ void Summer_Manager(int sec)
   // attuatori
   DT.evSala1.set(allRoom);
   DT.evSala2.set(allRoom);
-  DT.evCucina.set(summerAC_pump || allRoom);
+  DT.evCucina.set(allRoom);
 
   DT.evCameraM1.set(summerAC_pump || allRoom);
   DT.evCameraM2.set(summerAC_pump || allRoom);
@@ -477,8 +480,8 @@ void ExternalLight_Manager(int sec)
   if (DT.progExternalLight)
   {
     /**************************************************************************************************/
-    DT.m_log.add("-- darkExternal: " + String(DT.lightExternal) + " Request [" + String( 60 - 10 * DT.lightSide) + "]" );
-    if ( DT.lightExternal > 60 - 10 * DT.lightSide ) // isteresi
+    DT.m_log.add("-- darkExternal: " + String(DT.darkExternal) + " Request [" + String( 28 - 2 * DT.lightSide) + "]" );
+    if ( DT.darkExternal > 28 - 2 * DT.lightSide ) // isteresi
     {
       lightSide = true;
       lightLamp = true;

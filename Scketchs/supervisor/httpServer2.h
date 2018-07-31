@@ -195,7 +195,7 @@ void S_page_progs( WiFiClient &client)
 {
   String page = Menu();
   //***************************************************************************************************************/
-  page +=  "\n<h2> Programmi </h1>"
+  page +=  "\n<h1> Programmi </h1>"
            "<table>"
            "<tbody>"
            "<tr>"
