@@ -10,7 +10,7 @@ class cDataTable
     cBool progSummerAC_NIGHT;
     cBool progWinterFIRE;
     cBool progWinterPDC;
-    cBool progWinterPDC_ECO;
+    cBool progWinterPDC_ALLROOMS;
     cBool progAllRooms;
     cBool progExternalLight;
 
@@ -180,7 +180,7 @@ class cDataTable
       webVar[92] = progSummerAC_NIGHT.setup ( PROG, 0, "progSummerAC_NIGHT");
       webVar[93] = progWinterFIRE.setup     ( PROG, 0, "progWinterFIRE");
       webVar[94] = progWinterPDC.setup      ( PROG, 0, "progWinterPDC");
-      webVar[95] = progWinterPDC_ECO.setup  ( PROG, 0, "progWinterPDC_ECO");
+      webVar[95] = progWinterPDC_ALLROOMS.setup  ( PROG, 0, "progWinterPDC_ALLROOMS");
       webVar[96] = progAllRooms.setup       ( PROG, 0, "progAllRooms");
       webVar[97] = progExternalLight.setup  ( PROG, 0, "progExternalLight");
 
@@ -289,6 +289,22 @@ class cDataTable
           return webVar[i]->value();
         }
       }
+      return 0;
+    }
+
+     float getValue( String &label)
+    {
+      for ( int i = 0; i < 100; i++ )
+      {
+        if ( webVar[i] != 0) Serial.println(webVar[i]->descr());
+      //Serial.println(val);
+      
+        if ( webVar[i] != 0 && webVar[i]->descr() == label  )
+        {
+          return webVar[i]->value();
+        }
+      }
+      return 0;
     }
 
     void enumerateVals( String &labels, String &values)

@@ -46,7 +46,7 @@ void setup()
   DT.progBoilerACS.set(1);
   DT.progSummerAC.set(0);
   DT.progWinterPDC.set(0);
-  DT.progWinterPDC_ECO.set(0);
+  DT.progWinterPDC_ALLROOMS.set(0);
   DT.progAllRooms.set(0);
   DT.progExternalLight.set(1);
 
@@ -70,7 +70,7 @@ void loop()
   DT.progSummerAC_NIGHT.manualCheck();
   DT.progWinterFIRE.manualCheck();
   DT.progWinterPDC.manualCheck();
-  DT.progWinterPDC_ECO.manualCheck();
+  DT.progWinterPDC_ALLROOMS.manualCheck();
   DT.progAllRooms.manualCheck();
   DT.progExternalLight.manualCheck();
 
@@ -81,7 +81,7 @@ void loop()
   
   if (DT.progWinterFIRE)     DT.progSummerAC.set(0);
   if (DT.progWinterPDC)      DT.progSummerAC.set(0);
-  if (DT.progWinterPDC_ECO)  DT.progSummerAC.set(0);
+  if (DT.progWinterPDC_ALLROOMS)  DT.progSummerAC.set(0);
 
   {// Run Managers
     
@@ -110,7 +110,6 @@ void loop()
   //----------------------------------------------------------------------------
   RollingUpdateTerminals( 5 );
   //----------------------------------------------------------------------------
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -258,35 +257,6 @@ void Summer_Manager(int sec)
   /**************************************************************************************************/
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void BoilerACS_Manager(int sec)
-{
-  _CHECK_TIME_;
-  DT.m_log.add("-------------------- BoilerACS_Manager ---------------");
-
-  bool boilerACS = false;
-  /**************************************************************************************************/
-  if (DT.progBoilerACS)
-  {
-    //decido se accendere il boiler solo di notte e solo se il camino non funziona
-    if ( hour() < 7 )
-    {
-      boilerACS = true;
-      DT.m_log.add("Condizione ON hour:" + String( hour() ) + "< 7");
-    }
-    if ( DT.tReturnFireplace > 25 )
-    {
-      boilerACS = false;
-      DT.m_log.add("Condizione OFF DT.ReturnFireplace:" + String( DT.tReturnFireplace ) + "> 25");
-    }
-  }
-  /**************************************************************************************************/
-  DT.m_log.add("BoilerACS [" + String( boilerACS ) + "]");
-
-  // boiler
-  DT.rBoilerACS.set( boilerACS );
-}
-
 /******************************************************************************************************************************************************************/
 void Winter_Manager( int sec )
 {
@@ -308,9 +278,9 @@ void Winter_Manager( int sec )
   bool needPdc = false;
   bool needPCamino = false;
 
-  bool AllIn = DT.progAllRooms;
+  bool allRoom = DT.progAllRooms || DT.progWinterPDC_ALLROOMS;
 
-  if (DT.progWinterFIRE || DT.progWinterPDC || DT.progWinterPDC_ECO)
+  if (DT.progWinterFIRE || DT.progWinterPDC || DT.progWinterPDC_ALLROOMS)
   {
     //////////////////////////////////////////////////////////////////////////////////
     //decido se accendere le stanze
@@ -387,14 +357,14 @@ void Winter_Manager( int sec )
       DT.m_log.add("Emergenza tPufferLow > 55 ");
       needPompa_pp = true;
       needPompa_pt = true;
-      AllIn = true;
+      allRoom = true;
     }
     DT.m_log.add( "NeedPompa_pp: [" + String(needPompa_pp) + "]" );
 
     //////////////////////////////////////////////////////////////////////////////////
     //decido se accendere PDC
     needPdc = DT.progWinterPDC && ( sala || cucina || bagno );
-    needPdc = needPdc || ( DT.progWinterPDC_ECO && (sala || cucina || bagno) && DT.tExternal > 7 );
+    needPdc = needPdc || ( DT.progWinterPDC_ALLROOMS );
 
     if ( needPompa_pp )
     {
@@ -430,14 +400,14 @@ void Winter_Manager( int sec )
     }
     DT.m_log.add( "NeedEv: [" + String(NeedEv) + "]" );
 
-    cameraM   = (cameraM &&  NeedEv) || AllIn;
-    cameraM2  = (cameraM2 && NeedEv) || AllIn;
-    sala      = (sala && NeedEv) || AllIn;
-    sala2     = (sala2 && NeedEv) || AllIn;
-    cucina    = (cucina && NeedEv) || AllIn;
-    cameraS   = (cameraS && NeedEv) || AllIn;
-    cameraD   = (cameraD && NeedEv) || AllIn;
-    cameraD2  = (cameraD2 && NeedEv) || AllIn;
+    cameraM   = (cameraM &&  NeedEv) || allRoom;
+    cameraM2  = (cameraM2 && NeedEv);
+    sala      = (sala && NeedEv) || allRoom;
+    sala2     = (sala2 && NeedEv) || allRoom;
+    cucina    = (cucina && NeedEv) || allRoom;
+    cameraS   = (cameraS && NeedEv) || allRoom;
+    cameraD   = (cameraD && NeedEv) || allRoom;
+    cameraD2  = (cameraD2 && NeedEv);
   }
 
   //**********************************************************************
@@ -469,6 +439,35 @@ void Winter_Manager( int sec )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void BoilerACS_Manager(int sec)
+{
+  _CHECK_TIME_;
+  DT.m_log.add("-------------------- BoilerACS_Manager ---------------");
+
+  bool boilerACS = false;
+  /**************************************************************************************************/
+  if (DT.progBoilerACS)
+  {
+    //decido se accendere il boiler solo a mezzogiorno e solo se il camino non funziona
+    if ( hour() > 12 && hour() < 18  )
+    {
+      boilerACS = true;
+      DT.m_log.add("Condizione ON hour:" + String( hour() ) + " >12 & <18");
+    }
+    if ( DT.tReturnFireplace > 25 )
+    {
+      boilerACS = false;
+      DT.m_log.add("Condizione OFF DT.ReturnFireplace:" + String( DT.tReturnFireplace ) + "> 25");
+    }
+  }
+  /**************************************************************************************************/
+  DT.m_log.add("BoilerACS [" + String( boilerACS ) + "]");
+
+  // boiler
+  DT.rBoilerACS.set( boilerACS );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void ExternalLight_Manager(int sec)
 {
   _CHECK_TIME_;
@@ -480,18 +479,13 @@ void ExternalLight_Manager(int sec)
   if (DT.progExternalLight)
   {
     /**************************************************************************************************/
-    DT.m_log.add("-- darkExternal: " + String(DT.darkExternal) + " Request [" + String( 28 - 2 * DT.lightSide) + "]" );
-    if ( DT.darkExternal > 28 - 2 * DT.lightSide ) // isteresi
+    DT.m_log.add("-- darkExternal: " + String(DT.darkExternal) + " Request [" + String( 32 - 2 * DT.lightSide) + "]" );
+    if ( DT.darkExternal > 32 + 2 * DT.lightSide ) // isteresi
     {
       lightSide = true;
       lightLamp = true;
     }
-
-    if ( hour() < 12 )
-    {
-      lightLamp = false;
-    }
-
+    
     /**************************************************************************************************/
     DT.m_log.add("-- LightLamp [" +  String(lightLamp) + "]  LightSide [" +  String(lightSide) + "]" );
   }
