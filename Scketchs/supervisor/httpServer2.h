@@ -10,8 +10,8 @@ void S_header( WiFiClient &client);
 void S_page_progs( WiFiClient &client, String page);
 void S_page_rooms( WiFiClient &client, String page);
 void S_page_amp( WiFiClient &client, String page);
-void S_page2( WiFiClient &client , String page);
-void S_page3( WiFiClient &client, String page);
+void S_page_valves( WiFiClient &client , String page);
+void S_page_probes( WiFiClient &client, String page);
 void S_page_log( WiFiClient &client, String page);
 void S_page_json( WiFiClient &client, JsonObject& json, String page );
 String Menu();
@@ -39,9 +39,9 @@ bool handleHttpServer()
   {
     return false;
   }
-
+  
   // Wait until the client sends some data
-  //Serial.println("new client");
+  Serial.println("new client");
   int i = 0;
   if (!client.available())
   {
@@ -76,37 +76,37 @@ bool handleHttpServer()
       client.println(val);
       readString = LastPage;
     }
-    else if (readString.indexOf("/page_progs") != -1)
+    else if (readString.indexOf("/progs") != -1)
     {
       S_header( client );
       S_page_progs( client , Menu() );
     }
-    else if (readString.indexOf("/page_rooms") != -1)
+    else if (readString.indexOf("/rooms") != -1)
     {
       S_header( client );
       S_page_rooms( client , Menu() );
     }
-    else if (readString.indexOf("/page_amp") != -1)
+    else if (readString.indexOf("/amp") != -1)
     {
       S_header( client );
       S_page_amp( client , Menu() );
     }
-    else if (readString.indexOf("/page2") != -1)
+    else if (readString.indexOf("/valves") != -1)
     {
       S_header( client );
-      S_page2( client , Menu() );
+      S_page_valves( client , Menu() );
     }
-    else if (readString.indexOf("/page3") != -1)
+    else if (readString.indexOf("/probes") != -1)
     {
       S_header( client );
-      S_page3( client , Menu() );
+      S_page_probes( client , Menu() );
     }
-    else if (readString.indexOf("/page_log") != -1)
+    else if (readString.indexOf("/log") != -1)
     {
       S_header( client );
       S_page_log( client , Menu() );
     }
-    else if (readString.indexOf("/page_json") != -1)
+    else if (readString.indexOf("/json") != -1)
     {
       JsonObject& root = Config.root();
       S_header( client );
@@ -118,8 +118,8 @@ bool handleHttpServer()
       S_page_progs( client  , "");
       S_page_rooms( client  , "");
       S_page_amp( client  , "");
-      S_page2( client  , "");
-      S_page3( client  , "");
+      S_page_valves( client  , "");
+      S_page_probes( client  , "");
     }
 
     LastPage = readString;
@@ -192,13 +192,13 @@ String Menu()
 {
   String page;
   //***************************************************************************************************************/
-  page = "<h3><a href=page_progs> Programmi </a> |"
-         "<a href=page_rooms> Stanze </a> |"
-         "<a href=page_amp> Consumi </a> |"
-         "<a href=page2> Attuatori </a> |"
-         "<a href=page3> Caldaia </a> |"
-         "<a href=page_log> Log </a> |"
-         //    "<a href=page_json> Json </a> |"
+  page = "<h3><a href=progs> Programmi </a> |"
+         "<a href=rooms> Stanze </a> |"
+         "<a href=amp> Consumi </a> |"
+         "<a href=valves> Attuatori </a> |"
+         "<a href=probes> Caldaia </a> |"
+         "<a href=log> Log </a> |"
+         "<a href=json> Json </a> |"
          "</h3>";
   return page;
 }
@@ -298,7 +298,6 @@ void S_page_amp( WiFiClient &client, String page)
            "<th>Watt"
            "<th>KWh"
            "<th>h"
-           "<th>Euro"
            "<th>"
            "</tr>";
   client.println(page);
@@ -319,7 +318,6 @@ void S_page_amp( WiFiClient &client, String page)
       page += String("<td>") + a * 233;         // W
       page += String("<td>") + wh;              // KWH
       page += String("<td>") + t;               // time
-      page += String("<td>") + wh * 0.22;
       page += "</tr>";
     }
   }
@@ -333,7 +331,7 @@ void S_page_amp( WiFiClient &client, String page)
 }
 
 
-void S_page2( WiFiClient &client, String page)
+void S_page_valves( WiFiClient &client, String page)
 {
   //***************************************************************************************************************/
   page +=  "\n<h1> Attuatori Pavimento </h1>"
@@ -424,7 +422,7 @@ void S_page2( WiFiClient &client, String page)
 
 }
 
-void S_page3( WiFiClient &client, String page)
+void S_page_probes( WiFiClient &client, String page)
 {
   //***************************************************************************************************************/
   page += "\n<h1> Caldaia </h1>"

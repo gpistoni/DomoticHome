@@ -19,7 +19,7 @@ void  DHwifi::setup( IPAddress ip, IPAddress gateway, IPAddress subnet, String s
 
   while (WiFi.status() != WL_CONNECTED)
   {
-    delay(1000);
+    delay(5000);
     Serial.println(ssid + " not Linked.");
   }
   Serial.println(ssid + " Linked.");
@@ -138,6 +138,3 @@ String DHwifi::HttpRequest( String req )
   }
   return result;
 }
-
-
-

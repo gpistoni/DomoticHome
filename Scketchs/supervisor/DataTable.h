@@ -11,6 +11,7 @@ class cDataTable
     cBool progWinterFIRE;
     cBool progWinterPDC;
     cBool progWinterPDC_ALLROOMS;
+        cBool progWinterPDC_FOTOV;
     cBool progAllRooms;
     cBool progExternalLight;
 
@@ -79,11 +80,11 @@ class cDataTable
     cBool evCameraD2;
 
     // terminal 6
-    cFloat aTotal[3];
+    cFloat aProduced[3];
+    cFloat aInput[3];
     cFloat aL1[3];
     cFloat aL2[3];
     cFloat aL3[3];
-    cFloat aM[3];
     cFloat aN[3];
 
     // puntatori
@@ -154,26 +155,26 @@ class cDataTable
       webVar[56] = evCameraD1.setup         ( T5, 6, "evCameraD1");
       webVar[57] = evCameraD2.setup         ( T5, 7, "evCameraD2");
 
-      webVar[60] = aTotal[0].setup             ( T6, 0, "aTotal");
-      webVar[61] = aL1[0].setup                ( T6, 1, "aL1");
-      webVar[62] = aL2[0].setup                ( T6, 2, "aL2");
-      webVar[63] = aL3[0].setup                ( T6, 3, "aL3");
-      webVar[64] = aM[0].setup                 ( T6, 4, "aM");
-      webVar[65] = aN[0].setup                 ( T6, 5, "aN");
+      webVar[60] = aProduced[0].setup             ( T6, 0, "aProduced");
+      webVar[61] = aInput[0].setup                ( T6, 1, "aInput");
+      webVar[62] = aL1[0].setup                   ( T6, 2, "aL1");
+      webVar[63] = aL2[0].setup                   ( T6, 3, "aL2");
+      webVar[64] = aL3[0].setup                   ( T6, 4, "aL3");
+      webVar[65] = aN[0].setup                    ( T6, 5, "aN");
 
-      webVar[60 + 8] = aTotal[1].setup             ( T6, 8 + 0, "wTotal");
-      webVar[61 + 8] = aL1[1].setup                ( T6, 8 + 1, "wL1");
-      webVar[62 + 8] = aL2[1].setup                ( T6, 8 + 2, "wL2");
-      webVar[63 + 8] = aL3[1].setup                ( T6, 8 + 3, "wL3");
-      webVar[64 + 8] = aM[1].setup                 ( T6, 8 + 4, "wM");
-      webVar[65 + 8] = aN[1].setup                 ( T6, 8 + 5, "wN");
+      webVar[60 + 8] = aProduced[1].setup             ( T6, 8 + 0, "whProduced");
+      webVar[61 + 8] = aInput[1].setup                ( T6, 8 + 1, "whInput");
+      webVar[62 + 8] = aL1[1].setup                   ( T6, 8 + 2, "whL1");
+      webVar[63 + 8] = aL2[1].setup                   ( T6, 8 + 3, "whL2");
+      webVar[64 + 8] = aL3[1].setup                   ( T6, 8 + 4, "whL3");
+      webVar[65 + 8] = aN[1].setup                    ( T6, 8 + 5, "whN");
 
-      webVar[60 + 16] = aTotal[2].setup             ( T6, 16 + 0, "whTotal");
-      webVar[61 + 16] = aL1[2].setup                ( T6, 16 + 1, "whL1");
-      webVar[62 + 16] = aL2[2].setup                ( T6, 16 + 2, "whL2");
-      webVar[63 + 16] = aL3[2].setup                ( T6, 16 + 3, "whL3");
-      webVar[64 + 16] = aM[2].setup                 ( T6, 16 + 4, "whM");
-      webVar[65 + 16] = aN[2].setup                 ( T6, 16 + 5, "whN");
+      webVar[60 + 16] = aProduced[2].setup              ( T6, 16 + 0, "tProduced");
+      webVar[61 + 16] = aInput[2].setup                 ( T6, 16 + 1, "tInput");
+      webVar[62 + 16] = aL1[2].setup                    ( T6, 16 + 2, "tL1");
+      webVar[63 + 16] = aL1[2].setup                    ( T6, 16 + 3, "tL2");
+      webVar[64 + 16] = aL3[2].setup                    ( T6, 16 + 4, "tL3");
+      webVar[65 + 16] = aN[2].setup                     ( T6, 16 + 5, "tN");
 
       webVar[90] = progBoilerACS.setup      ( PROG, 0, "progBoilerACS");
       webVar[91] = progSummerAC.setup       ( PROG, 0, "progSummerAC");
@@ -181,8 +182,9 @@ class cDataTable
       webVar[93] = progWinterFIRE.setup     ( PROG, 0, "progWinterFIRE");
       webVar[94] = progWinterPDC.setup      ( PROG, 0, "progWinterPDC");
       webVar[95] = progWinterPDC_ALLROOMS.setup  ( PROG, 0, "progWinterPDC_ALLROOMS");
-      webVar[96] = progAllRooms.setup       ( PROG, 0, "progAllRooms");
-      webVar[97] = progExternalLight.setup  ( PROG, 0, "progExternalLight");
+      webVar[96] = progWinterPDC_FOTOV.setup  ( PROG, 0, "progWinterPDC_FOTOV");
+      webVar[97] = progAllRooms.setup       ( PROG, 0, "progAllRooms");
+      webVar[98] = progExternalLight.setup  ( PROG, 0, "progExternalLight");
 
     };
 
@@ -253,11 +255,11 @@ class cDataTable
 
       for (int i = 0; i < 3; i++)
       {
-        aTotal[i].updateNz( strs );
+        aProduced[i].updateNz( strs );
+        aInput[i].updateNz( strs );
         aL1[i].updateNz( strs );
         aL2[i].updateNz( strs );
         aL3[i].updateNz( strs );
-        aM[i].updateNz( strs );
         aN[i].updateNz( strs );
       }
     };
@@ -292,13 +294,13 @@ class cDataTable
       return 0;
     }
 
-     float getValue( String &label)
+    float getValue( String &label)
     {
       for ( int i = 0; i < 100; i++ )
       {
         if ( webVar[i] != 0) Serial.println(webVar[i]->descr());
-      //Serial.println(val);
-      
+        //Serial.println(val);
+
         if ( webVar[i] != 0 && webVar[i]->descr() == label  )
         {
           return webVar[i]->value();
@@ -449,7 +451,7 @@ class cDataTable
       str += ": {\n";
       bool first = true;
       for ( int i = 90; i < 100; i++ )
-      {        
+      {
         if ( webVar[i] != 0 )
         {
           if (!first) str += ",\n";
