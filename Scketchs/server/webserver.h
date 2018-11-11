@@ -1,4 +1,4 @@
-#include "arduinoJson.h"
+#include "ArduinoJson.h"
 
 extern EthernetServer server;
 extern DHProtocol T[8];
@@ -73,39 +73,36 @@ bool listenForEthernetClients()
           else
           {
             OUTLN( "DEBUG TREE"   + readString);
-            
-            StaticJsonBuffer<200> jb;
 
-            JsonArray &clients = jb.createArray();
-            
+            StaticJsonBuffer<500> jb;
+            client.println("[");
             for (int c = 1; c <= 7; c++)
             {
-              client.print( "T" + String(c) + ": " );
-              if ( c == 1)  client.print( "Temperature Stanze  \t" );
-              if ( c == 2)  client.print( "Luci Esterne        \t" );
-              if ( c == 3)  client.print( "Rele Caldaia        \t" );
-              if ( c == 4)  client.print( "Temperature Caldaia \t" );
-              if ( c == 5)  client.print( "Rele Ev Pavimento   \t" );
-              if ( c == 6)  client.print( "Amperometri         \t" );
-              if ( c == 7)  client.print( "----------          \t" );
+              jb.clear();
+              JsonObject &obj = jb.createObject();
+              obj["N"] = c;
+              if ( c == 1)  obj["Name"] = "Temp Stanze";
+              if ( c == 2)  obj["Name"] = "Luci Esterne" ;
+              if ( c == 3)  obj["Name"] = "Rele Caldaia";
+              if ( c == 4)  obj["Name"] = "Temp Caldaia" ;
+              if ( c == 5)  obj["Name"] = "Rele Pavimento" ;
+              if ( c == 6)  obj["Name"] = "Amperometri";
+              if ( c == 7)  obj["Name"] = "-";
 
-              JsonObject& obj = jb.createObject();
-              obj["LastRequest"] = (T[ c ].lastRequest / 1000 ) & 1000);
-              obj["LastRecived"] = (T[ c ].lastRecived / 1000 ) & 1000);
+              obj["tReq"] = T[ c ].lastRequest;
+              obj["tRec"] = T[ c ].lastRecived;
 
               for (int i = 0; i < 24; i++)
               {
-                if (i != 0) client.print(',');
-                client.print( T[ c ].sensor[i] );
+                if (i < 1 || T[c].sensor[i] != 0)     obj["v" + String(i)] = T[c].sensor[i];
               }
-              client.println("");
               for (int i = 0; i < 12; i++)
               {
-                if (i != 0) client.print(',');
-                client.print( T[ c ].relay[i] );
+                if (i < 1 || T[c].relay[i] != 0)      obj["r" + String(i)] = T[c].relay[i];
               }
-              client.println("");
+              obj.prettyPrintTo(client);
             }
+            client.println("]");
             break;
           }
           //*************************************
