@@ -192,6 +192,7 @@ class cDataTable
     {
       m_log.add("**T1-GET-tStanze** ");
       m_log.add(strs);
+      Serial.println(strs);
 
       tCucina.updateNz( strs );
       tSala.updateNz( strs );

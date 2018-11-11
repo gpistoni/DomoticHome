@@ -134,7 +134,7 @@ String DHwifi::HttpRequest( String req )
   // Read all the lines of the reply from server and print them to Serial
   while (client.available())
   {
-    result = client.readStringUntil('\r');
+    result += client.readStringUntil('\r');
   }
   return result;
 }
