@@ -286,7 +286,7 @@ void ExternalLight_Manager(int sec)
   {
     /**************************************************************************************************/
     DT.m_log.add("-- darkExternal: " + String(DT.darkExternal) + " Request [" + String( 35 - 2 * DT.lightSide) + "]" );
-    if ( DT.darkExternal > 35 - 2 * DT.lightSide ) // isteresi
+    if ( DT.darkExternal > 35 - 1 * DT.lightSide ) // isteresi
     {
       lightSide = true;
       lightLamp = true;

@@ -146,6 +146,8 @@ void RollingUpdateTerminals( int sec )
   if ( i % 10 == 8 || i == 0 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
 
   if ( i % 4 == 1 || i == 0 )   DT.UpdateT6( dhWifi.HttpRequest( "@get(6,99)") ); //amperometri
+
+  if ( i % 10 == 9 )   DT.m_log.add( dhWifi.HttpRequest( "/") );
   i++;
 }
 
