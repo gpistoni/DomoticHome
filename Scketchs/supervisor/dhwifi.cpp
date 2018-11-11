@@ -117,24 +117,35 @@ String DHwifi::HttpRequest( String req )
   m_remoteServer.toCharArray( host, 99);
   const int httpPort = 80;
 
-  if (!client.connect(host, httpPort))
+  if (client.connect(host, httpPort))
   {
+    String sreq = String("GET ") + req + " HTTP/1.1\r\n" +
+                  "Host: " + host + "\r\n" +
+                  "Connection: close\r\n\r\n";
+
+    Serial.print(sreq);
+    client.print(sreq);
+
+    delay(100);
+
+
+    String result;
+    while (client.connected())
+    {
+      if (client.available())
+      {
+        result += client.readStringUntil('\r');
+      }
+    }
+    client.stop();
+    Serial.println("\n[Disconnected]");
+    return result;
+  }
+  else
+  {
+    client.stop();
     Serial.print( host );
     Serial.println(" connection failed");
-    return "";
   }
-
-  client.print(String("GET ") + req + " HTTP/1.1\r\n" +
-               "Host: " + host + "\r\n" +
-               "Connection: close\r\n\r\n");
-
-  delay(10);
-
-  String result;
-  // Read all the lines of the reply from server and print them to Serial
-  while (client.available())
-  {
-    result += client.readStringUntil('\r');
-  }
-  return result;
+  return "";
 }

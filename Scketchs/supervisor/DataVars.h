@@ -81,7 +81,7 @@ class cVar
     {
       String s =  String("@set(") + String(m_t) + "," + String(m_signal) + "=" + String(m_value)  + ")";
       wifi->HttpRequest( s );
-      //log.add( String("Send Value ") + m_descr + ":" + String(m_value) );
+      log.add( String("Send Value ") + m_descr + ":" + String(m_value) );
     }
 
     float value()
@@ -242,4 +242,3 @@ class cBool: public cVar
           log.add( String("Send Value ") + m_descr + " (0)" );*/
     }
 };
-

@@ -6,6 +6,7 @@ extern DHFile Config;
 
 String LastPage;
 
+String Menu();
 void S_header( WiFiClient &client);
 void S_page_progs( WiFiClient &client, String page);
 void S_page_rooms( WiFiClient &client, String page);
@@ -14,12 +15,8 @@ void S_page_valves( WiFiClient &client , String page);
 void S_page_probes( WiFiClient &client, String page);
 void S_page_log( WiFiClient &client, String page);
 void S_page_json( WiFiClient &client, JsonObject& json, String page );
+void S_page_all( WiFiClient &client);
 String Menu();
-
-//void handlePage1() {
-// String s = HTML_page1; //Read HTML contents
-// server.send(200, "text/html", s); //Send web page
-//}
 
 void initHttpServer()
 {
@@ -39,7 +36,7 @@ bool handleHttpServer()
   {
     return false;
   }
-  
+
   // Wait until the client sends some data
   Serial.println("new client");
   int i = 0;
@@ -63,14 +60,15 @@ bool handleHttpServer()
       //Serial.println(val);
       DT.setPars( name, val );
       readString = LastPage;
+      S_page_all(client);
     }
     else if (readString.indexOf("/get?") != -1)
     {
       int idxGET = readString.indexOf("/get?");
       int idxGET2 = readString.indexOf(" ", idxGET);
-      
+
       String name = readString.substring(idxGET + 5, idxGET2);
-      
+
       Serial.println(name + "--");
       float val = DT.getValue( name );
       client.println(val);
@@ -112,14 +110,13 @@ bool handleHttpServer()
       S_header( client );
       S_page_json( client, root, Menu()  );
     }
+    else if (readString.indexOf("/favicon.ico") != -1)
+    {
+       client.println(0);    
+    }
     else
     {
-      S_header( client );
-      S_page_progs( client  , "");
-      S_page_rooms( client  , "");
-      S_page_amp( client  , "");
-      S_page_valves( client  , "");
-      S_page_probes( client  , "");
+      S_page_all(client);
     }
 
     LastPage = readString;
@@ -137,21 +134,22 @@ void S_header( WiFiClient &client)
   client.println(""); //  do not forget this one
   page = "<!DOCTYPE html><html xmlns='http://www.w3.org/1999/xhtml' dir='ltr'>"
          "<head>"
-         //"<meta http-equiv='refresh' content='4';url='http://192.168.1.201/' >"
+         "<meta http-equiv='refresh' content='10';url='http://192.168.1.201/' >"
+         "<meta http-equiv='Pragma' content='no-cache'>"
          "<title>Home</title>"
          "\n<script>"
          "function myButton( str )"
          "{"
-         "window.location='http://192.168.1.201/set?' + str;"
+         "window.location='http://192.168.1.201/set?' + str;" 
          "}"
          "</script>"
          // <!-- define on/off styles -->
          "\n<style type='text/css'>"
          ".on  { background:yellow; }"
          ".off { background:gray; }"
-         ".fon { background:blue; }"
+         ".fon { background:lightgreen; }"
          ".foff { background:red; }"
-         ".fdis { background:gray; }"
+         ".fdis { background:lightyellow; }"
          "</style>"
          "</head>";
   client.println(page);
@@ -164,20 +162,20 @@ void S_header( WiFiClient &client)
          "h1 {"
          "color:blue;"
          "font-family:verdana;"
-         "font-size:160%;}"
+         "font-size:120%;}"
          "p  {"
          "color:red;"
          "font-family:verdana;"
          "font-size:160%;}"
          "a  {"
          "font-family:verdana;"
-         "font-size:120%;}"
+         "font-size:110%;}"
          "table, th, td {"
          "border: 1px solid black;"
          "border-collapse: collapse;}"
          "th, td {"
-         "padding: 5px;"
-         "text-align: cnter;}"
+         "padding: 4px;"
+         "text-align: center;}"
          "</style>";
   client.println(page);
   //***************************************************************************************************************/
@@ -202,6 +200,8 @@ String Menu()
          "</h3>";
   return page;
 }
+
+
 
 
 void S_page_progs( WiFiClient &client, String page)
@@ -471,4 +471,14 @@ void S_page_json( WiFiClient& client, JsonObject& json, String page)
   json.prettyPrintTo(client);
   //***************************************************************************************************************/
 
+}
+
+void S_page_all( WiFiClient &client)
+{
+  S_header( client );
+  S_page_progs( client  , "");
+  S_page_rooms( client  , "");
+  S_page_amp( client  , "");
+  S_page_valves( client  , "");
+  S_page_probes( client  , "");
 }
