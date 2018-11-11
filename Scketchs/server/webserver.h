@@ -1,3 +1,5 @@
+#include "arduinoJson.h"
+
 extern EthernetServer server;
 extern DHProtocol T[8];
 
@@ -71,7 +73,11 @@ bool listenForEthernetClients()
           else
           {
             OUTLN( "DEBUG TREE"   + readString);
+            
+            StaticJsonBuffer<200> jb;
 
+            JsonArray &clients = jb.createArray();
+            
             for (int c = 1; c <= 7; c++)
             {
               client.print( "T" + String(c) + ": " );
@@ -83,10 +89,9 @@ bool listenForEthernetClients()
               if ( c == 6)  client.print( "Amperometri         \t" );
               if ( c == 7)  client.print( "----------          \t" );
 
-
-              client.print( (T[ c ].lastRequest / 1000 ) & 1000);
-              client.print( " / " );
-              client.println(( T[ c ].lastRecived / 1000 ) & 1000);
+              JsonObject& obj = jb.createObject();
+              obj["LastRequest"] = (T[ c ].lastRequest / 1000 ) & 1000);
+              obj["LastRecived"] = (T[ c ].lastRecived / 1000 ) & 1000);
 
               for (int i = 0; i < 24; i++)
               {
