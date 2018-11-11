@@ -64,7 +64,7 @@ void loop()
 {
   for (int t = 1; t < 8; t++)
   {
-    if ( T[t].checkTiming( 4000 ) )
+    if ( T[t].checkTiming( 3000 ) )
     {
       T[t].sendRequest();
       listenForEthernetClients();
@@ -84,6 +84,3 @@ void loop()
 
   listenForEthernetClients();
 }
-
-
-
