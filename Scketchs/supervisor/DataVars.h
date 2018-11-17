@@ -2,71 +2,52 @@
 #include "Logs.h"
 
 //********************************************************************************************
-// scompatta una lista in campi
-String strValue(String data, char separator, int index)
-{
-  int found = 0;
-  int strIndex[] = {0, -1};
-  int maxIndex = data.length() - 1;
-
-  for (int i = 0; i <= maxIndex && found <= index; i++)
-  {
-    if (data.charAt(i) == separator || i == maxIndex)
-    {
-      found++;
-      strIndex[0] = strIndex[1] + 1;
-      strIndex[1] = (i == maxIndex) ? i + 1 : i;
-    }
-  }
-  return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
-}
-
-double strValueD(String data, char separator, int index)
-{
-  return strValue( data, separator, index).toInt() / 10.0;
-}
-
-bool strValueB(String data, char separator, int index)
-{
-  return strValue( data, separator, index).toInt() > 0;
-}
-
-//********************************************************************************************
 class cVar
 {
   protected:
-    byte m_t;
-    byte m_signal;
+    String m_t;
+    String m_v;
     String m_descr;
     float m_value;
+    float m_adjust;
     float m_setpoint;
 
   public:
     cVar():
-      m_t(0),
-      m_signal(0),
       m_value(0),
+      m_adjust(0),
       m_setpoint(0)
     {
     }
 
     ~cVar()
-    {
-    }
+    {}
 
-    cVar* setup(byte t, byte signal, String descr, float setpoint = 0)
+    cVar* setup(String t, String v, String descr, float setpoint = 0)
     {
       m_t = t;
-      m_signal = signal;
+      m_v = v;
       m_descr = descr;
       m_value = setpoint;
       m_setpoint = setpoint;
       return this;
     }
+   
+    //***************************************************************************************
+    //set
 
     void set( float value )
     {
-      m_value = value;
+      m_value = value + m_adjust;
+    }
+
+    void setNz( float value )
+    {
+      if (value > 0)
+      {
+        m_value = value + m_adjust;
+        Serial.println(m_descr +": "+ sval() );
+      }
     }
 
     void setSetPoint( float value )
@@ -77,21 +58,48 @@ class cVar
       Serial.println(m_setpoint);
     }
 
+    void setAdjust( float adj)
+    {
+      m_adjust = adj;
+    }
+
     void sendRequest( DHwifi *wifi, BufferString &log)
     {
-      String s =  String("@set(") + String(m_t) + "," + String(m_signal) + "=" + String(m_value)  + ")";
+      String s =  String("@set(") + m_t + "," + m_v + "=" + String(m_value)  + ")";
       wifi->HttpRequest( s );
-      log.add( String("Send Value ") + m_descr + ":" + String(m_value) );
+      //log.add( String("Send Value ") + m_descr + ":" + String(m_value) );
     }
 
-    float value()
+    operator float()
     {
-      return m_value ;
+      return m_value;
     }
 
+    float val()
+      {
+      return m_value ;
+      }
+      
+    String sval()
+      {
+      return String(m_value) ;
+      }
+
+    //***************************************************************************************
+    //get
     float setPoint()
     {
       return m_setpoint;
+    }
+
+    String terminal()
+    {
+      return m_t;
+    }
+
+    String idxvalue()
+    {
+      return m_v;
     }
 
     String descr()
@@ -104,6 +112,8 @@ class cVar
       return "p" + m_descr ;
     }
 
+    //***************************************************************************************
+    //web
     String td_descr()
     {
       return String("<td>") + m_descr ;
@@ -145,46 +155,7 @@ class cVar
         return "<td><a href=" + href + ">  <input type='button' id='btn' value='FORCE OFF' class='foff'/>";
       }
     }
-};
 
-//********************************************************************************************
-class cFloat: public cVar
-{
-    float m_adjust;
-
-  public:
-    cFloat(): cVar(),
-      m_adjust(0)
-    {
-    }
-
-    void update( String stringlist )
-    {
-      float fval = strValueD(stringlist, ',', m_signal);
-      fval += m_adjust;
-      m_value = fval;
-
-      //Serial.print(m_descr);
-      //Serial.println(m_value);
-    }
-
-    void updateNz( String stringlist )
-    {
-      float fval = strValueD(stringlist, ',', m_signal);
-      if (fval > 0)
-      {
-        fval += m_adjust;
-        m_value = fval;
-      }
-
-      //Serial.print(m_descr);
-      //Serial.println(m_value);
-    }
-
-    operator float()
-    {
-      return m_value;
-    }
 
     String webColor()
     {
@@ -193,10 +164,6 @@ class cFloat: public cVar
       return String("rgb(") + String(v) + String(",255,") + String(255 - v) + String(")");
     }
 
-    void setAdjust( float adj)
-    {
-      m_adjust = adj;
-    }
 
 };
 
@@ -208,11 +175,6 @@ class cBool: public cVar
     {
     }
 
-    void update( String stringlist )
-    {
-      m_value = strValueB(stringlist, ',', m_signal);
-    }
-
     operator bool()
     {
       return (bool) m_value;
@@ -220,7 +182,7 @@ class cBool: public cVar
 
     int setPoint()
     {
-      return (int)m_setpoint + 0.5;
+      return (int)(m_setpoint + 0.5);
     }
 
     void manualCheck( )
@@ -229,16 +191,4 @@ class cBool: public cVar
       if ( setPoint() == 2 )   set( 0 );      //manual OFF mode
     }
 
-    void sendRequest( DHwifi *wifi, BufferString &log)
-    {
-      String s =  String("@set(") + String(m_t) + "," + String(m_signal) + "=" + String(m_value)  + ")";
-      wifi->HttpRequest( s );
-
-      // log.add(s);
-
-      /* if (m_value != 0)
-          log.add( String("Send Value ") + m_descr + " (1)" );
-        else
-          log.add( String("Send Value ") + m_descr + " (0)" );*/
-    }
 };

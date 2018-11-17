@@ -42,7 +42,7 @@ void setup()
 
   initHttpServer();
 
-  RollingUpdateTerminals( 0 );
+  UpdateTerminals( 0 );
 
   DT.progBoilerACS.set(1);
   DT.progSummerAC.set(0);
@@ -62,7 +62,6 @@ void loop()
   {
     return;
   }
-
   UpdateTime( 300 );
 
   digitalWrite(ACT, 1);
@@ -112,7 +111,7 @@ void loop()
 
   digitalWrite(ACT, 0);
   //----------------------------------------------------------------------------
-  RollingUpdateTerminals( 5 );
+  UpdateTerminals( 5 );
   //----------------------------------------------------------------------------
 }
 
@@ -133,22 +132,37 @@ void UpdateTime( int sec )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void RollingUpdateTerminals( int sec )
+void UpdateTerminals( int sec )
 {
   _CHECK_TIME_;
 
   static unsigned int i = 0;
+  /*
+    if ( i % 10 == 0 || i == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
+    if ( i % 10 == 2 || i == 0 )   DT.UpdateT2( dhWifi.HttpRequest( "@get(2,99)") );
+    if ( i % 10 == 4 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
+    if ( i % 10 == 6 || i == 0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
+    if ( i % 10 == 8 || i == 0 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
 
-  if ( i % 10 == 0 || i == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
-  if ( i % 10 == 2 || i == 0 )   DT.UpdateT2( dhWifi.HttpRequest( "@get(2,99)") );
-  if ( i % 10 == 4 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
-  if ( i % 10 == 6 || i == 0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
-  if ( i % 10 == 8 || i == 0 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
+    if ( i % 4 == 1 || i == 0 )   DT.UpdateT6( dhWifi.HttpRequest( "@get(6,99)") ); //amperometri
+  */
 
-  if ( i % 4 == 1 || i == 0 )   DT.UpdateT6( dhWifi.HttpRequest( "@get(6,99)") ); //amperometri
+  DT.m_log.add( "HTTRequest" );
 
-  if ( i % 10 == 9 )   DT.m_log.add( dhWifi.HttpRequest( "/") );
-  i++;
+  String data = dhWifi.HttpRequest("/");
+
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject& root = jsonBuffer.parseObject(data);
+
+  if (!root.success()) {
+    DT.m_log.add("parseObject() failed");
+    return;
+  }
+
+  //JsonObject& ooo = root["T1"];
+  //ooo.printTo(Serial);
+
+  DT.UpdateALL( root );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

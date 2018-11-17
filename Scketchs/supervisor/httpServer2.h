@@ -40,7 +40,7 @@ bool handleHttpServer()
   // Wait until the client sends some data
   Serial.println("new client");
   int i = 0;
-  if (!client.available())
+  if (client.available())
   {
     // Read the first line of the request
     String readString = client.readStringUntil('\r');
@@ -308,9 +308,9 @@ void S_page_amp( WiFiClient &client, String page)
   {
     if ( DT.webVar[i] )
     {
-      float a = DT.webVar[i]->value();
-      float wh = DT.webVar[8 + i]->value();
-      float t = DT.webVar[16 + i]->value();
+      float a = DT.webVar[i]->val();
+      float wh = DT.webVar[8 + i]->val();
+      float t = DT.webVar[16 + i]->val();
 
       page += "\n<tr>";
       page += DT.webVar[i]->td_descr();         // descr
@@ -346,7 +346,7 @@ void S_page_valves( WiFiClient &client, String page)
   page = "\n<tr>"
          "<td>Bagno</td>";
 
-  if (DT.rPdc == true)
+  if (DT.rPdc.val())
     page += DT.rPdc.td_bulb();
   else
     page += DT.rPompaPianoPrimo.td_bulb();
@@ -475,6 +475,8 @@ void S_page_json( WiFiClient& client, JsonObject& json, String page)
 
 void S_page_all( WiFiClient &client)
 {
+  Serial.println("S_page_all");
+  
   S_header( client );
   S_page_progs( client  , "");
   S_page_rooms( client  , "");

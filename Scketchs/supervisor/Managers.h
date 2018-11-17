@@ -16,28 +16,28 @@ void Summer_Manager(int sec)
     /**************************************************************************************************/
     // decido se accendere le pompe
 
-    if ( DT.tPufferHi < 23 )
+    if ( DT.tPufferHi.val() < 23 )
     {
       needPompa_pp = true;      // economy
       allRoom = true;
     }
     else
     {
-      if ( DT.tInletFloor > 20 )  // minima t Acqua raffreddata
+      if ( DT.tInletFloor.val()  > 20 )  // minima t Acqua raffreddata
       {
         summerAC_pdc = true;
         summerAC_pump = true;
         allRoom = DT.progAllRooms;
       }
-      if ( DT.tReturnFloor > 21 )
+      if ( DT.tReturnFloor.val()  > 21 )
       {
         summerAC_pump = true;
         allRoom = DT.progAllRooms;
       }
     }
     /**************************************************************************************************/
-    DT.m_log.add("summerAC_pdc [" +  String(summerAC_pdc) + "] summerAC_pump [" +  String(summerAC_pump) + "] tInletFloor: " + String( DT.tInletFloor ) + " tSala: " + String( DT.tSala ) + " tReturnFloor: " + String( DT.tReturnFloor ));
-    DT.m_log.add("needPompa_pp [" +  String(needPompa_pp) + "] tPufferHi: " + String( DT.tPufferHi ));
+    DT.m_log.add("summerAC_pdc [" +  String(summerAC_pdc) + "] summerAC_pump [" +  String(summerAC_pump) + "] tInletFloor: " + DT.tInletFloor.sval() + " tSala: " + DT.tSala.sval() + " tReturnFloor: " +  DT.tReturnFloor.sval());
+    DT.m_log.add("needPompa_pp [" +  String(needPompa_pp) + "] tPufferHi: " + DT.tPufferHi.sval() );
   }
   /**************************************************************************************************/
   // attuatori
@@ -171,7 +171,7 @@ void Winter_Manager( int sec )
     needPdc = DT.progWinterPDC && ( sala || cucina || bagno );
     needPdc = needPdc || ( DT.progWinterPDC_ALLROOMS );
     needPdc = needPdc || ( DT.progWinterPDC_FOTOV );
-    
+
     if ( needPompa_pp )
     {
       DT.m_log.add("PDC suspended - Fire enought ");
@@ -258,7 +258,7 @@ void BoilerACS_Manager(int sec)
     if ( hour() > 11 && hour() < 16  )
     {
       boilerACS = true;
-      DT.m_log.add("Condizione ON hour:" + String( hour() ) +" >11 & <16");
+      DT.m_log.add("Condizione ON hour:" + String( hour() ) + " >11 & <16");
     }
     if ( DT.tReturnFireplace > 25 )
     {
@@ -285,13 +285,13 @@ void ExternalLight_Manager(int sec)
   if (DT.progExternalLight)
   {
     /**************************************************************************************************/
-    DT.m_log.add("-- darkExternal: " + String(DT.darkExternal) + " Request [" + String( 35 - 2 * DT.lightSide) + "]" );
-    if ( DT.darkExternal > 35 - 1 * DT.lightSide ) // isteresi
+    DT.m_log.add("-- darkExternal: " + DT.darkExternal.sval() + " Request [" + String( 35 - 1 * DT.lightSide.val()) + "]" );
+    if ( DT.darkExternal > 35 - 1 * DT.lightSide.val() ) // isteresi
     {
       lightSide = true;
       lightLamp = true;
     }
-    
+
     /**************************************************************************************************/
     DT.m_log.add("-- LightLamp [" +  String(lightLamp) + "]  LightSide [" +  String(lightSide) + "]" );
   }

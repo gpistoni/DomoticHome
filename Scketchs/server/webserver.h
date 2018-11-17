@@ -72,15 +72,13 @@ bool listenForEthernetClients()
           //****************************************************************************************************************************
           else
           {
-            OUTLN( "DEBUG TREE"   + readString);
-
             StaticJsonBuffer<500> jb;
-            client.println("[");
+            client.println("{");
             for (int c = 1; c <= 7; c++)
             {
+              client.println("\"T" + String(c) + "\" : " );
               jb.clear();
               JsonObject &obj = jb.createObject();
-              obj["N"] = c;
               if ( c == 1)  obj["Name"] = "Temp Stanze";
               if ( c == 2)  obj["Name"] = "Luci Esterne" ;
               if ( c == 3)  obj["Name"] = "Rele Caldaia";
@@ -94,15 +92,16 @@ bool listenForEthernetClients()
 
               for (int i = 0; i < 24; i++)
               {
-                if (i < 1 || T[c].sensor[i] != 0)     obj["v" + String(i)] = T[c].sensor[i];
+                if (i < 1 || T[c].sensor[i] != 0)     obj["v" + String(i)] = T[c].sensor[i] / 10.0;
               }
               for (int i = 0; i < 12; i++)
               {
                 if (i < 1 || T[c].relay[i] != 0)      obj["r" + String(i)] = T[c].relay[i];
               }
               obj.prettyPrintTo(client);
+              if (c!=7) client.println(",");
             }
-            client.println("]");
+            client.println("}\n\r");
             break;
           }
           //*************************************
@@ -114,7 +113,7 @@ bool listenForEthernetClients()
     }
 
     // give the web browser time to receive the data
-    delay(2);
+    delay(50);
 
     // close the connection:
     readString = "";
