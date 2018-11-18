@@ -64,10 +64,10 @@ void loop()
 {
   for (int t = 1; t < 8; t++)
   {
-    if ( T[t].checkTiming( 3000 ) )
+    if ( T[t].checkTiming( 2000 ) )
     {
-      T[t].sendRequest();
       listenForEthernetClients();
+      T[t].sendRequest();
       T[t].waitData( 200 );
     };
     listenForEthernetClients();

@@ -32,95 +32,92 @@ bool handleHttpServer()
 {
   // Check if a client has connected
   WiFiClient client = httpServer.available();
-  if (!client)
+  if (client)
   {
-    return false;
-  }
+    // Wait until the client sends some data
+    if (client.available())
+    {
+      // Read the first line of the request
+      String readString = client.readStringUntil('\r');
 
-  // Wait until the client sends some data
-  Serial.println("new client");
-  int i = 0;
-  if (client.available())
-  {
-    // Read the first line of the request
-    String readString = client.readStringUntil('\r');
-    Serial.println(readString);
-    client.flush();
+      Serial.println("New Request:" +  readString);
+      // Match the request
+      int value = 0;
+      if (readString.indexOf("/set?") != -1)
+      {
+        int idxSET = readString.indexOf("/set?");
+        int idxSET2 = readString.indexOf("=", idxSET);
+        String name = readString.substring(idxSET + 5, idxSET2);
+        String val = readString.substring(idxSET2 + 1, 999);
 
-    // Match the request
-    int value = 0;
-    if (readString.indexOf("/set?") != -1)
-    {
-      int idxSET = readString.indexOf("/set?");
-      int idxSET2 = readString.indexOf("=", idxSET);
-      String name = readString.substring(idxSET + 5, idxSET2);
-      String val = readString.substring(idxSET2 + 1, 999);
+        //Serial.println(name);
+        //Serial.println(val);
+        DT.setPars( name, val );
+        readString = LastPage;
+        S_page_all(client);
+      }
+      else if (readString.indexOf("/get?") != -1)
+      {
+        int idxGET = readString.indexOf("/get?");
+        int idxGET2 = readString.indexOf(" ", idxGET);
 
-      //Serial.println(name);
-      //Serial.println(val);
-      DT.setPars( name, val );
-      readString = LastPage;
-      S_page_all(client);
-    }
-    else if (readString.indexOf("/get?") != -1)
-    {
-      int idxGET = readString.indexOf("/get?");
-      int idxGET2 = readString.indexOf(" ", idxGET);
+        String name = readString.substring(idxGET + 5, idxGET2);
 
-      String name = readString.substring(idxGET + 5, idxGET2);
+        Serial.println(name + "--");
+        float val = DT.getValue( name );
+        client.println(val);
+        readString = LastPage;
+      }
+      else if (readString.indexOf("/progs") != -1)
+      {
+        S_header( client );
+        S_page_progs( client , Menu() );
+      }
+      else if (readString.indexOf("/rooms") != -1)
+      {
+        S_header( client );
+        S_page_rooms( client , Menu() );
+      }
+      else if (readString.indexOf("/amp") != -1)
+      {
+        S_header( client );
+        S_page_amp( client , Menu() );
+      }
+      else if (readString.indexOf("/valves") != -1)
+      {
+        S_header( client );
+        S_page_valves( client , Menu() );
+      }
+      else if (readString.indexOf("/probes") != -1)
+      {
+        S_header( client );
+        S_page_probes( client , Menu() );
+      }
+      else if (readString.indexOf("/log") != -1)
+      {
+        S_header( client );
+        S_page_log( client , Menu() );
+      }
+      else if (readString.indexOf("/json") != -1)
+      {
+        JsonObject& root = Config.root();
+        S_header( client );
+        S_page_json( client, root, Menu()  );
+      }
+      else if (readString.indexOf("/favicon.ico") != -1)
+      {
+        client.println(0);
+      }
+      else
+      {
+        S_page_all(client);
+      }
 
-      Serial.println(name + "--");
-      float val = DT.getValue( name );
-      client.println(val);
-      readString = LastPage;
+      LastPage = readString;
+      return true;
     }
-    else if (readString.indexOf("/progs") != -1)
-    {
-      S_header( client );
-      S_page_progs( client , Menu() );
-    }
-    else if (readString.indexOf("/rooms") != -1)
-    {
-      S_header( client );
-      S_page_rooms( client , Menu() );
-    }
-    else if (readString.indexOf("/amp") != -1)
-    {
-      S_header( client );
-      S_page_amp( client , Menu() );
-    }
-    else if (readString.indexOf("/valves") != -1)
-    {
-      S_header( client );
-      S_page_valves( client , Menu() );
-    }
-    else if (readString.indexOf("/probes") != -1)
-    {
-      S_header( client );
-      S_page_probes( client , Menu() );
-    }
-    else if (readString.indexOf("/log") != -1)
-    {
-      S_header( client );
-      S_page_log( client , Menu() );
-    }
-    else if (readString.indexOf("/json") != -1)
-    {
-      JsonObject& root = Config.root();
-      S_header( client );
-      S_page_json( client, root, Menu()  );
-    }
-    else if (readString.indexOf("/favicon.ico") != -1)
-    {
-       client.println(0);    
-    }
-    else
-    {
-      S_page_all(client);
-    }
-
-    LastPage = readString;
-    return true;
+    delay(10);
+    client.stop();
   }
   return false;
 }
@@ -140,7 +137,7 @@ void S_header( WiFiClient &client)
          "\n<script>"
          "function myButton( str )"
          "{"
-         "window.location='http://192.168.1.201/set?' + str;" 
+         "window.location='http://192.168.1.201/set?' + str;"
          "}"
          "</script>"
          // <!-- define on/off styles -->
@@ -200,9 +197,6 @@ String Menu()
          "</h3>";
   return page;
 }
-
-
-
 
 void S_page_progs( WiFiClient &client, String page)
 {
@@ -321,6 +315,13 @@ void S_page_amp( WiFiClient &client, String page)
       page += "</tr>";
     }
   }
+  page += "\n<tr>";
+  page += String("<td>") + "Surplus";
+  page += String("<td>");
+  page += String("<td>") + DT.surplusWatt();
+  page += String("<td>");
+  page += String("<td>");
+  page += "</tr>";
   client.println(page);
   //***************************************************************************************************************/
 
@@ -475,12 +476,11 @@ void S_page_json( WiFiClient& client, JsonObject& json, String page)
 
 void S_page_all( WiFiClient &client)
 {
-  Serial.println("S_page_all");
-  
   S_header( client );
   S_page_progs( client  , "");
   S_page_rooms( client  , "");
   S_page_amp( client  , "");
   S_page_valves( client  , "");
   S_page_probes( client  , "");
+  S_page_log( client  , "");
 }

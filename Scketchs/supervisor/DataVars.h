@@ -7,6 +7,7 @@ class cVar
   protected:
     String m_t;
     String m_v;
+    String m_r;
     String m_descr;
     float m_value;
     float m_adjust;
@@ -23,16 +24,17 @@ class cVar
     ~cVar()
     {}
 
-    cVar* setup(String t, String v, String descr, float setpoint = 0)
+    cVar* setup(String t, String v, String r, String descr, float setpoint = 0)
     {
-      m_t = t;
-      m_v = v;
+      m_t = t;    //terminale
+      m_v = v;    //valore letto
+      m_r = r;    //relay
       m_descr = descr;
       m_value = setpoint;
       m_setpoint = setpoint;
       return this;
     }
-   
+
     //***************************************************************************************
     //set
 
@@ -46,7 +48,7 @@ class cVar
       if (value > 0)
       {
         m_value = value + m_adjust;
-        Serial.println(m_descr +": "+ sval() );
+        Serial.println(m_descr + ": " + sval() );
       }
     }
 
@@ -65,7 +67,8 @@ class cVar
 
     void sendRequest( DHwifi *wifi, BufferString &log)
     {
-      String s =  String("@set(") + m_t + "," + m_v + "=" + String(m_value)  + ")";
+      // Sent set?T5-r4=0.00
+      String s =  String("set?" ) + m_t + "-" + m_r + "=" + String(m_value);
       wifi->HttpRequest( s );
       //log.add( String("Send Value ") + m_descr + ":" + String(m_value) );
     }
@@ -76,14 +79,14 @@ class cVar
     }
 
     float val()
-      {
+    {
       return m_value ;
-      }
-      
+    }
+
     String sval()
-      {
+    {
       return String(m_value) ;
-      }
+    }
 
     //***************************************************************************************
     //get

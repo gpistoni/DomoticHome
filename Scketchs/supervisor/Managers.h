@@ -248,36 +248,43 @@ void Winter_Manager( int sec )
 void BoilerACS_Manager(int sec)
 {
   _CHECK_TIME_;
-  DT.m_log.add("-------------------- BoilerACS_Manager ---------------");
+  DT.m_log.add(">> ------------------- BoilerACS_Manager --------------- >>");
 
   bool boilerACS = false;
   /**************************************************************************************************/
   if (DT.progBoilerACS)
   {
-    //decido se accendere il boiler solo a mezzogiorno e solo se il camino non funziona
-    if ( hour() > 11 && hour() < 16  )
+    //decido se accendere il boiler se ho un surplus di energia
+    if ( DT.rBoilerACS && DT.surplusWatt() > 100 ||
+         DT.rBoilerACS && DT.surplusWatt() > 600 )
     {
       boilerACS = true;
-      DT.m_log.add("Condizione ON hour:" + String( hour() ) + " >11 & <16");
+      DT.m_log.add("Condizione ON surplusW:" + String(DT.surplusWatt()) );
+    }    
+    //decido se accendere il boiler solo a mezzogiorno e solo se il camino non funziona
+    if ( hour() > 12 && hour() < 16  )
+    {
+      boilerACS = true;
+      DT.m_log.add("Condizione ON hour:" + String( hour() ) + " >12 & <16");
     }
-    if ( DT.tReturnFireplace > 25 )
+    if ( DT.tReturnFireplace > 30 )
     {
       boilerACS = false;
-      DT.m_log.add("Condizione OFF DT.ReturnFireplace:" + String( DT.tReturnFireplace ) + "> 25");
+      DT.m_log.add("Condizione OFF DT.ReturnFireplace:" + String( DT.tReturnFireplace ) + "> 30");
     }
   }
   /**************************************************************************************************/
-  DT.m_log.add("BoilerACS [" + String( boilerACS ) + "]");
-
   // boiler
+  DT.m_log.add("BoilerACS [" + String( boilerACS ) + "]");
   DT.rBoilerACS.set( boilerACS );
+  DT.m_log.add("<<< BoilerACS_Manager <<<");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void ExternalLight_Manager(int sec)
 {
   _CHECK_TIME_;
-  DT.m_log.add("-------------------- ExternalLight_Manager --------------------");
+  DT.m_log.add(">>-------------------- ExternalLight_Manager -------------------->>");
 
   bool lightSide = false;
   bool lightLamp = false;
@@ -301,4 +308,6 @@ void ExternalLight_Manager(int sec)
   DT.lightSide.set(lightSide);
   DT.lightLamp.set(lightLamp);
   DT.lightExtra.set(lightLamp);
+
+  DT.m_log.add("<<< ExternalLight_Manager <<<");
 }

@@ -111,6 +111,7 @@ void loop()
 
   digitalWrite(ACT, 0);
   //----------------------------------------------------------------------------
+  
   UpdateTerminals( 5 );
   //----------------------------------------------------------------------------
 }
@@ -119,7 +120,7 @@ void loop()
 void UpdateTime( int sec )
 {
   _CHECK_TIME_;
-  DT.m_log.add("-------------------- UpdateTime --");
+ DT.m_log.add( "--- UpdateTime" );
 
   time_t epoch = dhWifi.GetSystemTime();
 
@@ -135,19 +136,7 @@ void UpdateTime( int sec )
 void UpdateTerminals( int sec )
 {
   _CHECK_TIME_;
-
-  static unsigned int i = 0;
-  /*
-    if ( i % 10 == 0 || i == 0 )   DT.UpdateT1( dhWifi.HttpRequest( "@get(1,99)") );
-    if ( i % 10 == 2 || i == 0 )   DT.UpdateT2( dhWifi.HttpRequest( "@get(2,99)") );
-    if ( i % 10 == 4 || i == 0 )   DT.UpdateT3( dhWifi.HttpRequest( "@get(3,99)") );
-    if ( i % 10 == 6 || i == 0 )   DT.UpdateT4( dhWifi.HttpRequest( "@get(4,99)") );
-    if ( i % 10 == 8 || i == 0 )   DT.UpdateT5( dhWifi.HttpRequest( "@get(5,99)") );
-
-    if ( i % 4 == 1 || i == 0 )   DT.UpdateT6( dhWifi.HttpRequest( "@get(6,99)") ); //amperometri
-  */
-
-  DT.m_log.add( "HTTRequest" );
+  DT.m_log.add( "--- UpdateTerminals" );
 
   String data = dhWifi.HttpRequest("/");
 
@@ -159,9 +148,6 @@ void UpdateTerminals( int sec )
     return;
   }
 
-  //JsonObject& ooo = root["T1"];
-  //ooo.printTo(Serial);
-
   DT.UpdateALL( root );
 }
 
@@ -169,7 +155,8 @@ void UpdateTerminals( int sec )
 void RollingSendValues( int sec )
 {
   _CHECK_TIME_;
-
+  DT.m_log.add( "--- RollingSendValues" );
+  
   static unsigned int i = 0;
 
   DT.rPdc.manualCheck();
@@ -191,10 +178,10 @@ void RollingSendValues( int sec )
   unsigned int i_hi =  i % 20;
   unsigned int i_low =  i % 200;
 
-  if ( i_low == 10 ) DT.rPdc.sendRequest(&dhWifi, DT.m_log );
-  if ( i_low == 12 ) DT.rPdcHeat.sendRequest(&dhWifi, DT.m_log );
-  if ( i_low == 14 ) DT.rPdcPompa.sendRequest(&dhWifi, DT.m_log );
-  if ( i_low == 16 ) DT.rPdcNightMode.sendRequest(&dhWifi, DT.m_log );
+  if ( i_low == 10 )  DT.rPdc.sendRequest(&dhWifi, DT.m_log );
+  if ( i_low == 12 )  DT.rPdcHeat.sendRequest(&dhWifi, DT.m_log );
+  if ( i_low == 14 )  DT.rPdcPompa.sendRequest(&dhWifi, DT.m_log );
+  if ( i_low == 16 )  DT.rPdcNightMode.sendRequest(&dhWifi, DT.m_log );
 
   if ( i_hi == 1 )    DT.rPompaPianoPrimo.sendRequest(&dhWifi, DT.m_log );
   if ( i_hi == 2 )    DT.rPompaPianoTerra.sendRequest(&dhWifi, DT.m_log );

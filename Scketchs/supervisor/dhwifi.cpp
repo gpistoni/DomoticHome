@@ -46,7 +46,7 @@ time_t DHwifi::GetSystemTime()
 
   sendNTPpacket(timeServerIP); // send an NTP packet to a time server
   // wait to see if a reply is available
-  delay(2000);
+  delay(1000);
 
   int cb = udp.parsePacket();
   if (!cb)
@@ -123,10 +123,10 @@ String DHwifi::HttpRequest( String req )
                   "Connection: close\r\n\r\n";
     client.print(sreq);
     //Serial.print(sreq);
-    //delay(200);
 
     String result;
-    while (client.connected())
+    unsigned long timeout = millis() + 2000; 
+    while (client.connected() && millis()<timeout  )
     {
       if (client.available())
       {
@@ -135,7 +135,11 @@ String DHwifi::HttpRequest( String req )
     }
     client.stop();
 
-    Serial.println("-- HttpRequest -- Recived" + String(result.length()) + " Bytes");
+  //  if (req.length() <5)
+  //    Serial.println(String("-- HttpRequest -- Recived") + String(result.length()) + " Bytes");
+  //  else
+  //    Serial.println(String("-- HttpRequest -- Sent ") + req);
+    
     return result;
   }
   else
