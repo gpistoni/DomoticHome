@@ -5,3 +5,9 @@ build-HA-Desktop_Qt_5_5_0_MinGW_32bit-Debug
 /android/build-HAserver-Desktop_Qt_5_5_0_MinGW_32bit-Debug
 /android/build-HAserver-Desktop_Qt_5_5_0_MinGW_32bit-Release
 /android/HA/*.2bd3abf
+/Qt/build-QDHome-Desktop_Qt_5_11_2_MinGW_32bit-Debug
+/Qt/build-QDHome-Desktop_Qt_5_11_2_MinGW_32bit-Release
+/Qt/build-QDHome-ctrl-Desktop_Qt_5_11_2_MinGW_32bit-Debug
+/Qt/build-QDHome-ctrl-Desktop_Qt_5_11_2_MinGW_32bit-Release
+/android/build-HAserver-Desktop_Qt_5_9_5_MSVC2017_64bit-Debug
+/android/build-Home-Desktop_Qt_5_9_5_MSVC2017_64bit-Debug

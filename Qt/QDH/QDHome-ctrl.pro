@@ -1,8 +1,10 @@
 HEADERS       = \
-    SQHttpClient.h
+    SQHttpClient.h \
+    DataReader.h
 
 SOURCES       = \
-    SQHttpClient.cpp
+    SQHttpClient.cpp \
+    main-ctrl.cpp
 	
 QT  += network
 
