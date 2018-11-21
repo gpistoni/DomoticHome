@@ -1,15 +1,12 @@
-#include "SQHttpClient.h"
-#include <QtCore\QThread>
+#include "QHttpClient.h"
 #include <QtNetwork/QHttpPart>
-#include <QBitmap>
 
-QString  CSQHttpClient::m_serverName;
-quint16  CSQHttpClient::m_serverPort;
-qint32   CSQHttpClient::m_timeout;
-QElapsedTimer CSQHttpClient::Timer;
-
-CSQHttpClient::CSQHttpClient()
+CQHttpClient::CQHttpClient( QString serverName, quint16 serverPort, qint32 timeout )
 {
+    m_serverName = serverName;
+    m_serverPort = serverPort;
+    m_timeout = timeout;
+
     try
     {
         m_socket= new QTcpSocket(this);
@@ -25,7 +22,7 @@ CSQHttpClient::CSQHttpClient()
     }
 }
 
-CSQHttpClient::~CSQHttpClient(void)
+CQHttpClient::~CQHttpClient(void)
 {
     try
     {
@@ -39,7 +36,7 @@ CSQHttpClient::~CSQHttpClient(void)
     }
 }
 
-QString CSQHttpClient::Write(const QString &request, int timeout)
+QString CQHttpClient::Write(const QString &request, int timeout)
 {
     //qDebug() << "_REQ_" + request;
 
@@ -60,7 +57,7 @@ QString CSQHttpClient::Write(const QString &request, int timeout)
     return QString(buffer);
 }
 
-QString CSQHttpClient::HTTPRequest(QString path)
+QString CQHttpClient::HTTPRequest(QString path)
 {
     try
     {

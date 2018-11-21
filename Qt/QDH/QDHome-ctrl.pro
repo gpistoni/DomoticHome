@@ -1,10 +1,15 @@
 HEADERS       = \
-    SQHttpClient.h \
-    DataReader.h
+    DataReader.h \
+    ../QLibrary/QHttpClient.h \
+    ../QLibrary/QHttpServer.h \
+    ../QLibrary/CHttpParser.h
 
 SOURCES       = \
-    SQHttpClient.cpp \
-    main-ctrl.cpp
+    main-ctrl.cpp \
+    ../QLibrary/QHttpClient.cpp \
+    ../QLibrary/QHttpServer.cpp \
+    ../QLibrary/CHttpParser.cpp
 	
-QT  += network
+QT  += network websockets
 
+CONFIG += console
