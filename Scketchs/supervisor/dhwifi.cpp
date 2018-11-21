@@ -38,8 +38,8 @@ void  DHwifi::setup( IPAddress ip, IPAddress gateway, IPAddress subnet, String s
 time_t DHwifi::GetSystemTime()
 {
   IPAddress timeServerIP; // time.nist.gov NTP server address
-  //const char* ntpServerName = "time.nist.gov";
-  const char* ntpServerName = "it.pool.ntp.org";
+  const char* ntpServerName = "time.nist.gov";
+  //const char* ntpServerName = "it.pool.ntp.org";
 
   //get a random server from the pool
   WiFi.hostByName(ntpServerName, timeServerIP);
@@ -74,7 +74,6 @@ time_t DHwifi::GetSystemTime()
     const unsigned long seventyYears = 2208988800UL;
     // subtract seventy years:
     unsigned long epoch = secsSince1900 - seventyYears;
-
     return epoch + 3600;
 
   }
@@ -122,15 +121,12 @@ String DHwifi::HttpRequest( String req )
     String sreq = String("GET ") + req + " HTTP/1.1\r\n" +
                   "Host: " + host + "\r\n" +
                   "Connection: close\r\n\r\n";
-
-    Serial.print(sreq);
     client.print(sreq);
-
-    delay(100);
-
+    //Serial.print(sreq);
 
     String result;
-    while (client.connected())
+    unsigned long timeout = millis() + 2000; 
+    while (client.connected() && millis()<timeout  )
     {
       if (client.available())
       {
@@ -138,14 +134,19 @@ String DHwifi::HttpRequest( String req )
       }
     }
     client.stop();
-    Serial.println("\n[Disconnected]");
+
+  //  if (req.length() <5)
+  //    Serial.println(String("-- HttpRequest -- Recived") + String(result.length()) + " Bytes");
+  //  else
+  //    Serial.println(String("-- HttpRequest -- Sent ") + req);
+    
     return result;
   }
   else
   {
     client.stop();
     Serial.print( host );
-    Serial.println(" connection failed");
+    Serial.println("-- HttpRequest -- connection failed");
   }
   return "";
 }
