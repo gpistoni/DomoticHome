@@ -27,17 +27,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    ../QLibrary/CHttpParser.cpp \
-    ../QLibrary/QHttpClient.cpp \
-    ../QLibrary/QHttpServer.cpp \
-    worker.cpp
+    worker.cpp \
+    ../QLibrary/HttpClient.cpp \
+    ../QLibrary/HttpParser.cpp \
+    ../QLibrary/HttpServer.cpp
 
 HEADERS += \
         mainwindow.h \
-    ../QLibrary/CHttpParser.h \
-    ../QLibrary/QHttpClient.h \
-    ../QLibrary/QHttpServer.h \
-    worker.h
+    worker.h \
+    ../QLibrary/DataReader.h \
+    ../QLibrary/HttpClient.h \
+    ../QLibrary/HttpParser.h \
+    ../QLibrary/HttpServer.h
 
 FORMS += \
         mainwindow.ui

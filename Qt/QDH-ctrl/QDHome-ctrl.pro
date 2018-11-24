@@ -1,13 +1,14 @@
 HEADERS       = \
-    DataReader.h \
-    ../QLibrary/QHttpClient.h \
-    ../QLibrary/QHttpServer.h \
-    ../QLibrary/CHttpParser.h
+    ../QLibrary/DataReader.h \
+    ../QLibrary/HttpParser.h \
+    ../QLibrary/HttpClient.h \
+    ../QLibrary/HttpParser.h
 
 SOURCES       = \
-    ../QLibrary/QHttpClient.cpp \
-    ../QLibrary/QHttpServer.cpp \
-    ../QLibrary/CHttpParser.cpp
+    main-ctrl.cpp \
+    ../QLibrary/HttpClient.cpp \
+    ../QLibrary/HttpParser.cpp \
+    ../QLibrary/HttpServer.cpp
 	
 QT  += network websockets
 

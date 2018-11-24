@@ -1,5 +1,5 @@
-#include "QHttpServer.h"
-#include "CHttpParser.h"
+#include "HttpServer.h"
+#include "HttpParser.h"
 #include "QtWebSockets/qwebsocketserver.h"
 #include "QtWebSockets/qwebsocket.h"
 #include <QtCore/QDebug>
@@ -17,13 +17,13 @@ CQHttpServer::CQHttpServer(quint16 port, bool debug, QObject *parent) :
 void CQHttpServer::startServer()
 {
     if(this->listen(QHostAddress::Any, m_port))
-        {
-            qDebug() << "Server started port " << m_port;
-        }
-        else
-        {
-            qDebug() << "Server did not start!";
-        }
+    {
+        qDebug() << "Server started port " << m_port;
+    }
+    else
+    {
+        qDebug() << "Server did not start!";
+    }
 }
 
 CQHttpServer::~CQHttpServer()
@@ -37,7 +37,7 @@ void CQHttpServer::incomingConnection(qintptr handle)
     // 3. Then, the server grabs one of the threads.
     // 4. The server throws the runnable to the thread.
 
-     qDebug() << "IncomingConnection: " << handle;
+    qDebug() << "IncomingConnection: " << handle;
 
     // Note: Rannable is a task not a thread
     CHTTPParser *task = new CHTTPParser();

@@ -17,10 +17,15 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
+    void updateValues(DataReader* dr );
+
+private slots:
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
-
-    QThread* m_thread;
+    QThread* m_workerthread;
     Worker* m_worker;
 };
 

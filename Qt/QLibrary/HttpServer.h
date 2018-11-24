@@ -22,6 +22,7 @@ public:
 
 protected:
     void incomingConnection( qintptr handle );
+
 private:
     QThreadPool *m_pool;
     quint16 m_port;

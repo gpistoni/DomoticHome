@@ -1,4 +1,4 @@
-#include "QHttpClient.h"
+#include "HttpClient.h"
 #include <QtNetwork/QHttpPart>
 #include <QThread>
 

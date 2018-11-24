@@ -2,8 +2,10 @@
 #define CWORKER_H
 
 #include <QObject>
+#include "../QLibrary/DataReader.h"
 
-class Worker : public QObject {
+class Worker : public QObject
+{
     Q_OBJECT
 
 public:
@@ -16,9 +18,7 @@ public slots:
 signals:
     void finished();
     void error(QString err);
-
-private:
-    // add your variables here
+    void update(DataReader* dr);
 };
 
 

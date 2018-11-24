@@ -1,4 +1,4 @@
-#include "CHttpParser.h"
+#include "HttpParser.h"
 #include <QTcpSocket>
 
 CHTTPParser::CHTTPParser()

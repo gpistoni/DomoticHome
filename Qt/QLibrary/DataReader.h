@@ -1,4 +1,5 @@
-#include "../QLibrary/QHttpClient.h"
+#pragma once
+#include "../QLibrary/HttpClient.h"
 
 #include "qdebug.h"
 #include "QJsonDocument"

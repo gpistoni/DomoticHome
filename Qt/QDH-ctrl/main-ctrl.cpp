@@ -1,5 +1,5 @@
-#include "DataReader.h"
-#include "../QLibrary/QHttpServer.h"
+#include "../QLibrary/DataReader.h"
+#include "../QLibrary/HttpServer.h"
 #include <QCoreApplication>
 #include <QThread>
 
