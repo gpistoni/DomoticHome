@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT += core gui
+QT += websockets network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,10 +26,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    ../QLibrary/CHttpParser.cpp \
+    ../QLibrary/QHttpClient.cpp \
+    ../QLibrary/QHttpServer.cpp \
+    worker.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    ../QLibrary/CHttpParser.h \
+    ../QLibrary/QHttpClient.h \
+    ../QLibrary/QHttpServer.h \
+    worker.h
 
 FORMS += \
         mainwindow.ui
