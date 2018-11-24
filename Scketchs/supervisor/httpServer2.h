@@ -309,7 +309,7 @@ void S_page_amp( WiFiClient &client, String page)
       page += "\n<tr>";
       page += DT.webVar[i]->td_descr();         // descr
       page += String("<td>") + a;               // A
-      page += String("<td>") + a * 233;         // W
+      page += String("<td>") + (int)(a * 233);         // W
       page += String("<td>") + wh;              // KWH
       page += String("<td>") + t;               // time
       page += "</tr>";
@@ -468,8 +468,11 @@ void S_page_json( WiFiClient& client, JsonObject& json, String page)
 {
   page += "\n<h1> Json </h1>";
 
+  //client.println(page);
+  //json.prettyPrintTo(client);
+
+  DT.print(page);
   client.println(page);
-  json.prettyPrintTo(client);
   //***************************************************************************************************************/
 
 }
@@ -482,5 +485,5 @@ void S_page_all( WiFiClient &client)
   S_page_amp( client  , "");
   S_page_valves( client  , "");
   S_page_probes( client  , "");
-  S_page_log( client  , "");
+ // S_page_log( client  , "");
 }

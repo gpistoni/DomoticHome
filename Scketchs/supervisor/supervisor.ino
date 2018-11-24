@@ -66,6 +66,7 @@ void loop()
 
   digitalWrite(ACT, 1);
 
+  // manual Check Programmi
   DT.progBoilerACS.manualCheck();
   DT.progSummerAC.manualCheck();
   DT.progSummerAC_NIGHT.manualCheck();
@@ -79,29 +80,31 @@ void loop()
   if ( hour() > 7 && hour() < 19 ) DT.progSummerAC_NIGHT.set(0);
   if ( month() >= 10 || month() <= 4) DT.progWinterFIRE.set(1);
 
-  if (DT.progSummerAC_NIGHT) DT.progSummerAC.set(1);
-
-  if (DT.progWinterFIRE)     DT.progSummerAC.set(0);
-  if (DT.progWinterPDC)      DT.progSummerAC.set(0);
+  if (DT.progSummerAC_NIGHT)      DT.progSummerAC.set(1);
+  
+  if (DT.progWinterFIRE)          DT.progSummerAC.set(0);
+  if (DT.progWinterPDC)           DT.progSummerAC.set(0);
   if (DT.progWinterPDC_ALLROOMS)  DT.progSummerAC.set(0);
-  if (DT.progWinterPDC_FOTOV)  DT.progSummerAC.set(0);
+  if (DT.progWinterPDC_FOTOV)     DT.progSummerAC.set(0);
 
   { // Run Managers
 
-    if ( DT.progSummerAC ) // solo estate
+    if ( DT.progSummerAC )            // solo estate
     {
-      Summer_Manager( 20 );
+      Summer_Manager( 30 );
     }
     else                               // solo inverno
     {
-      Winter_Manager( 20 );
+      Winter_Manager( 31 );
     }
-    BoilerACS_Manager( 20 );
-    ExternalLight_Manager( 20 );
+    
+    BoilerACS_Manager( 32 );
+    
+    ExternalLight_Manager( 60 );
   }
 
   //----------------------------------------------------------------------------
-  RollingSendValues( 2 );
+  RollingSendValues( 5 );
   //----------------------------------------------------------------------------
 
   if ( handleHttpServer() )
@@ -145,7 +148,8 @@ void UpdateTerminals( int sec )
   DynamicJsonBuffer jsonBuffer;
   JsonObject& root = jsonBuffer.parseObject(data);
 
-  if (!root.success()) {
+  if (!root.success()) 
+  {
     DT.m_log.add("parseObject() failed");
     return;
   }
@@ -157,10 +161,11 @@ void UpdateTerminals( int sec )
 void RollingSendValues( int sec )
 {
   _CHECK_TIME_;
-  DT.m_log.add( "--- RollingSendValues" );
+  //DT.m_log.add( "--- RollingSendValues" );
   
   static unsigned int i = 0;
 
+  // manual Check Rele'
   DT.rPdc.manualCheck();
   DT.rPdcHeat.manualCheck();
   DT.rPdcPompa.manualCheck();

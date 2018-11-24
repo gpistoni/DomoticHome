@@ -70,7 +70,7 @@ class cVar
       // Sent set?T5-r4=0.00
       String s =  String("set?" ) + m_t + "-" + m_r + "=" + String(m_value);
       wifi->HttpRequest( s );
-      //log.add( String("Send Value ") + m_descr + ":" + String(m_value) );
+      log.add( String("Send Value ") + m_descr + " " + s );
     }
 
     operator float()

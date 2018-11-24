@@ -120,19 +120,19 @@ class cDataTable
       webVar[16 + 4] = thCameraM.setup      ( "T1", "v20", "", "thCameraM");
       webVar[16 + 5] = thBagno.setup        ( "T1", "v21", "", "thBagno"  );
 
-      webVar[25] = lightCorner.setup        ( "T2", "v0", "r0", "LuciAngoli");
-      webVar[26] = lightSide.setup          ( "T2", "v1", "r1", "LuciLati");
-      webVar[27] = lightLamp.setup          ( "T2", "v2", "r2", "Lampione");
-      webVar[28] = lightExtra.setup         ( "T2", "v3", "r3", "Altro");
+      webVar[25] = lightCorner.setup        ( "T2", "", "r0", "LuciAngoli");
+      webVar[26] = lightSide.setup          ( "T2", "", "r1", "LuciLati");
+      webVar[27] = lightLamp.setup          ( "T2", "", "r2", "Lampione");
+      webVar[28] = lightExtra.setup         ( "T2", "", "r3", "Altro");
 
-      webVar[30] = rPdc.setup               ( "T3", "v0", "r0", "PDC");
-      webVar[31] = rPdcHeat.setup           ( "T3", "v1", "r1", "PdcHeat");
-      webVar[32] = rPdcPompa.setup          ( "T3", "v2", "r2", "PdcPompa");
-      webVar[33] = rPdcNightMode.setup      ( "T3", "v3", "r3", "PdcNightMode");
-      webVar[34] = rPompaPianoPrimo.setup   ( "T3", "v4", "r4", "PompaPianoPrimo");
-      webVar[35] = rPompaPianoTerra.setup   ( "T3", "v5", "r5", "PompaPianoTerra");
-      webVar[36] = rBoilerACS.setup         ( "T3", "v6", "r6", "BoilerACS");
-      webVar[37] = rPompaCamino.setup       ( "T3", "v7", "r7", "PompaCamino");
+      webVar[30] = rPdc.setup               ( "T3", "", "r0", "PDC");
+      webVar[31] = rPdcHeat.setup           ( "T3", "", "r1", "PdcHeat");
+      webVar[32] = rPdcPompa.setup          ( "T3", "", "r2", "PdcPompa");
+      webVar[33] = rPdcNightMode.setup      ( "T3", "", "r3", "PdcNightMode");
+      webVar[34] = rPompaPianoPrimo.setup   ( "T3", "", "r4", "PompaPianoPrimo");
+      webVar[35] = rPompaPianoTerra.setup   ( "T3", "", "r5", "PompaPianoTerra");
+      webVar[36] = rBoilerACS.setup         ( "T3", "", "r6", "BoilerACS");
+      webVar[37] = rPompaCamino.setup       ( "T3", "", "r7", "PompaCamino");
 
       webVar[40] = tPufferHi.setup          ( "T4", "v0", "", "tPufferHi");
       webVar[41] = tPufferLow.setup         ( "T4", "v1", "", "tPufferLow");
@@ -143,14 +143,14 @@ class cDataTable
       webVar[46] = tExternal.setup          ( "T4", "v6", "", "tExternal");
       webVar[47] = darkExternal.setup       ( "T4", "v8", "", "darkExternal");
 
-      webVar[50] = evCameraM1.setup         ( "T5", "v0", "r0", "evCameraM1");
-      webVar[51] = evCameraM2.setup         ( "T5", "v1", "r1", "evCameraM2");
-      webVar[52] = evCucina.setup           ( "T5", "v2", "r2", "evCucina");
-      webVar[53] = evSala1.setup            ( "T5", "v3", "r3", "evSala1");
-      webVar[54] = evSala2.setup            ( "T5", "v4", "r4", "evSala2");
-      webVar[55] = evCameraS.setup          ( "T5", "v5", "r5", "evCameraS");
-      webVar[56] = evCameraD1.setup         ( "T5", "v6", "r6", "evCameraD1");
-      webVar[57] = evCameraD2.setup         ( "T5", "v7", "r7", "evCameraD2");
+      webVar[50] = evCameraM1.setup         ( "T5", "", "r0", "evCameraM1");
+      webVar[51] = evCameraM2.setup         ( "T5", "", "r1", "evCameraM2");
+      webVar[52] = evCucina.setup           ( "T5", "", "r2", "evCucina");
+      webVar[53] = evSala1.setup            ( "T5", "", "r3", "evSala1");
+      webVar[54] = evSala2.setup            ( "T5", "", "r4", "evSala2");
+      webVar[55] = evCameraS.setup          ( "T5", "", "r5", "evCameraS");
+      webVar[56] = evCameraD1.setup         ( "T5", "", "r6", "evCameraD1");
+      webVar[57] = evCameraD2.setup         ( "T5", "", "r7", "evCameraD2");
 
       webVar[60] = aProduced[0].setup           ( "T6", "v0", "", "aProduced");
       webVar[61] = aInput[0].setup              ( "T6", "v1", "", "aInput");
@@ -181,10 +181,8 @@ class cDataTable
       webVar[98] = progExternalLight.setup      ( "PRG", "", "", "progExternalLight");
     };
 
-    void UpdateALL( JsonObject& values )
+    void UpdateALL( const JsonObject& values )
     {
-      //m_log.add( "Update DT");
-
       for ( int i = 0; i < 100; i++ )
       {
         if ( webVar[i] != 0 )
@@ -193,8 +191,7 @@ class cDataTable
           String sVal = webVar[i]-> idxvalue();
 
           //controllo se esiste il valore
-          const char* valid = values[sT][sVal];
-          if (valid)
+          if (sVal!="")
           {
             webVar[i]->set( values[sT][sVal] );
           }
@@ -249,7 +246,7 @@ class cDataTable
       {
         if ( webVar[i] != 0 )
         {
-          readable += "\n[";
+          readable += "<br>[";
           readable += i;
           readable += "] ";
           readable += webVar[i]->descr();
@@ -257,12 +254,12 @@ class cDataTable
           readable += webVar[i]->val();
         }
       };
-      readable += "\n";
+      readable += "<br>";
       for ( int i = 0; i < 100; i++ )
       {
         if ( webVar[i] != 0 )
         {
-          readable += "\n(";
+          readable += "<br>(";
           readable += i;
           readable += ") ";
           readable += webVar[i]->descrSetPoint();
@@ -278,6 +275,6 @@ class cDataTable
       int consumed = aL1[0].val() + aL2[0].val() + aL3[0].val();
       int produced = aProduced[0];
 
-      return ( produced - consumed ) * 230;
+      return ( produced - consumed ) * 233;
     };
 };
