@@ -2,7 +2,7 @@
 #define CWORKER_H
 
 #include <QObject>
-#include "../QLibrary/DataReader.h"
+#include "../QLibrary/DataTable.h"
 
 class Worker : public QObject
 {
@@ -18,7 +18,7 @@ public slots:
 signals:
     void finished();
     void error(QString err);
-    void update(DataReader* dr);
+    void updateValues(DataTable *v);
 };
 
 

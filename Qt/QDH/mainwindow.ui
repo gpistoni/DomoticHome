@@ -49,8 +49,14 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
        <property name="minimum">
         <number>0</number>
+       </property>
+       <property name="maximum">
+        <number>3000</number>
        </property>
        <property name="value">
         <number>0</number>
@@ -95,6 +101,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="maximum">
+        <number>3000</number>
+       </property>
        <property name="value">
         <number>0</number>
        </property>
@@ -126,6 +135,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="maximum">
+        <number>3000</number>
        </property>
        <property name="value">
         <number>0</number>

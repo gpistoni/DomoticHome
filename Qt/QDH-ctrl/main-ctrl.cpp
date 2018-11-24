@@ -1,4 +1,4 @@
-#include "../QLibrary/DataReader.h"
+#include "../QLibrary/DataTable.h"
 #include "../QLibrary/HttpServer.h"
 #include <QCoreApplication>
 #include <QThread>
@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
    // CQHttpServer webserver(8080, true);
 
     //In questo punto apro la comunicazione
-    DataReader DR("192.168.1.200", 80);
+    DataTable DR("192.168.1.200", 80);
     DR.ReadData();
 
     qDebug() << "PROVA: " << DR.GetValue("T1", "Name").toString();

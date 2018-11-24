@@ -35,10 +35,10 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
     worker.h \
-    ../QLibrary/DataReader.h \
     ../QLibrary/HttpClient.h \
     ../QLibrary/HttpParser.h \
-    ../QLibrary/HttpServer.h
+    ../QLibrary/HttpServer.h \
+    ../QLibrary/DataTable.h
 
 FORMS += \
         mainwindow.ui

@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(m_worker, SIGNAL(finished()), m_worker, SLOT(deleteLater()));
         connect(m_workerthread, SIGNAL(finished()), m_workerthread, SLOT(deleteLater()));
 
-        connect(m_worker, SIGNAL(update()), SLOT(updateValues(DataReader* dr)));
+        connect(m_worker, SIGNAL(updateValues(DataTable*)), SLOT(updateValues(DataTable*)));
 
         m_workerthread->start();
     };
@@ -33,14 +33,39 @@ void MainWindow::on_pushButton_clicked()
 {
 }
 
-void MainWindow::updateValues(DataReader* dr)
+void MainWindow::updateValues(DataTable* dr)
 {
-    float val[3] = {1,2,30};
-    ui->label_P->setText(QString::number(val[0]));
-    ui->label_S->setText(QString::number(val[1]));
-    ui->label_C->setText(QString::number(val[2]));
+    QString val[3];
+    val[0]= dr->GetValue("T6", "Produced");
+    val[1]= dr->GetValue("T6", "Surplus");
+    val[2]= dr->GetValue("T6", "Consumed");
 
-    ui->progressBar_P->setValue(val[0]);
-    ui->progressBar_S->setValue(val[1]);
-    ui->progressBar_C->setValue(val[2]);
+    ui->label_P->setText(val[0]);
+    ui->label_S->setText(val[1]);
+    ui->label_C->setText(val[2]);
+
+    float fval[3];
+    fval[0]= dr->GetValueF("T6", "Produced");
+    fval[1]= dr->GetValueF("T6", "Surplus");
+    fval[2]= dr->GetValueF("T6", "Consumed");
+
+    ui->progressBar_P->setValue(fval[0]);
+    ui->progressBar_C->setValue(fval[2]);
+
+    if (fval[1]>0)
+    {
+        QPalette p = palette();
+        p.setColor(QPalette::Highlight, Qt::green);
+       ui->progressBar_S->setPalette(p);
+        ui->progressBar_S->setValue(fval[1]);
+    }
+    else
+    {
+        QPalette p = palette();
+        p.setColor(QPalette::Highlight, Qt::red);
+        ui->progressBar_S->setPalette(p);
+        ui->progressBar_S->setValue(-fval[1]);
+    }
+    qDebug("updateValues");
 }
+

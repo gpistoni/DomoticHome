@@ -18,7 +18,7 @@ public:
     ~MainWindow();
 
 public slots:
-    void updateValues(DataReader* dr );
+    void updateValues(DataTable* dr );
 
 private slots:
     void on_pushButton_clicked();
@@ -28,5 +28,7 @@ private:
     QThread* m_workerthread;
     Worker* m_worker;
 };
+
+
 
 #endif // MAINWINDOW_H

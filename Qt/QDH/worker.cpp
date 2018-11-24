@@ -1,5 +1,7 @@
 #include "worker.h"
-#include "../QLibrary/DataReader.h"
+#include "../QLibrary/DataTable.h"
+#include "QThread"
+
 
 // --- CONSTRUCTOR ---
 Worker::Worker() {
@@ -15,15 +17,31 @@ Worker::~Worker() {
 // Start processing data.
 void Worker::process()
 {
-    /////////////////////////////////////////////////////////////////////////////////////////
-    DataReader DR("192.168.1.200", 80);
-    DR.ReadData();
+    while (1)
+    {
+        /////////////////////////////////////////////////////////////////////////////////////////
+        DataTable dr("192.168.1.200", 80);
+        dr.ReadData();
+        ////////////////////////////////////////////////////////////////////////////////////////
+        double val[6];
+        val[0]= dr.GetValueF("T6", "v0");
+        val[1]= dr.GetValueF("T6", "v1");
+        val[2]= dr.GetValueF("T6", "v2");
+        val[3]= dr.GetValueF("T6", "v3");
+        val[4]= dr.GetValueF("T6", "v4");
+        val[5]= dr.GetValueF("T6", "v5");
 
-    qDebug() << "PROVA: " << DR.GetValue("T6", "v1").toString();
-    /////////////////////////////////////////////////////////////////////////////////////////
+        double produced = val[0];
+        double consumed = val[3]+val[4]+val[5];
+        double surplus = produced - consumed;
 
-    emit update( &DR );
+        dr.SetValue("T6", "Produced", produced * 233);
+        dr.SetValue("T6", "Consumed", consumed * 233);
+        dr.SetValue("T6", "Surplus", surplus * 233);
 
+        emit updateValues( &dr );
+        QThread::sleep(1);
+    }
     /////////////////////////////////////////////////////////////////////////////////////////
     // allocate resources using new here
     qDebug("Hello World!");
