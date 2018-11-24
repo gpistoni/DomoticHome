@@ -2,8 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QThread>
-#include "worker.h"
+#include <QElapsedTimer>
+#include <QBitmap>
 
 namespace Ui {
 class MainWindow;
@@ -14,14 +14,18 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
 
-    QThread* m_thread;
-    Worker* m_worker;
+private slots:
+    void on_pushButton_clicked();
+
+private:
+    QImage m_image1;
+    QImage m_image2;
 };
 
 #endif // MAINWINDOW_H

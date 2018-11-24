@@ -1,6 +1,5 @@
 #include "QHttpServer.h"
 #include "CHttpParser.h"
-
 #include "QtWebSockets/qwebsocketserver.h"
 #include "QtWebSockets/qwebsocket.h"
 #include <QtCore/QDebug>
@@ -10,7 +9,6 @@ CQHttpServer::CQHttpServer(quint16 port, bool debug, QObject *parent) :
     QTcpServer(parent),
     m_debug(debug),
     m_port(port)
-
 {
     m_pool = new QThreadPool(this);
     m_pool->setMaxThreadCount(5);

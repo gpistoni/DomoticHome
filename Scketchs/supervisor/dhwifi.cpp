@@ -125,7 +125,7 @@ String DHwifi::HttpRequest( String req )
     //Serial.print(sreq);
 
     String result;
-    unsigned long timeout = millis() + 2000; 
+    unsigned long timeout = millis() + 4000; 
     while (client.connected() && millis()<timeout  )
     {
       if (client.available())

@@ -7,9 +7,9 @@ CHTTPParser::CHTTPParser()
 
 void CHTTPParser::run()
 {
-     qDebug( "SocketDescriptor run" );
-
+    qDebug( "SocketDescriptor run" );
     if(!socketDescriptor) return;
+
 
     QTcpSocket socket;
     socket.setSocketDescriptor(socketDescriptor);

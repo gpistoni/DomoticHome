@@ -15,8 +15,6 @@ public:
 
 public:
     CQHttpClient( QString serverName, quint16 serverPort, qint32 timeout );
-
-
     virtual ~CQHttpClient(void);
 
     QString errorString()
@@ -27,21 +25,12 @@ public:
 private:
     QString Write(const QString &str, int timeout = 3000 );
 
-
 private:
     QString HTTPRequest( QString path );
 
-
 public:
-    QString GetValue( QString path )
-    {
-        return HTTPRequest( QString("get?") + path );
-    }
-
-    QString GetValue_Json()
-    {
-        return HTTPRequest( QString("json"));
-    }
+    QString GetValue( QString path );
+    QString GetValue_Json();
 };
 
 

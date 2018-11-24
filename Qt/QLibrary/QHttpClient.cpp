@@ -1,5 +1,6 @@
 #include "QHttpClient.h"
 #include <QtNetwork/QHttpPart>
+#include <QThread>
 
 CQHttpClient::CQHttpClient( QString serverName, quint16 serverPort, qint32 timeout )
 {
@@ -15,6 +16,8 @@ CQHttpClient::CQHttpClient( QString serverName, quint16 serverPort, qint32 timeo
         {
             QString s = errorString();
         }
+        else
+            qDebug("Connected");
     }
     catch (...)
     {
@@ -39,37 +42,47 @@ CQHttpClient::~CQHttpClient(void)
 QString CQHttpClient::Write(const QString &request, int timeout)
 {
     //qDebug() << "_REQ_" + request;
-
-    QByteArray buffer;
+    QString result;
     {
         //write the data
         m_socket->write( request.toUtf8() );
-        m_socket->waitForBytesWritten();
+        m_socket->waitForBytesWritten(1000);
 
         //read answer
         m_socket->waitForReadyRead( timeout );
-        while (  m_socket->bytesAvailable() > 0 )
+        while(m_socket->bytesAvailable() > 0)
         {
-            buffer = m_socket->readAll();
+            result.append(m_socket->readAll());
+            m_socket->waitForReadyRead( timeout );
         }
     }
-    //qDebug() << "_RES_" + QString(buffer).toLatin1();
-    return QString(buffer);
+    //qDebug() << "_RES_" + result;
+    return result;
 }
 
-QString CQHttpClient::HTTPRequest(QString path)
+QString CQHttpClient::HTTPRequest(QString req)
 {
     try
     {
-        QString sMsg;
-        sMsg = "GET /";
-        sMsg += path;
+        QString sMsg = QString("GET ") + req + " HTTP/1.1\r\n" +
+                "Host: " + m_serverName + "\r\n" +
+                "Connection: keep-alive\r\n\r\n";
         return  Write( sMsg.toUtf8() );
     }
     catch (...)
     {
         return"";
     }
+}
+
+QString CQHttpClient::GetValue(QString path)
+{
+    return HTTPRequest( QString("get?") + path );
+}
+
+QString CQHttpClient::GetValue_Json()
+{
+    return HTTPRequest( QString("json"));
 }
 
 
