@@ -142,7 +142,7 @@ void Winter_Manager( int sec )
       DT.m_log.add("Condizione Pompa PP insufficiente: tInletFloor: " + String(DT.tInletFloor) + " tReturnFloor: " + String(DT.tReturnFloor) );
       needPompa_pp = false;
     }
-    if ( (DT.tReturnFloor > 28) )  // ritorno troppo alto - non ne ho bisogno
+    if ( (DT.tReturnFloor > 29) )  // ritorno troppo alto - non ne ho bisogno
     {
       DT.m_log.add("Stop Pompa: ritorno troppo alto tReturnFloor: " + String(DT.tReturnFloor) );
       needPompa_pp = false;
