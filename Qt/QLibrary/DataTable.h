@@ -8,7 +8,6 @@
 class DataTable
 {
     QVariantMap m_map;
-
     QString m_host = "10.0.2.2";
     quint16 m_port = 8080;
 
@@ -69,8 +68,5 @@ public:
         vmap1[name2] = value;
         m_map[name1] = vmap1;
     }
-
-
-
 };
 

@@ -30,7 +30,8 @@ SOURCES += \
     worker.cpp \
     ../QLibrary/HttpClient.cpp \
     ../QLibrary/HttpParser.cpp \
-    ../QLibrary/HttpServer.cpp
+    ../QLibrary/HttpServer.cpp \
+    ../QLibrary/DataTable.cpp
 
 HEADERS += \
         mainwindow.h \

@@ -56,7 +56,7 @@ void MainWindow::updateValues(DataTable* dr)
     {
         QPalette p = palette();
         p.setColor(QPalette::Highlight, Qt::green);
-       ui->progressBar_S->setPalette(p);
+        ui->progressBar_S->setPalette(p);
         ui->progressBar_S->setValue(fval[1]);
     }
     else
