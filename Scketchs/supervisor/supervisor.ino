@@ -125,13 +125,15 @@ void UpdateTime( int sec )
   _CHECK_TIME_;
  DT.m_log.add( "--- UpdateTime" );
 
-  time_t epoch = dhWifi.GetSystemTime();
+  //time_t epoch = dhWifi.GetSystemTime();
 
-  if (epoch > 0)
+//  if (epoch > 0)
   {
-    setTime( epoch );
-    if (month() >= 4 && month() <= 10) adjustTime(3600);
-    DT.m_log.add( date_time() );
+    configTime(3 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+      
+    //setTime( epoch );
+    //if (month() >= 4 && month() <= 10) adjustTime(3600);
+    //DT.m_log.add( date_time() );
   }
 }
 
