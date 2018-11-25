@@ -35,19 +35,22 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::updateValues(DataTable* dr)
 {
-    QString val[3];
-    val[0]= dr->GetValue("T6", "Produced");
-    val[1]= dr->GetValue("T6", "Surplus");
-    val[2]= dr->GetValue("T6", "Consumed");
-
-    ui->label_P->setText(val[0]);
-    ui->label_S->setText(val[1]);
-    ui->label_C->setText(val[2]);
-
-    float fval[3];
+    double fval[6];
     fval[0]= dr->GetValueF("T6", "Produced");
     fval[1]= dr->GetValueF("T6", "Surplus");
     fval[2]= dr->GetValueF("T6", "Consumed");
+
+    fval[3] = dr->GetValueF("T6", "L1");
+    fval[4] = dr->GetValueF("T6", "L2");
+    fval[5] = dr->GetValueF("T6", "L3");
+
+    ui->label_P->setText(QString::number(fval[0],'f',1));
+    ui->label_S->setText(QString::number(fval[1],'f',1));
+    ui->label_C->setText(QString::number(fval[2],'f',1));
+
+    ui->label_L1->setText("L1: " + QString::number(fval[3],'f',1));
+    ui->label_L2->setText("L2: " + QString::number(fval[4],'f',1));
+    ui->label_L3->setText("L3: " + QString::number(fval[5],'f',1));
 
     ui->progressBar_P->setValue(fval[0]);
     ui->progressBar_C->setValue(fval[2]);
