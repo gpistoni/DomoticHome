@@ -1,14 +1,10 @@
-//#include "ArduinoJson.h"
-
 extern EthernetServer server;
 extern DHProtocol T[8];
-
-//StaticJsonBuffer<500> jb;
 
 // caratteri
 void jPrint( EthernetClient &client, char* ch)
 {
-  client.println(ch);
+  client.print(ch);
 }
 
 // gruppo
@@ -114,7 +110,7 @@ bool listenForEthernetClients()
             {
               T[t].relay[r] = value;
               client.print( T[t].relay[r] );
-            }            
+            }
             break;
           }
           //****************************************************************************************************************************
@@ -139,7 +135,6 @@ bool listenForEthernetClients()
 
               jPrint_I(client, "tReq", T[c].lastRequest );
               jPrint_I(client, "tRec", T[c].lastRecived );
-
 
               for (int i = 0; i < 24; i++)
               {
@@ -167,9 +162,8 @@ bool listenForEthernetClients()
         }
       }
     }
-
     // give the web browser time to receive the data
-    delay(50);
+    delay(100);
 
     // close the connection:
     readString = "";

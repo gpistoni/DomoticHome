@@ -41,7 +41,7 @@ CQHttpClient::~CQHttpClient(void)
 
 QString CQHttpClient::Write(const QString &request, int timeout)
 {
-    //qDebug() << "_REQ_" + request;
+    qDebug() << "_REQ_" + request;
     QString result;
     {
         //write the data
@@ -56,7 +56,7 @@ QString CQHttpClient::Write(const QString &request, int timeout)
             m_socket->waitForReadyRead( timeout );
         }
     }
-    //qDebug() << "_RES_" + result;
+    qDebug() << "_RES_" + result;
     return result;
 }
 

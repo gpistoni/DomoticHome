@@ -19,7 +19,6 @@ IPAddress ip(192, 168, 1, 200);                     //<<-- IP
 IPAddress gateway(192, 168, 1, 1);                  //<<-- GATEWAY
 IPAddress subnet(255, 255, 255, 0);                 //<<-- SUBNET
 
-
 // Pins 10, 11, 12 and 13 are reserved for interfacing with the Ethernet module and should not be used otherwise
 // Pin 10 is reserved for the Wiznet interface, SS for the SD card is on Pin 4.
 // There is a built-in LED connected to digital pin 9.
@@ -54,25 +53,72 @@ void setup()
 
   for (int t = 1; t < 8; t++)
   {
-     T[t].sendRequest();
-     delay(500);
+    T[t].sendRequest();
+    delay(200);
   }
 }
 
-
 void loop()
 {
-  for (int t = 1; t < 8; t++)
+  listenForEthernetClients();
+
+  if ( T[1].checkTiming(2000) )
   {
-    if ( T[t].checkTiming( 2000 ) )
-    {
-      listenForEthernetClients();
-      T[t].sendRequest();
-      T[t].waitData( 200 );
-    };
-    listenForEthernetClients();
+    T[1].sendRequest();
+    T[1].waitData( 100 );
   };
 
+  listenForEthernetClients();
+
+  if ( T[2].checkTiming(2000) )
+  {
+    T[2].sendRequest();
+    T[2].waitData( 100 );
+  };
+
+  listenForEthernetClients();
+
+  if ( T[3].checkTiming(2000) )
+  {
+    T[3].sendRequest();
+    T[3].waitData( 100 );
+  };
+
+  listenForEthernetClients();
+
+  if ( T[4].checkTiming(2000) )
+  {
+    T[4].sendRequest();
+    T[4].waitData( 100 );
+  };
+
+  listenForEthernetClients();
+
+  if ( T[5].checkTiming(2000) )
+  {
+    T[5].sendRequest();
+    T[5].waitData( 100 );
+  };
+
+  listenForEthernetClients();
+
+  if ( T[6].checkTiming(2000) )
+  {
+    T[6].sendRequest();
+    T[6].waitData( 100 );
+  };
+
+  listenForEthernetClients();
+  
+  /*
+    if ( T[7].checkTiming(2000) )
+    {
+      T[7].sendRequest();
+      T[7].waitData( 100 );
+    };
+    listenForEthernetClients();
+  */
+  
   if ( Ethernet.localIP() != ip)
   {
     delay(1000);

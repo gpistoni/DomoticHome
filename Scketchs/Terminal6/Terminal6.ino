@@ -14,17 +14,17 @@
 DHProtocol Slave;
 SoftwareSerial mySerial(11, 12, TRUE);     // 11,12 Serial
 
-#define NUM_SENS 6
+#define NUM_SENS 5
 
 EnergyMonitor emon[6];
 
 double K[6] =  {
-  31.5,           // 100A
-  50.2,           // 30A
-  40,             // 15A
-  40,             // 15A
-  40,             // 15A
-  29
+  32,           // 100A
+  53,           // 30A
+  40,
+  40,           // 15A
+  40,           // 15A
+  40            // 15A
 };
 
 
@@ -60,7 +60,7 @@ const int V_rete = 233;
 void loop()
 {
   digitalWrite(LED_BUILTIN, LOW);
-  if ( Slave.waitRequest( 50 ) )
+  if ( Slave.waitRequest( 40 ) )
   {
     digitalWrite(LED_BUILTIN, HIGH);
     Slave.sendData();
@@ -74,40 +74,40 @@ void loop()
     int elapsed = millis() - read_t[i] ;
     read_t[i] = millis();
 
+    double v = analogRead(A0);
+
     double Irms = emon[i].calcIrms(1480);
-    double work = Irms * V_rete * elapsed / 1000 / 3600.0;
+    
+    if ( Irms < 0.10 ) Irms = 0.0;
+    double work = Irms * V_rete * elapsed / 1000.0 / 3600.0;
 
     totalwork[i] += work;
-    totalElapsed[i] += elapsed/1000.0;
+    totalElapsed[i] += elapsed / 1000.0;
 
-    Slave.sensor[i] = Irms * 10.0;
-    Slave.sensor[8 + i] = (int)totalwork[i];
-    Slave.sensor[16 + i] = (int)totalElapsed[i];
+    Slave.sensor[i] = (int)(Irms * V_rete) * 10.0; // watt
+    Slave.sensor[8 + i] = (int)(totalwork[i] / 1000.0);
+    Slave.sensor[16 + i] = (int)(totalElapsed[i] / 60.0 / 60.0);
 
-    if (i == 0) 
+    if (i == 0 && rolling_i < 1000 )
     {
-    Serial.print("\n");
-    Serial.print(i);
-    Serial.print(" K: ");
-    Serial.print(K[i]); // Irms
+      Serial.print("\n");
+      Serial.print(v);
+      Serial.print(" K: ");
+      Serial.print(K[i]); // Irms
 
-    Serial.print("\t (A): ");
-    Serial.print(Slave.sensor[i] / 10.0); // Irms
-    Serial.print("\t (W) : ");
-    Serial.print(Slave.sensor[i] * V_rete / 10); //Scrivo sul monitor seriale Corrente*Tensione=Potenza
-
-    Serial.print("\t Lavoro (wh) : ");
-    Serial.print( work ); // Scrivo sul monitor seriale Corrente*Tensione=Potenza
-    Serial.print("\t Totale (wh) : ");
-    Serial.print( totalwork[i] ); // Scrivo sul monitor seriale kwh
-    Serial.print(" in (s) : ");
-    Serial.print( totalElapsed[i] ); // Scrivo sul monitor seriale kwh
-    
-    Serial.print(" (  wh / h ) : ");
-    Serial.print( totalwork[i] * 3600.0 /  totalElapsed[i] ); // Scrivo sul monitor seriale kwh
+      Serial.print("\t (W) : ");
+      Serial.print( Slave.sensor[i]/10.0 ); //Scrivo sul monitor seriale Corrente*Tensione=Potenza
+      Serial.print("\t (wh) : ");
+      Serial.print( work ); // Scrivo sul monitor seriale Corrente*Tensione=Potenza
+      Serial.print("\t Totale (wh) : ");
+      Serial.print( totalwork[i] ); // Scrivo sul monitor seriale kwh
+      Serial.print("\t (Kwh) : ");
+      Serial.print( Slave.sensor[8 + i] );
+      Serial.print(" in (s) : ");
+      Serial.print( totalElapsed[i] ); // Scrivo sul monitor seriale kwh
+      Serial.print(" (h) : ");
+      Serial.print( Slave.sensor[16 + i] );
     }
   }
   /*****************************************************************************/
 };
-
-
