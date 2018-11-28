@@ -35,13 +35,13 @@ void Worker::process()
         double consumed = val[2]+val[3]+val[4];
         double surplus = produced - consumed;
 
-        dr.SetValue("T6", "Produced", produced * 233);
-        dr.SetValue("T6", "Consumed", consumed * 233);
-        dr.SetValue("T6", "Surplus", surplus * 233);
+        dr.SetValue("T6", "Produced", produced);
+        dr.SetValue("T6", "Consumed", consumed);
+        dr.SetValue("T6", "Surplus", surplus);
 
-        dr.SetValue("T6", "L1", val[2] * 233);
-        dr.SetValue("T6", "L2", val[3] * 233);
-        dr.SetValue("T6", "L3", val[4] * 233);
+        dr.SetValue("T6", "L1", val[2]);
+        dr.SetValue("T6", "L2", val[3]);
+        dr.SetValue("T6", "L3", val[4]);
 
         emit updateValues( &dr );
         QThread::sleep(1);
