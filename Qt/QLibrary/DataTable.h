@@ -4,12 +4,41 @@
 #include "qdebug.h"
 #include "QJsonDocument"
 #include "QJsonObject"
+#include "DataVars.h"
 
-class DataTable
+class DataValues
 {
+   public:
+    VarI progBoilerACS          = VarI( "PRG", "", "r0", "progBoilerACS" );
+    VarI progSummerAC           = VarI( "PRG", "", "r1", "progSummerAC" );
+    VarI progSummerAC_NIGHT     = VarI( "PRG", "", "r2", "progSummerAC_NIGHT" );
+    VarI progWinterFIRE         = VarI( "PRG", "", "r3", "progWinterFIRE" );
+    VarI progWinterPDC          = VarI( "PRG", "", "r4", "progWinterPDC" );
+    VarI progWinterPDC_ALLROOMS = VarI( "PRG", "", "r5", "progWinterPDC_ALLROOMS" );
+    VarI progWinterPDC_FOTOV    = VarI( "PRG", "", "r6", "progWinterPDC_FOTOV" );
+    VarI progAllRooms           = VarI( "PRG", "", "r7", "progAllRooms" );
+    VarI progExternalLight      = VarI( "PRG", "", "r8", "progExternalLight" );
+
+    std::vector<VarI*>    progs = {&progBoilerACS,
+                                   &progSummerAC,
+                                   &progSummerAC_NIGHT,
+                                   &progWinterFIRE,
+                                   &progWinterPDC,
+                                   &progWinterPDC_ALLROOMS,
+                                   &progWinterPDC_FOTOV,
+                                   &progAllRooms,
+                                   &progExternalLight };
+
+};
+
+class DataTable: public DataValues
+{    
+public:
     QVariantMap m_map;
-    QString m_host = "10.0.2.2";
-    quint16 m_port = 8080;
+
+private:
+    QString m_host;
+    quint16 m_port;
 
 public:
     DataTable( QString host, quint16 port  )
@@ -30,6 +59,7 @@ public:
 
             m_map = jsonRoot.toVariantMap();
             //****************************************
+            UpdateVal( progBoilerACS );
         }
         catch(...)
         {
@@ -55,6 +85,13 @@ public:
         return vmap2.toDouble();
     }
 
+    int GetValueI(QString name1, QString name2)
+    {
+        QVariantMap vmap1 = qvariant_cast<QVariantMap>(m_map[name1]);
+        QVariant vmap2 = vmap1[name2];
+        return vmap2.toInt();
+    }
+
     void SetValue(QString name1, QString name2, QString value)
     {
         QVariantMap vmap1 = qvariant_cast<QVariantMap>(m_map[name1]);
@@ -67,6 +104,11 @@ public:
         QVariantMap vmap1 = qvariant_cast<QVariantMap>(m_map[name1]);
         vmap1[name2] = value;
         m_map[name1] = vmap1;
+    }
+
+    void UpdateVal(VarI v)
+    {
+        v.m_value = GetValueI(v.m_t, v.m_v );
     }
 };
 

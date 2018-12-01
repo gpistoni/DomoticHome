@@ -19,9 +19,7 @@ public:
 
 public slots:
     void updateValues(DataTable* dr );
-
-private slots:
-    void on_pushButton_clicked();
+    void updateListView(DataTable* dr );
 
 private:
     Ui::MainWindow *ui;

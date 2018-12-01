@@ -1,12 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "../QLibrary/PushButtonVar.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     m_workerthread(new QThread()),
     m_worker (new Worker())
-
 {
     ui->setupUi(this);
 
@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(m_workerthread, SIGNAL(finished()), m_workerthread, SLOT(deleteLater()));
 
         connect(m_worker, SIGNAL(updateValues(DataTable*)), SLOT(updateValues(DataTable*)));
+        connect(m_worker, SIGNAL(updateListView(DataTable*)), SLOT(updateListView(DataTable*)));
 
         m_workerthread->start();
     };
@@ -29,12 +30,20 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_pushButton_clicked()
-{
-}
-
 void MainWindow::updateValues(DataTable* dr)
 {
+    if ( ui->progs->count() < 4 )
+    {
+        //disegno bottoni progs
+        for( VarI *elem : dr->progs )
+        {
+            PushButtonVar *but= new PushButtonVar(elem);
+
+            ui->progs->addWidget(but);
+        }
+    }
+
+
     double fval[6];
     fval[0]= dr->GetValueF("T6", "Produced");
     fval[1]= dr->GetValueF("T6", "Surplus");
@@ -70,5 +79,21 @@ void MainWindow::updateValues(DataTable* dr)
         ui->progressBar_S->setValue(-fval[1]);
     }
     qDebug("updateValues");
+}
+
+void MainWindow::updateListView(DataTable* dr)
+{
+    ui->listWidget->clear();
+    for(QVariantMap::const_iterator iter = dr->m_map.begin(); iter != dr->m_map.end(); ++iter)
+    {
+        ui->listWidget->addItem( QString(iter.key()) + " -----------------" );
+
+        QVariantMap mp = iter.value().toMap();
+        for(QVariantMap::const_iterator iter2 = mp.begin(); iter2 != mp.end(); ++iter2)
+        {
+            ui->listWidget->addItem( QString(iter2.key())  + ":" +  iter2.value().toString());
+        }
+    }
+
 }
 

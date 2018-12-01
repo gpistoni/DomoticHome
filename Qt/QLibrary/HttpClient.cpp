@@ -16,7 +16,7 @@ CQHttpClient::CQHttpClient( QString serverName, quint16 serverPort, qint32 timeo
         {
             QString s = errorString();
         }
-        else
+       // else
             qDebug("Connected");
     }
     catch (...)
@@ -30,7 +30,7 @@ CQHttpClient::~CQHttpClient(void)
     try
     {
         m_socket->disconnect();
-        m_socket->waitForDisconnected(1000);
+        //m_socket->waitForDisconnected(1000);
         delete m_socket;
     }
     catch (...)
@@ -41,7 +41,7 @@ CQHttpClient::~CQHttpClient(void)
 
 QString CQHttpClient::Write(const QString &request, int timeout)
 {
-    qDebug() << "_REQ_" + request;
+    //qDebug() << "_REQ_" + request;
     QString result;
     {
         //write the data
@@ -56,7 +56,7 @@ QString CQHttpClient::Write(const QString &request, int timeout)
             m_socket->waitForReadyRead( timeout );
         }
     }
-    qDebug() << "_RES_" + result;
+    //qDebug() << "_RES_" + result;
     return result;
 }
 

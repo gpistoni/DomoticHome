@@ -19,6 +19,7 @@ signals:
     void finished();
     void error(QString err);
     void updateValues(DataTable *v);
+    void updateListView(DataTable *v);
 };
 
 
