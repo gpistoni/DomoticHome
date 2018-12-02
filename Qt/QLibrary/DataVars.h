@@ -21,23 +21,19 @@ public:
 };
 
 //********************************************************************************************
-class VarF : Var
+class VarSP : Var
 {
 public:
-
-    float m_value;
-    float m_adjust;
-    float m_setpoint;
+    float m_value=0;
+    float m_adjust=0;
+    float m_setpoint=0;
 
 public:
-    VarF(QString t, QString v, QString r, QString descr): Var( t, v, r, descr ),
-        m_value(0),
-        m_adjust(0),
-        m_setpoint(0)
+    VarSP(QString t, QString v, QString r, QString descr): Var( t, v, r, descr )
     {
     }
 
-    ~VarF()
+    ~VarSP()
     {}
 
     //set
@@ -120,8 +116,7 @@ public:
 class VarI: public Var
 {
 public:
-
-    int m_value;
+    int m_value=0;
 
     VarI( QString t, QString v, QString r, QString descr):
         Var( t, v, r, descr ),
@@ -132,6 +127,46 @@ public:
     operator int()
     {
         return m_value;
+    }
+
+
+    /*
+    void manualCheck( )
+    {
+      if ( setPoint() == 1 )   set( 1 );      //manual ON mode
+      if ( setPoint() == 2 )   set( 0 );      //manual OFF mode
+    }
+    */
+
+};
+
+//********************************************************************************************
+class VarI3: public VarI
+{
+public:
+    QString m_v1;
+    QString m_v2;
+    int m_value1=0;
+    int m_value2=0;
+
+    VarI3( QString t, QString v0, QString v1, QString v2, QString descr):
+        VarI( t, v0, "", descr ),
+        m_v1(v1),
+        m_v2(v2)
+    {
+    }
+
+    int val_0()
+    {
+        return m_value;
+    }
+    int val_1()
+    {
+        return m_value1;
+    }
+    int val_2()
+    {
+        return m_value2;
     }
 
 

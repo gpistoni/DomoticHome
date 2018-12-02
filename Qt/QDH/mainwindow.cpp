@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "../QLibrary/PushButtonVar.h"
+#include "../QLibrary/InfoBarVar.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -32,17 +33,22 @@ MainWindow::~MainWindow()
 
 void MainWindow::updateValues(DataTable* dr)
 {
-    if ( ui->progs->count() < 4 )
+    if ( ui->progsPage->count() < 4 )
     {
         //disegno bottoni progs
         for( VarI *elem : dr->progs )
         {
             PushButtonVar *but= new PushButtonVar(elem);
+            ui->progsPage->addWidget(but);
+        }
 
-            ui->progs->addWidget(but);
+        //disegno bottoni ampers
+        for( VarI *elem : dr->ampers )
+        {
+            InfoBarVar *bar= new InfoBarVar(elem);
+            ui->ampersPage->addWidget(bar);
         }
     }
-
 
     double fval[6];
     fval[0]= dr->GetValueF("T6", "Produced");

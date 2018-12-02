@@ -8,7 +8,7 @@
 
 class DataValues
 {
-   public:
+public:
     VarI progBoilerACS          = VarI( "PRG", "", "r0", "progBoilerACS" );
     VarI progSummerAC           = VarI( "PRG", "", "r1", "progSummerAC" );
     VarI progSummerAC_NIGHT     = VarI( "PRG", "", "r2", "progSummerAC_NIGHT" );
@@ -28,7 +28,43 @@ class DataValues
                                    &progWinterPDC_FOTOV,
                                    &progAllRooms,
                                    &progExternalLight };
+    //*****************************************************************************************
 
+    VarI3 wProduced             = { "T6", "v0", "v8", "v16", "Produced" };
+    VarI wInput                = { "T6", "v1", "", "wInput" };
+    VarI wL1                   = { "T6", "v2", "", "wL1" };
+    VarI wL2                   = { "T6", "v3", "", "wL2" };
+    VarI wL3                   = { "T6", "v4", "", "wL3" };
+
+    VarI kwhProduced           = { "T6", "v8", "", "kwhProduced" };
+    VarI kwhInput              = { "T6", "v9", "", "kwhInput"};
+    VarI kwhL1                 = { "T6", "v10", "", "kwhL1" };
+    VarI kwhL2                 = { "T6", "v11", "", "kwhL2"};
+    VarI kwhL3                 = { "T6", "v12", "", "kwhL3" };
+
+    VarI hProduced             = { "T6", "v16", "", "hProduced" };
+    VarI hInput                = { "T6", "v17", "", "hInput" };
+    VarI hL1                   = { "T6", "v18", "", "hL1" };
+    VarI hL2                   = { "T6", "v19", "", "hL2" };
+    VarI hL3                   = { "T6", "v20", "", "hL3" };
+
+    std::vector<VarI*>    ampers = { &wProduced,
+                                     &kwhProduced,
+                                     &hProduced,
+                                     &wInput,
+                                     &kwhInput,
+                                     &hInput,
+                                     &wL1,
+                                     &kwhL1,
+                                     &hL1,
+                                     &wL2,
+                                     &kwhL2,
+                                     &hL2,
+                                     &wL3,
+                                     &kwhL3,
+                                     &hL3
+                                   };
+    //*****************************************************************************************
 };
 
 class DataTable: public DataValues
@@ -59,7 +95,14 @@ public:
 
             m_map = jsonRoot.toVariantMap();
             //****************************************
-            UpdateVal( progBoilerACS );
+            for( VarI *elem : progs )
+            {
+                UpdateVal( elem );
+            }
+            for( VarI *elem : ampers )
+            {
+                UpdateVal( elem );
+            }
         }
         catch(...)
         {
@@ -106,9 +149,9 @@ public:
         m_map[name1] = vmap1;
     }
 
-    void UpdateVal(VarI v)
+    void UpdateVal(VarI *var)
     {
-        v.m_value = GetValueI(v.m_t, v.m_v );
+        var->m_value = GetValueI(var->m_t, var->m_v);
     }
 };
 

@@ -7,19 +7,19 @@
 #include <QLabel>
 #include "DataVars.h"
 
-class Q_WIDGETS_EXPORT PushButtonVar : public QWidget
+class Q_WIDGETS_EXPORT InfoBarVar : public QWidget
 {
     Q_OBJECT
 
     VarI *var;
+
 private:
-    QPushButton *button;
-    //QLabel * icon;
-    //QLabel * text;
+    QLabel *text;
+    QLabel *value;
 
 public:
-    explicit PushButtonVar(VarI *v);
-    virtual ~PushButtonVar(){}
+    explicit InfoBarVar(VarI *v);
+    virtual ~InfoBarVar(){}
 
     void SetColor(  );
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>682</width>
-    <height>628</height>
+    <width>721</width>
+    <height>622</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -180,49 +180,56 @@
      <item row="7" column="3">
       <widget class="QListWidget" name="listWidget"/>
      </item>
+     <item row="3" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout"/>
+     </item>
     </layout>
    </widget>
-   <widget class="QToolBox" name="toolBox">
+   <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>341</width>
-      <height>500</height>
+      <width>291</width>
+      <height>600</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
-    <widget class="QWidget" name="page_1">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>341</width>
-       <height>438</height>
-      </rect>
-     </property>
-     <attribute name="label">
-      <string>Page 1</string>
+    <widget class="QWidget" name="tabWidgetPage1" native="true">
+     <attribute name="title">
+      <string/>
      </attribute>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <layout class="QGridLayout" name="progs"/>
+       <layout class="QGridLayout" name="progsPage"/>
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="page_2">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>341</width>
-       <height>438</height>
-      </rect>
-     </property>
-     <attribute name="label">
-      <string>Page 2</string>
+    <widget class="QWidget" name="tabWidgetPage2" native="true">
+     <attribute name="title">
+      <string/>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tabWidgetPage3" native="true">
+     <attribute name="title">
+      <string/>
+     </attribute>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <layout class="QGridLayout" name="ampersPage"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="tabWidgetPage4" native="true">
+     <attribute name="title">
+      <string/>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tabWidgetPage5" native="true">
+     <attribute name="title">
+      <string/>
      </attribute>
     </widget>
    </widget>
@@ -232,7 +239,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>682</width>
+     <width>721</width>
      <height>22</height>
     </rect>
    </property>

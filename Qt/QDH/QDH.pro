@@ -33,7 +33,8 @@ SOURCES += \
     ../QLibrary/HttpServer.cpp \
     ../QLibrary/DataTable.cpp \
     ../QLibrary/DataVars.cpp \
-    ../QLibrary/PushButtonVar.cpp
+    ../QLibrary/PushButtonVar.cpp \
+    ../QLibrary/InfoBarVar.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -43,7 +44,8 @@ HEADERS += \
     ../QLibrary/HttpServer.h \
     ../QLibrary/DataTable.h \
     ../QLibrary/DataVars.h \
-    ../QLibrary/PushButtonVar.h
+    ../QLibrary/PushButtonVar.h \
+    ../QLibrary/InfoBarVar.h
 
 FORMS += \
         mainwindow.ui
