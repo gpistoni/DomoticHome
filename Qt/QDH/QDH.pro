@@ -34,7 +34,8 @@ SOURCES += \
     ../QLibrary/DataTable.cpp \
     ../QLibrary/DataVars.cpp \
     ../QLibrary/PushButtonVar.cpp \
-    ../QLibrary/InfoBarVar.cpp
+    ../QLibrary/InfoBarVar.cpp \
+    ../QLibrary/InfoTempSetpoint.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -45,7 +46,8 @@ HEADERS += \
     ../QLibrary/DataTable.h \
     ../QLibrary/DataVars.h \
     ../QLibrary/PushButtonVar.h \
-    ../QLibrary/InfoBarVar.h
+    ../QLibrary/InfoBarVar.h \
+    ../QLibrary/InfoTempSetpoint.h
 
 FORMS += \
         mainwindow.ui

@@ -1,6 +1,6 @@
-#include "InfoBarVar.h"
+#include "InfoTempSetpoint.h"
 
-InfoBarVar::InfoBarVar(VarI3 *v): QWidget()
+InfoTempSetpoint::InfoTempSetpoint(VarF3SP *v): QWidget()
 {
     var = v;
 
@@ -15,8 +15,8 @@ InfoBarVar::InfoBarVar(VarI3 *v): QWidget()
     QHBoxLayout * hl = new QHBoxLayout();
     text->setText(var->m_descr);
     hl->addWidget(text);
-    value1->setText(QString::number(var->m_value));
-    hl->addWidget(value1);
+    value->setText(QString::number(var->m_value));
+    hl->addWidget(value);
     value1->setText(QString::number(var->m_value1));
     hl->addWidget(value1);
     value2->setText(QString::number(var->m_value2));
@@ -26,7 +26,7 @@ InfoBarVar::InfoBarVar(VarI3 *v): QWidget()
     SetColor();
 }
 
-void InfoBarVar::onClicked()
+void InfoTempSetpoint::onClicked()
 {
     //    QPushButton *button = (QPushButton *)sender();
     if(var->m_value)
@@ -36,7 +36,7 @@ void InfoBarVar::onClicked()
     SetColor();
 }
 
-void InfoBarVar::SetColor( )
+void InfoTempSetpoint::SetColor( )
 {
     QPalette pal = this->palette();
     pal.setColor(backgroundRole(), QColor(Qt::cyan));
@@ -46,3 +46,4 @@ void InfoBarVar::SetColor( )
     setPalette(pal);
     update();
 }
+

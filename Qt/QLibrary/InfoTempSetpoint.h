@@ -7,11 +7,11 @@
 #include <QLabel>
 #include "DataVars.h"
 
-class Q_WIDGETS_EXPORT InfoBarVar : public QWidget
+class Q_WIDGETS_EXPORT InfoTempSetpoint : public QWidget
 {
     Q_OBJECT
 
-    VarI3 *var;
+    VarF3SP *var;
 
 private:
     QLabel *text;
@@ -20,8 +20,8 @@ private:
     QLabel *value2;
 
 public:
-    explicit InfoBarVar(VarI3 *v);
-    virtual ~InfoBarVar(){}
+    explicit InfoTempSetpoint(VarF3SP *v);
+    virtual ~InfoTempSetpoint(){}
 
     void SetColor();
 

@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "../QLibrary/PushButtonVar.h"
 #include "../QLibrary/InfoBarVar.h"
+#include "../QLibrary/InfoTempSetpoint.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -43,7 +44,14 @@ void MainWindow::updateValues(DataTable* dr)
         }
 
         //disegno bottoni ampers
-        for( VarI *elem : dr->ampers )
+        for( VarF3SP *elem : dr->temps )
+        {
+            InfoTempSetpoint *ttt= new InfoTempSetpoint(elem);
+            ui->tempsPage->addWidget(ttt);
+        }
+
+        //disegno bottoni ampers
+        for( VarI3 *elem : dr->ampers )
         {
             InfoBarVar *bar= new InfoBarVar(elem);
             ui->ampersPage->addWidget(bar);

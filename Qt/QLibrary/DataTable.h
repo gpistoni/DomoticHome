@@ -30,40 +30,33 @@ public:
                                    &progExternalLight };
     //*****************************************************************************************
 
-    VarI3 wProduced             = { "T6", "v0", "v8", "v16", "Produced" };
-    VarI wInput                = { "T6", "v1", "", "wInput" };
-    VarI wL1                   = { "T6", "v2", "", "wL1" };
-    VarI wL2                   = { "T6", "v3", "", "wL2" };
-    VarI wL3                   = { "T6", "v4", "", "wL3" };
+    VarF3SP tCucina                   = { "T1", "v0", "v8", "v16", -0.5, 21, "tCucina" };
+    VarF3SP tSala                     = { "T1", "v1", "v9", "v17",  1.5, 23, "tSala" };
+    VarF3SP tCameraS                  = { "T1", "v2", "v10", "v18", 1,   18, "tCameraS" };
+    VarF3SP tCameraD                  = { "T1", "v3", "v11", "v19", 0.5, 18, "tCameraD" };
+    VarF3SP tCameraM                  = { "T1", "v4", "v12", "v20", 1,   16, "tCameraM" };
+    VarF3SP tBagno                    = { "T1", "v5", "v13", "v21", 2.5, 23, "tBagno" };
 
-    VarI kwhProduced           = { "T6", "v8", "", "kwhProduced" };
-    VarI kwhInput              = { "T6", "v9", "", "kwhInput"};
-    VarI kwhL1                 = { "T6", "v10", "", "kwhL1" };
-    VarI kwhL2                 = { "T6", "v11", "", "kwhL2"};
-    VarI kwhL3                 = { "T6", "v12", "", "kwhL3" };
-
-    VarI hProduced             = { "T6", "v16", "", "hProduced" };
-    VarI hInput                = { "T6", "v17", "", "hInput" };
-    VarI hL1                   = { "T6", "v18", "", "hL1" };
-    VarI hL2                   = { "T6", "v19", "", "hL2" };
-    VarI hL3                   = { "T6", "v20", "", "hL3" };
-
-    std::vector<VarI*>    ampers = { &wProduced,
-                                     &kwhProduced,
-                                     &hProduced,
-                                     &wInput,
-                                     &kwhInput,
-                                     &hInput,
-                                     &wL1,
-                                     &kwhL1,
-                                     &hL1,
-                                     &wL2,
-                                     &kwhL2,
-                                     &hL2,
-                                     &wL3,
-                                     &kwhL3,
-                                     &hL3
+    std::vector<VarF3SP*>    temps = { &tCucina,
+                                     &tSala,
+                                     &tCameraS,
+                                     &tCameraD,
+                                     &tCameraM,
+                                     &tBagno
                                    };
+
+    VarI3 wProduced            = { "T6", "v0", "v8", "v16", "Produced" };
+    VarI3 wInput               = { "T6", "v1", "v9", "v17", "wInput" };
+    VarI3 wL1                  = { "T6", "v2", "v10", "v18", "wL1" };
+    VarI3 wL2                  = { "T6", "v3", "v11", "v19", "wL2" };
+    VarI3 wL3                  = { "T6", "v4", "v12", "v20", "wL3" };
+
+    std::vector<VarI3*>    ampers = { &wProduced,
+                                      &wInput,
+                                      &wL1,
+                                      &wL2,
+                                      &wL3
+                                    };
     //*****************************************************************************************
 };
 
@@ -99,7 +92,11 @@ public:
             {
                 UpdateVal( elem );
             }
-            for( VarI *elem : ampers )
+            for( VarF3SP *elem : temps )
+            {
+                UpdateVal( elem );
+            }
+            for( VarI3 *elem : ampers )
             {
                 UpdateVal( elem );
             }
@@ -153,5 +150,19 @@ public:
     {
         var->m_value = GetValueI(var->m_t, var->m_v);
     }
+
+    void UpdateVal(VarI3 *var)
+    {
+        var->m_value = GetValueI(var->m_t, var->m_v);
+        var->m_value1 = GetValueI(var->m_t, var->m_v1);
+        var->m_value2 = GetValueI(var->m_t, var->m_v2);
+     }
+
+    void UpdateVal(VarF3SP *var)
+    {
+        var->m_value = GetValueF(var->m_t, var->m_v);
+        var->m_value1 = GetValueF(var->m_t, var->m_v1);
+        var->m_value2 = GetValueF(var->m_t, var->m_v2);
+     }
 };
 
