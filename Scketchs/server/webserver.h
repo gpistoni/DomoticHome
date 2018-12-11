@@ -24,7 +24,7 @@ void jPrint_F( EthernetClient &client, const String &name, float value)
   client.println(String("\"") + name + "\":\"" +  String(value) +  "\"," );
 }
 
-void jPrint_I( EthernetClient &client, const String &name, int value)
+void jPrint_L( EthernetClient &client, const String &name, unsigned long value)
 {
   client.println(String("\"") + name + "\":\"" +  String(value) +  "\"," );
 }
@@ -133,8 +133,8 @@ bool listenForEthernetClients()
               if ( c == 6)  jPrint_S(client, "Name", "Amperometri");
               if ( c == 7)  jPrint_S(client, "Name", "-");
 
-              jPrint_I(client, "tReq", T[c].lastRequest );
-              jPrint_I(client, "tRec", T[c].lastRecived );
+              jPrint_L(client, "tReq", T[c].lastRequest );
+              jPrint_L(client, "tRec", T[c].lastRecived );
 
               for (int i = 0; i < 24; i++)
               {
@@ -143,8 +143,8 @@ bool listenForEthernetClients()
               }
               for (int i = 0; i < 12; i++)
               {
-                if (i < 1 || T[c].relay[i] != 0)
-                  jPrint_I(client, String("r") + String(i), T[c].relay[i] );
+                if (T[c].relay[i] != 0)
+                  jPrint_L(client, String("r") + String(i), T[c].relay[i] );
               }
 
               jPrint_check(client);

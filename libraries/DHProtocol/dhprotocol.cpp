@@ -152,7 +152,7 @@ void DHProtocol::sendRequest( )
 
   _writeByte('$');
   OUTLN('$');
-  lastRequest = millis() - random(100);
+  lastRequest = millis();
 }
 
 //********************************************************************************/

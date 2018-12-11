@@ -3,6 +3,9 @@
 // scheda 6 SCt-013
 // rev: 30 dic 2017
 // rev 21 mar 2018
+// rev 08 dic 2018
+
+#define DISABLE_TRACE
 
 #include <dhprotocol.h>
 #include <cprobe.h>
@@ -19,7 +22,7 @@ SoftwareSerial mySerial(11, 12, TRUE);     // 11,12 Serial
 EnergyMonitor emon[6];
 
 double K[6] =  {
-  32,           // 100A
+  35,           // 100A
   53,           // 30A
   40,
   40,           // 15A
@@ -48,19 +51,18 @@ void setup()
 }
 
 unsigned long old_ReadHDT = 0;
-
 unsigned long read_t[8] = {millis(), millis(), millis(), millis(), millis(), millis(), millis(), millis()};
 
 double totalwork[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 double totalElapsed[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
-int rolling_i = 0;
+unsigned long rolling_i = 0;
 const int V_rete = 233;
 
 void loop()
 {
   digitalWrite(LED_BUILTIN, LOW);
-  if ( Slave.waitRequest( 40 ) )
+  if ( Slave.waitRequest( 50 ) )
   {
     digitalWrite(LED_BUILTIN, HIGH);
     Slave.sendData();
@@ -74,24 +76,20 @@ void loop()
     int elapsed = millis() - read_t[i] ;
     read_t[i] = millis();
 
-    double v = analogRead(A0);
-
     double Irms = emon[i].calcIrms(1480);
     
-    if ( Irms < 0.10 ) Irms = 0.0;
+    if ( Irms < 0.20 ) Irms = 0.0;
     double work = Irms * V_rete * elapsed / 1000.0 / 3600.0;
 
     totalwork[i] += work;
     totalElapsed[i] += elapsed / 1000.0;
 
-    Slave.sensor[i] = (int)(Irms * V_rete) * 10.0; // watt
-    Slave.sensor[8 + i] = (int)(totalwork[i] / 1000.0);
-    Slave.sensor[16 + i] = (int)(totalElapsed[i] / 60.0 / 60.0);
+    Slave.sensor[i] = (int)(Irms * V_rete * 10.0); // watt
+    Slave.sensor[8 + i] = (int)(totalwork[i] / 1000.0 * 10.0);
+    Slave.sensor[16 + i] = (int)(totalElapsed[i] / 60.0 / 60.0 * 10.0 );
 
-    if (i == 0 && rolling_i < 1000 )
+    if (i == 0 && rolling_i < 10 )
     {
-      Serial.print("\n");
-      Serial.print(v);
       Serial.print(" K: ");
       Serial.print(K[i]); // Irms
 
