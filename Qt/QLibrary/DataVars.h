@@ -153,32 +153,32 @@ public:
 };
 
 //********************************************************************************************
-class VarI3: public Var
+class VarF3: public Var
 {
  public:
     QString m_v1;
     QString m_v2;
  public:
-    int m_value=0;
-    int m_value1=0;
-    int m_value2=0;
+    float m_value=0;
+    float m_value1=0;
+    float m_value2=0;
 
-    VarI3( QString t, QString v0, QString v1, QString v2, QString descr):
+    VarF3( QString t, QString v0, QString v1, QString v2, QString descr):
         Var( t, v0, "", descr ),
         m_v1(v1),
         m_v2(v2)
     {
     }
 
-    int val_0()
+    float val_0()
     {
         return m_value;
     }
-    int val_1()
+    float val_1()
     {
         return m_value1;
     }
-    int val_2()
+    float val_2()
     {
         return m_value2;
     }

@@ -12,6 +12,7 @@ class Q_WIDGETS_EXPORT PushButtonVar : public QWidget
     Q_OBJECT
 
     VarI *var;
+
 private:
     QPushButton *button;
     //QLabel * icon;
@@ -25,5 +26,7 @@ public:
 
 public slots:
     void onClicked();
+    void Update();
+
 
 };

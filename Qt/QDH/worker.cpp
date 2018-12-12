@@ -30,9 +30,9 @@ void Worker::process()
         val[2]= dr.GetValueF("T6", "v2");
         val[3]= dr.GetValueF("T6", "v3");
         val[4]= dr.GetValueF("T6", "v4");
-        //val[5]= dr.GetValueF("T6", "v5");
+        val[5]= dr.GetValueF("T6", "v5");
 
-        double produced = val[0];
+        double produced = val[1];
         double consumed = val[2]+val[3]+val[4];
         double surplus = produced - consumed;
 
@@ -45,7 +45,6 @@ void Worker::process()
         dr.SetValue("T6", "L3", val[4]);
 
         emit updateValues( &dr );
-        emit updateListView( &dr );
         QThread::sleep(1);
     }
     /////////////////////////////////////////////////////////////////////////////////////////

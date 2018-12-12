@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(m_workerthread, SIGNAL(finished()), m_workerthread, SLOT(deleteLater()));
 
         connect(m_worker, SIGNAL(updateValues(DataTable*)), SLOT(updateValues(DataTable*)));
-        connect(m_worker, SIGNAL(updateListView(DataTable*)), SLOT(updateListView(DataTable*)));
+        connect(m_worker, SIGNAL(updateValues(DataTable*)), SLOT(updateListView(DataTable*)));
 
         m_workerthread->start();
     };
@@ -34,12 +34,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::updateValues(DataTable* dr)
 {
+    //solo la prima volta
     if ( ui->progsPage->count() < 4 )
     {
         //disegno bottoni progs
         for( VarI *elem : dr->progs )
         {
             PushButtonVar *but= new PushButtonVar(elem);
+            connect(m_worker, SIGNAL(updateValues(DataTable*)), but, SLOT(Update()));
             ui->progsPage->addWidget(but);
         }
 
@@ -47,18 +49,20 @@ void MainWindow::updateValues(DataTable* dr)
         for( VarF3SP *elem : dr->temps )
         {
             InfoTempSetpoint *ttt= new InfoTempSetpoint(elem);
+            connect(m_worker, SIGNAL(updateValues(DataTable*)), ttt, SLOT(Update()));
             ui->tempsPage->addWidget(ttt);
         }
 
         //disegno bottoni ampers
-        for( VarI3 *elem : dr->ampers )
+        for( VarF3 *elem : dr->ampers )
         {
             InfoBarVar *bar= new InfoBarVar(elem);
+            connect(m_worker, SIGNAL(updateValues(DataTable*)), bar, SLOT(Update()));
             ui->ampersPage->addWidget(bar);
         }
     }
 
-    double fval[6];
+    float fval[6];
     fval[0]= dr->GetValueF("T6", "Produced");
     fval[1]= dr->GetValueF("T6", "Surplus");
     fval[2]= dr->GetValueF("T6", "Consumed");
@@ -108,6 +112,5 @@ void MainWindow::updateListView(DataTable* dr)
             ui->listWidget->addItem( QString(iter2.key())  + ":" +  iter2.value().toString());
         }
     }
-
 }
 

@@ -45,3 +45,8 @@ void PushButtonVar::SetColor( )
     setPalette(pal);
     update();
 }
+
+void PushButtonVar::Update()
+{
+  SetColor();
+}

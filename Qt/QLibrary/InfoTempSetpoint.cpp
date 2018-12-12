@@ -10,6 +10,10 @@ InfoTempSetpoint::InfoTempSetpoint(VarF3SP *v): QWidget()
     value1 = new QLabel();
     value2 = new QLabel();
 
+    butp= new QPushButton();
+    setpoint= new QLabel();
+    butm= new QPushButton();
+
    // connect(button, SIGNAL(clicked()), this, SLOT(onClicked()));
 
     QHBoxLayout * hl = new QHBoxLayout();
@@ -21,6 +25,12 @@ InfoTempSetpoint::InfoTempSetpoint(VarF3SP *v): QWidget()
     hl->addWidget(value1);
     value2->setText(QString::number(var->m_value2));
     hl->addWidget(value2);
+    butp->setText("+");
+    hl->addWidget(butp);
+    setpoint->setText(QString::number(var->m_setpoint));
+    hl->addWidget(setpoint);
+    butm->setText("-");
+    hl->addWidget(butm);
 
     setLayout(hl);
     SetColor();
@@ -45,5 +55,12 @@ void InfoTempSetpoint::SetColor( )
     setAutoFillBackground(true);
     setPalette(pal);
     update();
+}
+
+void InfoTempSetpoint::Update()
+{
+    value->setText(QString::number(var->m_value));
+    value1->setText(QString::number(var->m_value1));
+    value2->setText(QString::number(var->m_value2));
 }
 

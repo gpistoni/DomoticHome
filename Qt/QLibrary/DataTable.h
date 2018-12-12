@@ -37,22 +37,22 @@ public:
     VarF3SP tCameraM                  = { "T1", "v4", "v12", "v20", 1,   16, "tCameraM" };
     VarF3SP tBagno                    = { "T1", "v5", "v13", "v21", 2.5, 23, "tBagno" };
 
-    std::vector<VarF3SP*>    temps = { &tCucina,
-                                     &tSala,
-                                     &tCameraS,
-                                     &tCameraD,
-                                     &tCameraM,
-                                     &tBagno
-                                   };
+    std::vector<VarF3SP*>    temps = {  &tCucina,
+                                        &tSala,
+                                        &tCameraS,
+                                        &tCameraD,
+                                        &tCameraM,
+                                        &tBagno
+                                        };
 
-    VarI3 wProduced            = { "T6", "v0", "v8", "v16", "Produced" };
-    VarI3 wInput               = { "T6", "v1", "v9", "v17", "wInput" };
-    VarI3 wL1                  = { "T6", "v2", "v10", "v18", "wL1" };
-    VarI3 wL2                  = { "T6", "v3", "v11", "v19", "wL2" };
-    VarI3 wL3                  = { "T6", "v4", "v12", "v20", "wL3" };
+    VarF3 wPowergrid            = { "T6", "v0", "v8", "v16", "PowerGrid" };
+    VarF3 wProduced             = { "T6", "v1", "v9", "v17", "Produced" };
+    VarF3 wL1                   = { "T6", "v2", "v10", "v18", "L1" };
+    VarF3 wL2                   = { "T6", "v3", "v11", "v19", "L2" };
+    VarF3 wL3                   = { "T6", "v4", "v12", "v20", "L3" };
 
-    std::vector<VarI3*>    ampers = { &wProduced,
-                                      &wInput,
+    std::vector<VarF3*>    ampers = { &wPowergrid,
+                                      &wProduced,
                                       &wL1,
                                       &wL2,
                                       &wL3
@@ -96,7 +96,7 @@ public:
             {
                 UpdateVal( elem );
             }
-            for( VarI3 *elem : ampers )
+            for( VarF3 *elem : ampers )
             {
                 UpdateVal( elem );
             }
@@ -118,11 +118,11 @@ public:
         return vmap2.toString();
     }
 
-    double GetValueF(QString name1, QString name2)
+    float GetValueF(QString name1, QString name2)
     {
         QVariantMap vmap1 = qvariant_cast<QVariantMap>(m_map[name1]);
         QVariant vmap2 = vmap1[name2];
-        return vmap2.toDouble();
+        return vmap2.toFloat();
     }
 
     int GetValueI(QString name1, QString name2)
@@ -151,11 +151,11 @@ public:
         var->m_value = GetValueI(var->m_t, var->m_v);
     }
 
-    void UpdateVal(VarI3 *var)
+    void UpdateVal(VarF3 *var)
     {
-        var->m_value = GetValueI(var->m_t, var->m_v);
-        var->m_value1 = GetValueI(var->m_t, var->m_v1);
-        var->m_value2 = GetValueI(var->m_t, var->m_v2);
+        var->m_value = GetValueF(var->m_t, var->m_v);
+        var->m_value1 = GetValueF(var->m_t, var->m_v1);
+        var->m_value2 = GetValueF(var->m_t, var->m_v2);
      }
 
     void UpdateVal(VarF3SP *var)
