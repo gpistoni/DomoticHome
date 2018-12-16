@@ -35,7 +35,6 @@ void jPrint_check( EthernetClient &client)
   client.println(String("\"") + String("check") + "\":" +  String(0) );
 }
 
-
 bool listenForEthernetClients()
 {
   // listen for incoming clients

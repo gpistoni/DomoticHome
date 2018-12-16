@@ -1,5 +1,6 @@
-#include "dhprotocol.h"
+#define DISABLE_TRACE 
 
+#include "dhprotocol.h"
 #include <SoftwareSerial.h>
 #include <SPI.h>
 #include <Ethernet.h>
@@ -58,6 +59,38 @@ void setup()
   }
 }
 
+
+void loop()
+{
+  listenForEthernetClients();
+
+  for (int t = 1; t < 8; t++)
+  {
+    T[t].sendRequest();
+    listenForEthernetClients();
+    T[t].waitData( 300 );
+    listenForEthernetClients();
+    delay(50);
+    listenForEthernetClients();
+    delay(50);
+    listenForEthernetClients();
+    delay(50);
+    listenForEthernetClients();
+    delay(50);
+    listenForEthernetClients();
+  }
+  
+  if ( Ethernet.localIP() != ip)
+  {
+    delay(1000);
+    Ethernet.begin(mac, ip);
+
+    OUT("RECONNECT server is at ");
+    OUTLN( Ethernet.localIP() );
+  };
+}
+
+/*
 void loop()
 {
   listenForEthernetClients();
@@ -110,14 +143,14 @@ void loop()
 
   listenForEthernetClients();
   
-  /*
+  
     if ( T[7].checkTiming(2000) )
     {
       T[7].sendRequest();
       T[7].waitData( 100 );
     };
     listenForEthernetClients();
-  */
+  
   
   if ( Ethernet.localIP() != ip)
   {
@@ -129,4 +162,4 @@ void loop()
   };
 
   listenForEthernetClients();
-}
+}*/
