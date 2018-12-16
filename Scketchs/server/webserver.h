@@ -84,6 +84,47 @@ bool listenForEthernetClients()
           String SetParam1 = readString.substring(idxSET2 + 1, idxSET3);
           String SetParam2  = readString.substring(idxSET3 + 1, idxSET4);
 
+          int idx0 = readString.indexOf("/");
+          int idx1 = readString.indexOf(".", idx0);
+          int idx2 = readString.indexOf("=", idx1);
+          int idx3 = readString.indexOf(" ", idx2);
+
+          String TERM = readString.substring(idx0 + 1, idx1);
+          String PARAM = readString.substring(idx1 + 1, idx2);
+          String VAL = readString.substring(idx2 + 1, idx3 );
+
+          int Term = -1;
+          if ( TERM.length() > 1 && TERM[0] == 't')
+          {
+            int t = TERM.substring(1).toInt();
+            if (t >= 0 && t < 12) Term = t;
+          }
+
+          int Relay = -1;
+          if ( PARAM.length() > 1 && PARAM[0] == 'r')
+          {
+            int r = PARAM.substring(1).toInt();
+            if (r >= 0 && r < 12) Relay = r;
+          }
+
+          int Sensor = -1;
+          if ( PARAM.length() > 1 && PARAM[0] == 'v')
+          {
+            int s = PARAM.substring(1).toInt();
+            if (s >= 0 && s < 24) Sensor = s;
+          }
+
+
+          OUT("term:");
+          OUT(Term);
+          OUT(" relay:");
+          OUT(Relay);
+          OUT(" sensor:");
+          OUT(Sensor);
+          OUT(" val:");
+          OUTLN(VAL);
+
+
           //****************************************************************************************************************************
           if ( idxGET > 0 )
           {
@@ -110,6 +151,30 @@ bool listenForEthernetClients()
               T[t].relay[r] = value;
               client.print( T[t].relay[r] );
             }
+            break;
+          }
+          //*********************************length*******************************************************************************************
+          // NEW style GET-SET
+          else if ( Term >= 0 && Relay >= 0)
+          {
+            if ( VAL.length() > 0 )
+            {
+              //set & print
+              float val = VAL.toFloat();
+              T[Term].relay[Relay] = val;
+            }
+            client.print( T[Term].relay[Relay] );
+            break;
+          }
+          else if ( Term >= 0 && Sensor >= 0)
+          {
+            if ( VAL.length() > 0 )
+            {
+              //set & print
+              float val = VAL.toFloat();
+              T[Term].sensor[Sensor] = val;
+            }
+            client.print( T[Term].sensor[Sensor] );
             break;
           }
           //****************************************************************************************************************************

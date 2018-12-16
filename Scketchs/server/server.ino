@@ -1,4 +1,4 @@
-#define DISABLE_TRACE 
+//#define DISABLE_TRACE 
 
 #include "dhprotocol.h"
 #include <SoftwareSerial.h>
