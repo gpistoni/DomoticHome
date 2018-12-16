@@ -2,43 +2,59 @@
 
 InfoBarVar::InfoBarVar(VarF3 *v): QWidget()
 {
-    var = v;
+    var3 = v;
 
     //button = new QPushButton();
     text = new QLabel();    //use a label to host the icon
     value = new QLabel();
     value1 = new QLabel();
     value2 = new QLabel();
-     pbar = new QProgressBar();
+    pbar = new QProgressBar();
 
-   // connect(button, SIGNAL(clicked()), this, SLOT(onClicked()));
+    // connect(button, SIGNAL(clicked()), this, SLOT(onClicked()));
 
     QHBoxLayout * hl = new QHBoxLayout();
-    text->setText(var->m_descr);
+    text->setText(var3->m_descr);
     hl->addWidget(text);
-    value->setText(QString::number(var->m_value));
+    value->setText(QString::number(var3->m_value));
     hl->addWidget(value);
-    value1->setText(QString::number(var->m_value1));
+    value1->setText(QString::number(var3->m_value1));
     hl->addWidget(value1);
-    value2->setText(QString::number(var->m_value2));
+    value2->setText(QString::number(var3->m_value2));
     hl->addWidget(value2);
     //--------------------------------------------------------
     pbar->setMinimum(0);
     pbar->setMaximum(3000);
-    pbar->setValue((int)var->m_value);
+    pbar->setValue((int)var3->m_value);
     hl->addWidget(pbar);
 
     setLayout(hl);
     SetColor();
 }
 
-void InfoBarVar::onClicked()
+InfoBarVar::InfoBarVar(VarF *v): QWidget()
 {
-    //    QPushButton *button = (QPushButton *)sender();
-    if(var->m_value)
-        var->m_value = 0;
-    else
-        var->m_value = 1;
+    var1 = v;
+
+    //button = new QPushButton();
+    text = new QLabel();    //use a label to host the icon
+    value = new QLabel();
+    pbar = new QProgressBar();
+
+    // connect(button, SIGNAL(clicked()), this, SLOT(onClicked()));
+
+    QHBoxLayout * hl = new QHBoxLayout();
+    text->setText(var1->m_descr);
+    hl->addWidget(text);
+    value->setText(QString::number(var1->m_value));
+    hl->addWidget(value);
+    //--------------------------------------------------------
+    pbar->setMinimum(0);
+    pbar->setMaximum(3000);
+    pbar->setValue((int)var1->m_value);
+    hl->addWidget(pbar);
+
+    setLayout(hl);
     SetColor();
 }
 
@@ -46,7 +62,9 @@ void InfoBarVar::SetColor( )
 {
     QPalette pal = this->palette();
     pal.setColor(backgroundRole(), QColor(Qt::cyan));
-    if (var->m_value )
+    if (var1 && var1->m_value>0 )
+        pal.setColor(backgroundRole(), QColor(Qt::green));
+    if (var3 && var3->m_value>0 )
         pal.setColor(backgroundRole(), QColor(Qt::green));
     setAutoFillBackground(true);
     setPalette(pal);
@@ -55,7 +73,14 @@ void InfoBarVar::SetColor( )
 
 void InfoBarVar::Update()
 {
-    value->setText(QString::number(var->m_value));
-    value1->setText(QString::number(var->m_value1));
-    value2->setText(QString::number(var->m_value2));
+    if (var1)
+    {
+        value->setText(QString::number(var1->m_value));
+    }
+    if (var3)
+    {
+        value->setText(QString::number(var3->m_value));
+        value1->setText(QString::number(var3->m_value1));
+        value2->setText(QString::number(var3->m_value2));
+    }
 }

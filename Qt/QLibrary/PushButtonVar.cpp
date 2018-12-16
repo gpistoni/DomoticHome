@@ -1,6 +1,6 @@
 #include "PushButtonVar.h"
 
-PushButtonVar::PushButtonVar(VarI *v): QWidget()
+PushButtonVar::PushButtonVar(VarB *v): QWidget()
 {
     var = v;
 

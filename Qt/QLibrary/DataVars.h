@@ -38,10 +38,10 @@ public:
             QString v0, QString v1, QString v2,
             float adj, float setpoint, QString descr) :
         Var( t, v0, "", descr ),
-      m_v1(v1),
-      m_v2(v2),
-      m_adjust(adj),
-      m_setpoint(setpoint)
+        m_v1(v1),
+        m_v2(v2),
+        m_adjust(adj),
+        m_setpoint(setpoint)
     {
     }
 
@@ -121,7 +121,30 @@ public:
     {
         return "p" + m_descr ;
     }
+};
 
+//********************************************************************************************
+class VarB: public Var
+{
+public:
+    bool m_value=0;
+    bool m_forced=0;
+
+public:
+    VarB( QString t, QString r, QString descr):
+        Var( t, "", r, descr )
+    {
+    }
+
+    operator bool()
+    {
+        return m_value;
+    }
+
+    bool isForced()
+    {
+        return m_forced;
+    }
 };
 
 //********************************************************************************************
@@ -140,28 +163,37 @@ public:
     {
         return m_value;
     }
-
-
-    /*
-    void manualCheck( )
-    {
-      if ( setPoint() == 1 )   set( 1 );      //manual ON mode
-      if ( setPoint() == 2 )   set( 0 );      //manual OFF mode
-    }
-    */
-
 };
+
+//********************************************************************************************
+class VarF: public Var
+{
+public:
+    float m_value=0;
+
+    VarF( QString t, QString v, QString descr):
+        Var( t, v, "", descr )
+    {
+    }
+
+    operator float()
+    {
+        return m_value;
+    }
+};
+
 
 //********************************************************************************************
 class VarF3: public Var
 {
- public:
+public:
     QString m_v1;
     QString m_v2;
- public:
+public:
     float m_value=0;
     float m_value1=0;
     float m_value2=0;
+    float pad=0;
 
     VarF3( QString t, QString v0, QString v1, QString v2, QString descr):
         Var( t, v0, "", descr ),
@@ -170,16 +202,30 @@ class VarF3: public Var
     {
     }
 
-    float val_0()
+    operator float()
     {
         return m_value;
     }
-    float val_1()
+
+    float value_1()
     {
         return m_value1;
     }
-    float val_2()
+    float value_2()
     {
         return m_value2;
+    }
+
+    void operator +=(const VarF3 &add)
+    {
+        m_value += add.m_value;
+        m_value1 += add.m_value1;
+        m_value2 += add.m_value2;
+    }
+    void operator -=(const VarF3 &sub)
+    {
+        m_value += sub.m_value;
+        m_value1 += sub.m_value1;
+        m_value2 += sub.m_value2;
     }
 };

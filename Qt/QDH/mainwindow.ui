@@ -190,52 +190,94 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>351</width>
+      <width>341</width>
       <height>441</height>
      </rect>
     </property>
-    <property name="currentIndex">
-     <number>1</number>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>441</height>
+     </size>
     </property>
-    <widget class="QWidget" name="tabWidgetPage1">
+    <property name="currentIndex">
+     <number>6</number>
+    </property>
+    <widget class="QWidget" name="tab1">
      <attribute name="title">
       <string/>
      </attribute>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <layout class="QGridLayout" name="progsPage"/>
+       <layout class="QGridLayout" name="Page1"/>
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="tabWidgetPage2">
+    <widget class="QWidget" name="tab2">
      <attribute name="title">
       <string/>
      </attribute>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <layout class="QHBoxLayout" name="horizontalLayout_6">
       <item>
-       <layout class="QGridLayout" name="tempsPage"/>
+       <layout class="QGridLayout" name="Page2"/>
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="tabWidgetPage3">
+    <widget class="QWidget" name="tab3">
      <attribute name="title">
       <string/>
      </attribute>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <layout class="QGridLayout" name="ampersPage"/>
+       <layout class="QGridLayout" name="Page3"/>
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="tabWidgetPage4">
+    <widget class="QWidget" name="tab4">
+     <property name="maximumSize">
+      <size>
+       <width>347</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <attribute name="title">
       <string/>
      </attribute>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <layout class="QGridLayout" name="Page4"/>
+      </item>
+     </layout>
     </widget>
-    <widget class="QWidget" name="tabWidgetPage5">
+    <widget class="QWidget" name="tab5">
      <attribute name="title">
       <string/>
      </attribute>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <layout class="QGridLayout" name="Page5"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="tab6">
+     <attribute name="title">
+      <string>Page</string>
+     </attribute>
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
+      <item>
+       <layout class="QGridLayout" name="Page6"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Page</string>
+     </attribute>
+     <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <item>
+       <layout class="QGridLayout" name="Page7"/>
+      </item>
+     </layout>
     </widget>
    </widget>
   </widget>

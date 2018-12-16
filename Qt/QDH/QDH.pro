@@ -27,7 +27,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    worker.cpp \
     ../QLibrary/HttpClient.cpp \
     ../QLibrary/HttpParser.cpp \
     ../QLibrary/HttpServer.cpp \
@@ -35,11 +34,11 @@ SOURCES += \
     ../QLibrary/DataVars.cpp \
     ../QLibrary/PushButtonVar.cpp \
     ../QLibrary/InfoBarVar.cpp \
-    ../QLibrary/InfoTempSetpoint.cpp
+    ../QLibrary/InfoTempSetpoint.cpp \
+    server.cpp
 
 HEADERS += \
         mainwindow.h \
-    worker.h \
     ../QLibrary/HttpClient.h \
     ../QLibrary/HttpParser.h \
     ../QLibrary/HttpServer.h \
@@ -47,7 +46,8 @@ HEADERS += \
     ../QLibrary/DataVars.h \
     ../QLibrary/PushButtonVar.h \
     ../QLibrary/InfoBarVar.h \
-    ../QLibrary/InfoTempSetpoint.h
+    ../QLibrary/InfoTempSetpoint.h \
+    server.h
 
 FORMS += \
         mainwindow.ui

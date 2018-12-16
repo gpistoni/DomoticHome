@@ -11,24 +11,25 @@ class Q_WIDGETS_EXPORT InfoBarVar : public QWidget
 {
     Q_OBJECT
 
-    VarF3 *var;
+    VarF  *var1 = nullptr;
+    VarF3 *var3 = nullptr;
 
 private:
-    QLabel *text;
-    QLabel *value;
-    QLabel *value1;
-    QLabel *value2;
+    QLabel *text = nullptr;
+    QLabel *value = nullptr;
+    QLabel *value1 = nullptr;
+    QLabel *value2 = nullptr;
 
-    QProgressBar *pbar;
+    QProgressBar *pbar = nullptr;
 
 public:
     explicit InfoBarVar(VarF3 *v);
+    explicit InfoBarVar(VarF *v);
     virtual ~InfoBarVar(){}
 
     void SetColor();
 
 public slots:
-    void onClicked();
-    void Update();
+     void Update();
 
 };

@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QThread>
-#include "worker.h"
+#include "server.h"
 
 namespace Ui {
 class MainWindow;
@@ -14,7 +14,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(Server *pserver, QWidget *parent = nullptr);
     ~MainWindow();
 
 public slots:
@@ -23,8 +23,8 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
-    QThread* m_workerthread;
-    Worker* m_worker;
+
+    Server* m_pserver;
 };
 
 

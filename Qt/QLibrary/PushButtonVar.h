@@ -11,7 +11,7 @@ class Q_WIDGETS_EXPORT PushButtonVar : public QWidget
 {
     Q_OBJECT
 
-    VarI *var;
+    VarB *var;
 
 private:
     QPushButton *button;
@@ -19,7 +19,7 @@ private:
     //QLabel * text;
 
 public:
-    explicit PushButtonVar(VarI *v);
+    explicit PushButtonVar(VarB *v);
     virtual ~PushButtonVar(){}
 
     void SetColor(  );
