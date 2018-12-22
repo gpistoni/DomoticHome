@@ -1,5 +1,4 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
 #include <QThread>
@@ -26,7 +25,3 @@ private:
 
     Server* m_pserver;
 };
-
-
-
-#endif // MAINWINDOW_H

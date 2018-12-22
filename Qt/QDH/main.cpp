@@ -8,17 +8,17 @@ int main(int argc, char *argv[])
     QStringList arg = a.arguments();
     qDebug() << arg;
 
-    bool RunServer = false;
+    bool RunPrograms = false;
     bool RunGui = false;
 
     if ( arg.indexOf("+s") > 0 )
-        RunServer = true;
+        RunPrograms = true;
     if ( arg.indexOf("+g") >0 )
         RunGui = true;
 
     // Server
     QThread serverthread;
-    Server server(RunServer);
+    Server server(RunPrograms);
 
     server.moveToThread(&serverthread);
     server.connect(&serverthread, SIGNAL(started()), &server, SLOT(run()));
@@ -41,6 +41,8 @@ int main(int argc, char *argv[])
             qDebug() << e.what();
         }
     }
+    a.exec();
 
-    return a.exec();
+    server.m_running = 0;
+    return 0;
 }

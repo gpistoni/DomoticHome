@@ -4,8 +4,8 @@
 
 
 // --- CONSTRUCTOR ---
-Server::Server(bool runserver) :
-    m_runServer(runserver){
+Server::Server(bool runPrograms) :
+    m_runPrograms(runPrograms){
     // you could copy data from constructor arguments to internal variables here.
 }
 
@@ -32,6 +32,7 @@ void Server::run()
         dr.wSurplus += dr.wProduced;
         dr.wSurplus -= dr.wConsumed;
 
+        // remove-------------------------------------------
         float val[6];
         val[0]= dr.GetValueF("T6", "v0");
         val[1]= dr.GetValueF("T6", "v1");
@@ -51,12 +52,13 @@ void Server::run()
         dr.SetValue("T6", "L1", val[2]);
         dr.SetValue("T6", "L2", val[3]);
         dr.SetValue("T6", "L3", val[4]);
+        // remove-------------------------------------------
 
         qDebug () << "UpdatedValues";
         emit updateValues( &dr );
         ////////////////////////////////////////////////////////////////////////////////////////
 
-        if (m_runServer)
+        if (m_runPrograms)
         {
 
         }

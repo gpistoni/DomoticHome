@@ -27,6 +27,5 @@ private:
     QThreadPool *m_pool;
     quint16 m_port;
     bool m_debug;
-
 };
 

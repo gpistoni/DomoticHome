@@ -224,8 +224,8 @@ public:
     }
     void operator -=(const VarF3 &sub)
     {
-        m_value += sub.m_value;
-        m_value1 += sub.m_value1;
-        m_value2 += sub.m_value2;
+        m_value -= sub.m_value;
+        m_value1 -= sub.m_value1;
+        m_value2 -= sub.m_value2;
     }
 };

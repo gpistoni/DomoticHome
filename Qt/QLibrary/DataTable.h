@@ -82,7 +82,7 @@ public:
     VarF tReturnFloor       = { "T4", "v4", "ReturnFloor" };
     VarF tInletFloor        = { "T4", "v5", "InletFloor" };
     VarF tExternal          = { "T4", "v6", "External" };
-    VarF darkExternal       = { "T4", "v7", "darkExternal" };
+    VarF darkExternal       = { "T4", "v8", "darkExternal" };
 
     std::vector<VarF*>    tcaldaia = { &tPufferHi,
                                        &tPufferLow,
@@ -244,7 +244,7 @@ public:
 
     void UpdateVal(VarF *var)
     {
-        var->m_value = GetValueI(var->m_t, var->m_v);
+        var->m_value = GetValueF(var->m_t, var->m_v);
     }
 
     void UpdateVal(VarB *var)
