@@ -155,7 +155,7 @@ public:
         CQHttpClient client(m_host, m_port, 10000 );
         try
         {
-            QString str = client.GetValue_Json();
+            QString str = client.Request_Json();
             //****************************************
             QJsonDocument jsonDoc = QJsonDocument::fromJson(str.toUtf8());
             QJsonObject jsonRoot = jsonDoc.object();
@@ -265,5 +265,52 @@ public:
         var->m_value1 = GetValueF(var->m_t, var->m_v1);
         var->m_value2 = GetValueF(var->m_t, var->m_v2);
     }
+    //******************************************************************************************
+
+    void SendValue(VarI *var)
+    {
+        CQHttpClient client(m_host, m_port, 10000 );
+        try
+        {
+            QString str = var->m_t + "." + var->m_r + "=" + QString::number(var->m_value);
+            client.Request_Set(str);
+        }
+        catch(...)
+        {}
+    }
+
+    void SendValue(VarF *var)
+    {
+        CQHttpClient client(m_host, m_port, 10000 );
+        try
+        {
+            QString str = var->m_t + "." + var->m_r + "=" + QString::number(var->m_value);
+            client.Request_Set(str);
+        }
+        catch(...)
+        {}
+}
+
+    /*
+
+    void SendValue(VarB *var)
+    {
+        var->m_value = SetValueI(var->m_t, var->m_r);
+    }
+
+    void SendValue(VarF3 *var)
+    {
+        var->m_value = SetValueF(var->m_t, var->m_r);
+        var->m_value1 = SetValueF(var->m_t, var->m_v1);
+        var->m_value2 = SetValueF(var->m_t, var->m_v2);
+    }
+
+    void SendValue(VarF3SP *var)
+    {
+        var->m_value = SetValueF(var->m_t, var->m_v);
+        var->m_value1 = SetValueF(var->m_t, var->m_v1);
+        var->m_value2 = SetValueF(var->m_t, var->m_v2);
+    }
+    */
 };
 

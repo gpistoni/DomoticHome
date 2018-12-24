@@ -76,7 +76,7 @@ void MainWindow::updateValues(DataTable* dr)
             ui->Page6->addWidget(bar);
         }
 
-        //disegno rcaldaia
+        //disegno evStanze
         for( VarB *elem : dr->evStanze )
         {
             PushButtonVar *bar= new PushButtonVar(elem);
@@ -115,7 +115,7 @@ void MainWindow::updateValues(DataTable* dr)
 
 void MainWindow::updateListView(DataTable* dr)
 {
-    ui->listWidget->clear();
+    /*ui->listWidget->clear();
     for(QVariantMap::const_iterator iter = dr->m_map.begin(); iter != dr->m_map.end(); ++iter)
     {
         ui->listWidget->addItem( QString(iter.key()) + " -----------------" );
@@ -125,6 +125,6 @@ void MainWindow::updateListView(DataTable* dr)
         {
             ui->listWidget->addItem( QString(iter2.key())  + ":" +  iter2.value().toString());
         }
-    }
+    }*/
 }
 

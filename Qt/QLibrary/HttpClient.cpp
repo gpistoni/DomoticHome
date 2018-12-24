@@ -67,6 +67,7 @@ QString CQHttpClient::HTTPRequest(QString req)
         QString sMsg = QString("GET ") + req + " HTTP/1.1\r\n" +
                 "Host: " + m_serverName + "\r\n" +
                 "Connection: keep-alive\r\n\r\n";
+        qDebug() << sMsg;
         return  Write( sMsg.toUtf8() );
     }
     catch (...)
@@ -75,14 +76,19 @@ QString CQHttpClient::HTTPRequest(QString req)
     }
 }
 
-QString CQHttpClient::GetValue(QString path)
+QString CQHttpClient::Request_Get(QString path)
 {
     return HTTPRequest( QString("get?") + path );
 }
 
-QString CQHttpClient::GetValue_Json()
+QString CQHttpClient::Request_Json()
 {
     return HTTPRequest( QString("json"));
+}
+
+QString CQHttpClient::Request_Set(QString path)
+{
+    return HTTPRequest( QString("set?") + path );
 }
 
 

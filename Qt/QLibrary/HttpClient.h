@@ -26,11 +26,12 @@ private:
     QString Write(const QString &str, int timeout = 3000 );
 
 private:
-    QString HTTPRequest( QString path );
+    QString HTTPRequest(QString path);
 
 public:
-    QString GetValue( QString path );
-    QString GetValue_Json();
+    QString Request_Get(QString path );
+    QString Request_Json();
+    QString Request_Set(QString path);
 };
 
 

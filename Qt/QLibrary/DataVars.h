@@ -1,6 +1,7 @@
 #pragma once
 
 #include "qstring.h"
+#pragma pack(1)
 
 //********************************************************************************************
 class Var
@@ -18,6 +19,11 @@ public:
         m_r = r;    //relay
         m_descr = descr;
     }
+
+    virtual ~Var()
+    {}
+
+    virtual QString svalue()=0;
 };
 
 //********************************************************************************************
@@ -45,8 +51,13 @@ public:
     {
     }
 
-    ~VarF3SP()
+    virtual ~VarF3SP() override
     {}
+
+    virtual QString svalue() override
+    {
+        return QString::number(static_cast<double>(m_value));
+    }
 
     //set
     void set( float value )
@@ -107,11 +118,6 @@ public:
         return m_t;
     }
 
-    QString idxvalue()
-    {
-        return m_v;
-    }
-
     QString descr()
     {
         return m_descr ;
@@ -136,6 +142,13 @@ public:
     {
     }
 
+    virtual ~VarB()override{}
+
+    virtual QString svalue() override
+    {
+        return QString::number(m_value);
+    }
+
     operator bool()
     {
         return m_value;
@@ -158,6 +171,13 @@ public:
         m_value(0)
     {
     }
+    virtual ~VarI()override {}
+
+
+    virtual QString svalue() override
+    {
+        return QString::number(m_value);
+    }
 
     operator int()
     {
@@ -176,6 +196,13 @@ public:
     {
     }
 
+    virtual ~VarF()override {}
+
+    virtual QString svalue() override
+    {
+        return QString::number(static_cast<double>(m_value));
+    }
+
     operator float()
     {
         return m_value;
@@ -184,28 +211,24 @@ public:
 
 
 //********************************************************************************************
-class VarF3: public Var
+class VarF3: public VarF
 {
 public:
     QString m_v1;
     QString m_v2;
 public:
-    float m_value=0;
     float m_value1=0;
     float m_value2=0;
     float pad=0;
 
     VarF3( QString t, QString v0, QString v1, QString v2, QString descr):
-        Var( t, v0, "", descr ),
+        VarF( t, v0, descr ),
         m_v1(v1),
         m_v2(v2)
     {
     }
 
-    operator float()
-    {
-        return m_value;
-    }
+    virtual ~VarF3()override {}
 
     float value_1()
     {

@@ -35,7 +35,8 @@ SOURCES += \
     ../QLibrary/PushButtonVar.cpp \
     ../QLibrary/InfoBarVar.cpp \
     ../QLibrary/InfoTempSetpoint.cpp \
-    server.cpp
+    server.cpp \
+    ../QLibrary/logw.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -47,7 +48,8 @@ HEADERS += \
     ../QLibrary/PushButtonVar.h \
     ../QLibrary/InfoBarVar.h \
     ../QLibrary/InfoTempSetpoint.h \
-    server.h
+    server.h \
+    ../QLibrary/logw.h
 
 FORMS += \
         mainwindow.ui
