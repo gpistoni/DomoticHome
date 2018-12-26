@@ -1,8 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "../QLibrary/PushButtonVar.h"
+#include "../QWidget/ButtonVarOnOffAuto.h"
 #include "../QLibrary/InfoBarVar.h"
 #include "../QLibrary/InfoTempSetpoint.h"
+#include "../QWidget/LogMessage.h"
 
 MainWindow::MainWindow(Server *pserver, QWidget *parent) :
     QMainWindow(parent),
@@ -26,72 +27,84 @@ MainWindow::~MainWindow()
 void MainWindow::updateValues(DataTable* dr)
 {
     //solo la prima volta
-    if ( ui->Page1->count() < 4 )
+    if ( m_firstRun )
     {
-        //disegno page progs
+        m_firstRun = false;
+
+        //*****************************************************************
+        // Log bar inferiore
+        m_logw = new LogMessage();
+        ui->bottomLayout->addWidget(m_logw);
+
+        ui->tabWidget->setTabText(0,"progs");
         for( VarB *elem : dr->progs )
         {
-            PushButtonVar *but= new PushButtonVar(elem);
+            ButtonVar *but= new ButtonVar(elem);
             connect(m_pserver, SIGNAL(updateValues(DataTable*)), but, SLOT(Update()));
             ui->Page1->addWidget(but);
         }
 
-        //disegno page temps
+        ui->tabWidget->setTabText(1,"temps");
         for( VarF3SP *elem : dr->temps )
         {
-            InfoTempSetpoint *ttt= new InfoTempSetpoint(elem);
-            connect(m_pserver, SIGNAL(updateValues(DataTable*)), ttt, SLOT(Update()));
-            ui->Page2->addWidget(ttt);
+            InfoTempSetpoint *t= new InfoTempSetpoint(elem);
+            connect(m_pserver, SIGNAL(updateValues(DataTable*)), t, SLOT(Update()));
+            ui->Page2->addWidget(t);
         }
 
-        //disegno page lights
+        ui->tabWidget->setTabText(2,"lights");
         for( VarB *elem : dr->lights )
         {
-            PushButtonVar *but= new PushButtonVar(elem);
+            ButtonVar *but= new ButtonVar(elem);
             connect(m_pserver, SIGNAL(updateValues(DataTable*)), but, SLOT(Update()));
             ui->Page3->addWidget(but);
         }
 
-        //disegno page ampers
+        ui->tabWidget->setTabText(3,"ampers");
         for( VarF3 *elem : dr->ampers )
         {
-            InfoBarVar *bar= new InfoBarVar(elem);
-            connect(m_pserver, SIGNAL(updateValues(DataTable*)), bar, SLOT(Update()));
-            ui->Page4->addWidget(bar);
+            InfoBarVar *t= new InfoBarVar(elem);
+            connect(m_pserver, SIGNAL(updateValues(DataTable*)), t, SLOT(Update()));
+            ui->Page4->addWidget(t);
         }
 
-        //disegno rcaldaia
+        ui->tabWidget->setTabText(4,"rcaldaia");
         for( VarB *elem : dr->rcaldaia )
         {
-            PushButtonVar *bar= new PushButtonVar(elem);
+            ButtonVar *bar= new ButtonVar(elem);
             connect(m_pserver, SIGNAL(updateValues(DataTable*)), bar, SLOT(Update()));
             ui->Page5->addWidget(bar);
         }
 
-        //disegno rcaldaia
+        ui->tabWidget->setTabText(5,"tcaldaia");
         for( VarF *elem : dr->tcaldaia )
         {
-            InfoBarVar *bar= new InfoBarVar(elem);
-            connect(m_pserver, SIGNAL(updateValues(DataTable*)), bar, SLOT(Update()));
-            ui->Page6->addWidget(bar);
+            InfoBarVar *t= new InfoBarVar(elem);
+            connect(m_pserver, SIGNAL(updateValues(DataTable*)), t, SLOT(Update()));
+            ui->Page6->addWidget(t);
         }
 
-        //disegno evStanze
+        ui->tabWidget->setTabText(6,"evStanze");
         for( VarB *elem : dr->evStanze )
         {
-            PushButtonVar *bar= new PushButtonVar(elem);
+            ButtonVar *bar= new ButtonVar(elem);
             connect(m_pserver, SIGNAL(updateValues(DataTable*)), bar, SLOT(Update()));
             ui->Page7->addWidget(bar);
         }
     }
 
-    ui->label_P->setText(QString::number(dr->wProduced,'f',1));
-    ui->label_S->setText(QString::number(dr->wSurplus,'f',1));
-    ui->label_C->setText(QString::number(dr->wConsumed,'f',1));
+    //***********************************************************
+    //aggiorno i messaggi
+    m_logw->appendMessage( dr->GetLogMessage() );
 
-    ui->label_L1->setText("L1: " + QString::number(dr->wL1,'f',1));
-    ui->label_L2->setText("L2: " + QString::number(dr->wL2,'f',1));
-    ui->label_L3->setText("L3: " + QString::number(dr->wL3,'f',1));
+    //***********************************************************
+    ui->label_P->setText( dr->wProduced.svalue());
+    ui->label_S->setText( dr->wSurplus.svalue());
+    ui->label_C->setText( dr->wConsumed.svalue());
+
+    ui->label_L1->setText("L1: " + dr->wL1.svalue());
+    ui->label_L2->setText("L2: " + dr->wL2.svalue());
+    ui->label_L3->setText("L3: " + dr->wL3.svalue());
 
     ui->progressBar_P->setValue(dr->wProduced);
     ui->progressBar_C->setValue(dr->wConsumed);
@@ -110,7 +123,7 @@ void MainWindow::updateValues(DataTable* dr)
         ui->progressBar_S->setPalette(p);
         ui->progressBar_S->setValue(-dr->wSurplus);
     }
-    qDebug("updateValues");
+    //***********************************************************
 }
 
 void MainWindow::updateListView(DataTable* dr)
@@ -126,5 +139,10 @@ void MainWindow::updateListView(DataTable* dr)
             ui->listWidget->addItem( QString(iter2.key())  + ":" +  iter2.value().toString());
         }
     }*/
+}
+
+void MainWindow::Log(QString s)
+{
+    m_logw->appendMessage(s);
 }
 

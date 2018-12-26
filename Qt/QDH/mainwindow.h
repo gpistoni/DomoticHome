@@ -4,6 +4,8 @@
 #include <QThread>
 #include "server.h"
 
+class LogMessage;
+
 namespace Ui {
 class MainWindow;
 }
@@ -16,6 +18,8 @@ public:
     explicit MainWindow(Server *pserver, QWidget *parent = nullptr);
     ~MainWindow();
 
+    void Log(QString s);
+
 public slots:
     void updateValues(DataTable* dr );
     void updateListView(DataTable* dr );
@@ -23,5 +27,8 @@ public slots:
 private:
     Ui::MainWindow *ui;
 
-    Server* m_pserver;
+    bool m_firstRun = true;
+
+    Server* m_pserver= nullptr;
+    LogMessage* m_logw = nullptr;
 };

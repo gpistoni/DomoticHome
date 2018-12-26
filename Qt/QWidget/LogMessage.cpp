@@ -1,15 +1,4 @@
-#pragma once
-#include <qplaintextedit.h>
-
-class LogW : public QPlainTextEdit
-{
-    Q_OBJECT
-public:
-    explicit LogW(QWidget *parent = nullptr) {}
-
-    /* snip */
-    void appendMessage(const QString& text);
-};
+#include "logw.h"
 
 
 void LogW::appendMessage(const QString& text)

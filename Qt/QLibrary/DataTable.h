@@ -143,6 +143,8 @@ private:
     QString m_host;
     quint16 m_port;
 
+    QString m_logMessage;
+
 public:
     DataTable( QString host, quint16 port  )
     {
@@ -190,6 +192,47 @@ public:
             {
                 UpdateVal( elem );
             }
+        }
+        catch(...)
+        {
+        }
+    }
+
+    void SendData()
+    {
+        try
+        {
+            //****************************************
+            for( VarB *elem : progs )
+            {
+                SendValue( elem );
+            }
+            /*
+            for( VarF3SP *elem : temps )
+            {
+                UpdateVal( elem );
+            }
+            for( VarB *elem : lights )
+            {
+                UpdateVal( elem );
+            }
+            for( VarB *elem : rcaldaia )
+            {
+                UpdateVal( elem );
+            }
+            for( VarF *elem : tcaldaia )
+            {
+                UpdateVal( elem );
+            }
+            for( VarB *elem : evStanze )
+            {
+                UpdateVal( elem );
+            }
+            for( VarF3 *elem : ampers )
+            {
+                UpdateVal( elem );
+            }
+            */
         }
         catch(...)
         {
@@ -289,15 +332,21 @@ public:
         }
         catch(...)
         {}
-}
-
-    /*
+    }
 
     void SendValue(VarB *var)
     {
-        var->m_value = SetValueI(var->m_t, var->m_r);
+        CQHttpClient client(m_host, m_port, 10000 );
+        try
+        {
+            QString str = var->m_t + "." + var->m_r + "=" + QString::number(var->m_value);
+            client.Request_Set(str);
+        }
+        catch(...)
+        {}
     }
 
+    /*
     void SendValue(VarF3 *var)
     {
         var->m_value = SetValueF(var->m_t, var->m_r);
@@ -312,5 +361,16 @@ public:
         var->m_value2 = SetValueF(var->m_t, var->m_v2);
     }
     */
+
+    void LogMessage(QString s)
+    {
+        m_logMessage += s;
+    }
+
+    QString GetLogMessage()
+    {
+        QString s = m_logMessage;
+        return s;
+    }
 };
 

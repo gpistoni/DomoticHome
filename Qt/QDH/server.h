@@ -19,7 +19,6 @@ public slots:
 
 signals:
     void finished();
-
     void error(QString err);
     void updateValues(DataTable *v);
 };

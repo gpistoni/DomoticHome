@@ -1,7 +1,6 @@
 #pragma once
 
 #include "qstring.h"
-#pragma pack(1)
 
 //********************************************************************************************
 class Var
@@ -200,7 +199,7 @@ public:
 
     virtual QString svalue() override
     {
-        return QString::number(static_cast<double>(m_value));
+        return QString::number(m_value,'f',1);
     }
 
     operator float()
