@@ -26,7 +26,7 @@ private:
     QString Write(const QString &str, int timeout = 3000 );
 
 private:
-    QString HTTPRequest(QString path);
+    QString HTTPRequest(QString path, bool debugLog = false);
 
 public:
     QString Request_Get(QString path );

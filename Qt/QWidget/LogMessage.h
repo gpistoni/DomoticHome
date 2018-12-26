@@ -1,11 +1,12 @@
 #pragma once
 #include <qplaintextedit.h>
 
-class LogW : public QPlainTextEdit
+class LogMessage : public QPlainTextEdit
 {
     Q_OBJECT
+
 public:
-    explicit LogW(QWidget *parent = nullptr)
+    explicit LogMessage(QWidget *parent = nullptr)
     {
         this->setMaximumBlockCount(1000);
     }

@@ -131,9 +131,11 @@ public:
 //********************************************************************************************
 class VarB: public Var
 {
-public:
+private:
     bool m_value=0;
-    bool m_forced=0;
+
+    bool m_newValue=0;
+    bool m_modified=0;
 
 public:
     VarB( QString t, QString r, QString descr):
@@ -147,15 +149,25 @@ public:
     {
         return QString::number(m_value);
     }
-
     operator bool()
     {
         return m_value;
     }
-
-    bool isForced()
+    bool IsModifiedValue(bool &newValue)
     {
-        return m_forced;
+        if (m_modified)
+            newValue = m_newValue;
+       return m_modified;
+    }
+    void Value(bool newValue)
+    {
+        m_value = newValue;
+    }
+    void ModifyValue(bool newValue)
+    {
+        m_value = newValue;
+        m_newValue = newValue;
+        m_modified = true;
     }
 };
 

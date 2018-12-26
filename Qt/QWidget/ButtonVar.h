@@ -5,23 +5,28 @@
 #include <QHBoxLayout>
 
 #include <QLabel>
-#include "DataVars.h"
+#include "../QLibrary/DataVars.h"
 
-class Q_WIDGETS_EXPORT PushButtonVar : public QWidget
+class Q_WIDGETS_EXPORT ButtonVar : public QWidget
 {
     Q_OBJECT
 
-    VarB *var;
+protected:
+    QPalette m_pON;
+    QPalette m_pOFF;
+    QPalette m_pDIS;
 
-private:
+    VarB *var;
+    QHBoxLayout m_gl;
+
     QLabel * text;
 
     QPushButton *buttonON;
     QPushButton *buttonOFF;
 
 public:
-    explicit PushButtonVar(VarB *v);
-    virtual ~PushButtonVar(){}
+    explicit ButtonVar(VarB *v);
+    virtual ~ButtonVar(){}
 
     void SetColor(  );
 

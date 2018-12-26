@@ -166,7 +166,7 @@ public:
             //****************************************
             for( VarB *elem : progs )
             {
-                UpdateVal( elem );
+                UpdateRelay( elem );
             }
             for( VarF3SP *elem : temps )
             {
@@ -174,11 +174,11 @@ public:
             }
             for( VarB *elem : lights )
             {
-                UpdateVal( elem );
+                UpdateRelay( elem );
             }
             for( VarB *elem : rcaldaia )
             {
-                UpdateVal( elem );
+                UpdateRelay( elem );
             }
             for( VarF *elem : tcaldaia )
             {
@@ -186,7 +186,7 @@ public:
             }
             for( VarB *elem : evStanze )
             {
-                UpdateVal( elem );
+                UpdateRelay( elem );
             }
             for( VarF3 *elem : ampers )
             {
@@ -211,23 +211,25 @@ public:
             for( VarF3SP *elem : temps )
             {
                 UpdateVal( elem );
-            }
+            }*/
             for( VarB *elem : lights )
             {
-                UpdateVal( elem );
+                SendValue( elem );
             }
             for( VarB *elem : rcaldaia )
             {
-                UpdateVal( elem );
+                SendValue( elem );
             }
+            /*
             for( VarF *elem : tcaldaia )
             {
                 UpdateVal( elem );
-            }
+            }*/
             for( VarB *elem : evStanze )
             {
-                UpdateVal( elem );
+                SendValue( elem );
             }
+            /*
             for( VarF3 *elem : ampers )
             {
                 UpdateVal( elem );
@@ -290,9 +292,9 @@ public:
         var->m_value = GetValueF(var->m_t, var->m_v);
     }
 
-    void UpdateVal(VarB *var)
+    void UpdateRelay(VarB *var)
     {
-        var->m_value = GetValueI(var->m_t, var->m_v);
+        var->Value( GetValueI(var->m_t, var->m_r));
     }
 
     void UpdateVal(VarF3 *var)
@@ -309,38 +311,17 @@ public:
         var->m_value2 = GetValueF(var->m_t, var->m_v2);
     }
     //******************************************************************************************
-
-    void SendValue(VarI *var)
-    {
-        CQHttpClient client(m_host, m_port, 10000 );
-        try
-        {
-            QString str = var->m_t + "." + var->m_r + "=" + QString::number(var->m_value);
-            client.Request_Set(str);
-        }
-        catch(...)
-        {}
-    }
-
-    void SendValue(VarF *var)
-    {
-        CQHttpClient client(m_host, m_port, 10000 );
-        try
-        {
-            QString str = var->m_t + "." + var->m_r + "=" + QString::number(var->m_value);
-            client.Request_Set(str);
-        }
-        catch(...)
-        {}
-    }
-
     void SendValue(VarB *var)
     {
-        CQHttpClient client(m_host, m_port, 10000 );
         try
         {
-            QString str = var->m_t + "." + var->m_r + "=" + QString::number(var->m_value);
-            client.Request_Set(str);
+            bool newval;
+            if (var->IsModifiedValue(newval))
+            {
+                CQHttpClient client(m_host, m_port, 10000 );
+                QString str = var->m_t.toLower() + "." + var->m_r.toLower() + "=" + QString::number(newval);
+                client.Request_Set(str);
+            }
         }
         catch(...)
         {}

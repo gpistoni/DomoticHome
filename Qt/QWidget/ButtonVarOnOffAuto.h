@@ -1,27 +1,22 @@
 #pragma once
-
 #include <QObject>
 #include <QPushButton>
 #include <QHBoxLayout>
-
 #include <QLabel>
-#include "DataVars.h"
 
-class Q_WIDGETS_EXPORT PushButtonVar : public QWidget
+#include "ButtonVar.h"
+#include "../QLibrary/DataVars.h"
+
+class Q_WIDGETS_EXPORT ButtonVarOnOffAuto : public ButtonVar
 {
     Q_OBJECT
 
-    VarB *var;
-
 private:
-    QLabel * text;
-
-    QPushButton *buttonON;
-    QPushButton *buttonOFF;
+    QPushButton *buttonAUTO;
 
 public:
-    explicit PushButtonVar(VarB *v);
-    virtual ~PushButtonVar(){}
+    explicit ButtonVarOnOffAuto(VarB *v);
+    virtual ~ButtonVarOnOffAuto(){}
 
     void SetColor(  );
 

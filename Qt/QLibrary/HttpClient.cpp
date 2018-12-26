@@ -17,7 +17,7 @@ CQHttpClient::CQHttpClient( QString serverName, quint16 serverPort, qint32 timeo
             QString s = errorString();
         }
        // else
-            qDebug("Connected");
+       //qDebug("Connected");
     }
     catch (...)
     {
@@ -60,14 +60,14 @@ QString CQHttpClient::Write(const QString &request, int timeout)
     return result;
 }
 
-QString CQHttpClient::HTTPRequest(QString req)
+QString CQHttpClient::HTTPRequest(QString req, bool debugLog)
 {
     try
     {
         QString sMsg = QString("GET ") + req + " HTTP/1.1\r\n" +
                 "Host: " + m_serverName + "\r\n" +
                 "Connection: keep-alive\r\n\r\n";
-        qDebug() << sMsg;
+        if (debugLog) qDebug() << sMsg;
         return  Write( sMsg.toUtf8() );
     }
     catch (...)
@@ -78,7 +78,7 @@ QString CQHttpClient::HTTPRequest(QString req)
 
 QString CQHttpClient::Request_Get(QString path)
 {
-    return HTTPRequest( QString("get?") + path );
+    return HTTPRequest( QString("/") + path, true );
 }
 
 QString CQHttpClient::Request_Json()
@@ -88,7 +88,7 @@ QString CQHttpClient::Request_Json()
 
 QString CQHttpClient::Request_Set(QString path)
 {
-    return HTTPRequest( QString("set?") + path );
+    return HTTPRequest( QString("/") + path, true );
 }
 
 

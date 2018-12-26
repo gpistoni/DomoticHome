@@ -1,61 +1,47 @@
-#include "PushButtonVar.h"
+#include "ButtonVarOnOffAuto.h"
 #include <QSpacerItem>
 
-PushButtonVar::PushButtonVar(VarB *v): QWidget()
+ButtonVarOnOffAuto::ButtonVarOnOffAuto(VarB *v): ButtonVar(v)
 {
-    var = v;
-
-    text = new QLabel();
-    buttonON = new QPushButton();
-    buttonOFF = new QPushButton();
-
-    connect(buttonON, SIGNAL(clicked()), this, SLOT(onClicked()));
-    connect(buttonOFF, SIGNAL(clicked()), this, SLOT(onClicked()));
-
-    text->setText(var->m_descr);
+    buttonAUTO = new QPushButton();
+    connect(buttonAUTO, SIGNAL(clicked()), this, SLOT(onClicked()));
 
     QHBoxLayout * hl = new QHBoxLayout();
-    buttonON->setText("ON");
-    buttonON->setLayout(hl);
+    buttonAUTO->setText("A");
+    buttonAUTO->setLayout(hl);
 
-    buttonOFF->setText("OFF");
-    buttonOFF->setLayout(hl);
+    m_gl.addWidget(buttonAUTO);
 
-    QSpacerItem *spacer = new QSpacerItem(1,1, QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-    QHBoxLayout * gl = new QHBoxLayout();
-    gl->addWidget(text);
-    gl->addSpacerItem(spacer);
-    gl->addWidget(buttonOFF);
-    gl->addWidget(buttonON);
-
-    setLayout(gl);
+    setLayout(&m_gl);
     SetColor();
 }
 
-void PushButtonVar::onClicked()
+void ButtonVarOnOffAuto::onClicked()
 {
-    //    QPushButton *button = (QPushButton *)sender();
-    if(var->m_value)
-        var->m_value = 0;
+    QPushButton *button = static_cast<QPushButton*>(sender());
+    if (button==buttonON)
+        var->ModifyValue(true);
+    if (button==buttonOFF)
+        var->ModifyValue(true);
+    if (button==buttonAUTO)
+        var->ModifyValue(true);
+    SetColor();
+}
+
+void ButtonVarOnOffAuto::SetColor( )
+{
+    ButtonVar::SetColor();
+    /*
+    if (*var )
+        buttonFORCE->setPalette(m_pON);
     else
-        var->m_value = 1;
-
-    SetColor();
-}
-
-void PushButtonVar::SetColor( )
-{
-    QPalette pal = this->palette();
-    pal.setColor(QPalette::Button, QColor(Qt::cyan));
-    if (var->m_value )
-        pal.setColor(QPalette::Button, QColor(Qt::green));
-    //setAutoFillBackground(true);
-    setPalette(pal);
+        buttonFORCE->setPalette(m_pOFF);
+*/
     update();
 }
 
-void PushButtonVar::Update()
+void ButtonVarOnOffAuto::Update()
 {
-  SetColor();
+    SetColor();
+    update();
 }

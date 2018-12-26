@@ -1,8 +1,12 @@
-#include "PushButtonVar.h"
+#include "ButtonVar.h"
 #include <QSpacerItem>
 
-PushButtonVar::PushButtonVar(VarB *v): QWidget()
+ButtonVar::ButtonVar(VarB *v): QWidget()
 {
+    m_pON.setColor(QPalette::Button, QColor(Qt::green));
+    m_pOFF.setColor(QPalette::Button, QColor(Qt::gray));
+    m_pDIS.setColor(QPalette::Button, QColor(Qt::lightGray));
+
     var = v;
 
     text = new QLabel();
@@ -23,39 +27,41 @@ PushButtonVar::PushButtonVar(VarB *v): QWidget()
 
     QSpacerItem *spacer = new QSpacerItem(1,1, QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-    QHBoxLayout * gl = new QHBoxLayout();
-    gl->addWidget(text);
-    gl->addSpacerItem(spacer);
-    gl->addWidget(buttonOFF);
-    gl->addWidget(buttonON);
+    m_gl.addWidget(text);
+    m_gl.addSpacerItem(spacer);
+    m_gl.addWidget(buttonOFF);
+    m_gl.addWidget(buttonON);
 
-    setLayout(gl);
+    setLayout(&m_gl);
     SetColor();
 }
 
-void PushButtonVar::onClicked()
+void ButtonVar::onClicked()
 {
-    //    QPushButton *button = (QPushButton *)sender();
-    if(var->m_value)
-        var->m_value = 0;
+    QPushButton *button = static_cast<QPushButton*>(sender());
+    if (button==buttonON)
+        var->ModifyValue(true);
+    if (button==buttonOFF)
+        var->ModifyValue(false);
+    SetColor();
+}
+
+void ButtonVar::SetColor( )
+{
+    if (*var)
+    {
+        buttonON->setPalette(m_pON);
+        buttonOFF->setPalette(m_pDIS);
+    }
     else
-        var->m_value = 1;
-
-    SetColor();
-}
-
-void PushButtonVar::SetColor( )
-{
-    QPalette pal = this->palette();
-    pal.setColor(QPalette::Button, QColor(Qt::cyan));
-    if (var->m_value )
-        pal.setColor(QPalette::Button, QColor(Qt::green));
-    //setAutoFillBackground(true);
-    setPalette(pal);
+    {
+        buttonON->setPalette(m_pDIS);
+        buttonOFF->setPalette(m_pOFF);
+    }
     update();
 }
 
-void PushButtonVar::Update()
+void ButtonVar::Update()
 {
-  SetColor();
+    SetColor();
 }
