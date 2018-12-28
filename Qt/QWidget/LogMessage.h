@@ -11,7 +11,6 @@ public:
         this->setMaximumBlockCount(1000);
     }
 
-    /* snip */
     void appendMessage(const QString& text);
 };
 

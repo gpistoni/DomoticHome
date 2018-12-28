@@ -10,25 +10,23 @@ class DataValues
 {
 public:
     //*****************************************************************************************
-    VarB progBoilerACS          = VarB( "T0", "r0", "progBoilerACS" );
-    VarB progSummerAC           = VarB( "T0", "r1", "progSummerAC" );
-    VarB progSummerAC_NIGHT     = VarB( "T0", "r2", "progSummerAC_NIGHT" );
-    VarB progWinterFIRE         = VarB( "T0", "r3", "progWinterFIRE" );
-    VarB progWinterPDC          = VarB( "T0", "r4", "progWinterPDC" );
-    VarB progWinterPDC_ALLROOMS = VarB( "T0", "r5", "progWinterPDC_ALLROOMS" );
-    VarB progWinterPDC_FOTOV    = VarB( "T0", "r6", "progWinterPDC_FOTOV" );
-    VarB progAllRooms           = VarB( "T0", "r7", "progAllRooms" );
-    VarB progExternalLight      = VarB( "T0", "r8", "progExternalLight" );
+    VarB progBoilerACS          = VarB( "T0", "r0", "pBoilerACS" );
+    VarB progSummerAC           = VarB( "T0", "r1", "EstateAC" );
+    VarB progWinterFIRE         = VarB( "T0", "r2", "InverinoCAMINO" );
+    VarB progWinterPDC          = VarB( "T0", "r3", "InvernoPDC" );
+    VarB progExternalLight      = VarB( "T0", "r4", "LuciEsterno" );
+
+    VarB progAllRooms           = VarB( "T0", "r7", "TutteLeStanze" );
+    VarB progFotoV            = VarB( "T0", "r8", "SurplusFotoV" );
 
     std::vector<VarB*>    progs = {&progBoilerACS,
                                    &progSummerAC,
-                                   &progSummerAC_NIGHT,
                                    &progWinterFIRE,
                                    &progWinterPDC,
-                                   &progWinterPDC_ALLROOMS,
-                                   &progWinterPDC_FOTOV,
+                                   &progExternalLight,
                                    &progAllRooms,
-                                   &progExternalLight };
+                                   &progFotoV
+                                  };
     //*****************************************************************************************
     VarF3SP tCucina                   = { "T1", "v0", "v8", "v16", -0.5, 21, "tCucina" };
     VarF3SP tSala                     = { "T1", "v1", "v9", "v17",  1.5, 23, "tSala" };

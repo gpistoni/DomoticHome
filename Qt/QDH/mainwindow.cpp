@@ -15,7 +15,6 @@ MainWindow::MainWindow(Server *pserver, QWidget *parent) :
     //connect server signals
     {
         connect(m_pserver, SIGNAL(updateValues(DataTable*)), SLOT(updateValues(DataTable*)));
-        connect(m_pserver, SIGNAL(updateValues(DataTable*)), SLOT(updateListView(DataTable*)));
     };
 }
 
@@ -124,21 +123,6 @@ void MainWindow::updateValues(DataTable* dr)
         ui->progressBar_S->setValue(-dr->wSurplus);
     }
     //***********************************************************
-}
-
-void MainWindow::updateListView(DataTable* dr)
-{
-    /*ui->listWidget->clear();
-    for(QVariantMap::const_iterator iter = dr->m_map.begin(); iter != dr->m_map.end(); ++iter)
-    {
-        ui->listWidget->addItem( QString(iter.key()) + " -----------------" );
-
-        QVariantMap mp = iter.value().toMap();
-        for(QVariantMap::const_iterator iter2 = mp.begin(); iter2 != mp.end(); ++iter2)
-        {
-            ui->listWidget->addItem( QString(iter2.key())  + ":" +  iter2.value().toString());
-        }
-    }*/
 }
 
 void MainWindow::Log(QString s)

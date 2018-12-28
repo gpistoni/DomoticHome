@@ -19,113 +19,12 @@ public:
         m_descr = descr;
     }
 
-    virtual ~Var()
-    {}
+    virtual ~Var() {}
 
     virtual QString svalue()=0;
-};
 
-//********************************************************************************************
-class VarF3SP : public Var
-{
-public:
-    QString m_v1;
-    QString m_v2;
-public:
-    float m_value=0;
-    float m_value1=0;
-    float m_value2=0;
-    float m_adjust=0;
-    float m_setpoint=0;
-
-public:
-    VarF3SP(QString t,
-            QString v0, QString v1, QString v2,
-            float adj, float setpoint, QString descr) :
-        Var( t, v0, "", descr ),
-        m_v1(v1),
-        m_v2(v2),
-        m_adjust(adj),
-        m_setpoint(setpoint)
-    {
-    }
-
-    virtual ~VarF3SP() override
-    {}
-
-    virtual QString svalue() override
-    {
-        return QString::number(static_cast<double>(m_value));
-    }
-
-    //set
-    void set( float value )
-    {
-        m_value = value + m_adjust;
-    }
-
-    void setNz( float value )
-    {
-        if (value > 0)
-        {
-            m_value = value + m_adjust;
-            //  Serial.println(m_descr + ": " + sval() );
-        }
-    }
-
-    void setSetPoint( float value )
-    {
-        m_setpoint = value;
-        //    Serial.print(m_descr);
-        //    Serial.print("=");
-        //    Serial.println(m_setpoint);
-    }
-
-    void setAdjust( float adj)
-    {
-        m_adjust = adj;
-    }
-
-    /*   void sendRequest( DHwifi *wifi, BufferString &log)
-   {
-      // Sent set?T5-r4=0.00
-      String s =  String("set?" ) + m_t + "-" + m_r + "=" + String(m_value);
-      wifi->HttpRequest( s );
-      log.add( String("Send Value ") + m_descr + " " + s );
-    }
-*/
-
-    operator float()
-    {
-        return m_value;
-    }
-
-    /* QString sval()
-    {
-      return QString::to\(m_value,) ;
-    }*/
-
-    //***************************************************************************************
-    //get
-    float setPoint()
-    {
-        return m_setpoint;
-    }
-
-    QString terminal()
-    {
-        return m_t;
-    }
-
-    QString descr()
-    {
-        return m_descr ;
-    }
-
-    QString descrSetPoint()
-    {
-        return "p" + m_descr ;
-    }
+    QString terminal()  {   return m_t;    }
+    QString descr()     {   return m_descr ;   }
 };
 
 //********************************************************************************************
@@ -215,7 +114,7 @@ public:
 
     virtual QString svalue() override
     {
-        return QString::number(m_value,'f',1);
+        return QString::number(static_cast<double>(m_value));
     }
 
     operator float()
@@ -265,5 +164,56 @@ public:
         m_value -= sub.m_value;
         m_value1 -= sub.m_value1;
         m_value2 -= sub.m_value2;
+    }
+};
+
+//********************************************************************************************
+class VarF3SP : public VarF3
+{
+public:
+    float m_adjust=0;
+    float m_setpoint=0;
+
+public:
+    VarF3SP(QString t,
+            QString v0, QString v1, QString v2,
+            float adj, float setpoint, QString descr) :
+        VarF3( t, v0,v1,v2, descr ),
+        m_adjust(adj),
+        m_setpoint(setpoint)
+    {}
+
+    virtual ~VarF3SP() override
+    {}
+
+    //set
+    void set( float value )
+    {
+        m_value = value + m_adjust;
+    }
+
+    void setSetPoint( float value )
+    {
+        m_setpoint = value;
+    }
+
+    void setAdjust( float adj)
+    {
+        m_adjust = adj;
+    }
+
+    //***************************************************************************************
+    float setPoint()
+    {
+        return m_setpoint;
+    }
+    QString ssetPoint()
+    {
+        return QString::number(static_cast<double>(m_setpoint));
+    }
+
+    QString descrSetPoint()
+    {
+        return "p" + m_descr ;
     }
 };

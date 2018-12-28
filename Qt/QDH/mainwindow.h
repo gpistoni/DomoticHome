@@ -22,7 +22,6 @@ public:
 
 public slots:
     void updateValues(DataTable* dr );
-    void updateListView(DataTable* dr );
 
 private:
     Ui::MainWindow *ui;
