@@ -156,17 +156,21 @@ public:
     bool IsModifiedValue(bool &newValue)
     {
         if (m_modified)
+        {
             newValue = m_newValue;
-       return m_modified;
+            m_modified = false;
+            return true;
+        }
+else
+            return false;
     }
-    void Value(bool newValue)
+    void Value(bool v)
     {
-        m_value = newValue;
+        m_value = v;
     }
-    void ModifyValue(bool newValue)
+    void ModifyValue(bool v)
     {
-        m_value = newValue;
-        m_newValue = newValue;
+        m_newValue = v;
         m_modified = true;
     }
 };

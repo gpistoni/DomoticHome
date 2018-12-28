@@ -198,14 +198,15 @@ public:
         }
     }
 
-    void SendData()
+    bool SendModifiedData()
     {
+        bool modifiedProg = false;
         try
         {
             //****************************************
             for( VarB *elem : progs )
             {
-                SendValue( elem );
+               modifiedProg |= SendModifiedValue( elem );
             }
             /*
             for( VarF3SP *elem : temps )
@@ -214,11 +215,11 @@ public:
             }*/
             for( VarB *elem : lights )
             {
-                SendValue( elem );
+                SendModifiedValue( elem );
             }
             for( VarB *elem : rcaldaia )
             {
-                SendValue( elem );
+                SendModifiedValue( elem );
             }
             /*
             for( VarF *elem : tcaldaia )
@@ -227,7 +228,7 @@ public:
             }*/
             for( VarB *elem : evStanze )
             {
-                SendValue( elem );
+                SendModifiedValue( elem );
             }
             /*
             for( VarF3 *elem : ampers )
@@ -239,6 +240,7 @@ public:
         catch(...)
         {
         }
+        return  modifiedProg;
     }
 
     QString PrintTree()
@@ -311,7 +313,8 @@ public:
         var->m_value2 = GetValueF(var->m_t, var->m_v2);
     }
     //******************************************************************************************
-    void SendValue(VarB *var)
+
+    bool SendModifiedValue(VarB *var)
     {
         try
         {
@@ -321,10 +324,12 @@ public:
                 CQHttpClient client(m_host, m_port, 10000 );
                 QString str = var->m_t.toLower() + "." + var->m_r.toLower() + "=" + QString::number(newval);
                 client.Request_Set(str);
+                return true;
             }
         }
         catch(...)
         {}
+         return false;
     }
 
     /*
@@ -345,6 +350,7 @@ public:
 
     void LogMessage(QString s)
     {
+        m_logMessage += "\n";
         m_logMessage += s;
     }
 

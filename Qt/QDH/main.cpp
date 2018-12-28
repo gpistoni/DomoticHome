@@ -23,8 +23,6 @@ int main(int argc, char *argv[])
     server.moveToThread(&serverthread);
     server.connect(&serverthread, SIGNAL(started()), &server, SLOT(run()));
     server.connect(&server, SIGNAL(finished()), &serverthread, SLOT(quit()));
-    server.connect(&server, SIGNAL(finished()), &server, SLOT(deleteLater()));
-    server.connect(&serverthread, SIGNAL(finished()), &serverthread, SLOT(deleteLater()));
     serverthread.start();
 
     MainWindow *main = nullptr;
@@ -43,6 +41,6 @@ int main(int argc, char *argv[])
     }
     a.exec();
 
-    server.m_running = 0;
+    server.Stop();
     return 0;
 }
