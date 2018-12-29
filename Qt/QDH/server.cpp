@@ -46,7 +46,7 @@ void Server::run()
                 dr.wSurplus += dr.wProduced;
                 dr.wSurplus -= dr.wConsumed;
 
-                dr.LogMessage(" UpdatedValues");
+                //dr.LogMessage(" UpdatedValues");
                 emit updateValues( &dr );
 
                 ////////////////////////////////////////////////////////////////////////////////////////
@@ -56,10 +56,10 @@ void Server::run()
 
                 if (m_runPrograms)
                 {
-                    manage_BoilerACS();
-                    manage_ExternalLight(300);
+                    manage_ExternalLight(280);
+                    manage_BoilerACS(290);
                     manage_Summer(300);
-                    manage_Winter(300);
+                    manage_Winter(310);
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////
                 //Send Changed
@@ -67,7 +67,7 @@ void Server::run()
 
                 if (modifiedProg)
                 {
-                    manage_BoilerACS();
+                    manage_BoilerACS(1);
                     manage_ExternalLight(1);
                     manage_Winter(1);
                     manage_Summer(1);
@@ -84,20 +84,20 @@ void Server::run()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void Server::manage_BoilerACS()
+void Server::manage_BoilerACS(int sec)
 {
-    if ( t_BoilerACS.elapsed() < 10000 )
+    if ( t_BoilerACS.elapsed() < sec * 1000 )
         return;
     t_BoilerACS.restart();
 
-    dr.LogMessage("--- BoilerACS_Manager ---");
+    dr.LogMessage("--- BoilerACS ---"  + QDateTime::currentDateTime().toString() );
 
     bool boilerACS = false;
     /**************************************************************************************************/
     if ( dr.progBoilerACS )
     {
         //decido se accendere il boiler sempre se ho un surplus di energia
-        if ( dr.rBoilerACS && dr.wSurplus < ( 600 -  dr.rBoilerACS * 500)  ) // consumo stimato
+        if ( dr.wSurplus > ( 500 -  dr.rBoilerACS * 400)  ) // consumo stimato
         {
             boilerACS = true;
             dr.LogMessage("Condizione ON surplusW:" + dr.wSurplus.svalue() );
@@ -127,7 +127,7 @@ void Server::manage_ExternalLight(int sec)
         return;
     t_ExternalLight.restart();
 
-    dr.LogMessage("--- ExternalLight_Manager ---");
+    dr.LogMessage("--- ExternalLight ---" + QDateTime::currentDateTime().toString() );
 
     bool lightSide = false;
     bool lightLamp = false;
@@ -135,7 +135,7 @@ void Server::manage_ExternalLight(int sec)
     if (dr.progExternalLight)
     {
         /**************************************************************************************************/
-        dr.LogMessage("-- darkExternal: " + dr.darkExternal.svalue() + " Request >" + QString::number( 32 - 1 * dr.lampLati )  );
+        dr.LogMessage("darkExternal: " + dr.darkExternal.svalue() + " Request >" + QString::number( 32 - 1 * dr.lampLati )  );
         if ( dr.darkExternal > 32 - 1 * dr.lampLati ) // isteresi
         {
             lightSide = true;
@@ -143,7 +143,7 @@ void Server::manage_ExternalLight(int sec)
         }
 
         /**************************************************************************************************/
-        dr.LogMessage("-- LightLamp [" +  QString::number(lightLamp) + "]  LightSide [" +  QString::number(lightSide) + "]" );
+        dr.LogMessage("LightLamp [" +  QString::number(lightLamp) + "]  LightSide [" +  QString::number(lightSide) + "]" );
     }
 
     // attuatori
@@ -159,7 +159,7 @@ void Server::manage_Summer(int sec)
     if ( t_Summer.elapsed() < sec * 1000 ) return;
     t_Summer.restart();
 
-    dr.LogMessage("--- Summer_Manager ---");
+    dr.LogMessage("--- Summer ---" + QDateTime::currentDateTime().toString() );
 
     bool summerAC_pdc  = false;
     bool summerAC_pump = false;
@@ -181,11 +181,20 @@ void Server::manage_Summer(int sec)
             summerAC_pump = true;
             allRoom = dr.progAllRooms;
         }
+
+        // spengo pdc se non ho surplus
+        if ( dr.progFotoV && ( dr.wSurplus < ( 800 -  dr.rPdc * 700)) ) // surplus < consumostimato
+        {
+            dr.LogMessage("PDC suspended surplusW:" + dr.wSurplus.svalue() );
+            summerAC_pdc = false;
+        }
+
         /**************************************************************************************************/
         dr.LogMessage("summerAC_pdc [" +  QString::number(summerAC_pdc) + "] summerAC_pump [" +   QString::number(summerAC_pump) + "]");
         dr.LogMessage("tInletFloor: " + dr.tInletFloor.svalue() + " tSala: " + dr.tSala.svalue() + " tReturnFloor: " +  dr.tReturnFloor.svalue() );
         dr.LogMessage("tPufferHi: " + dr.tPufferHi.svalue() );
     }
+
     /**************************************************************************************************/
     // attuatori
     dr.evSala1.ModifyValue(allRoom);
@@ -197,7 +206,6 @@ void Server::manage_Summer(int sec)
     dr.evCameraS.ModifyValue (summerAC_pump || allRoom);
     dr.evCameraD1.ModifyValue(summerAC_pump || allRoom);
     dr.evCameraD2.ModifyValue(summerAC_pump || allRoom);
-
 
     /**************************************************************************************************/
     // accendo PDC
@@ -213,7 +221,7 @@ void  Server::manage_Winter( int sec )
     if ( t_Winter.elapsed() < sec * 1000 ) return;
     t_Winter.restart();
 
-    dr.LogMessage("--- Winter_Manager ---");
+    dr.LogMessage("--- Winter ---" + QDateTime::currentDateTime().toString() );
 
     bool sala = false;
     bool cucina = false;
@@ -312,26 +320,13 @@ void  Server::manage_Winter( int sec )
         //decido se accendere PDC
         needPdc = dr.progWinterPDC && ( sala || cucina || bagno );
 
-        if ( needPompa_pp )
+        // spengo pdc se non ho surplus
+        if ( dr.progFotoV && ( dr.wSurplus < ( 800 -  dr.rPdc * 700)) ) // surplus < consumostimato
         {
-            dr.LogMessage("PDC suspended - Fire enought ");
-            needPdc = false;
-        }
-        if ( dr.progFotoV && ( dr.wSurplus < ( 1000 -  dr.rPdc * 800)) ) // surplus < consumostimato
-        {
-            dr.LogMessage("PDC suspended - No Surplus FotoV ");
+            dr.LogMessage("PDC suspended surplusW:" + dr.wSurplus.svalue() );
             needPdc = false;
         }
         dr.LogMessage("NeedPdc: [" + QString::number(needPdc) + "]" );
-
-        //////////////////////////////////////////////////////////////////////////////////
-        // decido se accendere pompa camino
-        dr.LogMessage("Condizione Pompa Camino: tReturnFireplace " + dr.tReturnFireplace.svalue() + " - " + "tPufferLow " + dr.tPufferLow.svalue() );
-        if ( dr.tPufferLow < 45 && dr.tReturnFireplace > 34 && dr.tReturnFireplace > dr.tPufferLow + 5 )
-        {
-            needPCamino = true;
-        }
-        dr.LogMessage("NeedPCamino: [" + QString::number(needPCamino) + "]" );
 
         //////////////////////////////////////////////////////////////////////////////////
         // decido se accendere piano terra
@@ -351,7 +346,7 @@ void  Server::manage_Winter( int sec )
         }
         dr.LogMessage("NeedEv: [" + QString::number(NeedEv) + "]" );
 
-        cameraM   = (cameraM &&  NeedEv) || allRoom;
+        cameraM   = (cameraM && NeedEv) || allRoom;
         cameraM2  = (cameraM2 && NeedEv);
         sala      = (sala && NeedEv) || allRoom;
         cucina    = (cucina && NeedEv) || allRoom;

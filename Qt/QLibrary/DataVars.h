@@ -54,14 +54,14 @@ public:
     }
     bool IsModifiedValue(bool &newValue)
     {
-        if (m_modified)
+        newValue = m_newValue;
+
+        if (m_modified && m_newValue!=m_value )
         {
-            newValue = m_newValue;
-            m_modified = false;
             return true;
         }
-else
-            return false;
+        m_modified = false;
+        return false;
     }
     void Value(bool v)
     {
