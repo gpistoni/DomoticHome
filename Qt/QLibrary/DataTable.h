@@ -1,6 +1,7 @@
 #pragma once
 #include "../QLibrary/HttpClient.h"
 
+#include <iostream>
 #include "qdebug.h"
 #include "QJsonDocument"
 #include "QJsonObject"
@@ -346,15 +347,23 @@ public:
     }
     */
 
+    void LogPoint()
+    {
+        m_logMessage += ".";
+        std::cout << ".";
+    }
+
     void LogMessage(QString s)
     {
         m_logMessage += "\n";
         m_logMessage += s;
+        std::cout << s.toStdString();
     }
 
     QString GetLogMessage()
     {
         QString s = m_logMessage;
+        m_logMessage.clear();
         return s;
     }
 };

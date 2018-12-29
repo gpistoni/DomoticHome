@@ -9,7 +9,16 @@ QT += websockets network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+CONFIG(release, debug|release)
+{
 TARGET = QDH
+}
+
+CONFIG(debug, debug|release)
+{
+TARGET = QDHd
+}
+
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use

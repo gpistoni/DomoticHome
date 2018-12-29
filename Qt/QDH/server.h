@@ -31,6 +31,7 @@ private:
     QElapsedTimer t_UpdateValues;
     QElapsedTimer t_BoilerACS;
     QElapsedTimer t_ExternalLight;
+    QElapsedTimer t_evRooms;
     QElapsedTimer t_Winter;
     QElapsedTimer t_Summer;
 
@@ -40,6 +41,7 @@ public:
 public slots:
     void manage_BoilerACS(int sec);
     void manage_ExternalLight(int sec);
+    void manage_evRooms( int sec );
     void manage_Winter(int sec);
     void manage_Summer(int sec);
 

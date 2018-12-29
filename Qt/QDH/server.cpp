@@ -11,6 +11,7 @@ Server::Server(bool runPrograms) :
     t_UpdateValues.start();
     t_BoilerACS.start();
     t_ExternalLight.start();
+    t_evRooms.start();
     t_Winter.start();
     t_Summer.start();
 }
@@ -26,7 +27,10 @@ void Server::run()
 {
     while (m_running)
     {
+        dr.LogMessage("VER 2019.02");
+
         try {
+
             while (m_running)
             {
                 QThread::msleep(100);  //milliseconds
@@ -47,6 +51,7 @@ void Server::run()
                 dr.wSurplus -= dr.wConsumed;
 
                 //dr.LogMessage(" UpdatedValues");
+                dr.LogPoint();
                 emit updateValues( &dr );
 
                 ////////////////////////////////////////////////////////////////////////////////////////
@@ -56,10 +61,11 @@ void Server::run()
 
                 if (m_runPrograms)
                 {
-                    manage_ExternalLight(280);
+                    manage_ExternalLight(30);
                     manage_BoilerACS(290);
-                    manage_Summer(300);
-                    manage_Winter(310);
+                    manage_Summer(500);
+                    manage_Winter(510);
+                    manage_evRooms(520);
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////
                 //Send Changed
@@ -77,8 +83,10 @@ void Server::run()
             /////////////////////////////////////////////////////////////////////////////////////////
             // allocate resources using new here
             emit finished();
-        } catch (...)
+        }
+        catch (...)
         {
+            dr.LogMessage("catch");
         }
     }
 }
@@ -90,6 +98,7 @@ void Server::manage_BoilerACS(int sec)
         return;
     t_BoilerACS.restart();
 
+    dr.LogMessage("-------------------------------");
     dr.LogMessage("--- BoilerACS ---"  + QDateTime::currentDateTime().toString() );
 
     bool boilerACS = false;
@@ -127,6 +136,7 @@ void Server::manage_ExternalLight(int sec)
         return;
     t_ExternalLight.restart();
 
+    dr.LogMessage("-------------------------------");
     dr.LogMessage("--- ExternalLight ---" + QDateTime::currentDateTime().toString() );
 
     bool lightSide = false;
@@ -159,6 +169,7 @@ void Server::manage_Summer(int sec)
     if ( t_Summer.elapsed() < sec * 1000 ) return;
     t_Summer.restart();
 
+    dr.LogMessage("-------------------------------");
     dr.LogMessage("--- Summer ---" + QDateTime::currentDateTime().toString() );
 
     bool summerAC_pdc  = false;
@@ -215,13 +226,13 @@ void Server::manage_Summer(int sec)
     dr.rPdcPompa.ModifyValue( summerAC_pump );
 }
 
-/******************************************************************************************************************************************************************/
-void  Server::manage_Winter( int sec )
+void  Server::manage_evRooms( int sec )
 {
-    if ( t_Winter.elapsed() < sec * 1000 ) return;
-    t_Winter.restart();
+    if ( t_evRooms.elapsed() < sec * 1000 ) return;
+    t_evRooms.restart();
 
-    dr.LogMessage("--- Winter ---" + QDateTime::currentDateTime().toString() );
+    dr.LogMessage("-------------------------------");
+    dr.LogMessage("--- EvRooms ---" + QDateTime::currentDateTime().toString() );
 
     bool sala = false;
     bool cucina = false;
@@ -230,38 +241,32 @@ void  Server::manage_Winter( int sec )
     bool cameraD2 = false;
     bool cameraM = false;
     bool cameraM2 = false;
-    bool bagno = false;
-
-    bool needPompa_pt = false;
-    bool needPompa_pp = false;
-    bool needPdc = false;
-    bool needPCamino = false;
 
     bool allRoom = dr.progAllRooms;
 
-    if (dr.progWinterFIRE || dr.progWinterPDC)
+    if (dr.rPompaPianoPrimo || dr.rPompaPianoTerra || dr.rPdcPompa)
     {
         //////////////////////////////////////////////////////////////////////////////////
         //decido se accendere le stanze
-        QString str = "Condizione";
+        QString str = "Stanze";
         if ( dr.tSala < dr.tSala.setPoint() )
         {
-            str += " tSala " + dr.tSala.svalue()  + " < " + dr.tSala.ssetPoint();
+            str += "\ntSala " + dr.tSala.svalue()  + " < " + dr.tSala.ssetPoint();
             sala = true;
         }
         if ( dr.tCucina < dr.tCucina.setPoint() )
         {
-            str += " tCucina " + dr.tCucina.svalue()  + " < " + dr.tCucina.ssetPoint();
+            str += "\ntCucina " + dr.tCucina.svalue()  + " < " + dr.tCucina.ssetPoint();
             cucina = true;
         }
         if ( dr.tCameraS < dr.tCameraS.setPoint() )
         {
-            str += " tCameraS " + dr.tCameraS.svalue()  + " < " + dr.tCameraS.ssetPoint();
+            str += "\ntCameraS " + dr.tCameraS.svalue()  + " < " + dr.tCameraS.ssetPoint();
             cameraS = true;
         }
         if ( dr.tCameraD < dr.tCameraD.setPoint() )
         {
-            str += " tCameraD " + dr.tCameraD.svalue()  + " < " + dr.tCameraD.ssetPoint();
+            str += "\ntCameraD " + dr.tCameraD.svalue()  + " < " + dr.tCameraD.ssetPoint();
             cameraD = true;
         }
         if ( dr.tCameraD < dr.tCameraD.setPoint() - 2 )
@@ -270,23 +275,49 @@ void  Server::manage_Winter( int sec )
         }
         if ( dr.tCameraM < dr.tCameraM.setPoint() )
         {
-            str += " tCameraM " + dr.tCameraM.svalue()  + " < " + dr.tCameraM.ssetPoint();
+            str += "\ntCameraM " + dr.tCameraM.svalue()  + " < " + dr.tCameraM.ssetPoint();
             cameraM = true;
         }
         if ( dr.tCameraM < dr.tCameraM.setPoint() - 2 )
         {
             cameraM2 = true;
         }
-        if ( dr.tBagno < dr.tBagno.setPoint() )
-        {
-            str += " tBagno " + dr.tBagno.svalue() + " < " + dr.tBagno.ssetPoint();
-            bagno = true;
-        }
         dr.LogMessage(str);
+    }
 
+    //**********************************************************************
+    // elettrovalvole stanze -----------------------------------------------------------------------
+    dr.evCameraM1.ModifyValue(cameraM || allRoom);
+    dr.evCameraM2.ModifyValue(cameraM2 || allRoom);
+    dr.evSala1.ModifyValue(sala || allRoom);
+    dr.evSala2.ModifyValue(sala || allRoom );
+    dr.evCucina.ModifyValue(cucina || allRoom );
+    dr.evCameraS.ModifyValue(cameraS || allRoom );
+    dr.evCameraD1.ModifyValue(cameraD || allRoom );
+    dr.evCameraD2.ModifyValue(cameraD2 || allRoom);
+}
+
+
+
+/******************************************************************************************************************************************************************/
+void  Server::manage_Winter( int sec )
+{
+    if ( t_Winter.elapsed() < sec * 1000 ) return;
+    t_Winter.restart();
+
+    dr.LogMessage("-------------------------------");
+    dr.LogMessage("--- Winter ---" + QDateTime::currentDateTime().toString() );
+
+    bool needPompa_pt = false;
+    bool needPompa_pp = false;
+    bool needPdc = false;
+    bool needPCamino = false;
+
+    if (dr.progWinterFIRE || dr.progWinterPDC)
+    {
         //////////////////////////////////////////////////////////////////////////////////
         // decido se accendere/spegnere pompa piano primo
-        needPompa_pp = ( sala || cucina || bagno || cameraS || cameraD || cameraM );
+        needPompa_pp = true;
         if ( dr.tInputMixer < 28 && dr.tPufferHi < 28 && dr.tReturnFireplace < 28 )   // non ho temperatura
         {
             dr.LogMessage("Condizione Pompa PP insufficiente: tInletFloor: " + dr.tInletFloor.svalue() + " tReturnFloor: " + dr.tReturnFloor.svalue() );
@@ -312,19 +343,22 @@ void  Server::manage_Winter( int sec )
             dr.LogMessage("Emergenza tPufferLow > 55 ");
             needPompa_pp = true;
             needPompa_pt = true;
-            allRoom = true;
         }
         dr.LogMessage("NeedPompa_pp: [" + QString::number(needPompa_pp) + "]" );
 
         //////////////////////////////////////////////////////////////////////////////////
         //decido se accendere PDC
-        needPdc = dr.progWinterPDC && ( sala || cucina || bagno );
+        needPdc = dr.progWinterPDC && !needPompa_pp;
 
-        // spengo pdc se non ho surplus
-        if ( dr.progFotoV && ( dr.wSurplus < ( 800 -  dr.rPdc * 700)) ) // surplus < consumostimato
+        if ( dr.progFotoV  )
         {
-            dr.LogMessage("PDC suspended surplusW:" + dr.wSurplus.svalue() );
-            needPdc = false;
+            // spengo pdc se non ho surplus
+            dr.LogMessage("PDC surplus richiesto:" + QString::number(800 -  dr.rPdc * 700) );
+            if ( dr.wSurplus < ( 800 -  dr.rPdc * 700) ) // surplus < consumostimato
+            {
+                dr.LogMessage("PDC suspended surplusW:" + dr.wSurplus.svalue() );
+                needPdc = false;
+            }
         }
         dr.LogMessage("NeedPdc: [" + QString::number(needPdc) + "]" );
 
@@ -337,36 +371,9 @@ void  Server::manage_Winter( int sec )
         }
         dr.LogMessage("NeedPompa_pt: [" + QString::number(needPompa_pt) + "]" );
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // decido se attivare le elettrovalbole primo piano
-        bool NeedEv = false;
-        if ( dr.tInletFloor > 25 || needPdc )
-        {
-            NeedEv = true;
-        }
-        dr.LogMessage("NeedEv: [" + QString::number(NeedEv) + "]" );
-
-        cameraM   = (cameraM && NeedEv) || allRoom;
-        cameraM2  = (cameraM2 && NeedEv);
-        sala      = (sala && NeedEv) || allRoom;
-        cucina    = (cucina && NeedEv) || allRoom;
-        cameraS   = (cameraS && NeedEv) || allRoom;
-        cameraD   = (cameraD && NeedEv) || allRoom;
-        cameraD2  = (cameraD2 && NeedEv);
     }
 
-    //**********************************************************************
-    // elettrovalvole stanze -----------------------------------------------------------------------
-    dr.evCameraM1.ModifyValue(cameraM);
-    dr.evCameraM2.ModifyValue(cameraM2);
-    dr.evSala1.ModifyValue(sala);
-    dr.evSala2.ModifyValue(sala);
-    dr.evCucina.ModifyValue(cucina);
-    dr.evCameraS.ModifyValue(cameraS);
-    dr.evCameraD1.ModifyValue(cameraD);
-    dr.evCameraD2.ModifyValue(cameraD2);
-
-    // comandi semimanuali centrale -----------------------------------------------------
+    // comandi sulla centrale -----------------------------------------------------
     // accendo pompa pp
     dr.rPompaPianoPrimo.ModifyValue( needPompa_pp );
     //piano terra
