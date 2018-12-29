@@ -27,8 +27,7 @@ void Server::run()
 {
     while (m_running)
     {
-        dr.LogMessage("VER 2019.02");
-
+        dr.LogMessage("VER 2019.01.03");
         try {
 
             while (m_running)
@@ -61,7 +60,7 @@ void Server::run()
 
                 if (m_runPrograms)
                 {
-                    manage_ExternalLight(30);
+                    manage_ExternalLight(120);
                     manage_BoilerACS(290);
                     manage_Summer(500);
                     manage_Winter(510);
@@ -98,7 +97,6 @@ void Server::manage_BoilerACS(int sec)
         return;
     t_BoilerACS.restart();
 
-    dr.LogMessage("-------------------------------");
     dr.LogMessage("--- BoilerACS ---"  + QDateTime::currentDateTime().toString() );
 
     bool boilerACS = false;
@@ -136,7 +134,6 @@ void Server::manage_ExternalLight(int sec)
         return;
     t_ExternalLight.restart();
 
-    dr.LogMessage("-------------------------------");
     dr.LogMessage("--- ExternalLight ---" + QDateTime::currentDateTime().toString() );
 
     bool lightSide = false;
@@ -145,8 +142,8 @@ void Server::manage_ExternalLight(int sec)
     if (dr.progExternalLight)
     {
         /**************************************************************************************************/
-        dr.LogMessage("darkExternal: " + dr.darkExternal.svalue() + " Request >" + QString::number( 32 - 1 * dr.lampLati )  );
-        if ( dr.darkExternal > 32 - 1 * dr.lampLati ) // isteresi
+        dr.LogMessage("darkExternal: " + dr.darkExternal.svalue() + " Request >" + QString::number( 32 - 2 * dr.lampLati )  );
+        if ( dr.darkExternal > (32 - 2 * dr.lampLati) ) // isteresi
         {
             lightSide = true;
             lightLamp = true;
@@ -169,7 +166,6 @@ void Server::manage_Summer(int sec)
     if ( t_Summer.elapsed() < sec * 1000 ) return;
     t_Summer.restart();
 
-    dr.LogMessage("-------------------------------");
     dr.LogMessage("--- Summer ---" + QDateTime::currentDateTime().toString() );
 
     bool summerAC_pdc  = false;
@@ -231,7 +227,6 @@ void  Server::manage_evRooms( int sec )
     if ( t_evRooms.elapsed() < sec * 1000 ) return;
     t_evRooms.restart();
 
-    dr.LogMessage("-------------------------------");
     dr.LogMessage("--- EvRooms ---" + QDateTime::currentDateTime().toString() );
 
     bool sala = false;
@@ -305,7 +300,6 @@ void  Server::manage_Winter( int sec )
     if ( t_Winter.elapsed() < sec * 1000 ) return;
     t_Winter.restart();
 
-    dr.LogMessage("-------------------------------");
     dr.LogMessage("--- Winter ---" + QDateTime::currentDateTime().toString() );
 
     bool needPompa_pt = false;
