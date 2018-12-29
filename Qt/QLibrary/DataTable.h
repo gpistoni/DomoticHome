@@ -350,14 +350,14 @@ public:
     void LogPoint()
     {
         m_logMessage += ".";
-        std::cout << ".";
+           std::cerr  << ".";
     }
 
     void LogMessage(QString s)
     {
         m_logMessage += "\n";
         m_logMessage += s;
-        std::cout << s.toStdString();
+        std::cerr <<  "\n" << s.toStdString();
     }
 
     QString GetLogMessage()

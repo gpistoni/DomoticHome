@@ -67,7 +67,8 @@ QString CQHttpClient::HTTPRequest(QString req, bool debugLog)
         QString sMsg = QString("GET ") + req + " HTTP/1.1\r\n" +
                 "Host: " + m_serverName + "\r\n" +
                 "Connection: keep-alive\r\n\r\n";
-        if (debugLog) qDebug() << sMsg;
+        if (debugLog)
+            qDebug() << QString("GET ") + req;
         return  Write( sMsg.toUtf8() );
     }
     catch (...)
