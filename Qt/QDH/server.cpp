@@ -29,10 +29,9 @@ void Server::run()
     {
         dr.LogMessage("VER 2019.01.04");
         try {
-
             while (m_running)
             {
-                QThread::msleep(100);  //milliseconds
+                QThread::msleep(1);  //milliseconds
 
                 if ( t_UpdateValues.elapsed() < 1000 )
                     continue;
