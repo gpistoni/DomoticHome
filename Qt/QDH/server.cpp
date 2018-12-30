@@ -27,7 +27,7 @@ void Server::run()
 {
     while (m_running)
     {
-        dr.LogMessage("VER 2019.01.03");
+        dr.LogMessage("VER 2019.01.04");
         try {
 
             while (m_running)

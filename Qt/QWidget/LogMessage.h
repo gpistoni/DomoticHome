@@ -8,6 +8,7 @@ class LogMessage : public QPlainTextEdit
 public:
     explicit LogMessage(QWidget *parent = nullptr)
     {
+        if(parent){};
         this->setMaximumBlockCount(1000);
     }
 

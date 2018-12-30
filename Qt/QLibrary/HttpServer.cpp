@@ -7,8 +7,8 @@
 
 CQHttpServer::CQHttpServer(quint16 port, bool debug, QObject *parent) :
     QTcpServer(parent),
-    m_debug(debug),
-    m_port(port)
+    m_port(port),
+    m_debug(debug)
 {
     m_pool = new QThreadPool(this);
     m_pool->setMaxThreadCount(5);
