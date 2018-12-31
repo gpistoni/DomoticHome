@@ -10,9 +10,6 @@ int main(int argc, char *argv[])
 
     bool RunPrograms = false;
 
-    if ( arg.indexOf("+s") > 0 )
-        RunPrograms = true;
-
     // Server
     QThread serverthread;
     Server server(RunPrograms);
