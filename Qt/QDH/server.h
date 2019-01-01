@@ -38,13 +38,16 @@ private:
 public:
     void Stop(){m_running = false; }
 
-public slots:
+public:
+    void manage_Progs(bool immediate);
+
     void manage_BoilerACS(int sec);
     void manage_ExternalLight(int sec);
     void manage_evRooms( int sec );
     void manage_Winter(int sec);
     void manage_Summer(int sec);
 
+public slots:
     void run();
 
 signals:

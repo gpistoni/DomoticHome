@@ -25,9 +25,10 @@ Server::~Server() {
 // Start processing data.
 void Server::run()
 {
+    bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 2019.01.04");
+        dr.LogMessage("VER 1.0.5");
         try {
             while (m_running)
             {
@@ -59,11 +60,8 @@ void Server::run()
 
                 if (m_runPrograms)
                 {
-                    manage_ExternalLight(120);
-                    manage_BoilerACS(290);
-                    manage_Summer(500);
-                    manage_Winter(510);
-                    manage_evRooms(520);
+                    if (firstRun) manage_Progs(true);
+                    else          manage_Progs(false);
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////
                 //Send Changed
@@ -71,11 +69,9 @@ void Server::run()
 
                 if (modifiedProg)
                 {
-                    manage_BoilerACS(1);
-                    manage_ExternalLight(1);
-                    manage_Winter(1);
-                    manage_Summer(1);
+                    manage_Progs(true);
                 }
+                firstRun = false;
             }
 
             /////////////////////////////////////////////////////////////////////////////////////////
@@ -86,6 +82,26 @@ void Server::run()
         {
             dr.LogMessage("catch");
         }
+    }
+}
+
+void Server::manage_Progs(bool immediate)
+{
+    if (immediate)
+    {
+        manage_ExternalLight(1);
+        manage_BoilerACS(1);
+        manage_Summer(1);
+        manage_Winter(1);
+        manage_evRooms(1);
+    }
+    else
+    {
+        manage_ExternalLight(120);
+        manage_BoilerACS(290);
+        manage_Summer(500);
+        manage_Winter(510);
+        manage_evRooms(520);
     }
 }
 
@@ -169,6 +185,7 @@ void Server::manage_Summer(int sec)
 
     bool summerAC_pdc  = false;
     bool summerAC_pump = false;
+    bool summerAC_night = false;
     bool allRoom = false;
 
     /**************************************************************************************************/
@@ -189,7 +206,14 @@ void Server::manage_Summer(int sec)
         }
 
         // spengo pdc se non ho surplus
-        if ( dr.progFotoV && ( dr.wSurplus < ( 800 -  dr.rPdc * 700)) ) // surplus < consumostimato
+        if ( dr.progFotoV && ( dr.wSurplus < ( 600 -  dr.rPdc * 500)) ) // surplus < consumostimato
+        {
+            dr.LogMessage("PDC limited surplusW:" + dr.wSurplus.svalue() );
+            summerAC_night = true;
+        }
+
+        // spengo pdc se non ho surplus
+        if ( dr.progFotoV && ( dr.wSurplus < ( 900 -  dr.rPdc * 800)) ) // surplus < consumostimato
         {
             dr.LogMessage("PDC suspended surplusW:" + dr.wSurplus.svalue() );
             summerAC_pdc = false;
@@ -216,7 +240,7 @@ void Server::manage_Summer(int sec)
     /**************************************************************************************************/
     // accendo PDC
     dr.rPdc.ModifyValue( summerAC_pdc );
-    dr.rPdcNightMode.ModifyValue( summerAC_pdc );
+    dr.rPdcNightMode.ModifyValue( summerAC_pdc && summerAC_night );
     dr.rPdcHeat.ModifyValue( false );
     dr.rPdcPompa.ModifyValue( summerAC_pump );
 }
@@ -305,6 +329,7 @@ void  Server::manage_Winter( int sec )
     bool needPompa_pp = false;
     bool needPdc = false;
     bool needPCamino = false;
+    bool needPdc_Night = false;
 
     if (dr.progWinterFIRE || dr.progWinterPDC)
     {
@@ -346,11 +371,20 @@ void  Server::manage_Winter( int sec )
         if ( dr.progFotoV  )
         {
             // spengo pdc se non ho surplus
-            dr.LogMessage("PDC surplus richiesto:" + QString::number(800 -  dr.rPdc * 700) );
-            if ( dr.wSurplus < ( 800 -  dr.rPdc * 700) ) // surplus < consumostimato
+            dr.LogMessage("PDC surplus richiesto:" + QString::number(600 -  dr.rPdc * 500) );
+            if ( dr.wSurplus < ( 600 -  dr.rPdc * 500) ) // surplus < consumostimato
             {
                 dr.LogMessage("PDC suspended surplusW:" + dr.wSurplus.svalue() );
                 needPdc = false;
+            }
+            else
+            {
+                dr.LogMessage("PDC surplus richiesto:" + QString::number(900 -  dr.rPdc * 800) );
+                if ( dr.wSurplus < ( 900 -  dr.rPdc * 800) ) // surplus < consumostimato
+                {
+                    dr.LogMessage("PDC NightMode surplusW:" + dr.wSurplus.svalue() );
+                    needPdc_Night = true;
+                }
             }
         }
         dr.LogMessage("NeedPdc: [" + QString::number(needPdc) + "]" );
@@ -378,7 +412,7 @@ void  Server::manage_Winter( int sec )
     //pompa
     dr.rPdcPompa.ModifyValue( needPdc );
     //night
-    dr.rPdcNightMode.ModifyValue( needPdc );
+    dr.rPdcNightMode.ModifyValue( needPdc_Night );
     //camino
     dr.rPompaCamino.ModifyValue( needPCamino );
 }
