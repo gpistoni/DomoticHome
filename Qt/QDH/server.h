@@ -19,6 +19,18 @@ private:
     bool m_running = true;
     bool m_runPrograms;
 
+    int winter()
+    {
+        return month()<=4 || month()>=11;
+    }
+    int summer()
+    {
+        return month()>=6 && month()<=9;
+    }
+    int month()
+    {
+        return QDateTime::currentDateTime().date().month();
+    }
     int hour()
     {
         return QDateTime::currentDateTime().time().hour();

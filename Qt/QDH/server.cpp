@@ -1,6 +1,7 @@
 #include "server.h"
 #include "../QLibrary/DataTable.h"
 #include "QThread"
+#include "QFile"
 
 
 // --- CONSTRUCTOR ---
@@ -28,7 +29,26 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.0.6");
+        dr.LogMessage("VER 1.0.7", true);
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        // forced by date
+        dr.progBoilerACS.Value(true);
+        dr.progExternalLight.Value(true);
+        dr.progFotoV.Value(true);
+
+        if ( winter() )
+        {
+            dr.progWinterFIRE.Value(true);
+            dr.progSummerAC.Value(false);
+        }
+        if ( summer() )
+        {
+            dr.progWinterFIRE.Value(false);
+            dr.progSummerAC.Value(true);
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////
+
         try {
             while (m_running)
             {
@@ -49,24 +69,19 @@ void Server::run()
                 dr.wSurplus += dr.wProduced;
                 dr.wSurplus -= dr.wConsumed;
 
-                //dr.LogMessage(" UpdatedValues");
                 dr.LogPoint();
                 emit updateValues( &dr );
 
                 ////////////////////////////////////////////////////////////////////////////////////////
-                // forced
-                dr.progBoilerACS.Value(true);
-                dr.progExternalLight.Value(true);
-
                 if (m_runPrograms)
                 {
                     if (firstRun) manage_Progs(true);
                     else          manage_Progs(false);
                 }
+
                 ////////////////////////////////////////////////////////////////////////////////////////
                 //Send Changed
                 bool modifiedProg = dr.SendModifiedData();
-
                 if (modifiedProg)
                 {
                     manage_Progs(true);
@@ -169,7 +184,7 @@ void Server::manage_ExternalLight(int sec)
 
     if (dr.progExternalLight)
     {
-        if ( hour()>18 || hour() < 7)
+        if ( hour()>=18 || hour() <=7)
         {
             /**************************************************************************************************/
             dr.LogMessage("darkExternal: " + dr.darkExternal.svalue() + " Request >" + QString::number( 32 - 2 * dr.lampLati )  );
@@ -211,7 +226,7 @@ void  Server::manage_evRooms( int sec )
 
     bool allRoom = dr.progAllRooms;
 
-    if (dr.rPompaPianoPrimo || dr.rPompaPianoTerra || dr.rPdcPompa)
+    if (dr.rPompaPianoPrimo || dr.rPompaPianoTerra || dr.rPdcPompa || dr.tInputMixer > 30)
     {
         //////////////////////////////////////////////////////////////////////////////////
         //decido se accendere le stanze

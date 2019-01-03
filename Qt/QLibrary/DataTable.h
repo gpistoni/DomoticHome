@@ -6,6 +6,8 @@
 #include "QJsonDocument"
 #include "QJsonObject"
 #include "DataVars.h"
+#include "QFile"
+
 
 class DataValues
 {
@@ -349,15 +351,23 @@ public:
 
     void LogPoint()
     {
-        m_logMessage += ".";
-           std::cerr  << ".";
+        std::cerr  << ".";
     }
 
-    void LogMessage(QString s)
+    void LogMessage(QString s, bool logtofile=false)
     {
         m_logMessage += "\n";
         m_logMessage += s;
         std::cerr <<  "\n" << s.toStdString();
+
+        if (logtofile)
+        {
+        QFile f("dh.log");
+        if (f.open(QIODevice::WriteOnly | QIODevice::Append))
+        {
+          f.write("");
+        }
+        }
     }
 
     QString GetLogMessage()
