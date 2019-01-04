@@ -29,25 +29,7 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.0.7", true);
-
-        ////////////////////////////////////////////////////////////////////////////////////////
-        // forced by date
-        dr.progBoilerACS.Value(true);
-        dr.progExternalLight.Value(true);
-        dr.progFotoV.Value(true);
-
-        if ( winter() )
-        {
-            dr.progWinterFIRE.Value(true);
-            dr.progSummerAC.Value(false);
-        }
-        if ( summer() )
-        {
-            dr.progWinterFIRE.Value(false);
-            dr.progSummerAC.Value(true);
-        }
-        ////////////////////////////////////////////////////////////////////////////////////////
+        dr.LogMessage("VER 1.0.8", true);
 
         try {
             while (m_running)
@@ -61,6 +43,22 @@ void Server::run()
                 /////////////////////////////////////////////////////////////////////////////////////////
                 dr.ReadData();
 
+                ////////////////////////////////////////////////////////////////////////////////////////
+                // forced by date
+                dr.progBoilerACS.Value(true);
+                dr.progExternalLight.Value(true);
+                dr.progFotoV.Value(true);
+
+                if ( winter() )
+                {
+                    dr.progWinterFIRE.Value(true);
+                    dr.progSummerAC.Value(false);
+                }
+                if ( summer() )
+                {
+                    dr.progWinterFIRE.Value(false);
+                    dr.progSummerAC.Value(true);
+                }
                 ////////////////////////////////////////////////////////////////////////////////////////
                 // calcoli
                 dr.wConsumed += dr.wL1;

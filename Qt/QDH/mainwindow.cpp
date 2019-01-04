@@ -94,7 +94,9 @@ void MainWindow::updateValues(DataTable* dr)
 
     //***********************************************************
     //aggiorno i messaggi
-    m_logw->appendMessage( dr->GetLogMessage() );
+    QString s;
+    if ( dr->GetLogMessage(s))
+         m_logw->appendMessage( s );
 
     //***********************************************************
     ui->label_P->setText( dr->wProduced.svalue());

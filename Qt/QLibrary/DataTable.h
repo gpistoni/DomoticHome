@@ -207,7 +207,7 @@ public:
             //****************************************
             for( VarB *elem : progs )
             {
-               modifiedProg |= SendModifiedValue( elem );
+                modifiedProg |= SendModifiedValue( elem );
             }
             /*
             for( VarF3SP *elem : temps )
@@ -330,7 +330,7 @@ public:
         }
         catch(...)
         {}
-         return false;
+        return false;
     }
 
     /*
@@ -362,19 +362,19 @@ public:
 
         if (logtofile)
         {
-        QFile f("dh.log");
-        if (f.open(QIODevice::WriteOnly | QIODevice::Append))
-        {
-          f.write("");
-        }
+            QFile f("dh.log");
+            if (f.open(QIODevice::WriteOnly | QIODevice::Append))
+            {
+                f.write(s.toLatin1());
+            }
         }
     }
 
-    QString GetLogMessage()
+    bool GetLogMessage( QString &s )
     {
-        QString s = m_logMessage;
+        s = m_logMessage;
         m_logMessage.clear();
-        return s;
+        return s.size();
     }
 };
 
