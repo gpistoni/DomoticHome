@@ -45,19 +45,19 @@ void Server::run()
 
                 ////////////////////////////////////////////////////////////////////////////////////////
                 // forced by date
-                dr.progBoilerACS.Value(true);
-                dr.progExternalLight.Value(true);
-                dr.progFotoV.Value(true);
+                dr.progBoilerACS.ModifyValue(true);
+                dr.progExternalLight.ModifyValue(true);
+                dr.progFotoV.ModifyValue(true);
 
                 if ( winter() )
                 {
-                    dr.progWinterFIRE.Value(true);
-                    dr.progSummerAC.Value(false);
+                    dr.progWinterFIRE.ModifyValue(true);
+                    dr.progSummerAC.ModifyValue(false);
                 }
                 if ( summer() )
                 {
-                    dr.progWinterFIRE.Value(false);
-                    dr.progSummerAC.Value(true);
+                    dr.progWinterFIRE.ModifyValue(false);
+                    dr.progSummerAC.ModifyValue(true);
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////
                 // calcoli
