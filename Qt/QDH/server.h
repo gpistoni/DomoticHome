@@ -46,6 +46,7 @@ private:
     QElapsedTimer t_evRooms;
     QElapsedTimer t_Winter;
     QElapsedTimer t_Summer;
+    QElapsedTimer t_Camino;
 
 public:
     void Stop(){m_running = false; }
@@ -58,6 +59,7 @@ public:
     void manage_evRooms( int sec );
     void manage_Winter(int sec);
     void manage_Summer(int sec);
+    void manage_Camino(int sec);
 
 public slots:
     void run();

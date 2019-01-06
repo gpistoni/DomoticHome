@@ -15,6 +15,7 @@ Server::Server(bool runPrograms) :
     t_evRooms.start();
     t_Winter.start();
     t_Summer.start();
+    t_Camino.start();
 }
 
 // --- DECONSTRUCTOR ---
@@ -43,22 +44,6 @@ void Server::run()
                 /////////////////////////////////////////////////////////////////////////////////////////
                 dr.ReadData();
 
-                ////////////////////////////////////////////////////////////////////////////////////////
-                // forced by date
-                dr.progBoilerACS.Value(true);
-                dr.progExternalLight.Value(true);
-                dr.progFotoV.Value(true);
-
-                if ( winter() )
-                {
-                    dr.progWinterFIRE.Value(true);
-                    dr.progSummerAC.Value(false);
-                }
-                if ( summer() )
-                {
-                    dr.progWinterFIRE.Value(false);
-                    dr.progSummerAC.Value(true);
-                }
                 ////////////////////////////////////////////////////////////////////////////////////////
                 // calcoli
                 dr.wConsumed += dr.wL1;
@@ -104,17 +89,19 @@ void Server::manage_Progs(bool immediate)
     {
         manage_ExternalLight(1);
         manage_BoilerACS(1);
+        manage_evRooms(1);
         manage_Summer(1);
         manage_Winter(1);
-        manage_evRooms(1);
+        manage_Camino(1);
     }
     else
     {
         manage_ExternalLight(120);
         manage_BoilerACS(250);
-        manage_Winter(400);
-        manage_Summer(410);
-        manage_evRooms(500);
+        manage_evRooms(300);
+        manage_Winter(300);
+        manage_Summer(310);
+        manage_Camino(60);
     }
 }
 
@@ -415,15 +402,18 @@ void  Server::manage_Winter( int sec )
 
         //////////////////////////////////////////////////////////////////////////////////
         //decido se accendere PDC
-        needPdc = dr.progWinterPDC && !needPompa_pp;
+        if ( dr.progWinterPDC && dr.tInputMixer < 28 )
+        {
+            needPdc = true;
+        }
 
-        if ( dr.progFotoV  )
+        if ( needPdc && dr.progFotoV  )
         {
             dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() );
 
             if (dr.rPdc)
             {   //pdc Gia Accesa
-                if ( dr.wSurplus >500 )
+                if ( dr.wSurplus > 500 )
                 {    // molto surplus
                     dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
                     needPdc_Night = false;
@@ -446,17 +436,9 @@ void  Server::manage_Winter( int sec )
             }
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // decido se accendere piano terra
-        if ( dr.tPufferLow > 45 && dr.tReturnFireplace > 45 )
-        {
-            dr.LogMessage("Condizione dr.tPufferLow > 45 && dr.tReturnFireplace > 45");
-            needPompa_pt = true;
-        }
 
         dr.LogMessage("NeedPdc: [" + QString::number(needPdc) + "]" );
         dr.LogMessage("NeedPompa_pp: [" + QString::number(needPompa_pp) + "]" );
-        dr.LogMessage("NeedPompa_pt: [" + QString::number(needPompa_pt) + "]" );
         dr.LogMessage("NeedPompa_camino: [" + QString::number(needPompa_Camino) + "]" );
     }
 
@@ -477,3 +459,36 @@ void  Server::manage_Winter( int sec )
     dr.rPompaCamino.ModifyValue( needPompa_Camino );
 }
 
+
+void  Server::manage_Camino( int sec )
+{
+    if ( t_Camino.elapsed() < sec * 1000 ) return;
+    t_Camino.restart();
+
+    dr.LogMessage("--- Camino ---" + QDateTime::currentDateTime().toString() );
+    bool needPCamino=false;
+    bool needPompa_pt=false;
+
+    //////////////////////////////////////////////////////////////////////////////////
+    // decido se accendere pompa camino
+    dr.LogMessage("Condizione Pompa Camino: tReturnFireplace " + dr.tReturnFireplace.svalue() + " - " + "tPufferLow " + dr.tPufferLow.svalue() );
+    if ( dr.tPufferLow < 45 && dr.tReturnFireplace > 34 && dr.tReturnFireplace > dr.tPufferLow + 5 )
+    {
+        needPCamino = true;
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////
+    // decido se accendere piano terra
+    if ( dr.tPufferLow > 45 && dr.tReturnFireplace > 45 )
+    {
+        dr.LogMessage("Condizione dr.tPufferLow > 45 && dr.tReturnFireplace > 45");
+        needPompa_pt = true;
+    }
+
+
+    dr.LogMessage("NeedPCamino: [" + QString::number(needPCamino) + "]" );
+    dr.LogMessage("NeedPompa_pt: [" + QString::number(needPompa_pt) + "]" );
+
+    // heat
+    dr.rPompaCamino.ModifyValue( needPCamino );
+}
