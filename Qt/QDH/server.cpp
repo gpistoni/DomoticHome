@@ -45,6 +45,25 @@ void Server::run()
                 dr.ReadData();
 
                 ////////////////////////////////////////////////////////////////////////////////////////
+<<<<<<< HEAD
+=======
+                // forced by date
+                dr.progBoilerACS.ModifyValue(true);
+                dr.progExternalLight.ModifyValue(true);
+                dr.progFotoV.ModifyValue(true);
+
+                if ( winter() )
+                {
+                    dr.progWinterFIRE.ModifyValue(true);
+                    dr.progSummerAC.ModifyValue(false);
+                }
+                if ( summer() )
+                {
+                    dr.progWinterFIRE.ModifyValue(false);
+                    dr.progSummerAC.ModifyValue(true);
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////
+>>>>>>> 3cea9f759527ace9f04654b975907c8e2e0f9e19
                 // calcoli
                 dr.wConsumed += dr.wL1;
                 dr.wConsumed += dr.wL2;
