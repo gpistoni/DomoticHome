@@ -20,7 +20,7 @@ public:
     VarB progExternalLight      = VarB( "T0", "r4", "LuciEsterno" );
 
     VarB progAllRooms           = VarB( "T0", "r7", "TutteLeStanze" );
-    VarB progFotoV            = VarB( "T0", "r8", "SurplusFotoV" );
+    VarB progFotoV              = VarB( "T0", "r8", "SurplusFotoV" );
 
     std::vector<VarB*>    progs = {&progBoilerACS,
                                    &progSummerAC,
@@ -31,12 +31,12 @@ public:
                                    &progFotoV
                                   };
     //*****************************************************************************************
-    VarF3SP tCucina                   = { "T1", "v0", "v8", "v16", -0.5, 21, "tCucina" };
-    VarF3SP tSala                     = { "T1", "v1", "v9", "v17",  1.5, 23, "tSala" };
-    VarF3SP tCameraS                  = { "T1", "v2", "v10", "v18", 1,   18, "tCameraS" };
-    VarF3SP tCameraD                  = { "T1", "v3", "v11", "v19", 0.5, 18, "tCameraD" };
-    VarF3SP tCameraM                  = { "T1", "v4", "v12", "v20", 1,   16, "tCameraM" };
-    VarF3SP tBagno                    = { "T1", "v5", "v13", "v21", 2.5, 23, "tBagno" };
+    VarF3SP tCucina                   = { "T1", "v0", "v8", "v16", -0.5, 21, "tCucina", 10, 30 };
+    VarF3SP tSala                     = { "T1", "v1", "v9", "v17",  1.5, 23, "tSala", 10, 30 };
+    VarF3SP tCameraS                  = { "T1", "v2", "v10", "v18", 1,   18, "tCameraS", 10, 30 };
+    VarF3SP tCameraD                  = { "T1", "v3", "v11", "v19", 0.5, 18, "tCameraD" , 10, 30};
+    VarF3SP tCameraM                  = { "T1", "v4", "v12", "v20", 1,   16, "tCameraM" , 10, 30};
+    VarF3SP tBagno                    = { "T1", "v5", "v13", "v21", 2.5, 23, "tBagno" , 10, 30};
 
     std::vector<VarF3SP*>    temps = {  &tCucina,
                                         &tSala,
@@ -76,14 +76,14 @@ public:
                                         &rPompaCamino
                                      };
     //*****************************************************************************************
-    VarF tPufferHi          = { "T4", "v0", "PufferHi" };
-    VarF tPufferLow         = { "T4", "v1", "PufferLow" };
-    VarF tInputMixer        = { "T4", "v2", "InputMixer" };
-    VarF tReturnFireplace   = { "T4", "v3", "ReturnFireplace" };
-    VarF tReturnFloor       = { "T4", "v4", "ReturnFloor" };
-    VarF tInletFloor        = { "T4", "v5", "InletFloor" };
-    VarF tExternal          = { "T4", "v6", "External" };
-    VarF darkExternal       = { "T4", "v8", "darkExternal" };
+    VarF tPufferHi          = { "T4", "v0", "PufferHi",0,60 };
+    VarF tPufferLow         = { "T4", "v1", "PufferLow",0,60 };
+    VarF tInputMixer        = { "T4", "v2", "InputMixer",0,60 };
+    VarF tReturnFireplace   = { "T4", "v3", "ReturnFireplace",0,60 };
+    VarF tReturnFloor       = { "T4", "v4", "ReturnFloor",0,60 };
+    VarF tInletFloor        = { "T4", "v5", "InletFloor",0,60 };
+    VarF tExternal          = { "T4", "v6", "External",-10,40 };
+    VarF darkExternal       = { "T4", "v8", "darkExternal",0,40 };
 
     std::vector<VarF*>    tcaldaia = { &tPufferHi,
                                        &tPufferLow,
@@ -114,15 +114,15 @@ public:
                                        &evCameraD2
                                      };
     //*****************************************************************************************
-    VarF3 wPowergrid            = { "T6", "v0", "v8", "v16", "PowerGrid" };
-    VarF3 wProduced             = { "T6", "v1", "v9", "v17", "Produced" };
-    VarF3 wL1                   = { "T6", "v2", "v10", "v18", "L1" };
-    VarF3 wL2                   = { "T6", "v3", "v11", "v19", "L2" };
-    VarF3 wL3                   = { "T6", "v4", "v12", "v20", "L3" };
+    VarF3 wPowergrid            = { "T6", "v0", "v8", "v16", "PowerGrid" , 0, 4000};
+    VarF3 wProduced             = { "T6", "v1", "v9", "v17", "Produced" , 0, 4000};
+    VarF3 wL1                   = { "T6", "v2", "v10", "v18", "L1" , 0, 4000};
+    VarF3 wL2                   = { "T6", "v3", "v11", "v19", "L2" , 0, 4000};
+    VarF3 wL3                   = { "T6", "v4", "v12", "v20", "L3" , 0, 4000};
 
     // dato calcolato
-    VarF3 wConsumed             = { "T6", "", "", "", "Consumed" };
-    VarF3 wSurplus              = { "T6", "", "", "", "Surplus" };
+    VarF3 wConsumed             = { "T6", "", "", "", "Consumed" , 0, 4000};
+    VarF3 wSurplus              = { "T6", "", "", "", "Surplus" , 0, 4000};
 
     std::vector<VarF3*>    ampers = { &wPowergrid,
                                       &wProduced,
@@ -362,10 +362,11 @@ public:
 
         if (logtofile)
         {
-            QFile f("dh.log");
+            QFile f("/var/log/dh.log");
             if (f.open(QIODevice::WriteOnly | QIODevice::Append))
             {
                 f.write(s.toLatin1());
+                f.write("\n\r");
             }
         }
     }

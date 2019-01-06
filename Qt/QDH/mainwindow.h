@@ -2,9 +2,10 @@
 
 #include <QMainWindow>
 #include <QThread>
-#include "server.h"
 
+class DataTable;
 class LogMessage;
+class Server;
 
 namespace Ui {
 class MainWindow;

@@ -13,8 +13,9 @@ Server::Server(bool runPrograms) :
     t_BoilerACS.start();
     t_ExternalLight.start();
     t_evRooms.start();
-    t_Winter.start();
-    t_Summer.start();
+    t_WinterPDC.start();
+    t_WinterFIRE.start();
+    t_SummerPDC.start();
     t_Camino.start();
 }
 
@@ -30,7 +31,7 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.0.8", true);
+        dr.LogMessage("VER 1.0.9", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
@@ -71,10 +72,15 @@ void Server::run()
                 emit updateValues( &dr );
 
                 ////////////////////////////////////////////////////////////////////////////////////////
+                if (firstRun)
+                {
+                    manage_Progs(true);
+                }
+
+                ////////////////////////////////////////////////////////////////////////////////////////
                 if (m_runPrograms)
                 {
-                    if (firstRun) manage_Progs(true);
-                    else          manage_Progs(false);
+                    manage_Progs(false);
                 }
 
                 ////////////////////////////////////////////////////////////////////////////////////////
@@ -104,18 +110,20 @@ void Server::manage_Progs(bool immediate)
     {
         manage_ExternalLight(1);
         manage_BoilerACS(1);
+        manage_SummerPDC(1);
+        manage_WinterFIRE(1);
+        manage_WinterPDC(1);
         manage_evRooms(1);
-        manage_Summer(1);
-        manage_Winter(1);
         manage_Camino(1);
     }
     else
     {
         manage_ExternalLight(120);
         manage_BoilerACS(250);
+        manage_WinterPDC(300);
+        manage_WinterFIRE(200);
+        manage_SummerPDC(310);
         manage_evRooms(300);
-        manage_Winter(300);
-        manage_Summer(310);
         manage_Camino(60);
     }
 }
@@ -196,11 +204,11 @@ void Server::manage_ExternalLight(int sec)
 
             if ( hour() < 7 )
                 lightLamp = false;
-
         }
-        dr.LogMessage("LightLamp [" +  QString::number(lightLamp) + "] " );
-        dr.LogMessage("LightSide [" +  QString::number(lightSide) + "]" );
     }
+
+    dr.LogMessage("LightLamp [" +  QString::number(lightLamp) + "] " );
+    dr.LogMessage("LightSide [" +  QString::number(lightSide) + "]" );
 
     // attuatori
     dr.lampAngoli.ModifyValue(lightSide);
@@ -281,48 +289,131 @@ void  Server::manage_evRooms( int sec )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void Server::manage_Summer(int sec)
+void Server::manage_SummerPDC(int sec)
 {
-    if ( t_Summer.elapsed() < sec * 1000 ) return;
-    t_Summer.restart();
+    if ( t_SummerPDC.elapsed() < sec * 1000 ) return;
+    t_SummerPDC.restart();
 
     dr.LogMessage("--- Summer ---" + QDateTime::currentDateTime().toString() );
 
-    bool needPdc  = false;
-    bool needPdc_Pump = false;
-    bool needPdc_Night = true;
-    bool allRoom = false;
+//    bool needPdc  = false;
+//    bool needPdc_Pump = false;
+//    bool needPdc_Night = false;
+//    bool allRoom = false;
 
-    /**************************************************************************************************/
-    if (dr.progSummerAC)
+//    /**************************************************************************************************/
+//    if (dr.progSummerAC)
+//    {
+//        allRoom = dr.progAllRooms;
+//        /**************************************************************************************************/
+//        // decido se accendere le pompe
+//        if ( dr.tInletFloor  > 20 )  // minima t Acqua raffreddata
+//        {
+//            needPdc = true;
+//            needPdc_Pump = true;
+
+//        }
+//        else if ( dr.tInletFloor  < 25 )
+//        {
+//            needPdc_Pump = true;
+//            allRoom = dr.progAllRooms;
+//        }
+
+//        if ( dr.progFotoV  )
+//        {
+//            dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() );
+
+//            if (dr.rPdc)
+//            {   //pdc Gia Accesa
+//                if ( dr.wSurplus >500 )
+//                {    // molto surplus
+//                    dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
+//                    needPdc_Night = false;
+//                }
+//                if ( dr.wSurplus < 200 )
+//                {
+//                    dr.LogMessage("PDC Insufficiente SurplusW:" + dr.wSurplus.svalue() );
+//                    needPdc =false;
+//                }
+//            }
+//            else
+//            {   //pdc Spenta
+//                if ( dr.wSurplus < 700 )
+//                {
+//                    dr.LogMessage("PDC Insufficiente SurplusW:" + dr.wSurplus.svalue() );
+//                    needPdc =false;
+//                }
+//            }
+//        }
+//    }
+
+//    /**************************************************************************************************/
+//    dr.LogMessage("summerAC_pdc [" +  QString::number(needPdc) + "]");
+//    dr.LogMessage("summerAC_pump [" +   QString::number(needPdc_Pump) + "]");
+//    dr.LogMessage("summerAC_night [" +   QString::number(needPdc_Night) + "]");
+
+//    dr.LogMessage("tInletFloor: " + dr.tInletFloor.svalue() + " tSala: " + dr.tSala.svalue() + " tReturnFloor: " +  dr.tReturnFloor.svalue() );
+//    dr.LogMessage("tPufferHi: " + dr.tPufferHi.svalue() );
+
+//    /**************************************************************************************************/
+//    // attuatori
+//    dr.evSala1.ModifyValue(allRoom);
+//    dr.evSala2.ModifyValue(allRoom);
+//    dr.evCucina.ModifyValue(allRoom);
+
+//    dr.evCameraM1.ModifyValue(needPdc || allRoom);
+//    dr.evCameraM2.ModifyValue(needPdc || allRoom);
+//    dr.evCameraS.ModifyValue (needPdc || allRoom);
+//    dr.evCameraD1.ModifyValue(needPdc || allRoom);
+//    dr.evCameraD2.ModifyValue(needPdc || allRoom);
+
+//    /**************************************************************************************************/
+//    // accendo PDC
+//    dr.rPdc.ModifyValue( needPdc );
+//    dr.rPdcNightMode.ModifyValue( needPdc && needPdc_Night );
+//    dr.rPdcHeat.ModifyValue( false );
+//    dr.rPdcPompa.ModifyValue( needPdc_Pump );
+}
+
+
+/******************************************************************************************************************************************************************/
+void  Server::manage_WinterPDC( int sec )
+{
+    if ( t_WinterPDC.elapsed() < sec * 1000 ) return;
+    t_WinterPDC.restart();
+
+    dr.LogMessage("--- Winter ---" + QDateTime::currentDateTime().toString() );
+
+    bool needPompa_pt = dr.rPompaPianoTerra;
+    bool needPompa_pp = dr.rPompaPianoPrimo;
+    bool needPdc = false;
+    bool needPdc_Night = false;
+
+    if (dr.progWinterPDC)
     {
-        allRoom = dr.progAllRooms;
-        /**************************************************************************************************/
-        // decido se accendere le pompe
-        if ( dr.tInletFloor  > 20 )  // minima t Acqua raffreddata
+        //////////////////////////////////////////////////////////////////////////////////
+        //decido se accendere PDC
+        dr.LogMessage("PDC ON: tInputMixer:" + dr.tInputMixer.svalue() + "<28 tExternal:"+ dr.tExternal.svalue() + "<15 " );
+        if ( dr.tInputMixer < 28 && dr.tExternal < 15 )
         {
             needPdc = true;
-            needPdc_Pump = true;
-
-        }
-        else if ( dr.tInletFloor  < 25 )
-        {
-            needPdc_Pump = true;
-            allRoom = dr.progAllRooms;
+            needPdc_Night = true;
         }
 
-        if ( dr.progFotoV  )
+        if ( needPdc && dr.progFotoV  )
         {
             dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() );
 
             if (dr.rPdc)
             {   //pdc Gia Accesa
-                if ( dr.wSurplus >500 )
+                if ( dr.wSurplus > 500 )
                 {    // molto surplus
                     dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
                     needPdc_Night = false;
+                    needPompa_pp = true;
+                    needPompa_pt = true;
                 }
-                if ( dr.wSurplus < 200 )
+                if ( dr.wSurplus < 100 )
                 {
                     dr.LogMessage("PDC Insufficiente SurplusW:" + dr.wSurplus.svalue() );
                     needPdc =false;
@@ -330,59 +421,47 @@ void Server::manage_Summer(int sec)
             }
             else
             {   //pdc Spenta
-                if ( dr.wSurplus < 700 )
+                if ( dr.wSurplus < 600 )
                 {
                     dr.LogMessage("PDC Insufficiente SurplusW:" + dr.wSurplus.svalue() );
                     needPdc =false;
                 }
             }
         }
-
-        /**************************************************************************************************/
-        dr.LogMessage("summerAC_pdc [" +  QString::number(needPdc) + "]");
-        dr.LogMessage("summerAC_pump [" +   QString::number(needPdc_Pump) + "]");
-        dr.LogMessage("summerAC_night [" +   QString::number(needPdc_Night) + "]");
-
-        dr.LogMessage("tInletFloor: " + dr.tInletFloor.svalue() + " tSala: " + dr.tSala.svalue() + " tReturnFloor: " +  dr.tReturnFloor.svalue() );
-        dr.LogMessage("tPufferHi: " + dr.tPufferHi.svalue() );
     }
 
-    /**************************************************************************************************/
-    // attuatori
-    dr.evSala1.ModifyValue(allRoom);
-    dr.evSala2.ModifyValue(allRoom);
-    dr.evCucina.ModifyValue(allRoom);
+    dr.LogMessage("NeedPdc: [" + QString::number(needPdc) + "]" );
+    dr.LogMessage("NeedPdc_Night: [" + QString::number(needPdc_Night) + "]" );
+    dr.LogMessage("NeedPompa_pp: [" + QString::number(needPompa_pp) + "]" );
+    dr.LogMessage("needPompa_pt: [" + QString::number(needPompa_pt) + "]" );
 
-    dr.evCameraM1.ModifyValue(needPdc || allRoom);
-    dr.evCameraM2.ModifyValue(needPdc || allRoom);
-    dr.evCameraS.ModifyValue (needPdc || allRoom);
-    dr.evCameraD1.ModifyValue(needPdc || allRoom);
-    dr.evCameraD2.ModifyValue(needPdc || allRoom);
-
-    /**************************************************************************************************/
+    // comandi sulla centrale -----------------------------------------------------
+    // accendo pompa pp
+    dr.rPompaPianoPrimo.ModifyValue( needPompa_pp );
+    //piano terra
+    dr.rPompaPianoTerra.ModifyValue( needPompa_pt );
     // accendo PDC
     dr.rPdc.ModifyValue( needPdc );
+    // heat
+    dr.rPdcHeat.ModifyValue( needPdc );
+    //pompa
+    dr.rPdcPompa.ModifyValue( needPdc );
+    //night
     dr.rPdcNightMode.ModifyValue( needPdc && needPdc_Night );
-    dr.rPdcHeat.ModifyValue( false );
-    dr.rPdcPompa.ModifyValue( needPdc_Pump );
 }
 
-
 /******************************************************************************************************************************************************************/
-void  Server::manage_Winter( int sec )
+void  Server::manage_WinterFIRE( int sec )
 {
-    if ( t_Winter.elapsed() < sec * 1000 ) return;
-    t_Winter.restart();
+    if ( t_WinterFIRE.elapsed() < sec * 1000 ) return;
+    t_WinterFIRE.restart();
 
-    dr.LogMessage("--- Winter ---" + QDateTime::currentDateTime().toString() );
+    dr.LogMessage("--- Winter FIRE ---" + QDateTime::currentDateTime().toString() );
 
-    bool needPompa_Camino = false;
     bool needPompa_pt = false;
     bool needPompa_pp = false;
-    bool needPdc = false;
-    bool needPdc_Night = true;
 
-    if (dr.progWinterFIRE || dr.progWinterPDC)
+    if (dr.progWinterFIRE)
     {
         //////////////////////////////////////////////////////////////////////////////////
         // decido se accendere/spegnere pompa piano primo
@@ -413,68 +492,19 @@ void  Server::manage_Winter( int sec )
             needPompa_pp = true;
             needPompa_pt = true;
         }
-
-
-        //////////////////////////////////////////////////////////////////////////////////
-        //decido se accendere PDC
-        if ( dr.progWinterPDC && dr.tInputMixer < 28 )
-        {
-            needPdc = true;
-        }
-
-        if ( needPdc && dr.progFotoV  )
-        {
-            dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() );
-
-            if (dr.rPdc)
-            {   //pdc Gia Accesa
-                if ( dr.wSurplus > 500 )
-                {    // molto surplus
-                    dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
-                    needPdc_Night = false;
-                    needPompa_pp = true;
-                    needPompa_pt = true;
-                }
-                if ( dr.wSurplus < 200 )
-                {
-                    dr.LogMessage("PDC Insufficiente SurplusW:" + dr.wSurplus.svalue() );
-                    needPdc =false;
-                }
-            }
-            else
-            {   //pdc Spenta
-                if ( dr.wSurplus < 700 )
-                {
-                    dr.LogMessage("PDC Insufficiente SurplusW:" + dr.wSurplus.svalue() );
-                    needPdc =false;
-                }
-            }
-        }
-
-
-        dr.LogMessage("NeedPdc: [" + QString::number(needPdc) + "]" );
-        dr.LogMessage("NeedPompa_pp: [" + QString::number(needPompa_pp) + "]" );
-        dr.LogMessage("NeedPompa_camino: [" + QString::number(needPompa_Camino) + "]" );
     }
+    dr.LogMessage("needPompa_pt: [" + QString::number(needPompa_pt) + "]" );
+    dr.LogMessage("NeedPompa_pp: [" + QString::number(needPompa_pp) + "]" );
 
     // comandi sulla centrale -----------------------------------------------------
     // accendo pompa pp
     dr.rPompaPianoPrimo.ModifyValue( needPompa_pp );
     //piano terra
     dr.rPompaPianoTerra.ModifyValue( needPompa_pt );
-    // accendo PDC
-    dr.rPdc.ModifyValue( needPdc );
-    // heat
-    dr.rPdcHeat.ModifyValue( needPdc );
-    //pompa
-    dr.rPdcPompa.ModifyValue( needPdc );
-    //night
-    dr.rPdcNightMode.ModifyValue( needPdc && needPdc_Night );
-    //camino
-    dr.rPompaCamino.ModifyValue( needPompa_Camino );
 }
 
 
+/******************************************************************************************************************************************************************/
 void  Server::manage_Camino( int sec )
 {
     if ( t_Camino.elapsed() < sec * 1000 ) return;
@@ -484,22 +514,24 @@ void  Server::manage_Camino( int sec )
     bool needPCamino=false;
     bool needPompa_pt=false;
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // decido se accendere pompa camino
-    dr.LogMessage("Condizione Pompa Camino: tReturnFireplace " + dr.tReturnFireplace.svalue() + " - " + "tPufferLow " + dr.tPufferLow.svalue() );
-    if ( dr.tPufferLow < 45 && dr.tReturnFireplace > 34 && dr.tReturnFireplace > dr.tPufferLow + 5 )
+    if (dr.progWinterFIRE)
     {
-        needPCamino = true;
-    }
+        //////////////////////////////////////////////////////////////////////////////////
+        // decido se accendere pompa camino
+        dr.LogMessage("Condizione Pompa Camino: tReturnFireplace " + dr.tReturnFireplace.svalue() + " - " + "tPufferLow " + dr.tPufferLow.svalue() );
+        if ( dr.tPufferLow < 45 && dr.tReturnFireplace > 34 && dr.tReturnFireplace > dr.tPufferLow + 5 )
+        {
+            needPCamino = true;
+        }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // decido se accendere piano terra
-    if ( dr.tPufferLow > 45 && dr.tReturnFireplace > 45 )
-    {
-        dr.LogMessage("Condizione dr.tPufferLow > 45 && dr.tReturnFireplace > 45");
-        needPompa_pt = true;
+        //////////////////////////////////////////////////////////////////////////////////
+        // decido se accendere piano terra
+        if ( dr.tPufferLow > 45 && dr.tReturnFireplace > 45 )
+        {
+            dr.LogMessage("Condizione dr.tPufferLow > 45 && dr.tReturnFireplace > 45");
+            needPompa_pt = true;
+        }
     }
-
 
     dr.LogMessage("NeedPCamino: [" + QString::number(needPCamino) + "]" );
     dr.LogMessage("NeedPompa_pt: [" + QString::number(needPompa_pt) + "]" );

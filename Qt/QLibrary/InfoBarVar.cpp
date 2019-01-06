@@ -23,8 +23,8 @@ InfoBarVar::InfoBarVar(VarF3 *v): QWidget()
     value2->setText(QString::number(var3->m_value2));
     hl->addWidget(value2);
     //--------------------------------------------------------
-    pbar->setMinimum(0);
-    pbar->setMaximum(3000);
+    pbar->setMinimum(var3->m_min);
+    pbar->setMaximum(var3->m_max);
     pbar->setValue((int)var3->m_value);
     hl->addWidget(pbar);
 
@@ -49,8 +49,8 @@ InfoBarVar::InfoBarVar(VarF *v): QWidget()
     value->setText(QString::number(var1->m_value));
     hl->addWidget(value);
     //--------------------------------------------------------
-    pbar->setMinimum(0);
-    pbar->setMaximum(3000);
+    pbar->setMinimum(var1->m_min);
+    pbar->setMaximum(var1->m_max);
     pbar->setValue((int)var1->m_value);
     hl->addWidget(pbar);
 

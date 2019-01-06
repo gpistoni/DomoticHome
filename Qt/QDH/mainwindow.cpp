@@ -1,9 +1,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "../QWidget/ButtonVarOnOffAuto.h"
+#include "../QWidget/LogMessage.h"
+#include "../QLibrary/DataTable.h"
 #include "../QLibrary/InfoBarVar.h"
 #include "../QLibrary/InfoTempSetpoint.h"
-#include "../QWidget/LogMessage.h"
+#include "server.h"
 
 MainWindow::MainWindow(Server *pserver, QWidget *parent) :
     QMainWindow(parent),

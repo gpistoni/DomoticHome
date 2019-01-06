@@ -105,8 +105,13 @@ class VarF: public Var
 public:
     float m_value=0;
 
-    VarF( QString t, QString v, QString descr):
-        Var( t, v, "", descr )
+    int m_min=0;
+    int m_max=0;
+
+    VarF( QString t, QString v, QString descr, int minval, int maxval ):
+        Var( t, v, "", descr ),
+        m_min(minval),
+        m_max(maxval)
     {
     }
 
@@ -135,8 +140,8 @@ public:
     float m_value2=0;
     float pad=0;
 
-    VarF3( QString t, QString v0, QString v1, QString v2, QString descr):
-        VarF( t, v0, descr ),
+    VarF3( QString t, QString v0, QString v1, QString v2, QString descr, int minval, int maxval):
+        VarF( t, v0, descr,  minval,  maxval ),
         m_v1(v1),
         m_v2(v2)
     {
@@ -177,8 +182,8 @@ public:
 public:
     VarF3SP(QString t,
             QString v0, QString v1, QString v2,
-            float adj, float setpoint, QString descr) :
-        VarF3( t, v0,v1,v2, descr ),
+            float adj, float setpoint, QString descr, int minval, int maxval) :
+        VarF3( t, v0,v1,v2, descr, minval, maxval),
         m_adjust(adj),
         m_setpoint(setpoint)
     {}
