@@ -351,10 +351,10 @@ public:
 
     void LogPoint()
     {
-        std::cerr  << ".";
+        std::cerr << ".";
     }
 
-    void LogMessage(QString s, bool logtofile=false)
+    void LogMessage(QString s, bool logtofile = true)
     {
         m_logMessage += "\n";
         m_logMessage += s;

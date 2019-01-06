@@ -32,6 +32,22 @@ void Server::run()
     {
         dr.LogMessage("VER 1.0.8", true);
 
+        // forced by date
+        dr.progBoilerACS.ModifyValue(true);
+        dr.progExternalLight.ModifyValue(true);
+        dr.progFotoV.ModifyValue(true);
+
+        if ( winter() )
+        {
+            dr.progWinterFIRE.ModifyValue(true);
+            dr.progSummerAC.ModifyValue(false);
+        }
+        if ( summer() )
+        {
+            dr.progWinterFIRE.ModifyValue(false);
+            dr.progSummerAC.ModifyValue(true);
+        }
+
         try {
             while (m_running)
             {
@@ -44,26 +60,6 @@ void Server::run()
                 /////////////////////////////////////////////////////////////////////////////////////////
                 dr.ReadData();
 
-                ////////////////////////////////////////////////////////////////////////////////////////
-<<<<<<< HEAD
-=======
-                // forced by date
-                dr.progBoilerACS.ModifyValue(true);
-                dr.progExternalLight.ModifyValue(true);
-                dr.progFotoV.ModifyValue(true);
-
-                if ( winter() )
-                {
-                    dr.progWinterFIRE.ModifyValue(true);
-                    dr.progSummerAC.ModifyValue(false);
-                }
-                if ( summer() )
-                {
-                    dr.progWinterFIRE.ModifyValue(false);
-                    dr.progSummerAC.ModifyValue(true);
-                }
-                ////////////////////////////////////////////////////////////////////////////////////////
->>>>>>> 3cea9f759527ace9f04654b975907c8e2e0f9e19
                 // calcoli
                 dr.wConsumed += dr.wL1;
                 dr.wConsumed += dr.wL2;
@@ -213,6 +209,7 @@ void Server::manage_ExternalLight(int sec)
     dr.lampExtra.ModifyValue(lightLamp);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void  Server::manage_evRooms( int sec )
 {
     if ( t_evRooms.elapsed() < sec * 1000 ) return;
@@ -282,7 +279,6 @@ void  Server::manage_evRooms( int sec )
     dr.evCameraD1.ModifyValue(cameraD || allRoom );
     dr.evCameraD2.ModifyValue(cameraD2 || allRoom);
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Server::manage_Summer(int sec)
