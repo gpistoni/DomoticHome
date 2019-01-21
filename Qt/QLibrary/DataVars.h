@@ -19,10 +19,9 @@ public:
         m_descr = descr;
     }
 
-    virtual ~Var() {}
-
+    virtual ~Var()
+    {}
     virtual QString svalue()=0;
-
     QString terminal()  {   return m_t;    }
     QString descr()     {   return m_descr ;   }
 };
@@ -39,11 +38,9 @@ private:
 public:
     VarB( QString t, QString r, QString descr):
         Var( t, "", r, descr )
-    {
-    }
-
-    virtual ~VarB()override{}
-
+    {}
+    virtual ~VarB()override
+    {}
     virtual QString svalue() override
     {
         return QString::number(m_value);
@@ -85,14 +82,12 @@ public:
         m_value(0)
     {
     }
-    virtual ~VarI()override {}
-
-
+    virtual ~VarI()override
+    {}
     virtual QString svalue() override
     {
         return QString::number(m_value);
     }
-
     operator int()
     {
         return m_value;
@@ -114,14 +109,12 @@ public:
         m_max(maxval)
     {
     }
-
-    virtual ~VarF()override {}
-
+    virtual ~VarF()override
+    {}
     virtual QString svalue() override
     {
         return QString::number(static_cast<double>(m_value));
     }
-
     operator float()
     {
         return m_value;
@@ -144,8 +137,7 @@ public:
         VarF( t, v0, descr,  minval,  maxval ),
         m_v1(v1),
         m_v2(v2)
-    {
-    }
+    {}
 
     virtual ~VarF3()override {}
 
@@ -157,18 +149,17 @@ public:
     {
         return m_value2;
     }
-
     void operator +=(const VarF3 &add)
     {
         m_value += add.m_value;
-        m_value1 += add.m_value1;
-        m_value2 += add.m_value2;
+        //m_value1 += add.m_value1;
+        //m_value2 += add.m_value2;
     }
     void operator -=(const VarF3 &sub)
     {
         m_value -= sub.m_value;
-        m_value1 -= sub.m_value1;
-        m_value2 -= sub.m_value2;
+        //m_value1 -= sub.m_value1;
+        //m_value2 -= sub.m_value2;
     }
 };
 
@@ -196,17 +187,14 @@ public:
     {
         m_value = value + m_adjust;
     }
-
     void setSetPoint( float value )
     {
         m_setpoint = value;
     }
-
     void setAdjust( float adj)
     {
         m_adjust = adj;
     }
-
     //***************************************************************************************
     float setPoint()
     {
@@ -216,7 +204,6 @@ public:
     {
         return QString::number(static_cast<double>(m_setpoint));
     }
-
     QString descrSetPoint()
     {
         return "p" + m_descr ;

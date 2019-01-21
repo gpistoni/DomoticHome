@@ -33,25 +33,65 @@ void MainWindow::updateValues(DataTable* dr)
         m_firstRun = false;
 
         //*****************************************************************
-        // Log bar inferiore
-        m_logw = new LogMessage();
-        ui->bottomLayout->addWidget(m_logw);
-
-        ui->tabWidget->setTabText(0,"progs");
-        for( VarB *elem : dr->progs )
         {
-            ButtonVar *but= new ButtonVar(elem);
-            connect(m_pserver, SIGNAL(updateValues(DataTable*)), but, SLOT(Update()));
-            ui->Page1->addWidget(but);
+            QWidget *tab = new QWidget();
+            tab->setObjectName(QStringLiteral("tab1"));
+            QGridLayout *gridLayout = new QGridLayout(tab);
+            gridLayout->setSpacing(6);
+            gridLayout->setContentsMargins(11, 11, 11, 11);
+            gridLayout->setObjectName(QStringLiteral("gridLayout1"));
+            for( VarB *elem : dr->progs )
+            {
+                ButtonVar *but= new ButtonVar(elem);
+                connect(m_pserver, SIGNAL(updateValues(DataTable*)), but, SLOT(Update()));
+                gridLayout->addWidget(but);
+            }
+
+            QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+            gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
+
+            ui->tabWidget->addTab(tab, QString());
+            ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab),"Progs");
+        }
+        //*****************************************************************
+        {
+            QWidget *tab = new QWidget();
+            tab->setObjectName(QStringLiteral("tab2"));
+            QGridLayout *gridLayout = new QGridLayout(tab);
+            gridLayout->setSpacing(6);
+            gridLayout->setContentsMargins(11, 11, 11, 11);
+            gridLayout->setObjectName(QStringLiteral("gridLayout2"));
+            for( VarF3SP *elem : dr->temps )
+            {
+                InfoTempSetpoint *t= new InfoTempSetpoint(elem);
+                connect(m_pserver, SIGNAL(updateValues(DataTable*)), t, SLOT(Update()));
+                gridLayout->addWidget(t);
+            }
+            QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+            gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
+
+            ui->tabWidget->addTab(tab, QString());
+            ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab),"Temps");
+        }
+        //*****************************************************************
+        {
+            QWidget *tab = new QWidget();
+            tab->setObjectName(QStringLiteral("tab3"));
+            QGridLayout *gridLayout= new QGridLayout(tab);
+            gridLayout->setSpacing(6);
+            gridLayout->setContentsMargins(11, 11, 11, 11);
+            gridLayout->setObjectName(QStringLiteral("gridLayout3"));
+
+            m_logw = new LogMessage();
+            gridLayout->addWidget(m_logw);
+
+            ui->tabWidget->addTab(tab, QString());
+            ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "Logs");
         }
 
-        ui->tabWidget->setTabText(1,"temps");
-        for( VarF3SP *elem : dr->temps )
-        {
-            InfoTempSetpoint *t= new InfoTempSetpoint(elem);
-            connect(m_pserver, SIGNAL(updateValues(DataTable*)), t, SLOT(Update()));
-            ui->Page2->addWidget(t);
-        }
+
+
+
 
         ui->tabWidget->setTabText(2,"lights");
         for( VarB *elem : dr->lights )
@@ -98,7 +138,7 @@ void MainWindow::updateValues(DataTable* dr)
     //aggiorno i messaggi
     QString s;
     if ( dr->GetLogMessage(s))
-         m_logw->appendMessage( s );
+        m_logw->appendMessage( s );
 
     //***********************************************************
     ui->label_P->setText( dr->wProduced.svalue());

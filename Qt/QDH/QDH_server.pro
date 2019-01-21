@@ -10,7 +10,9 @@ QT += websockets network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = /root/dh/dh_server
+Release:TARGET = /root/dh/dh_server
+Debug:TARGET = dh_server
+
 
 CONFIG += console
 CONFIG -= app_bundle
@@ -56,5 +58,4 @@ HEADERS += \
     ../QWidget/ButtonVar.h \
     ../QWidget/LogMessage.h
 
-FORMS += \
-        mainwindow.ui
+FORMS +=

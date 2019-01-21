@@ -118,12 +118,12 @@ void Server::manage_Progs(bool immediate)
     }
     else
     {
-        manage_ExternalLight(120);
-        manage_BoilerACS(250);
+        manage_ExternalLight(200);
+        manage_BoilerACS(200);
         manage_WinterPDC(300);
-        manage_WinterFIRE(200);
+        manage_WinterFIRE(100);
         manage_SummerPDC(310);
-        manage_evRooms(300);
+        manage_evRooms(200);
         manage_Camino(60);
     }
 }
@@ -192,7 +192,7 @@ void Server::manage_ExternalLight(int sec)
 
     if (dr.progExternalLight)
     {
-        if ( hour()>=18 || hour() <=7)
+        if ( hour()>=17 || hour() <=7)
         {
             /**************************************************************************************************/
             dr.LogMessage("darkExternal: " + dr.darkExternal.svalue() + " Request >" + QString::number( 32 - 2 * dr.lampLati )  );
@@ -235,7 +235,8 @@ void  Server::manage_evRooms( int sec )
 
     bool allRoom = dr.progAllRooms;
 
-    if (dr.rPompaPianoPrimo || dr.rPompaPianoTerra || dr.rPdcPompa || dr.tInputMixer > 30)
+    //attivo le stanze solo a determinate condizioni
+    if ( (hour() >= 6 ) && (dr.rPompaPianoPrimo || dr.rPompaPianoTerra || dr.rPdcPompa || dr.tInputMixer > 30) )
     {
         //////////////////////////////////////////////////////////////////////////////////
         //decido se accendere le stanze
@@ -296,83 +297,83 @@ void Server::manage_SummerPDC(int sec)
 
     dr.LogMessage("--- Summer ---" + QDateTime::currentDateTime().toString() );
 
-//    bool needPdc  = false;
-//    bool needPdc_Pump = false;
-//    bool needPdc_Night = false;
-//    bool allRoom = false;
+    //    bool needPdc  = false;
+    //    bool needPdc_Pump = false;
+    //    bool needPdc_Night = false;
+    //    bool allRoom = false;
 
-//    /**************************************************************************************************/
-//    if (dr.progSummerAC)
-//    {
-//        allRoom = dr.progAllRooms;
-//        /**************************************************************************************************/
-//        // decido se accendere le pompe
-//        if ( dr.tInletFloor  > 20 )  // minima t Acqua raffreddata
-//        {
-//            needPdc = true;
-//            needPdc_Pump = true;
+    //    /**************************************************************************************************/
+    //    if (dr.progSummerAC)
+    //    {
+    //        allRoom = dr.progAllRooms;
+    //        /**************************************************************************************************/
+    //        // decido se accendere le pompe
+    //        if ( dr.tInletFloor  > 20 )  // minima t Acqua raffreddata
+    //        {
+    //            needPdc = true;
+    //            needPdc_Pump = true;
 
-//        }
-//        else if ( dr.tInletFloor  < 25 )
-//        {
-//            needPdc_Pump = true;
-//            allRoom = dr.progAllRooms;
-//        }
+    //        }
+    //        else if ( dr.tInletFloor  < 25 )
+    //        {
+    //            needPdc_Pump = true;
+    //            allRoom = dr.progAllRooms;
+    //        }
 
-//        if ( dr.progFotoV  )
-//        {
-//            dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() );
+    //        if ( dr.progFotoV  )
+    //        {
+    //            dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() );
 
-//            if (dr.rPdc)
-//            {   //pdc Gia Accesa
-//                if ( dr.wSurplus >500 )
-//                {    // molto surplus
-//                    dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
-//                    needPdc_Night = false;
-//                }
-//                if ( dr.wSurplus < 200 )
-//                {
-//                    dr.LogMessage("PDC Insufficiente SurplusW:" + dr.wSurplus.svalue() );
-//                    needPdc =false;
-//                }
-//            }
-//            else
-//            {   //pdc Spenta
-//                if ( dr.wSurplus < 700 )
-//                {
-//                    dr.LogMessage("PDC Insufficiente SurplusW:" + dr.wSurplus.svalue() );
-//                    needPdc =false;
-//                }
-//            }
-//        }
-//    }
+    //            if (dr.rPdc)
+    //            {   //pdc Gia Accesa
+    //                if ( dr.wSurplus >500 )
+    //                {    // molto surplus
+    //                    dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
+    //                    needPdc_Night = false;
+    //                }
+    //                if ( dr.wSurplus < 200 )
+    //                {
+    //                    dr.LogMessage("PDC Insufficiente SurplusW:" + dr.wSurplus.svalue() );
+    //                    needPdc =false;
+    //                }
+    //            }
+    //            else
+    //            {   //pdc Spenta
+    //                if ( dr.wSurplus < 700 )
+    //                {
+    //                    dr.LogMessage("PDC Insufficiente SurplusW:" + dr.wSurplus.svalue() );
+    //                    needPdc =false;
+    //                }
+    //            }
+    //        }
+    //    }
 
-//    /**************************************************************************************************/
-//    dr.LogMessage("summerAC_pdc [" +  QString::number(needPdc) + "]");
-//    dr.LogMessage("summerAC_pump [" +   QString::number(needPdc_Pump) + "]");
-//    dr.LogMessage("summerAC_night [" +   QString::number(needPdc_Night) + "]");
+    //    /**************************************************************************************************/
+    //    dr.LogMessage("summerAC_pdc [" +  QString::number(needPdc) + "]");
+    //    dr.LogMessage("summerAC_pump [" +   QString::number(needPdc_Pump) + "]");
+    //    dr.LogMessage("summerAC_night [" +   QString::number(needPdc_Night) + "]");
 
-//    dr.LogMessage("tInletFloor: " + dr.tInletFloor.svalue() + " tSala: " + dr.tSala.svalue() + " tReturnFloor: " +  dr.tReturnFloor.svalue() );
-//    dr.LogMessage("tPufferHi: " + dr.tPufferHi.svalue() );
+    //    dr.LogMessage("tInletFloor: " + dr.tInletFloor.svalue() + " tSala: " + dr.tSala.svalue() + " tReturnFloor: " +  dr.tReturnFloor.svalue() );
+    //    dr.LogMessage("tPufferHi: " + dr.tPufferHi.svalue() );
 
-//    /**************************************************************************************************/
-//    // attuatori
-//    dr.evSala1.ModifyValue(allRoom);
-//    dr.evSala2.ModifyValue(allRoom);
-//    dr.evCucina.ModifyValue(allRoom);
+    //    /**************************************************************************************************/
+    //    // attuatori
+    //    dr.evSala1.ModifyValue(allRoom);
+    //    dr.evSala2.ModifyValue(allRoom);
+    //    dr.evCucina.ModifyValue(allRoom);
 
-//    dr.evCameraM1.ModifyValue(needPdc || allRoom);
-//    dr.evCameraM2.ModifyValue(needPdc || allRoom);
-//    dr.evCameraS.ModifyValue (needPdc || allRoom);
-//    dr.evCameraD1.ModifyValue(needPdc || allRoom);
-//    dr.evCameraD2.ModifyValue(needPdc || allRoom);
+    //    dr.evCameraM1.ModifyValue(needPdc || allRoom);
+    //    dr.evCameraM2.ModifyValue(needPdc || allRoom);
+    //    dr.evCameraS.ModifyValue (needPdc || allRoom);
+    //    dr.evCameraD1.ModifyValue(needPdc || allRoom);
+    //    dr.evCameraD2.ModifyValue(needPdc || allRoom);
 
-//    /**************************************************************************************************/
-//    // accendo PDC
-//    dr.rPdc.ModifyValue( needPdc );
-//    dr.rPdcNightMode.ModifyValue( needPdc && needPdc_Night );
-//    dr.rPdcHeat.ModifyValue( false );
-//    dr.rPdcPompa.ModifyValue( needPdc_Pump );
+    //    /**************************************************************************************************/
+    //    // accendo PDC
+    //    dr.rPdc.ModifyValue( needPdc );
+    //    dr.rPdcNightMode.ModifyValue( needPdc && needPdc_Night );
+    //    dr.rPdcHeat.ModifyValue( false );
+    //    dr.rPdcPompa.ModifyValue( needPdc_Pump );
 }
 
 
@@ -394,7 +395,7 @@ void  Server::manage_WinterPDC( int sec )
         //////////////////////////////////////////////////////////////////////////////////
         //decido se accendere PDC
         dr.LogMessage("PDC ON: tInputMixer:" + dr.tInputMixer.svalue() + "<28 tExternal:"+ dr.tExternal.svalue() + "<15 " );
-        if ( dr.tInputMixer < 28 && dr.tExternal < 15 )
+        if ( dr.tInputMixer < 30 && dr.tExternal < 15 && dr.rBoilerACS )
         {
             needPdc = true;
             needPdc_Night = true;
@@ -481,7 +482,7 @@ void  Server::manage_WinterFIRE( int sec )
             dr.LogMessage("Stop Pompa: Sicurezza temp ingreso impianto: tInletFloor: " + dr.tInletFloor.svalue() + " > 35" );
             needPompa_pp = false;
         }
-        if ( dr.tReturnFireplace < 35 && hour() < 5 ) // fuori oario
+        if ( dr.tReturnFireplace < 35 && hour() < 6 ) // fuori oario spengo pompa
         {
             dr.LogMessage("Stop Pompa: orario " + QString::number( hour() ) );
             needPompa_pp = false;
@@ -518,7 +519,7 @@ void  Server::manage_Camino( int sec )
     {
         //////////////////////////////////////////////////////////////////////////////////
         // decido se accendere pompa camino
-        dr.LogMessage("Condizione Pompa Camino: tReturnFireplace " + dr.tReturnFireplace.svalue() + " - " + "tPufferLow " + dr.tPufferLow.svalue() );
+        dr.LogMessage("Condizione Pompa Camino: tReturnFireplace " + dr.tReturnFireplace.svalue() + " > 34 - " + "tPufferLow " + dr.tPufferLow.svalue() + " > dr.tPufferLow + 5");
         if ( dr.tPufferLow < 45 && dr.tReturnFireplace > 34 && dr.tReturnFireplace > dr.tPufferLow + 5 )
         {
             needPCamino = true;
@@ -526,9 +527,9 @@ void  Server::manage_Camino( int sec )
 
         //////////////////////////////////////////////////////////////////////////////////
         // decido se accendere piano terra
+        dr.LogMessage("Condizione dr.tPufferLow > 45 && dr.tReturnFireplace > 45");
         if ( dr.tPufferLow > 45 && dr.tReturnFireplace > 45 )
         {
-            dr.LogMessage("Condizione dr.tPufferLow > 45 && dr.tReturnFireplace > 45");
             needPompa_pt = true;
         }
     }
