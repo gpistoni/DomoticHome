@@ -62,6 +62,8 @@ void Server::run()
                 /////////////////////////////////////////////////////////////////////////////////////////
                 dr.ReadData();
 
+                dr.wProduced.m_value *= 1.15f;
+
                 // calcoli
                 dr.wConsumed += dr.wL1;
                 dr.wConsumed += dr.wL2;
