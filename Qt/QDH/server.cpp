@@ -142,21 +142,15 @@ void Server::manage_BoilerACS(int sec)
     /**************************************************************************************************/
     if ( dr.progBoilerACS )
     {
-        if ( dr.rBoilerACS )
+        if ( dr.rBoilerACS && dr.wSurplus > 0 )
         {
-            if ( dr.wSurplus > 100)
-            {
-                boilerACS = true;
-                dr.LogMessage("Condizione ON surplusW:" + dr.wSurplus.svalue() );
-            }
+            boilerACS = true;
+            dr.LogMessage("Condizione ON surplusW:" + dr.wSurplus.svalue() );
         }
-        else
+        else if ( !dr.rBoilerACS && dr.wSurplus > 450 )
         {
-            if ( dr.wSurplus > 500)
-            {
-                boilerACS = true;
-                dr.LogMessage("Condizione ON surplusW:" + dr.wSurplus.svalue() );
-            }
+            boilerACS = true;
+            dr.LogMessage("Condizione ON surplusW:" + dr.wSurplus.svalue() );
         }
 
         //decido se accendere il boiler solo a mezzogiorno
@@ -165,11 +159,12 @@ void Server::manage_BoilerACS(int sec)
             boilerACS = true;
             dr.LogMessage("Condizione ON hour:" + QString::number( hour() ) + " >12 & <16");
         }
+
         // solo se il camino non funziona
         if ( dr.tReturnFireplace > 30 )
         {
             boilerACS = false;
-            dr.LogMessage("Condizione OFF dr.ReturnFireplace:" + dr.tReturnFireplace.svalue() + "> 30");
+            dr.LogMessage("Condizione OFF ReturnFireplace:" + dr.tReturnFireplace.svalue() + "> 30");
         }
     }
     /**************************************************************************************************/
@@ -394,39 +389,28 @@ void  Server::manage_WinterPDC( int sec )
     {
         //////////////////////////////////////////////////////////////////////////////////
         //decido se accendere PDC
-        dr.LogMessage("PDC ON: tInputMixer:" + dr.tInputMixer.svalue() + "<28 tExternal:"+ dr.tExternal.svalue() + "<15 " );
-        if ( dr.tInputMixer < 30 && dr.tExternal < 15 && dr.rBoilerACS )
-        {
-            needPdc = true;
-            needPdc_Night = true;
-        }
-
-        if ( needPdc && dr.progFotoV  )
+        if ( dr.progFotoV  )
         {
             dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() );
 
-            if (dr.rPdc)
-            {   //pdc Gia Accesa
-                if ( dr.wSurplus > 500 )
-                {    // molto surplus
-                    dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
-                    needPdc_Night = false;
-                    needPompa_pp = true;
-                    needPompa_pt = true;
-                }
-                if ( dr.wSurplus < 100 )
-                {
-                    dr.LogMessage("PDC Insufficiente SurplusW:" + dr.wSurplus.svalue() );
-                    needPdc =false;
-                }
+            if (dr.rPdc && dr.wSurplus > 50 )
+            {
+                dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
+                needPdc = true;
             }
-            else
-            {   //pdc Spenta
-                if ( dr.wSurplus < 600 )
-                {
-                    dr.LogMessage("PDC Insufficiente SurplusW:" + dr.wSurplus.svalue() );
-                    needPdc =false;
-                }
+            else if (!dr.rPdc && dr.wSurplus > 500 )
+            {
+                dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
+                needPdc = true;
+            }
+
+            //pdc Gia Accesa
+            if (dr.rPdc && dr.wSurplus > 500 )
+            {    // molto surplus
+                dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
+                needPdc_Night = false;
+                needPompa_pp = true;
+                needPompa_pt = true;
             }
         }
     }
