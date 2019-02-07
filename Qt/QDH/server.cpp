@@ -31,7 +31,7 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.0.10", true);
+        dr.LogMessage("VER 1.0.11", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
@@ -272,6 +272,14 @@ void  Server::manage_evRooms( int sec )
         {
             cameraM2 = true;
         }
+
+        if ( dr.rPdc && dr.rPdcHeat )
+        {
+            str += "\nPdc Heat mode";
+            sala = true;
+            cucina = true;
+        }
+
         dr.LogMessage(str);
     }
 
@@ -383,8 +391,6 @@ void  Server::manage_WinterPDC( int sec )
 
     dr.LogMessage("--- Winter ---" + QDateTime::currentDateTime().toString() );
 
-    bool needPompa_pt = dr.rPompaPianoTerra;
-    bool needPompa_pp = dr.rPompaPianoPrimo;
     bool needPdc = false;
     bool needPdc_Night = false;
 
@@ -411,22 +417,14 @@ void  Server::manage_WinterPDC( int sec )
             {    // molto surplus
                 dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
                 needPdc_Night = false;
-                needPompa_pp = true;
-                needPompa_pt = true;
             }
         }
     }
 
     dr.LogMessage("NeedPdc: [" + QString::number(needPdc) + "]" );
     dr.LogMessage("NeedPdc_Night: [" + QString::number(needPdc_Night) + "]" );
-    dr.LogMessage("NeedPompa_pp: [" + QString::number(needPompa_pp) + "]" );
-    dr.LogMessage("needPompa_pt: [" + QString::number(needPompa_pt) + "]" );
 
     // comandi sulla centrale -----------------------------------------------------
-    // accendo pompa pp
-    dr.rPompaPianoPrimo.ModifyValue( needPompa_pp );
-    //piano terra
-    dr.rPompaPianoTerra.ModifyValue( needPompa_pt );
     // accendo PDC
     dr.rPdc.ModifyValue( needPdc );
     // heat
@@ -480,6 +478,13 @@ void  Server::manage_WinterFIRE( int sec )
             needPompa_pt = true;
         }
     }
+
+    //con pdc accesa accendo pompa_pp
+    if ( dr.rPdc && dr.rPdcHeat && !dr.rPdcNightMode)
+    {
+        needPompa_pp = true;
+    }
+
     dr.LogMessage("needPompa_pt: [" + QString::number(needPompa_pt) + "]" );
     dr.LogMessage("NeedPompa_pp: [" + QString::number(needPompa_pp) + "]" );
 
