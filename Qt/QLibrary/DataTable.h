@@ -20,15 +20,13 @@ public:
     VarB progExternalLight      = VarB( "T0", "r4", "LuciEsterno" );
 
     VarB progAllRooms           = VarB( "T0", "r7", "TutteLeStanze" );
-    VarB progFotoV              = VarB( "T0", "r8", "SurplusFotoV" );
 
     std::vector<VarB*>    progs = {&progBoilerACS,
                                    &progSummerAC,
                                    &progWinterFIRE,
                                    &progWinterPDC,
                                    &progExternalLight,
-                                   &progAllRooms,
-                                   &progFotoV
+                                   &progAllRooms
                                   };
     //*****************************************************************************************
     VarF3SP tCucina                   = { "T1", "v0", "v8", "v16", -0.5, 22, "tCucina",   10, 30 };
@@ -366,7 +364,7 @@ public:
             if (f.open(QIODevice::WriteOnly | QIODevice::Append))
             {
                 f.write(s.toLatin1());
-                f.write("\n\r");
+                f.write("\n");
             }
         }
     }

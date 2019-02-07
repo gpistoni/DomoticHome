@@ -31,21 +31,22 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.0.9", true);
+        dr.LogMessage("VER 1.0.10", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
         dr.progExternalLight.ModifyValue(true);
-        dr.progFotoV.ModifyValue(true);
 
         if ( winter() )
         {
             dr.progWinterFIRE.ModifyValue(true);
+            dr.progWinterPDC.ModifyValue(true);
             dr.progSummerAC.ModifyValue(false);
         }
         if ( summer() )
         {
             dr.progWinterFIRE.ModifyValue(false);
+            dr.progWinterPDC.ModifyValue(false);
             dr.progSummerAC.ModifyValue(true);
         }
 
@@ -389,7 +390,6 @@ void  Server::manage_WinterPDC( int sec )
     {
         //////////////////////////////////////////////////////////////////////////////////
         //decido se accendere PDC
-        if ( dr.progFotoV  )
         {
             dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() );
 

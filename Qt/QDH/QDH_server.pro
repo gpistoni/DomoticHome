@@ -3,16 +3,14 @@
 # Project created by QtCreator 2018-11-24T13:15:06
 #
 #-------------------------------------------------
-
+F
 QT += core
 QT -= gui
 QT += websockets network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-Release:TARGET = /root/dh/dh_server
-Debug:TARGET = dh_server
-
+TARGET = /root/dh/dh_server
 
 CONFIG += console
 CONFIG -= app_bundle
