@@ -30,7 +30,7 @@ public:
                                   };
     //*****************************************************************************************
     VarF3SP tCucina                   = { "T1", "v0", "v8", "v16", -0.5, 22, "tCucina",   10, 30 };
-    VarF3SP tSala                     = { "T1", "v1", "v9", "v17",  1.5, 23, "tSala",     10, 30 };
+    VarF3SP tSala                     = { "T1", "v1", "v9", "v17",  0.5, 23, "tSala",     10, 30 };
     VarF3SP tCameraS                  = { "T1", "v2", "v10", "v18", 1.5, 18, "tCameraS",  10, 30 };
     VarF3SP tCameraD                  = { "T1", "v3", "v11", "v19", 0.5, 18, "tCameraD" , 10, 30 };
     VarF3SP tCameraM                  = { "T1", "v4", "v12", "v20", 1,   16, "tCameraM" , 10, 30 };
@@ -95,18 +95,18 @@ public:
     //*****************************************************************************************
     VarB evCameraM1         = { "T5", "r0", "CameraM1" };
     VarB evCameraM2         = { "T5", "r1", "CameraM2" };
-    VarB evSala1            = { "T5", "r2", "Sala1" };
-    VarB evSala2            = { "T5", "r3", "Sala2" };
-    VarB evCucina           = { "T5", "r4", "Cucina" };
+    VarB evCucina           = { "T5", "r2", "Cucina" };
+    VarB evSala1            = { "T5", "r3", "Sala1" };
+    VarB evSala2            = { "T5", "r4", "Sala2" };
     VarB evCameraS          = { "T5", "r5", "CameraS" };
     VarB evCameraD1         = { "T5", "r6", "CameraD1" };
     VarB evCameraD2         = { "T5", "r7", "CameraD2" };
 
     std::vector<VarB*>    evStanze = { &evCameraM1,
                                        &evCameraM2,
+                                       &evCucina,
                                        &evSala1,
                                        &evSala2,
-                                       &evCucina,
                                        &evCameraS,
                                        &evCameraD1,
                                        &evCameraD2
@@ -307,7 +307,7 @@ public:
 
     void UpdateVal(VarF3SP *var)
     {
-        var->m_value = GetValueF(var->m_t, var->m_v);
+        var->m_value = GetValueF(var->m_t, var->m_v) + var->m_adjust;
         var->m_value1 = GetValueF(var->m_t, var->m_v1);
         var->m_value2 = GetValueF(var->m_t, var->m_v2);
     }
