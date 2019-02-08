@@ -36,8 +36,8 @@ SOURCES += \
     ../QLibrary/HttpServer.cpp \
     ../QLibrary/DataTable.cpp \
     ../QLibrary/DataVars.cpp \
-    ../QLibrary/InfoBarVar.cpp \
-    ../QLibrary/InfoTempSetpoint.cpp \
+    ../QWidget/InfoBarVar.cpp \
+    ../QWidget/InfoTempSetpoint.cpp \
     ../QWidget/LogMessage.cpp \
     ../QWidget/ButtonVarOnOffAuto.cpp \
     ../QWidget/ButtonVar.cpp \
@@ -50,8 +50,8 @@ HEADERS += \
     ../QLibrary/HttpServer.h \
     ../QLibrary/DataTable.h \
     ../QLibrary/DataVars.h \
-    ../QLibrary/InfoBarVar.h \
-    ../QLibrary/InfoTempSetpoint.h \
+    ../QWidget/InfoBarVar.h \
+    ../QWidget/InfoTempSetpoint.h \
     ../QWidget/ButtonVarOnOffAuto.h \
     ../QWidget/ButtonVar.h \
     ../QWidget/LogMessage.h
