@@ -5,9 +5,9 @@
 #include <QHBoxLayout>
 #include <QLabel>
 
-#include "DataVars.h"
+#include "../QLibrary/DataVars.h"
 
-class Q_WIDGETS_EXPORT InfoTempSetpoint : public QWidget
+class InfoTempSetpoint : public QWidget
 {
     Q_OBJECT
 

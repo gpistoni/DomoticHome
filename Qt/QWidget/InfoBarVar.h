@@ -5,9 +5,9 @@
 #include <QHBoxLayout>
 #include <QProgressBar>
 #include <QLabel>
-#include "DataVars.h"
+#include "../QLibrary/DataVars.h"
 
-class Q_WIDGETS_EXPORT InfoBarVar : public QWidget
+class InfoBarVar : public QWidget
 {
     Q_OBJECT
 

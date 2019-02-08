@@ -7,16 +7,21 @@
 #include "ButtonVar.h"
 #include "../QLibrary/DataVars.h"
 
-class Q_WIDGETS_EXPORT ButtonVarOnOffAuto : public ButtonVar
+class ButtonVarForced : public StdButton
 {
     Q_OBJECT
+    VarBf *var;
 
 private:
-    QPushButton *buttonAUTO;
+    QLabel * text;
+
+    QPushButton *buttonStatus;
+    QPushButton *buttonForceON;
+    QPushButton *buttonForceOFF;
 
 public:
-    explicit ButtonVarOnOffAuto(VarB *v);
-    virtual ~ButtonVarOnOffAuto(){}
+    explicit ButtonVarForced(VarBf *v);
+    virtual ~ButtonVarForced(){}
 
     void SetColor(  );
 
