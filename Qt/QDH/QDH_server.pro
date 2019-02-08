@@ -52,7 +52,11 @@ HEADERS += \
     ../QLibrary/DataVars.h \
     ../QWidget/InfoBarVar.h \
     ../QWidget/InfoTempSetpoint.h \
+<<<<<<< HEAD
+    ../QWidget/ButtonVarOnOffAuto.h \
+=======
     ../QWidget/ButtonVarForced.h \
+>>>>>>> 98c43ebd7005142a3987c91d2b86fd971b3df89e
     ../QWidget/ButtonVar.h \
     ../QWidget/LogMessage.h
 
