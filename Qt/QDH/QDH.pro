@@ -34,14 +34,11 @@ SOURCES += \
     ../QLibrary/HttpServer.cpp \
     ../QLibrary/DataTable.cpp \
     ../QLibrary/DataVars.cpp \
-    ../QWidget/LogMessage.cpp \
-    ../QWidget/ButtonVar.cpp \
     main.cpp \
     ../QWidget/ButtonVarForced.cpp \
     ../QWidget/LogMessage.cpp \
     ../QWidget/InfoTempSetpoint.cpp \
     ../QWidget/InfoBarVar.cpp \
-    ../QWidget/ButtonVarForced.cpp \
     ../QWidget/ButtonVar.cpp
 
 HEADERS += \
@@ -52,13 +49,10 @@ HEADERS += \
     ../QLibrary/HttpServer.h \
     ../QLibrary/DataTable.h \
     ../QLibrary/DataVars.h \
-    ../QWidget/ButtonVar.h \
-    ../QWidget/LogMessage.h \
     ../QWidget/ButtonVarForced.h \
     ../QWidget/LogMessage.h \
     ../QWidget/InfoTempSetpoint.h \
     ../QWidget/InfoBarVar.h \
-    ../QWidget/ButtonVarForced.h \
     ../QWidget/ButtonVar.h
 
 FORMS += \
