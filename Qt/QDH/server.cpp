@@ -31,7 +31,7 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.0.11", true);
+        dr.LogMessage("VER 1.0.12", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
