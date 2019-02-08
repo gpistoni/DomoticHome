@@ -39,7 +39,7 @@ SOURCES += \
     ../QWidget/InfoBarVar.cpp \
     ../QWidget/InfoTempSetpoint.cpp \
     ../QWidget/LogMessage.cpp \
-    ../QWidget/ButtonVarOnOffAuto.cpp \
+    ../QWidget/ButtonVarForced.cpp \
     ../QWidget/ButtonVar.cpp \
     main_server.cpp
 
@@ -52,7 +52,7 @@ HEADERS += \
     ../QLibrary/DataVars.h \
     ../QWidget/InfoBarVar.h \
     ../QWidget/InfoTempSetpoint.h \
-    ../QWidget/ButtonVarOnOffAuto.h \
+    ../QWidget/ButtonVarForced.h \
     ../QWidget/ButtonVar.h \
     ../QWidget/LogMessage.h
 
