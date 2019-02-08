@@ -34,12 +34,15 @@ SOURCES += \
     ../QLibrary/HttpServer.cpp \
     ../QLibrary/DataTable.cpp \
     ../QLibrary/DataVars.cpp \
-    ../QLibrary/InfoBarVar.cpp \
-    ../QLibrary/InfoTempSetpoint.cpp \
     ../QWidget/LogMessage.cpp \
-    ../QWidget/ButtonVarOnOffAuto.cpp \
     ../QWidget/ButtonVar.cpp \
-    main.cpp
+    main.cpp \
+    ../QWidget/ButtonVarForced.cpp \
+    ../QWidget/LogMessage.cpp \
+    ../QWidget/InfoTempSetpoint.cpp \
+    ../QWidget/InfoBarVar.cpp \
+    ../QWidget/ButtonVarForced.cpp \
+    ../QWidget/ButtonVar.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -49,11 +52,14 @@ HEADERS += \
     ../QLibrary/HttpServer.h \
     ../QLibrary/DataTable.h \
     ../QLibrary/DataVars.h \
-    ../QLibrary/InfoBarVar.h \
-    ../QLibrary/InfoTempSetpoint.h \
-    ../QWidget/ButtonVarOnOffAuto.h \
     ../QWidget/ButtonVar.h \
-    ../QWidget/LogMessage.h
+    ../QWidget/LogMessage.h \
+    ../QWidget/ButtonVarForced.h \
+    ../QWidget/LogMessage.h \
+    ../QWidget/InfoTempSetpoint.h \
+    ../QWidget/InfoBarVar.h \
+    ../QWidget/ButtonVarForced.h \
+    ../QWidget/ButtonVar.h
 
 FORMS += \
         mainwindow.ui

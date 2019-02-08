@@ -1,10 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "../QWidget/ButtonVarOnOffAuto.h"
+#include "../QWidget/ButtonVarForced.h"
 #include "../QWidget/LogMessage.h"
-#include "../QLibrary/DataTable.h"
-#include "../QLibrary/InfoBarVar.h"
-#include "../QLibrary/InfoTempSetpoint.h"
+#include "../QWidget/InfoBarVar.h"
+#include "../QWidget/InfoTempSetpoint.h"
 #include "server.h"
 
 MainWindow::MainWindow(Server *pserver, QWidget *parent) :
@@ -35,11 +34,10 @@ void MainWindow::updateValues(DataTable* dr)
         //*****************************************************************
         {
             QWidget *tab = new QWidget();
-            tab->setObjectName(QStringLiteral("tab1"));
             QGridLayout *gridLayout = new QGridLayout(tab);
             gridLayout->setSpacing(6);
             gridLayout->setContentsMargins(11, 11, 11, 11);
-            gridLayout->setObjectName(QStringLiteral("gridLayout1"));
+
             for( VarB *elem : dr->progs )
             {
                 ButtonVar *but= new ButtonVar(elem);
@@ -56,11 +54,11 @@ void MainWindow::updateValues(DataTable* dr)
         //*****************************************************************
         {
             QWidget *tab = new QWidget();
-            tab->setObjectName(QStringLiteral("tab2"));
             QGridLayout *gridLayout = new QGridLayout(tab);
             gridLayout->setSpacing(6);
             gridLayout->setContentsMargins(11, 11, 11, 11);
-            gridLayout->setObjectName(QStringLiteral("gridLayout2"));
+
+
             for( VarF3SP *elem : dr->temps )
             {
                 InfoTempSetpoint *t= new InfoTempSetpoint(elem);
@@ -76,61 +74,122 @@ void MainWindow::updateValues(DataTable* dr)
         //*****************************************************************
         {
             QWidget *tab = new QWidget();
-            tab->setObjectName(QStringLiteral("tab3"));
             QGridLayout *gridLayout= new QGridLayout(tab);
             gridLayout->setSpacing(6);
             gridLayout->setContentsMargins(11, 11, 11, 11);
-            gridLayout->setObjectName(QStringLiteral("gridLayout3"));
+
+            for( VarB *elem : dr->lights )
+            {
+                ButtonVar *but= new ButtonVar(elem);
+                connect(m_pserver, SIGNAL(updateValues(DataTable*)), but, SLOT(Update()));
+                gridLayout->addWidget(but);
+            }
+            QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+            gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
+
+            ui->tabWidget->addTab(tab, QString());
+            ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "Lights");
+        }
+         //*****************************************************************
+        {
+            QWidget *tab = new QWidget();
+            QGridLayout *gridLayout= new QGridLayout(tab);
+            gridLayout->setSpacing(6);
+            gridLayout->setContentsMargins(11, 11, 11, 11);
+
+            for( VarF3 *elem : dr->ampers )
+            {
+                InfoBarVar *t= new InfoBarVar(elem);
+                connect(m_pserver, SIGNAL(updateValues(DataTable*)), t, SLOT(Update()));
+                gridLayout->addWidget(t);
+            }
+
+            QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+            gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
+
+            ui->tabWidget->addTab(tab, QString());
+            ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "Ampers");
+        }
+         //*****************************************************************
+        {
+            QWidget *tab = new QWidget();
+            tab->setObjectName(QStringLiteral("tabRct"));
+
+            QGridLayout *gridLayout= new QGridLayout(tab);
+            gridLayout->setSpacing(6);
+            gridLayout->setContentsMargins(11, 11, 11, 11);
+
+            for( VarBf *elem : dr->rcaldaia )
+            {
+                ButtonVarForced *bar= new ButtonVarForced(elem);
+                connect(m_pserver, SIGNAL(updateValues(DataTable*)), bar, SLOT(Update()));
+                gridLayout->addWidget(bar);
+            }
+
+            QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+            gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
+
+            ui->tabWidget->addTab(tab, QString());
+            ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "rCT");
+        }
+         //*****************************************************************
+        {
+            QWidget *tab = new QWidget();
+            tab->setObjectName(QStringLiteral("tabTct"));
+
+            QGridLayout *gridLayout= new QGridLayout(tab);
+            gridLayout->setSpacing(6);
+            gridLayout->setContentsMargins(11, 11, 11, 11);
+
+            for( VarF *elem : dr->tcaldaia )
+            {
+                InfoBarVar *t= new InfoBarVar(elem);
+                connect(m_pserver, SIGNAL(updateValues(DataTable*)), t, SLOT(Update()));
+                gridLayout->addWidget(t);
+            }
+
+            QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+            gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
+
+            ui->tabWidget->addTab(tab, QString());
+            ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "tCT");
+        }
+        //*****************************************************************
+        {
+            QWidget *tab = new QWidget();
+            tab->setObjectName(QStringLiteral("tabevStanze"));
+
+            QGridLayout *gridLayout= new QGridLayout(tab);
+            gridLayout->setSpacing(6);
+            gridLayout->setContentsMargins(11, 11, 11, 11);
+
+            for( VarBf *elem : dr->evStanze )
+            {
+                ButtonVarForced *bar= new ButtonVarForced(elem);
+                connect(m_pserver, SIGNAL(updateValues(DataTable*)), bar, SLOT(Update()));
+                gridLayout->addWidget(bar);
+            }
+
+            QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+            gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
+
+            ui->tabWidget->addTab(tab, QString());
+            ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "evStanze");
+        }
+        //*****************************************************************
+        {
+            QWidget *tab = new QWidget();
+            tab->setObjectName(QStringLiteral("tabLogs"));
+
+            QGridLayout *gridLayout= new QGridLayout(tab);
+            gridLayout->setSpacing(6);
+            gridLayout->setContentsMargins(11, 11, 11, 11);
 
             m_logw = new LogMessage();
             gridLayout->addWidget(m_logw);
 
             ui->tabWidget->addTab(tab, QString());
             ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "Logs");
-        }
-
-
-
-
-
-        ui->tabWidget->setTabText(2,"lights");
-        for( VarB *elem : dr->lights )
-        {
-            ButtonVar *but= new ButtonVar(elem);
-            connect(m_pserver, SIGNAL(updateValues(DataTable*)), but, SLOT(Update()));
-            ui->Page3->addWidget(but);
-        }
-
-        ui->tabWidget->setTabText(3,"ampers");
-        for( VarF3 *elem : dr->ampers )
-        {
-            InfoBarVar *t= new InfoBarVar(elem);
-            connect(m_pserver, SIGNAL(updateValues(DataTable*)), t, SLOT(Update()));
-            ui->Page4->addWidget(t);
-        }
-
-        ui->tabWidget->setTabText(4,"rcaldaia");
-        for( VarB *elem : dr->rcaldaia )
-        {
-            ButtonVar *bar= new ButtonVar(elem);
-            connect(m_pserver, SIGNAL(updateValues(DataTable*)), bar, SLOT(Update()));
-            ui->Page5->addWidget(bar);
-        }
-
-        ui->tabWidget->setTabText(5,"tcaldaia");
-        for( VarF *elem : dr->tcaldaia )
-        {
-            InfoBarVar *t= new InfoBarVar(elem);
-            connect(m_pserver, SIGNAL(updateValues(DataTable*)), t, SLOT(Update()));
-            ui->Page6->addWidget(t);
-        }
-
-        ui->tabWidget->setTabText(6,"evStanze");
-        for( VarB *elem : dr->evStanze )
-        {
-            ButtonVar *bar= new ButtonVar(elem);
-            connect(m_pserver, SIGNAL(updateValues(DataTable*)), bar, SLOT(Update()));
-            ui->Page7->addWidget(bar);
         }
     }
 
@@ -149,22 +208,22 @@ void MainWindow::updateValues(DataTable* dr)
     ui->label_L2->setText("L2: " + dr->wL2.svalue());
     ui->label_L3->setText("L3: " + dr->wL3.svalue());
 
-    ui->progressBar_P->setValue(dr->wProduced);
-    ui->progressBar_C->setValue(dr->wConsumed);
+    ui->progressBar_P->setValue((int)dr->wProduced);
+    ui->progressBar_C->setValue((int)dr->wConsumed);
 
     if (dr->wSurplus>0)
     {
         QPalette p = palette();
         p.setColor(QPalette::Highlight, Qt::green);
         ui->progressBar_S->setPalette(p);
-        ui->progressBar_S->setValue(dr->wSurplus);
+        ui->progressBar_S->setValue((int)dr->wSurplus);
     }
     else
     {
         QPalette p = palette();
         p.setColor(QPalette::Highlight, Qt::red);
         ui->progressBar_S->setPalette(p);
-        ui->progressBar_S->setValue(-dr->wSurplus);
+        ui->progressBar_S->setValue((int)-dr->wSurplus);
     }
     //***********************************************************
 }

@@ -1,6 +1,5 @@
 #pragma once
 #include "../QLibrary/HttpClient.h"
-
 #include <iostream>
 #include "qdebug.h"
 #include "QJsonDocument"
@@ -55,16 +54,16 @@ public:
                                       &lampExtra
                                    };
     //*****************************************************************************************
-    VarB rPdc                           = { "T3", "r0", "Pdc" };
-    VarB rPdcHeat                       = { "T3", "r1", "rPdcHeat" };
-    VarB rPdcPompa                      = { "T3", "r2", "rPdcPompa" };
-    VarB rPdcNightMode                  = { "T3", "r3", "rPdcNightMode" };
-    VarB rPompaPianoPrimo               = { "T3", "r4", "rPompaPianoPrimo" };
-    VarB rPompaPianoTerra               = { "T3", "r5", "rPompaPianoTerra" };
-    VarB rBoilerACS                     = { "T3", "r6", "rBoilerACS" };
-    VarB rPompaCamino                   = { "T3", "r7", "rPompaCamino" };
+    VarBf rPdc                     = { "T3", "r0", "Pdc" };
+    VarBf rPdcHeat                 = { "T3", "r1", "rPdcHeat" };
+    VarBf rPdcPompa                = { "T3", "r2", "rPdcPompa" };
+    VarBf rPdcNightMode            = { "T3", "r3", "rPdcNightMode" };
+    VarBf rPompaPianoPrimo         = { "T3", "r4", "rPompaPianoPrimo" };
+    VarBf rPompaPianoTerra         = { "T3", "r5", "rPompaPianoTerra" };
+    VarBf rBoilerACS               = { "T3", "r6", "rBoilerACS" };
+    VarBf rPompaCamino             = { "T3", "r7", "rPompaCamino" };
 
-    std::vector<VarB*>    rcaldaia = {  &rPdc,
+    std::vector<VarBf*>    rcaldaia = {  &rPdc,
                                         &rPdcHeat,
                                         &rPdcPompa,
                                         &rPdcNightMode,
@@ -93,16 +92,16 @@ public:
                                        &darkExternal
                                      };
     //*****************************************************************************************
-    VarB evCameraM1         = { "T5", "r0", "CameraM1" };
-    VarB evCameraM2         = { "T5", "r1", "CameraM2" };
-    VarB evCucina           = { "T5", "r2", "Cucina" };
-    VarB evSala1            = { "T5", "r3", "Sala1" };
-    VarB evSala2            = { "T5", "r4", "Sala2" };
-    VarB evCameraS          = { "T5", "r5", "CameraS" };
-    VarB evCameraD1         = { "T5", "r6", "CameraD1" };
-    VarB evCameraD2         = { "T5", "r7", "CameraD2" };
+    VarBf evCameraM1         = { "T5", "r0", "CameraM1" };
+    VarBf evCameraM2         = { "T5", "r1", "CameraM2" };
+    VarBf evCucina           = { "T5", "r2", "Cucina" };
+    VarBf evSala1            = { "T5", "r3", "Sala1" };
+    VarBf evSala2            = { "T5", "r4", "Sala2" };
+    VarBf evCameraS          = { "T5", "r5", "CameraS" };
+    VarBf evCameraD1         = { "T5", "r6", "CameraD1" };
+    VarBf evCameraD2         = { "T5", "r7", "CameraD2" };
 
-    std::vector<VarB*>    evStanze = { &evCameraM1,
+    std::vector<VarBf*>    evStanze = { &evCameraM1,
                                        &evCameraM2,
                                        &evCucina,
                                        &evSala1,
@@ -175,7 +174,7 @@ public:
             {
                 UpdateRelay( elem );
             }
-            for( VarB *elem : rcaldaia )
+            for( VarBf *elem : rcaldaia )
             {
                 UpdateRelay( elem );
             }
@@ -183,7 +182,7 @@ public:
             {
                 UpdateVal( elem );
             }
-            for( VarB *elem : evStanze )
+            for( VarBf *elem : evStanze )
             {
                 UpdateRelay( elem );
             }
@@ -216,25 +215,14 @@ public:
             {
                 SendModifiedValue( elem );
             }
-            for( VarB *elem : rcaldaia )
+            for( VarBf *elem : rcaldaia )
             {
                 SendModifiedValue( elem );
             }
-            /*
-            for( VarF *elem : tcaldaia )
-            {
-                UpdateVal( elem );
-            }*/
-            for( VarB *elem : evStanze )
+            for( VarBf *elem : evStanze )
             {
                 SendModifiedValue( elem );
-            }
-            /*
-            for( VarF3 *elem : ampers )
-            {
-                UpdateVal( elem );
-            }
-            */
+            }            
         }
         catch(...)
         {
@@ -295,7 +283,12 @@ public:
 
     void UpdateRelay(VarB *var)
     {
-        var->Value( GetValueI(var->m_t, var->m_r));
+        var->SetValue( GetValueI(var->m_t, var->m_r));
+    }
+
+    void UpdateRelay(VarBf *var)
+    {
+        var->SetValue( GetValueI(var->m_t, var->m_r));
     }
 
     void UpdateVal(VarF3 *var)
@@ -318,6 +311,24 @@ public:
         try
         {
             bool newval;
+            if (var->IsModifiedValue(newval))
+            {
+                CQHttpClient client(m_host, m_port, 10000 );
+                QString str = var->m_t.toLower() + "." + var->m_r.toLower() + "=" + QString::number(newval);
+                client.Request_Set(str);
+                return true;
+            }
+        }
+        catch(...)
+        {}
+        return false;
+    }
+
+    bool SendModifiedValue(VarBf *var)
+    {
+        try
+        {
+            int newval;
             if (var->IsModifiedValue(newval))
             {
                 CQHttpClient client(m_host, m_port, 10000 );

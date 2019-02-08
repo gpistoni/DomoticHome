@@ -1,12 +1,16 @@
 #include "ButtonVar.h"
 #include <QSpacerItem>
 
-ButtonVar::ButtonVar(VarB *v): QWidget()
+StdButton::StdButton(): QWidget()
 {
     m_pON.setColor(QPalette::Button, QColor(Qt::green));
-    m_pOFF.setColor(QPalette::Button, QColor(Qt::gray));
+    m_pOFF.setColor(QPalette::Button, QColor(Qt::darkGray));
     m_pDIS.setColor(QPalette::Button, QColor(Qt::lightGray));
+}
 
+
+ButtonVar::ButtonVar(VarB *v)
+{
     var = v;
 
     text = new QLabel();

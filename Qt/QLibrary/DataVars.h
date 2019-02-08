@@ -1,5 +1,4 @@
 #pragma once
-
 #include "qstring.h"
 
 //********************************************************************************************
@@ -60,11 +59,80 @@ public:
         m_modified = false;
         return false;
     }
-    void Value(bool v)
+    void SetValue(bool v)
     {
         m_value = v;
     }
     void ModifyValue(bool v)
+    {
+        m_newValue = v;
+        m_modified = true;
+    }
+};
+
+//********************************************************************************************
+class VarBf: public Var
+{
+public:
+    enum class tValue
+    {
+        OFF =0,
+        ON=1,
+        FORCE_OFF = 2,
+        FORCE_ON = 3
+    };
+
+private:
+    tValue  m_value=tValue::OFF;         // se 0 = off, 1= on, 2=forceOFF, 3=forceON
+    tValue  m_newValue=tValue::OFF;
+    bool m_modified=0;
+
+public:
+    VarBf( QString t, QString r, QString descr):
+        Var( t, "", r, descr )
+    {}
+    virtual ~VarBf()override
+    {}
+    virtual QString svalue() override
+    {
+        return QString::number(static_cast<int>(m_value));
+    }
+    operator bool()
+    {
+        return (m_value==tValue::ON || m_value==tValue::FORCE_ON);
+    }
+    bool isForceOn()
+    {
+        return (m_value==tValue::FORCE_ON);
+    }
+    bool isForceOff()
+    {
+        return (m_value==tValue::FORCE_OFF);
+    }
+    bool IsModifiedValue(int &newValue)
+    {
+        newValue = static_cast<int>(m_newValue);
+
+        if (m_modified && m_newValue!=m_value )
+        {
+            return true;
+        }
+        m_modified = false;
+        return false;
+    }
+    void SetValue(int v)
+    {
+        m_value = static_cast<tValue>(v);
+    }
+    void ModifyValue(bool v)
+    { // solo se non sono in forced
+        if (m_value==tValue::ON || m_value==tValue::OFF)
+        {
+            m_newValue = static_cast<tValue>(v);
+            m_modified = true;
+        }
+    }
+    void ModifyValue(tValue v)
     {
         m_newValue = v;
         m_modified = true;
