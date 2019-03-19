@@ -20,6 +20,7 @@ ButtonVar::ButtonVar(VarB *v)
     connect(buttonON, SIGNAL(clicked()), this, SLOT(onClicked()));
     connect(buttonOFF, SIGNAL(clicked()), this, SLOT(onClicked()));
 
+    text->setMinimumWidth(300);
     text->setText(var->m_descr);
 
     QHBoxLayout * hl = new QHBoxLayout();

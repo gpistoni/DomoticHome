@@ -4,6 +4,7 @@
 #include "../QWidget/LogMessage.h"
 #include "../QWidget/InfoBarVar.h"
 #include "../QWidget/InfoTempSetpoint.h"
+#include "QScrollArea"
 #include "server.h"
 
 MainWindow::MainWindow(Server *pserver, QWidget *parent) :
@@ -58,7 +59,6 @@ void MainWindow::updateValues(DataTable* dr)
             gridLayout->setSpacing(6);
             gridLayout->setContentsMargins(11, 11, 11, 11);
 
-
             for( VarF3SP *elem : dr->temps )
             {
                 InfoTempSetpoint *t= new InfoTempSetpoint(elem);
@@ -104,8 +104,8 @@ void MainWindow::updateValues(DataTable* dr)
                 gridLayout->addWidget(t);
             }
 
-            QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-            gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
+            //QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+            //gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
 
             ui->tabWidget->addTab(tab, QString());
             ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "Ampers");
@@ -126,8 +126,8 @@ void MainWindow::updateValues(DataTable* dr)
                 gridLayout->addWidget(bar);
             }
 
-            QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-            gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
+           // QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+           // gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
 
             ui->tabWidget->addTab(tab, QString());
             ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "rCT");
@@ -148,8 +148,8 @@ void MainWindow::updateValues(DataTable* dr)
                 gridLayout->addWidget(t);
             }
 
-            QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-            gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
+            //QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+            //gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
 
             ui->tabWidget->addTab(tab, QString());
             ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "tCT");
@@ -170,8 +170,8 @@ void MainWindow::updateValues(DataTable* dr)
                 gridLayout->addWidget(bar);
             }
 
-            QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-            gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
+            //QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+           //gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
 
             ui->tabWidget->addTab(tab, QString());
             ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "evStanze");
@@ -191,6 +191,10 @@ void MainWindow::updateValues(DataTable* dr)
             ui->tabWidget->addTab(tab, QString());
             ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "Logs");
         }
+
+        //   QScrollArea *scroll = new QScrollArea(this);
+     //   scroll->setWidget(ui->tabWidget);
+
     }
 
     //***********************************************************

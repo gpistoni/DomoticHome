@@ -7,6 +7,7 @@
 
 CQHttpServer::CQHttpServer(quint16 port, bool debug, QObject *parent) :
     QTcpServer(parent),
+    m_dv(nullptr),
     m_port(port),
     m_debug(debug)
 {
@@ -14,8 +15,9 @@ CQHttpServer::CQHttpServer(quint16 port, bool debug, QObject *parent) :
     m_pool->setMaxThreadCount(5);
 }
 
-void CQHttpServer::startServer()
+void CQHttpServer::startServer( DataValues *dv)
 {
+    m_dv = dv;
     if(this->listen(QHostAddress::Any, m_port))
     {
         qDebug() << "Server started port " << m_port;
@@ -40,7 +42,7 @@ void CQHttpServer::incomingConnection(qintptr handle)
     qDebug() << "IncomingConnection: " << handle;
 
     // Note: Rannable is a task not a thread
-    CHTTPParser *task = new CHTTPParser();
+    CHTTPParser *task = new CHTTPParser(m_dv);
     task->setAutoDelete(true);
 
     task->socketDescriptor = handle;

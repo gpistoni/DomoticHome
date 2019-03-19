@@ -3,6 +3,7 @@
 #include <QTcpSocket>
 #include <QTcpServer>
 #include <QThreadPool>
+#include "DataTable.h"
 
 
 class CQHttpServer : public QTcpServer
@@ -12,13 +13,15 @@ public:
     explicit CQHttpServer(quint16 port, bool debug = false, QObject *parent = nullptr);
     ~CQHttpServer();
 
+    DataValues *m_dv;
+
 Q_SIGNALS:
     void closed();
 
 private Q_SLOTS:
 
 public:
-    void startServer();
+    void startServer(DataValues *dv);
 
 protected:
     void incomingConnection( qintptr handle );

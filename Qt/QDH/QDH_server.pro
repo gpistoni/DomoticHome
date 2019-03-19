@@ -3,14 +3,13 @@
 # Project created by QtCreator 2018-11-24T13:15:06
 #
 #-------------------------------------------------
-F
 QT += core
 QT -= gui
 QT += websockets network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = /root/dh/dh_server
+//TARGET = /root/dh/dh_server
 
 CONFIG += console
 CONFIG -= app_bundle
@@ -52,11 +51,7 @@ HEADERS += \
     ../QLibrary/DataVars.h \
     ../QWidget/InfoBarVar.h \
     ../QWidget/InfoTempSetpoint.h \
-<<<<<<< HEAD
-    ../QWidget/ButtonVarOnOffAuto.h \
-=======
     ../QWidget/ButtonVarForced.h \
->>>>>>> 98c43ebd7005142a3987c91d2b86fd971b3df89e
     ../QWidget/ButtonVar.h \
     ../QWidget/LogMessage.h
 

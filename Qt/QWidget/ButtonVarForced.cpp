@@ -14,6 +14,7 @@ ButtonVarForced::ButtonVarForced(VarBf *v)
     connect(buttonForceON, SIGNAL(clicked()), this, SLOT(onClicked()));
     connect(buttonForceOFF, SIGNAL(clicked()), this, SLOT(onClicked()));
 
+    text->setMinimumWidth(200);
     text->setText(var->m_descr);
 
     buttonStatus->setText("AUTO");

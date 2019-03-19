@@ -1,5 +1,4 @@
 #pragma once
-
 #include <QObject>
 #include "../QLibrary/DataTable.h"
 #include "QDateTime"

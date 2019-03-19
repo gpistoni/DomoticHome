@@ -16,9 +16,9 @@ class InfoBarVar : public QWidget
 
 private:
     QLabel *text = nullptr;
-    QLabel *value = nullptr;
-    QLabel *value1 = nullptr;
-    QLabel *value2 = nullptr;
+    QLabel *tvalue = nullptr;
+    QLabel *tvalue1 = nullptr;
+    QLabel *tvalue2 = nullptr;
 
     QProgressBar *pbar = nullptr;
 

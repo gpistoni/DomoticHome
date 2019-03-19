@@ -1,5 +1,6 @@
 #include "server.h"
 #include "../QLibrary/DataTable.h"
+#include "../QLibrary/HttpServer.h"
 #include "QThread"
 #include "QFile"
 
@@ -28,10 +29,13 @@ Server::~Server() {
 // Start processing data.
 void Server::run()
 {
+    CQHttpServer HttpServer(8080);
+    HttpServer.startServer(&dr);
+
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.0.12", true);
+        dr.LogMessage("VER 1.0.13", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
@@ -121,13 +125,13 @@ void Server::manage_Progs(bool immediate)
     }
     else
     {
-        manage_ExternalLight(200);
-        manage_BoilerACS(200);
-        manage_WinterPDC(300);
-        manage_WinterFIRE(100);
-        manage_SummerPDC(310);
-        manage_evRooms(200);
-        manage_Camino(60);
+        manage_ExternalLight(10*60);
+        manage_BoilerACS(10*60);
+        manage_WinterPDC(5*60);
+        manage_WinterFIRE(3*60);
+        manage_SummerPDC(5*60);
+        manage_evRooms(3*60);
+        manage_Camino(3*60);
     }
 }
 
@@ -451,7 +455,7 @@ void  Server::manage_WinterFIRE( int sec )
         //////////////////////////////////////////////////////////////////////////////////
         // decido se accendere/spegnere pompa piano primo
         needPompa_pp = true;
-        if ( dr.tInputMixer < 28 && dr.tPufferHi < 28 && dr.tReturnFireplace < 28 )   // non ho temperatura
+        if ( dr.tInputMixer < 27 && dr.tPufferHi < 28 && dr.tReturnFireplace < 28 )   // non ho temperatura
         {
             dr.LogMessage("Condizione Pompa PP insufficiente: tInletFloor: " + dr.tInletFloor.svalue() + " tReturnFloor: " + dr.tReturnFloor.svalue() );
             needPompa_pp = false;
@@ -471,18 +475,17 @@ void  Server::manage_WinterFIRE( int sec )
             dr.LogMessage("Stop Pompa: orario " + QString::number( hour() ) );
             needPompa_pp = false;
         }
+        if ( dr.tReturnFireplace < 35 && hour() >= 11 ) // fuori oario spengo pompa
+        {
+            dr.LogMessage("Stop Pompa: orario " + QString::number( hour() ) );
+            needPompa_pp = false;
+        }
         if ( dr.tPufferLow > 55 )   // emergenza
         {
             dr.LogMessage("Emergenza tPufferLow > 55 ");
             needPompa_pp = true;
             needPompa_pt = true;
         }
-    }
-
-    //con pdc accesa accendo pompa_pp
-    if ( dr.rPdc && dr.rPdcHeat && !dr.rPdcNightMode)
-    {
-        needPompa_pp = true;
     }
 
     dr.LogMessage("needPompa_pt: [" + QString::number(needPompa_pt) + "]" );
