@@ -72,7 +72,8 @@ void Server::run()
                 dr.wConsumed += dr.wL1;
                 dr.wConsumed += dr.wL2;
                 dr.wConsumed += dr.wL3;
-                dr.wSurplus += dr.wProduced;
+
+                dr.wSurplus = dr.wProduced;
                 dr.wSurplus -= dr.wConsumed;
 
                 dr.LogPoint();
