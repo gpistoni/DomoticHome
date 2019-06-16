@@ -35,7 +35,7 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.0.13", true);
+        dr.LogMessage("VER 1.0.14", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
@@ -229,6 +229,7 @@ void  Server::manage_evRooms( int sec )
     dr.LogMessage("--- EvRooms ---" + QDateTime::currentDateTime().toString() );
 
     bool sala = false;
+    bool sala2 = false;
     bool cucina = false;
     bool cameraS = false;
     bool cameraD = false;
@@ -238,54 +239,103 @@ void  Server::manage_evRooms( int sec )
 
     bool allRoom = dr.progAllRooms;
 
-    //attivo le stanze solo a determinate condizioni
-    if ( (hour() >= 6 ) && (dr.rPompaPianoPrimo || dr.rPompaPianoTerra || dr.rPdcPompa || dr.tInputMixer > 30) )
+    //attivo le stanze solo a determinate condizioni (INVERNO)
+    if (dr.progWinterPDC || dr.progWinterFIRE)
     {
-        //////////////////////////////////////////////////////////////////////////////////
-        //decido se accendere le stanze
-        QString str = "Stanze";
-        if ( dr.tSala < dr.tSala.setPoint() )
+        if ( (hour() >= 6 ) && (dr.rPompaPianoPrimo || dr.rPompaPianoTerra || dr.rPdcPompa || dr.tInputMixer > 30) )
         {
-            str += "\ntSala " + dr.tSala.svalue()  + " < " + dr.tSala.ssetPoint();
-            sala = true;
-        }
-        if ( dr.tCucina < dr.tCucina.setPoint() )
-        {
-            str += "\ntCucina " + dr.tCucina.svalue()  + " < " + dr.tCucina.ssetPoint();
-            cucina = true;
-        }
-        if ( dr.tCameraS < dr.tCameraS.setPoint() )
-        {
-            str += "\ntCameraS " + dr.tCameraS.svalue()  + " < " + dr.tCameraS.ssetPoint();
-            cameraS = true;
-        }
-        if ( dr.tCameraD < dr.tCameraD.setPoint() )
-        {
-            str += "\ntCameraD " + dr.tCameraD.svalue()  + " < " + dr.tCameraD.ssetPoint();
-            cameraD = true;
-        }
-        if ( dr.tCameraD < dr.tCameraD.setPoint() - 2 )
-        {
-            cameraD2 = true;
-        }
-        if ( dr.tCameraM < dr.tCameraM.setPoint() )
-        {
-            str += "\ntCameraM " + dr.tCameraM.svalue()  + " < " + dr.tCameraM.ssetPoint();
-            cameraM = true;
-        }
-        if ( dr.tCameraM < dr.tCameraM.setPoint() - 2 )
-        {
-            cameraM2 = true;
-        }
+            //////////////////////////////////////////////////////////////////////////////////
+            //decido se accendere le stanze
+            QString str = "Stanze";
+            if ( dr.tSala < dr.tSala.setPoint() )
+            {
+                str += "\ntSala " + dr.tSala.svalue()  + " < " + dr.tSala.ssetPoint();
+                sala = true;
+                sala2 = true;
+            }
+            if ( dr.tCucina < dr.tCucina.setPoint() )
+            {
+                str += "\ntCucina " + dr.tCucina.svalue()  + " < " + dr.tCucina.ssetPoint();
+                cucina = true;
+            }
+            if ( dr.tCameraS < dr.tCameraS.setPoint() )
+            {
+                str += "\ntCameraS " + dr.tCameraS.svalue()  + " < " + dr.tCameraS.ssetPoint();
+                cameraS = true;
+            }
+            if ( dr.tCameraD < dr.tCameraD.setPoint() )
+            {
+                str += "\ntCameraD " + dr.tCameraD.svalue()  + " < " + dr.tCameraD.ssetPoint();
+                cameraD = true;
+            }
+            if ( dr.tCameraD < dr.tCameraD.setPoint() - 2 )
+            {
+                cameraD2 = true;
+            }
+            if ( dr.tCameraM < dr.tCameraM.setPoint() )
+            {
+                str += "\ntCameraM " + dr.tCameraM.svalue()  + " < " + dr.tCameraM.ssetPoint();
+                cameraM = true;
+            }
+            if ( dr.tCameraM < dr.tCameraM.setPoint() - 2 )
+            {
+                cameraM2 = true;
+            }
+            if ( dr.rPdc && dr.rPdcHeat )
+            {
+                str += "\nPdc Heat mode";
+                sala = true;
+                cucina = true;
+            }
 
-        if ( dr.rPdc && dr.rPdcHeat )
-        {
-            str += "\nPdc Heat mode";
-            sala = true;
-            cucina = true;
+            dr.LogMessage(str);
         }
+    }
+    //attivo le stanze solo a determinate condizioni (ESTATE)
+    if (dr.progSummerAC  )
+    {
+        if ( dr.rPdcPompa || dr.rPompaPianoPrimo)
+        {
+            //////////////////////////////////////////////////////////////////////////////////
+            //decido se accendere le stanze
+            QString str = "Stanze";
+            if ( dr.tSala > dr.tSala.setPoint() + 2  )
+            {
+                str += "\ntSala " + dr.tSala.svalue()  + " < " + dr.tSala.ssetPoint()+ 2 ;
+                sala = true;
+                sala2 = false;
+            }
+            if ( dr.tCucina > dr.tCucina.setPoint() + 2  )
+            {
+                str += "\ntCucina " + dr.tCucina.svalue()  + " < " + dr.tCucina.ssetPoint()+ 2 ;
+                cucina = true;
+            }
+            if ( dr.tCameraS > dr.tCameraS.setPoint() + 2 )
+            {
+                str += "\ntCameraS " + dr.tCameraS.svalue()  + " < " + dr.tCameraS.ssetPoint()+ 2 ;
+                cameraS = true;
+            }
+            if ( dr.tCameraD > dr.tCameraD.setPoint() + 2  )
+            {
+                str += "\ntCameraD " + dr.tCameraD.svalue()  + " < " + dr.tCameraD.ssetPoint()+ 2 ;
+                cameraD = true;
+            }
+            if ( dr.tCameraD > dr.tCameraD.setPoint() + 4 )
+            {
+                cameraD2 = true;
+            }
+            if ( dr.tCameraM > dr.tCameraM.setPoint() + 2 )
+            {
+                str += "\ntCameraM " + dr.tCameraM.svalue()  + " < " + dr.tCameraM.ssetPoint()+ 2 ;
+                cameraM = true;
+            }
+            if ( dr.tCameraM > dr.tCameraM.setPoint() + 4 )
+            {
+                cameraM2 = true;
+            }
 
-        dr.LogMessage(str);
+            dr.LogMessage(str);
+        }
     }
 
     //**********************************************************************
@@ -293,7 +343,7 @@ void  Server::manage_evRooms( int sec )
     dr.evCameraM1.ModifyValue(cameraM || allRoom);
     dr.evCameraM2.ModifyValue(cameraM2 || allRoom);
     dr.evSala1.ModifyValue(sala || allRoom);
-    dr.evSala2.ModifyValue(sala || allRoom );
+    dr.evSala2.ModifyValue(sala2 || allRoom );
     dr.evCucina.ModifyValue(cucina || allRoom );
     dr.evCameraS.ModifyValue(cameraS || allRoom );
     dr.evCameraD1.ModifyValue(cameraD || allRoom );
@@ -308,83 +358,65 @@ void Server::manage_SummerPDC(int sec)
 
     dr.LogMessage("--- Summer ---" + QDateTime::currentDateTime().toString() );
 
-    //    bool needPdc  = false;
-    //    bool needPdc_Pump = false;
-    //    bool needPdc_Night = false;
-    //    bool allRoom = false;
+    bool needPdc = false;
+    bool needPdc_Pump = false;
+    bool needPdc_Night = true;
 
-    //    /**************************************************************************************************/
-    //    if (dr.progSummerAC)
-    //    {
-    //        allRoom = dr.progAllRooms;
-    //        /**************************************************************************************************/
-    //        // decido se accendere le pompe
-    //        if ( dr.tInletFloor  > 20 )  // minima t Acqua raffreddata
-    //        {
-    //            needPdc = true;
-    //            needPdc_Pump = true;
+    /**************************************************************************************************/
+    if (dr.progSummerAC)
+    {
+        //////////////////////////////////////////////////////////////////////////////////
+        //decido se accendere PDC
 
-    //        }
-    //        else if ( dr.tInletFloor  < 25 )
-    //        {
-    //            needPdc_Pump = true;
-    //            allRoom = dr.progAllRooms;
-    //        }
+        dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() );
 
-    //        if ( dr.progFotoV  )
-    //        {
-    //            dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() );
+        if (dr.rPdc && dr.wSurplus > 50 )
+        {
+            dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
+            needPdc = true;
+        }
+        else if (!dr.rPdc && dr.wSurplus > 600 )
+        {
+            dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
+            needPdc = true;
+        }
 
-    //            if (dr.rPdc)
-    //            {   //pdc Gia Accesa
-    //                if ( dr.wSurplus >500 )
-    //                {    // molto surplus
-    //                    dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
-    //                    needPdc_Night = false;
-    //                }
-    //                if ( dr.wSurplus < 200 )
-    //                {
-    //                    dr.LogMessage("PDC Insufficiente SurplusW:" + dr.wSurplus.svalue() );
-    //                    needPdc =false;
-    //                }
-    //            }
-    //            else
-    //            {   //pdc Spenta
-    //                if ( dr.wSurplus < 700 )
-    //                {
-    //                    dr.LogMessage("PDC Insufficiente SurplusW:" + dr.wSurplus.svalue() );
-    //                    needPdc =false;
-    //                }
-    //            }
-    //        }
-    //    }
+        //pdc Gia Accesa
+        if (dr.rPdc && dr.wSurplus > 600 )
+        {    // molto surplus
+            dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
+            needPdc_Night = false;
+        }
 
-    //    /**************************************************************************************************/
-    //    dr.LogMessage("summerAC_pdc [" +  QString::number(needPdc) + "]");
-    //    dr.LogMessage("summerAC_pump [" +   QString::number(needPdc_Pump) + "]");
-    //    dr.LogMessage("summerAC_night [" +   QString::number(needPdc_Night) + "]");
+        /**************************************************************************************************/
+        if ( dr.tExternal < 25 )  // minima t esterna
+        {
+            needPdc = false;
+        }
 
-    //    dr.LogMessage("tInletFloor: " + dr.tInletFloor.svalue() + " tSala: " + dr.tSala.svalue() + " tReturnFloor: " +  dr.tReturnFloor.svalue() );
-    //    dr.LogMessage("tPufferHi: " + dr.tPufferHi.svalue() );
+        needPdc_Pump = needPdc;
 
-    //    /**************************************************************************************************/
-    //    // attuatori
-    //    dr.evSala1.ModifyValue(allRoom);
-    //    dr.evSala2.ModifyValue(allRoom);
-    //    dr.evCucina.ModifyValue(allRoom);
+        /**************************************************************************************************/
+        if ( dr.tInletFloor  < 22 )  // minima t Acqua raffreddata
+        {
+            needPdc = false;
+        }
+    }
 
-    //    dr.evCameraM1.ModifyValue(needPdc || allRoom);
-    //    dr.evCameraM2.ModifyValue(needPdc || allRoom);
-    //    dr.evCameraS.ModifyValue (needPdc || allRoom);
-    //    dr.evCameraD1.ModifyValue(needPdc || allRoom);
-    //    dr.evCameraD2.ModifyValue(needPdc || allRoom);
+    /**************************************************************************************************/
+    dr.LogMessage("summerAC_pdc [" +  QString::number(needPdc) + "]");
+    dr.LogMessage("summerAC_pump [" +   QString::number(needPdc_Pump) + "]");
+    dr.LogMessage("summerAC_night [" +   QString::number(needPdc_Night) + "]");
 
-    //    /**************************************************************************************************/
-    //    // accendo PDC
-    //    dr.rPdc.ModifyValue( needPdc );
-    //    dr.rPdcNightMode.ModifyValue( needPdc && needPdc_Night );
-    //    dr.rPdcHeat.ModifyValue( false );
-    //    dr.rPdcPompa.ModifyValue( needPdc_Pump );
+    dr.LogMessage("tInletFloor: " + dr.tInletFloor.svalue() + " tReturnFloor: " +  dr.tReturnFloor.svalue() );
+    dr.LogMessage("tPufferHi: " + dr.tPufferHi.svalue() );
+
+    /**************************************************************************************************/
+    // accendo PDC
+    dr.rPdc.ModifyValue( needPdc );
+    dr.rPdcNightMode.ModifyValue( needPdc && needPdc_Night );
+    dr.rPdcHeat.ModifyValue( false );
+    dr.rPdcPompa.ModifyValue( needPdc_Pump );
 }
 
 
@@ -397,7 +429,7 @@ void  Server::manage_WinterPDC( int sec )
     dr.LogMessage("--- Winter ---" + QDateTime::currentDateTime().toString() );
 
     bool needPdc = false;
-    bool needPdc_Night = false;
+    bool needPdc_Night = true;
 
     if (dr.progWinterPDC)
     {
@@ -411,14 +443,14 @@ void  Server::manage_WinterPDC( int sec )
                 dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
-            else if (!dr.rPdc && dr.wSurplus > 500 )
+            else if (!dr.rPdc && dr.wSurplus > 600 )
             {
                 dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
 
             //pdc Gia Accesa
-            if (dr.rPdc && dr.wSurplus > 500 )
+            if (dr.rPdc && dr.wSurplus > 600 )
             {    // molto surplus
                 dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
                 needPdc_Night = false;
