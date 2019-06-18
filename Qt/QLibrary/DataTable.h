@@ -363,28 +363,8 @@ public:
         // std::cerr << ".";
     }
 
-    void LogMessage(QString s, bool logtofile = true)
-    {
-        m_logMessage += "\n";
-        m_logMessage += s;
-        std::cerr <<  "\n" << s.toStdString();
+    void LogMessage(QString s, bool logtofile = true);
 
-        if (logtofile)
-        {
-            QFile f("/var/log/dh.log");
-            if (f.open(QIODevice::WriteOnly | QIODevice::Append))
-            {
-                f.write(s.toLatin1());
-                f.write("\n");
-            }
-        }
-    }
-
-    bool GetLogMessage( QString &s )
-    {
-        s = m_logMessage;
-        m_logMessage.clear();
-        return s.size();
-    }
+    bool GetLogMessage( QString &s );
 };
 

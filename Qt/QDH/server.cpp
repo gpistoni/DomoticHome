@@ -14,9 +14,8 @@ Server::Server(bool runPrograms) :
     t_BoilerACS.start();
     t_ExternalLight.start();
     t_evRooms.start();
-    t_WinterPDC.start();
+    t_PDC.start();
     t_WinterFIRE.start();
-    t_SummerPDC.start();
     t_Camino.start();
 }
 
@@ -35,7 +34,7 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.0.14", true);
+        dr.LogMessage("VER 1.1.0", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
@@ -118,9 +117,8 @@ void Server::manage_Progs(bool immediate)
     {
         manage_ExternalLight(1);
         manage_BoilerACS(1);
-        manage_SummerPDC(1);
         manage_WinterFIRE(1);
-        manage_WinterPDC(1);
+        manage_PDC(1);
         manage_evRooms(1);
         manage_Camino(1);
     }
@@ -128,9 +126,8 @@ void Server::manage_Progs(bool immediate)
     {
         manage_ExternalLight(10*60);
         manage_BoilerACS(10*60);
-        manage_WinterPDC(5*60);
+        manage_PDC(5*60);
         manage_WinterFIRE(3*60);
-        manage_SummerPDC(5*60);
         manage_evRooms(3*60);
         manage_Camino(3*60);
     }
@@ -144,18 +141,18 @@ void Server::manage_BoilerACS(int sec)
         return;
     t_BoilerACS.restart();
 
-    dr.LogMessage("--- BoilerACS ---"  + QDateTime::currentDateTime().toString() );
+    dr.LogMessage("--- BoilerACS ---"  );
 
     bool boilerACS = false;
     /**************************************************************************************************/
     if ( dr.progBoilerACS )
     {
-        if ( dr.rBoilerACS && dr.wSurplus > 0 )
+        if ( dr.rBoilerACS && dr.wSurplus > 50 ) // se e gia acceso
         {
             boilerACS = true;
             dr.LogMessage("Condizione ON surplusW:" + dr.wSurplus.svalue() );
         }
-        else if ( !dr.rBoilerACS && dr.wSurplus > 450 )
+        else if ( !dr.rBoilerACS && dr.wSurplus > 450 ) // se e spento
         {
             boilerACS = true;
             dr.LogMessage("Condizione ON surplusW:" + dr.wSurplus.svalue() );
@@ -188,7 +185,8 @@ void Server::manage_ExternalLight(int sec)
         return;
     t_ExternalLight.restart();
 
-    dr.LogMessage("--- ExternalLight ---" + QDateTime::currentDateTime().toString() );
+    dr.LogMessage(QDateTime::currentDateTime().date().toString() );
+    dr.LogMessage("--- ExternalLight ---"  );
 
     bool lightSide = false;
     bool lightLamp = false;
@@ -226,7 +224,7 @@ void  Server::manage_evRooms( int sec )
     if ( t_evRooms.elapsed() < sec * 1000 ) return;
     t_evRooms.restart();
 
-    dr.LogMessage("--- EvRooms ---" + QDateTime::currentDateTime().toString() );
+    dr.LogMessage("--- EvRooms ---" );
 
     bool sala = false;
     bool sala2 = false;
@@ -350,26 +348,25 @@ void  Server::manage_evRooms( int sec )
     dr.evCameraD2.ModifyValue(cameraD2 || allRoom);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void Server::manage_SummerPDC(int sec)
+/******************************************************************************************************************************************************************/
+void  Server::manage_PDC( int sec )
 {
-    if ( t_SummerPDC.elapsed() < sec * 1000 ) return;
-    t_SummerPDC.restart();
+    if ( t_PDC.elapsed() < sec * 1000 ) return;
+    t_PDC.restart();
 
-    dr.LogMessage("--- Summer ---" + QDateTime::currentDateTime().toString() );
+    dr.LogMessage("--- PDC SURPLUS ---" );
 
     bool needPdc = false;
     bool needPdc_Pump = false;
     bool needPdc_Night = true;
+    bool needPdc_Heat = false;
 
-    /**************************************************************************************************/
-    if (dr.progSummerAC)
+    dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() );
+
+    if (dr.progWinterPDC)
     {
         //////////////////////////////////////////////////////////////////////////////////
         //decido se accendere PDC
-
-        dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() );
-
         if (dr.rPdc && dr.wSurplus > 50 )
         {
             dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
@@ -387,87 +384,61 @@ void Server::manage_SummerPDC(int sec)
             dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
             needPdc_Night = false;
         }
+        needPdc_Heat = needPdc;
+        needPdc_Pump = needPdc;
+    }
+
+    else  if (dr.progSummerAC)
+    {
+        //////////////////////////////////////////////////////////////////////////////////
+        //decido se accendere PDC
+        if (dr.rPdc && dr.wSurplus > 200 )
+        {
+            dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
+            needPdc = true;
+        }
+        else if (!dr.rPdc && dr.wSurplus > 800 )
+        {
+            dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
+            needPdc = true;
+        }
+        //pdc Gia Accesa
+        if (dr.rPdc && dr.wSurplus > 800 )
+        {    // molto surplus
+            dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
+            needPdc_Night = false;
+        }
 
         /**************************************************************************************************/
-        if ( dr.tExternal < 25 )  // minima t esterna
+        if (needPdc && dr.tExternal < 25 )  // minima t esterna
         {
+            dr.LogMessage("PDC OFF t estrerna 25>" + dr.tExternal.svalue() );
             needPdc = false;
         }
 
         needPdc_Pump = needPdc;
+        needPdc_Heat = false;
 
         /**************************************************************************************************/
-        if ( dr.tInletFloor  < 22 )  // minima t Acqua raffreddata
+        if (needPdc && dr.tInletFloor  < 22 )  // minima t Acqua raffreddata
         {
+            dr.LogMessage("PDC OFF t inlet 22>" + dr.tInletFloor.svalue() );
             needPdc = false;
         }
     }
 
-    /**************************************************************************************************/
-    dr.LogMessage("summerAC_pdc [" +  QString::number(needPdc) + "]");
-    dr.LogMessage("summerAC_pump [" +   QString::number(needPdc_Pump) + "]");
-    dr.LogMessage("summerAC_night [" +   QString::number(needPdc_Night) + "]");
-
-    dr.LogMessage("tInletFloor: " + dr.tInletFloor.svalue() + " tReturnFloor: " +  dr.tReturnFloor.svalue() );
-    dr.LogMessage("tPufferHi: " + dr.tPufferHi.svalue() );
-
-    /**************************************************************************************************/
-    // accendo PDC
-    dr.rPdc.ModifyValue( needPdc );
-    dr.rPdcNightMode.ModifyValue( needPdc && needPdc_Night );
-    dr.rPdcHeat.ModifyValue( false );
-    dr.rPdcPompa.ModifyValue( needPdc_Pump );
-}
-
-
-/******************************************************************************************************************************************************************/
-void  Server::manage_WinterPDC( int sec )
-{
-    if ( t_WinterPDC.elapsed() < sec * 1000 ) return;
-    t_WinterPDC.restart();
-
-    dr.LogMessage("--- Winter ---" + QDateTime::currentDateTime().toString() );
-
-    bool needPdc = false;
-    bool needPdc_Night = true;
-
-    if (dr.progWinterPDC)
-    {
-        //////////////////////////////////////////////////////////////////////////////////
-        //decido se accendere PDC
-        {
-            dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() );
-
-            if (dr.rPdc && dr.wSurplus > 50 )
-            {
-                dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
-                needPdc = true;
-            }
-            else if (!dr.rPdc && dr.wSurplus > 600 )
-            {
-                dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
-                needPdc = true;
-            }
-
-            //pdc Gia Accesa
-            if (dr.rPdc && dr.wSurplus > 600 )
-            {    // molto surplus
-                dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
-                needPdc_Night = false;
-            }
-        }
-    }
-
     dr.LogMessage("NeedPdc: [" + QString::number(needPdc) + "]" );
-    dr.LogMessage("NeedPdc_Night: [" + QString::number(needPdc_Night) + "]" );
+    dr.LogMessage("NeedPdc_Night: [" + QString::number(needPdc && needPdc_Night) + "]" );
+    dr.LogMessage("NeedPdc_Pump [" + QString::number(needPdc_Pump) + "]");
+    dr.LogMessage("NeedPdc_Heat [" + QString::number(needPdc && needPdc_Heat) + "]");
 
     // comandi sulla centrale -----------------------------------------------------
     // accendo PDC
     dr.rPdc.ModifyValue( needPdc );
     // heat
-    dr.rPdcHeat.ModifyValue( needPdc );
+    dr.rPdcHeat.ModifyValue( needPdc && needPdc_Heat );
     //pompa
-    dr.rPdcPompa.ModifyValue( needPdc );
+    dr.rPdcPompa.ModifyValue( needPdc_Pump );
     //night
     dr.rPdcNightMode.ModifyValue( needPdc && needPdc_Night );
 }
@@ -478,7 +449,7 @@ void  Server::manage_WinterFIRE( int sec )
     if ( t_WinterFIRE.elapsed() < sec * 1000 ) return;
     t_WinterFIRE.restart();
 
-    dr.LogMessage("--- Winter FIRE ---" + QDateTime::currentDateTime().toString() );
+    dr.LogMessage("--- Winter FIRE ---"  );
 
     bool needPompa_pt = false;
     bool needPompa_pp = false;
@@ -538,7 +509,7 @@ void  Server::manage_Camino( int sec )
     if ( t_Camino.elapsed() < sec * 1000 ) return;
     t_Camino.restart();
 
-    dr.LogMessage("--- Camino ---" + QDateTime::currentDateTime().toString() );
+    dr.LogMessage("--- Camino ---" );
     bool needPCamino=false;
     bool needPompa_pt=false;
 

@@ -44,8 +44,7 @@ private:
     QElapsedTimer t_ExternalLight;
     QElapsedTimer t_evRooms;
     QElapsedTimer t_WinterFIRE;
-    QElapsedTimer t_WinterPDC;
-    QElapsedTimer t_SummerPDC;
+    QElapsedTimer t_PDC;
     QElapsedTimer t_Camino;
 
 public:
@@ -57,9 +56,8 @@ public:
     void manage_BoilerACS(int sec);
     void manage_ExternalLight(int sec);
     void manage_evRooms(int sec);
-    void manage_WinterPDC(int sec);
+    void manage_PDC(int sec);
     void manage_WinterFIRE(int sec);
-    void manage_SummerPDC(int sec);
     void manage_Camino(int sec);
 
 public slots:
