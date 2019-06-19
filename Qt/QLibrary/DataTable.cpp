@@ -16,8 +16,7 @@ void DataTable::LogMessage(QString s, bool logtofile)
         QFile f("/var/log/dh.log");
         if (f.open(QIODevice::WriteOnly | QIODevice::Append))
         {
-            f.write(s.toLatin1());
-            f.write("\n");
+            f.write(str.toLatin1());
         }
     }
 }

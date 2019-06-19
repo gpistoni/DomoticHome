@@ -299,23 +299,23 @@ void  Server::manage_evRooms( int sec )
             QString str = "Stanze";
             if ( dr.tSala > dr.tSala.setPoint() + 2  )
             {
-                str += "\ntSala " + dr.tSala.svalue()  + " < " + dr.tSala.ssetPoint()+ 2 ;
+                str += "tSala " + dr.tSala.svalue()  + ">" + dr.tSala.ssetPoint()+ 2 ;
                 sala = true;
                 sala2 = false;
             }
             if ( dr.tCucina > dr.tCucina.setPoint() + 2  )
             {
-                str += "\ntCucina " + dr.tCucina.svalue()  + " < " + dr.tCucina.ssetPoint()+ 2 ;
+                str += "tCuc " + dr.tCucina.svalue()  + ">" + dr.tCucina.ssetPoint()+ 2 ;
                 cucina = true;
             }
             if ( dr.tCameraS > dr.tCameraS.setPoint() + 2 )
             {
-                str += "\ntCameraS " + dr.tCameraS.svalue()  + " < " + dr.tCameraS.ssetPoint()+ 2 ;
+                str += "tCamS " + dr.tCameraS.svalue()  + ">" + dr.tCameraS.ssetPoint()+ 2 ;
                 cameraS = true;
             }
             if ( dr.tCameraD > dr.tCameraD.setPoint() + 2  )
             {
-                str += "\ntCameraD " + dr.tCameraD.svalue()  + " < " + dr.tCameraD.ssetPoint()+ 2 ;
+                str += "tCamD " + dr.tCameraD.svalue()  + ">" + dr.tCameraD.ssetPoint()+ 2 ;
                 cameraD = true;
             }
             if ( dr.tCameraD > dr.tCameraD.setPoint() + 4 )
@@ -324,7 +324,7 @@ void  Server::manage_evRooms( int sec )
             }
             if ( dr.tCameraM > dr.tCameraM.setPoint() + 2 )
             {
-                str += "\ntCameraM " + dr.tCameraM.svalue()  + " < " + dr.tCameraM.ssetPoint()+ 2 ;
+                str += "tCamM " + dr.tCameraM.svalue()  + ">" + dr.tCameraM.ssetPoint()+ 2 ;
                 cameraM = true;
             }
             if ( dr.tCameraM > dr.tCameraM.setPoint() + 4 )
