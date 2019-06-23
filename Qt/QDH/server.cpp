@@ -3,6 +3,7 @@
 #include "../QLibrary/HttpServer.h"
 #include "QThread"
 #include "QFile"
+#include <unistd.h>
 
 
 // --- CONSTRUCTOR ---
@@ -34,7 +35,7 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.1.0", true);
+        dr.LogMessage("VER 1.1.2", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
@@ -56,14 +57,15 @@ void Server::run()
         try {
             while (m_running)
             {
-                QThread::msleep(1);  //milliseconds
+                QThread::msleep(10);  //milliseconds
 
-                if ( t_UpdateValues.elapsed() < 1000 )
-                    continue;
+                if ( t_UpdateValues.elapsed() < 3000 ) continue;
                 t_UpdateValues.restart();
 
                 /////////////////////////////////////////////////////////////////////////////////////////
+                dr.LogMessage("--- ReadData ---"  );
                 dr.ReadData();
+                dr.LogMessage("--- ReadData end ---"  );
 
                 dr.wProduced.m_value *= 1.15f;
 
@@ -92,10 +94,15 @@ void Server::run()
 
                 ////////////////////////////////////////////////////////////////////////////////////////
                 //Send Changed
+                dr.LogMessage("--- SendModifiedData ---"  );
                 bool modifiedProg = dr.SendModifiedData();
+                dr.LogMessage("--- SendModifiedData end ---"  );
                 if (modifiedProg)
                 {
+                    dr.LogMessage("--- manage_Progs ---"  );
                     manage_Progs(true);
+                    dr.LogMessage("--- manage_Progs end ---"  );
+
                 }
                 firstRun = false;
             }
@@ -137,8 +144,7 @@ void Server::manage_Progs(bool immediate)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Server::manage_BoilerACS(int sec)
 {
-    if ( t_BoilerACS.elapsed() < sec * 1000 )
-        return;
+    if ( t_BoilerACS.elapsed() < sec * 1000 ) return;
     t_BoilerACS.restart();
 
     dr.LogMessage("--- BoilerACS ---"  );
@@ -181,8 +187,7 @@ void Server::manage_BoilerACS(int sec)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Server::manage_ExternalLight(int sec)
 {
-    if ( t_ExternalLight.elapsed() < sec * 1000 )
-        return;
+    if ( t_ExternalLight.elapsed() < sec * 1000 ) return;
     t_ExternalLight.restart();
 
     dr.LogMessage(QDateTime::currentDateTime().date().toString() );
@@ -203,7 +208,7 @@ void Server::manage_ExternalLight(int sec)
                 lightLamp = true;
             }
 
-            if ( hour() < 7 )
+            if ( hour() <= 7 )
                 lightLamp = false;
         }
     }
@@ -244,26 +249,26 @@ void  Server::manage_evRooms( int sec )
         {
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accendere le stanze
-            QString str = "Stanze";
+            QString str = "Stanze:";
             if ( dr.tSala < dr.tSala.setPoint() )
             {
-                str += "\ntSala " + dr.tSala.svalue()  + " < " + dr.tSala.ssetPoint();
+                str += " tSal " + dr.tSala.svalue()  + "<" + dr.tSala.ssetPoint();
                 sala = true;
                 sala2 = true;
             }
             if ( dr.tCucina < dr.tCucina.setPoint() )
             {
-                str += "\ntCucina " + dr.tCucina.svalue()  + " < " + dr.tCucina.ssetPoint();
+                str += " tCuc " + dr.tCucina.svalue()  + "<" + dr.tCucina.ssetPoint();
                 cucina = true;
             }
             if ( dr.tCameraS < dr.tCameraS.setPoint() )
             {
-                str += "\ntCameraS " + dr.tCameraS.svalue()  + " < " + dr.tCameraS.ssetPoint();
+                str += " tCamS " + dr.tCameraS.svalue()  + "<" + dr.tCameraS.ssetPoint();
                 cameraS = true;
             }
             if ( dr.tCameraD < dr.tCameraD.setPoint() )
             {
-                str += "\ntCameraD " + dr.tCameraD.svalue()  + " < " + dr.tCameraD.ssetPoint();
+                str += " tCamD " + dr.tCameraD.svalue()  + "<" + dr.tCameraD.ssetPoint();
                 cameraD = true;
             }
             if ( dr.tCameraD < dr.tCameraD.setPoint() - 2 )
@@ -272,7 +277,7 @@ void  Server::manage_evRooms( int sec )
             }
             if ( dr.tCameraM < dr.tCameraM.setPoint() )
             {
-                str += "\ntCameraM " + dr.tCameraM.svalue()  + " < " + dr.tCameraM.ssetPoint();
+                str += " tCamM " + dr.tCameraM.svalue()  + "<" + dr.tCameraM.ssetPoint();
                 cameraM = true;
             }
             if ( dr.tCameraM < dr.tCameraM.setPoint() - 2 )
@@ -281,7 +286,7 @@ void  Server::manage_evRooms( int sec )
             }
             if ( dr.rPdc && dr.rPdcHeat )
             {
-                str += "\nPdc Heat mode";
+                str += "Pdc Heat mode";
                 sala = true;
                 cucina = true;
             }
@@ -299,23 +304,23 @@ void  Server::manage_evRooms( int sec )
             QString str = "Stanze";
             if ( dr.tSala > dr.tSala.setPoint() + 2  )
             {
-                str += "tSala " + dr.tSala.svalue()  + ">" + dr.tSala.ssetPoint()+ 2 ;
+                str += " tSala " + dr.tSala.svalue()  + ">" + dr.tSala.ssetPoint() ;
                 sala = true;
                 sala2 = false;
             }
             if ( dr.tCucina > dr.tCucina.setPoint() + 2  )
             {
-                str += "tCuc " + dr.tCucina.svalue()  + ">" + dr.tCucina.ssetPoint()+ 2 ;
+                str += " tCuc " + dr.tCucina.svalue()  + ">" + dr.tCucina.ssetPoint();
                 cucina = true;
             }
             if ( dr.tCameraS > dr.tCameraS.setPoint() + 2 )
             {
-                str += "tCamS " + dr.tCameraS.svalue()  + ">" + dr.tCameraS.ssetPoint()+ 2 ;
+                str += " tCamS " + dr.tCameraS.svalue()  + ">" + dr.tCameraS.ssetPoint();
                 cameraS = true;
             }
             if ( dr.tCameraD > dr.tCameraD.setPoint() + 2  )
             {
-                str += "tCamD " + dr.tCameraD.svalue()  + ">" + dr.tCameraD.ssetPoint()+ 2 ;
+                str += " tCamD " + dr.tCameraD.svalue()  + ">" + dr.tCameraD.ssetPoint();
                 cameraD = true;
             }
             if ( dr.tCameraD > dr.tCameraD.setPoint() + 4 )
@@ -324,7 +329,7 @@ void  Server::manage_evRooms( int sec )
             }
             if ( dr.tCameraM > dr.tCameraM.setPoint() + 2 )
             {
-                str += "tCamM " + dr.tCameraM.svalue()  + ">" + dr.tCameraM.ssetPoint()+ 2 ;
+                str += " tCamM " + dr.tCameraM.svalue()  + ">" + dr.tCameraM.ssetPoint();
                 cameraM = true;
             }
             if ( dr.tCameraM > dr.tCameraM.setPoint() + 4 )
@@ -361,7 +366,7 @@ void  Server::manage_PDC( int sec )
     bool needPdc_Night = true;
     bool needPdc_Heat = false;
 
-    dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() );
+    dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() + " [L1]:" + dr.wL1.svalue() + " [L2]:" + dr.wL2.svalue() + " [L3]:" + dr.wL3.svalue());
 
     if (dr.progWinterPDC)
     {
@@ -387,7 +392,6 @@ void  Server::manage_PDC( int sec )
         needPdc_Heat = needPdc;
         needPdc_Pump = needPdc;
     }
-
     else  if (dr.progSummerAC)
     {
         //////////////////////////////////////////////////////////////////////////////////
@@ -420,7 +424,7 @@ void  Server::manage_PDC( int sec )
         needPdc_Heat = false;
 
         /**************************************************************************************************/
-        if (needPdc && dr.tInletFloor  < 22 )  // minima t Acqua raffreddata
+        if (needPdc && dr.tInletFloor  < 21 )  // minima t Acqua raffreddata
         {
             dr.LogMessage("PDC OFF t inlet 22>" + dr.tInletFloor.svalue() );
             needPdc = false;
