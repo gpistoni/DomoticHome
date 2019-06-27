@@ -264,13 +264,13 @@ public:
         m_adjust = adj;
     }
     //***************************************************************************************
-    float setPoint()
+    float setPoint(float add =0)
     {
-        return m_setpoint;
+        return m_setpoint + add;
     }
-    QString ssetPoint()
+    QString ssetPoint(float add=0)
     {
-        return QString::number(static_cast<double>(m_setpoint));
+        return QString::number(static_cast<double>(m_setpoint+add));
     }
     QString descrSetPoint()
     {

@@ -120,7 +120,7 @@ void Server::manage_Progs(bool immediate)
         manage_WinterFIRE(1);
         manage_PDC(1);
         manage_evRooms(1);
-        manage_Camino(1);
+        if ( winter() ) manage_Camino(1);
     }
     else
     {
@@ -129,7 +129,7 @@ void Server::manage_Progs(bool immediate)
         manage_PDC(5*60);
         manage_WinterFIRE(3*60);
         manage_evRooms(3*60);
-        manage_Camino(3*60);
+        if ( winter() ) manage_Camino(3*60);
     }
 }
 
@@ -264,7 +264,7 @@ void  Server::manage_evRooms( int sec )
                 str += " tCamD " + dr.tCameraD.svalue()  + "<" + dr.tCameraD.ssetPoint();
                 cameraD = true;
             }
-            if ( dr.tCameraD < dr.tCameraD.setPoint() - 2 )
+            if ( dr.tCameraD < dr.tCameraD.setPoint(-2) )
             {
                 cameraD2 = true;
             }
@@ -273,7 +273,7 @@ void  Server::manage_evRooms( int sec )
                 str += " tCamM " + dr.tCameraM.svalue()  + "<" + dr.tCameraM.ssetPoint();
                 cameraM = true;
             }
-            if ( dr.tCameraM < dr.tCameraM.setPoint() - 2 )
+            if ( dr.tCameraM < dr.tCameraM.setPoint(-2) )
             {
                 cameraM2 = true;
             }
@@ -290,42 +290,42 @@ void  Server::manage_evRooms( int sec )
     //attivo le stanze solo a determinate condizioni (ESTATE)
     if (dr.progSummerAC  )
     {
-        if ( dr.rPdcPompa || dr.rPompaPianoPrimo)
+        if ( dr.rPdcPompa || dr.rPompaPianoPrimo )
         {
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accendere le stanze
             QString str = "Stanze";
-            if ( dr.tSala > dr.tSala.setPoint() + 2  )
+            if ( dr.tSala > dr.tSala.setPoint(2)  )
             {
-                str += " tSala " + dr.tSala.svalue()  + ">" + dr.tSala.ssetPoint() ;
+                str += " tSala " + dr.tSala.svalue()  + ">" + dr.tSala.ssetPoint(2) ;
                 sala = true;
-                sala2 = false;
+                sala2 = true;
             }
-            if ( dr.tCucina > dr.tCucina.setPoint() + 2  )
+            if ( dr.tCucina > dr.tCucina.setPoint(2)  )
             {
-                str += " tCuc " + dr.tCucina.svalue()  + ">" + dr.tCucina.ssetPoint();
+                str += " tCuc " + dr.tCucina.svalue()  + ">" + dr.tCucina.ssetPoint(2);
                 cucina = true;
             }
-            if ( dr.tCameraS > dr.tCameraS.setPoint() + 2 )
+            if ( dr.tCameraS > dr.tCameraS.setPoint(2) )
             {
-                str += " tCamS " + dr.tCameraS.svalue()  + ">" + dr.tCameraS.ssetPoint();
+                str += " tCamS " + dr.tCameraS.svalue()  + ">" + dr.tCameraS.ssetPoint(2);
                 cameraS = true;
             }
-            if ( dr.tCameraD > dr.tCameraD.setPoint() + 2  )
+            if ( dr.tCameraD > dr.tCameraD.setPoint(2)  )
             {
-                str += " tCamD " + dr.tCameraD.svalue()  + ">" + dr.tCameraD.ssetPoint();
+                str += " tCamD " + dr.tCameraD.svalue()  + ">" + dr.tCameraD.ssetPoint(2);
                 cameraD = true;
             }
-            if ( dr.tCameraD > dr.tCameraD.setPoint() + 4 )
+            if ( dr.tCameraD > dr.tCameraD.setPoint(3) )
             {
                 cameraD2 = true;
             }
-            if ( dr.tCameraM > dr.tCameraM.setPoint() + 2 )
+            if ( dr.tCameraM > dr.tCameraM.setPoint(2) )
             {
-                str += " tCamM " + dr.tCameraM.svalue()  + ">" + dr.tCameraM.ssetPoint();
+                str += " tCamM " + dr.tCameraM.svalue()  + ">" + dr.tCameraM.ssetPoint(2);
                 cameraM = true;
             }
-            if ( dr.tCameraM > dr.tCameraM.setPoint() + 4 )
+            if ( dr.tCameraM > dr.tCameraM.setPoint(2) )
             {
                 cameraM2 = true;
             }
@@ -382,6 +382,11 @@ void  Server::manage_PDC( int sec )
             dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
             needPdc_Night = false;
         }
+        if (dr.progAllRooms)
+        {
+            dr.LogMessage("PDC ON FORCED ALLROOMS");
+            needPdc = true;
+        }
         needPdc_Heat = needPdc;
         needPdc_Pump = needPdc;
     }
@@ -399,12 +404,18 @@ void  Server::manage_PDC( int sec )
             dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
             needPdc = true;
         }
-        //pdc Gia Accesa
-        if (dr.rPdc && dr.wSurplus > 800 )
-        {    // molto surplus
-            dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
-            needPdc_Night = false;
+
+        if (dr.progAllRooms)
+        {
+            dr.LogMessage("PDC ON FORCED ALLROOMS");
+            needPdc = true;
         }
+        //pdc Gia Accesa
+        //if (dr.rPdc && dr.wSurplus > 800 )
+        //{    // molto surplus
+        //    dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
+        //    needPdc_Night = false;
+        //}
 
         /**************************************************************************************************/
         if (needPdc && dr.tExternal < 25 )  // minima t esterna
@@ -417,9 +428,16 @@ void  Server::manage_PDC( int sec )
         needPdc_Heat = false;
 
         /**************************************************************************************************/
-        if (needPdc && dr.tInletFloor  < 21 )  // minima t Acqua raffreddata
+        if (needPdc && dr.tInletFloor < 20 )  // minima t Acqua raffreddata
         {
-            dr.LogMessage("PDC OFF t inlet 22>" + dr.tInletFloor.svalue() );
+            dr.LogMessage("PDC OFF t inlet " + dr.tInletFloor.svalue() + "< 20" );
+            needPdc = false;
+        }
+
+        /**************************************************************************************************/
+        if (needPdc && dr.tInletFloor+dr.tReturnFloor < 44 )  // minima t Acqua
+        {
+            dr.LogMessage("PDC OFF t inlet " + dr.tInletFloor.svalue() +"+"+dr.tReturnFloor.svalue() + "< 44" );
             needPdc = false;
         }
     }
