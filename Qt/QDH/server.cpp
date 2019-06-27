@@ -35,7 +35,7 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.1.2", true);
+        dr.LogMessage("VER 1.1.3", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
@@ -63,9 +63,7 @@ void Server::run()
                 t_UpdateValues.restart();
 
                 /////////////////////////////////////////////////////////////////////////////////////////
-                dr.LogMessage("--- ReadData ---"  );
                 dr.ReadData();
-                dr.LogMessage("--- ReadData end ---"  );
 
                 dr.wProduced.m_value *= 1.15f;
 
@@ -94,15 +92,10 @@ void Server::run()
 
                 ////////////////////////////////////////////////////////////////////////////////////////
                 //Send Changed
-                dr.LogMessage("--- SendModifiedData ---"  );
                 bool modifiedProg = dr.SendModifiedData();
-                dr.LogMessage("--- SendModifiedData end ---"  );
                 if (modifiedProg)
                 {
-                    dr.LogMessage("--- manage_Progs ---"  );
                     manage_Progs(true);
-                    dr.LogMessage("--- manage_Progs end ---"  );
-
                 }
                 firstRun = false;
             }
@@ -243,7 +236,7 @@ void  Server::manage_evRooms( int sec )
     bool allRoom = dr.progAllRooms;
 
     //attivo le stanze solo a determinate condizioni (INVERNO)
-    if (dr.progWinterPDC || dr.progWinterFIRE)
+    if (dr.progWinterPDC || dr.progWinterFIRE || dr.progSummerAC )
     {
         if ( (hour() >= 6 ) && (dr.rPompaPianoPrimo || dr.rPompaPianoTerra || dr.rPdcPompa || dr.tInputMixer > 30) )
         {

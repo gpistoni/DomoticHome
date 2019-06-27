@@ -29,7 +29,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-    server.cpp \
     ../QLibrary/HttpClient.cpp \
     ../QLibrary/HttpParser.cpp \
     ../QLibrary/HttpServer.cpp \
@@ -40,7 +39,8 @@ SOURCES += \
     ../QWidget/LogMessage.cpp \
     ../QWidget/ButtonVarForced.cpp \
     ../QWidget/ButtonVar.cpp \
-    main_server.cpp
+    main_server.cpp \
+    server.cpp
 
 HEADERS += \
     server.h \
