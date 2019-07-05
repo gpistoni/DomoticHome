@@ -40,26 +40,31 @@ void Server::run()
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
         dr.progExternalLight.ModifyValue(true);
+        dr.progSummerPDC.ModifyValue(false);
 
         if ( winter() )
         {
             dr.progWinterFIRE.ModifyValue(true);
             dr.progWinterPDC.ModifyValue(true);
-            dr.progSummerAC.ModifyValue(false);
+            dr.progSummerPDC.ModifyValue(false);
+            dr.progSummerPDC_eco.ModifyValue(false);
         }
         if ( summer() )
         {
             dr.progWinterFIRE.ModifyValue(false);
             dr.progWinterPDC.ModifyValue(false);
-            dr.progSummerAC.ModifyValue(true);
+            dr.progSummerPDC_eco.ModifyValue(true);
         }
 
         try {
             while (m_running)
             {
-                QThread::msleep(10);  //milliseconds
+                QThread::msleep(500);  //milliseconds
 
-                if ( t_UpdateValues.elapsed() < 3000 ) continue;
+                if (!firstRun && !m_runPrograms)
+                {
+                    if (t_UpdateValues.elapsed() < 3000 ) continue;
+                }
                 t_UpdateValues.restart();
 
                 /////////////////////////////////////////////////////////////////////////////////////////
@@ -236,7 +241,7 @@ void  Server::manage_evRooms( int sec )
     bool allRoom = dr.progAllRooms;
 
     //attivo le stanze solo a determinate condizioni (INVERNO)
-    if (dr.progWinterPDC || dr.progWinterFIRE || dr.progSummerAC )
+    if (dr.progWinterPDC || dr.progWinterFIRE || dr.progSummerPDC || dr.progSummerPDC_eco )
     {
         if ( (hour() >= 6 ) && (dr.rPompaPianoPrimo || dr.rPompaPianoTerra || dr.rPdcPompa || dr.tInputMixer > 30) )
         {
@@ -288,7 +293,7 @@ void  Server::manage_evRooms( int sec )
         }
     }
     //attivo le stanze solo a determinate condizioni (ESTATE)
-    if (dr.progSummerAC  )
+    if (dr.progSummerPDC || dr.progSummerPDC_eco )
     {
         if ( dr.rPdcPompa || dr.rPompaPianoPrimo )
         {
@@ -335,6 +340,8 @@ void  Server::manage_evRooms( int sec )
     }
 
     //**********************************************************************
+    dr.LogMessage("EvRooms s[" +  QString::number(sala) + "] " );
+
     // elettrovalvole stanze -----------------------------------------------------------------------
     dr.evCameraM1.ModifyValue(cameraM || allRoom);
     dr.evCameraM2.ModifyValue(cameraM2 || allRoom);
@@ -360,6 +367,8 @@ void  Server::manage_PDC( int sec )
     bool needPdc_Heat = false;
 
     dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() + " [L1]:" + dr.wL1.svalue() + " [L2]:" + dr.wL2.svalue() + " [L3]:" + dr.wL3.svalue());
+
+    float surplus = dr.wSurplus;
 
     if (dr.progWinterPDC)
     {
@@ -390,32 +399,28 @@ void  Server::manage_PDC( int sec )
         needPdc_Heat = needPdc;
         needPdc_Pump = needPdc;
     }
-    else  if (dr.progSummerAC)
+    else if (dr.progSummerPDC || dr.progSummerPDC_eco)
     {
-        //////////////////////////////////////////////////////////////////////////////////
-        //decido se accendere PDC
-        if (dr.rPdc && dr.wSurplus > 200 )
+        if (dr.progSummerPDC)
         {
-            dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
             needPdc = true;
         }
-        else if (!dr.rPdc && dr.wSurplus > 800 )
+        if (dr.progSummerPDC_eco)
         {
-            dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
-            needPdc = true;
-        }
+            //////////////////////////////////////////////////////////////////////////////////
+            //decido se accendere PDC
+            if (dr.rPdc && surplus > 200 )
+            {
+                dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
+                needPdc = true;
+            }
 
-        if (dr.progAllRooms)
-        {
-            dr.LogMessage("PDC ON FORCED ALLROOMS");
-            needPdc = true;
+            else if (!dr.rPdc && surplus > 800 )
+            {
+                dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
+                needPdc = true;
+            }
         }
-        //pdc Gia Accesa
-        //if (dr.rPdc && dr.wSurplus > 800 )
-        //{    // molto surplus
-        //    dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
-        //    needPdc_Night = false;
-        //}
 
         /**************************************************************************************************/
         if (needPdc && dr.tExternal < 25 )  // minima t esterna

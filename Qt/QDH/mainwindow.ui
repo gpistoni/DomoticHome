@@ -19,7 +19,7 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
+  <widget class="QWidget" name="mainWidget">
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
@@ -29,24 +29,17 @@
         <height>16777215</height>
        </size>
       </property>
-      <property name="currentIndex">
-       <number>0</number>
+      <property name="font">
+       <font>
+        <pointsize>15</pointsize>
+       </font>
       </property>
-      <widget class="QWidget" name="tab8">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>99999</width>
-         <height>16777215</height>
-        </size>
-       </property>
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="tabWidgetPage1" native="true">
        <attribute name="title">
-        <string>Page</string>
+        <string/>
        </attribute>
        <layout class="QGridLayout" name="gridLayout">
         <item row="6" column="1">

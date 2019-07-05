@@ -90,7 +90,7 @@ void MainWindow::updateValues(DataTable* dr)
             ui->tabWidget->addTab(tab, QString());
             ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "Lights");
         }
-         //*****************************************************************
+        //*****************************************************************
         {
             QWidget *tab = new QWidget();
             QGridLayout *gridLayout= new QGridLayout(tab);
@@ -110,7 +110,7 @@ void MainWindow::updateValues(DataTable* dr)
             ui->tabWidget->addTab(tab, QString());
             ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "Ampers");
         }
-         //*****************************************************************
+        //*****************************************************************
         {
             QWidget *tab = new QWidget();
             tab->setObjectName(QStringLiteral("tabRct"));
@@ -126,13 +126,13 @@ void MainWindow::updateValues(DataTable* dr)
                 gridLayout->addWidget(bar);
             }
 
-           // QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-           // gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
+            // QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+            // gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
 
             ui->tabWidget->addTab(tab, QString());
-            ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "rCT");
+            ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "Pumps");
         }
-         //*****************************************************************
+        //*****************************************************************
         {
             QWidget *tab = new QWidget();
             tab->setObjectName(QStringLiteral("tabTct"));
@@ -152,7 +152,7 @@ void MainWindow::updateValues(DataTable* dr)
             //gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
 
             ui->tabWidget->addTab(tab, QString());
-            ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "tCT");
+            ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "TempsCT");
         }
         //*****************************************************************
         {
@@ -171,10 +171,10 @@ void MainWindow::updateValues(DataTable* dr)
             }
 
             //QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-           //gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
+            //gridLayout->addItem(horizontalSpacer, 0, 1, 1, 1);
 
             ui->tabWidget->addTab(tab, QString());
-            ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "evStanze");
+            ui->tabWidget->setTabText(ui->tabWidget->indexOf(tab), "Rooms");
         }
         //*****************************************************************
         {
@@ -193,7 +193,8 @@ void MainWindow::updateValues(DataTable* dr)
         }
 
         //   QScrollArea *scroll = new QScrollArea(this);
-     //   scroll->setWidget(ui->tabWidget);
+        //   scroll->setWidget(ui->tabWidget);
+        ui->tabWidget->setTabText(0, "Home");
 
     }
 
@@ -212,22 +213,22 @@ void MainWindow::updateValues(DataTable* dr)
     ui->label_L2->setText("L2: " + dr->wL2.svalue());
     ui->label_L3->setText("L3: " + dr->wL3.svalue());
 
-    ui->progressBar_P->setValue((int)dr->wProduced);
-    ui->progressBar_C->setValue((int)dr->wConsumed);
+    ui->progressBar_P->setValue(static_cast<int>(dr->wProduced));
+    ui->progressBar_C->setValue(static_cast<int>(dr->wConsumed));
 
     if (dr->wSurplus>0)
     {
         QPalette p = palette();
         p.setColor(QPalette::Highlight, Qt::green);
         ui->progressBar_S->setPalette(p);
-        ui->progressBar_S->setValue((int)dr->wSurplus);
+        ui->progressBar_S->setValue(static_cast<int>(dr->wSurplus));
     }
     else
     {
         QPalette p = palette();
         p.setColor(QPalette::Highlight, Qt::red);
         ui->progressBar_S->setPalette(p);
-        ui->progressBar_S->setValue((int)-dr->wSurplus);
+        ui->progressBar_S->setValue(static_cast<int>(-dr->wSurplus));
     }
     //***********************************************************
 }

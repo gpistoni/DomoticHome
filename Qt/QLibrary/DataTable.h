@@ -13,19 +13,21 @@ class DataValues
 public:
     //*****************************************************************************************
     VarB progBoilerACS          = VarB( "T0", "r0", "pBoilerACS" );
-    VarB progSummerAC           = VarB( "T0", "r1", "EstateAC" );
+    VarB progSummerPDC_eco      = VarB( "T0", "r1", "EstatePDC_eco" );
     VarB progWinterFIRE         = VarB( "T0", "r2", "InverinoCAMINO" );
     VarB progWinterPDC          = VarB( "T0", "r3", "InvernoPDC" );
     VarB progExternalLight      = VarB( "T0", "r4", "LuciEsterno" );
 
     VarB progAllRooms           = VarB( "T0", "r7", "TutteLeStanze" );
+    VarB progSummerPDC          = VarB( "T0", "r8", "EstatePDC" );
 
     std::vector<VarB*>    progs = {&progBoilerACS,
-                                   &progSummerAC,
+                                   &progSummerPDC_eco,
                                    &progWinterFIRE,
                                    &progWinterPDC,
                                    &progExternalLight,
-                                   &progAllRooms
+                                   &progAllRooms,
+                                   &progSummerPDC
                                   };
     //*****************************************************************************************
     VarF3SP tCucina                   = { "T1", "v0", "v8", "v16", -0.5, 22, "tCucina",   10, 30 };
@@ -363,7 +365,7 @@ public:
         // std::cerr << ".";
     }
 
-    void LogMessage(QString s, bool logtofile = true);
+   void LogMessage(QString s, bool logtofile = true);
 
     bool GetLogMessage( QString &s );
 };
