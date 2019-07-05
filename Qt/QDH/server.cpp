@@ -428,16 +428,16 @@ void  Server::manage_PDC( int sec )
         needPdc_Heat = false;
 
         /**************************************************************************************************/
-        if (needPdc && dr.tInletFloor < 20 )  // minima t Acqua raffreddata
+        if (needPdc && dr.tInletFloor < 19 )  // minima t Acqua raffreddata
         {
-            dr.LogMessage("PDC OFF t inlet " + dr.tInletFloor.svalue() + "< 20" );
+            dr.LogMessage("PDC OFF t inlet " + dr.tInletFloor.svalue() + "< 19" );
             needPdc = false;
         }
 
         /**************************************************************************************************/
-        if (needPdc && dr.tInletFloor+dr.tReturnFloor < 44 )  // minima t Acqua
+        if (needPdc && dr.tInletFloor+dr.tReturnFloor < 40 )  // minima t Acqua
         {
-            dr.LogMessage("PDC OFF t inlet " + dr.tInletFloor.svalue() +"+"+dr.tReturnFloor.svalue() + "< 44" );
+            dr.LogMessage("PDC OFF t inlet " + dr.tInletFloor.svalue() +"+"+dr.tReturnFloor.svalue() + "< 40" );
             needPdc = false;
         }
     }
@@ -454,6 +454,7 @@ void  Server::manage_PDC( int sec )
     dr.rPdcHeat.ModifyValue( needPdc && needPdc_Heat );
     //pompa
     dr.rPdcPompa.ModifyValue( needPdc_Pump );
+    dr.rPompaPianoPrimo.ModifyValue( needPdc_Pump );
     //night
     dr.rPdcNightMode.ModifyValue( needPdc && needPdc_Night );
 }
