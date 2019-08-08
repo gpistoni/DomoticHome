@@ -1,6 +1,8 @@
 #include "HttpClient.h"
 #include <QtNetwork/QHttpPart>
 #include <QThread>
+#include <iostream>
+
 
 CQHttpClient::CQHttpClient( QString serverName, quint16 serverPort, qint32 timeout )
 {
@@ -16,8 +18,8 @@ CQHttpClient::CQHttpClient( QString serverName, quint16 serverPort, qint32 timeo
         {
             QString s = errorString();
         }
-       // else
-       //qDebug("Connected");
+        // else
+        //qDebug("Connected");
     }
     catch (...)
     {
@@ -90,6 +92,46 @@ QString CQHttpClient::Request_Json()
 QString CQHttpClient::Request_Set(QString path)
 {
     return HTTPRequest( QString("/") + path, true );
+}
+
+bool CQHttpClient::PingGoogle()
+{
+    if (system("ping -c1 -s1 www.google.com"))
+    {
+        std::cout<<"There is no internet connection \n";
+        return false;
+    }
+    std::cout<<"There is internet connection available\n";
+    return true;
+
+
+    //    CURL *curl;
+    //    CURLcode res;
+
+    //    curl = curl_easy_init();
+    //    if(curl)
+    //    {
+    //        curl_easy_setopt(curl, CURLOPT_URL, "www.google.com");
+    //        while ((res = curl_easy_perform(curl)) != CURLE_OK)
+    //        {
+    //            switch (res)
+    //            {
+    //            case CURLE_COULDNT_CONNECT:
+    //            case CURLE_COULDNT_RESOLVE_HOST:
+    //            case CURLE_COULDNT_RESOLVE_PROXY:
+    //                return false;
+    //                break;
+    //            default:
+    //                cerr<<"Request failed:"<<curl_easy_strerror(res)<<endl;
+    //                exit(1);
+    //            }
+    //        }
+
+
+    //        /* always cleanup */
+    //        curl_easy_cleanup(curl);
+    //        return true;
+    //    }
 }
 
 

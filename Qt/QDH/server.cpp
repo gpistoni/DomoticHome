@@ -12,6 +12,7 @@ Server::Server(bool runPrograms) :
     m_runPrograms(runPrograms)
 {
     t_UpdateValues.start();
+    t_InternetConnection.start();
     t_BoilerACS.start();
     t_ExternalLight.start();
     t_evRooms.start();
@@ -35,7 +36,7 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.1.3", true);
+        dr.LogMessage("VER 1.1.4", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
@@ -102,7 +103,7 @@ void Server::run()
                 {
                     manage_Progs(true);
                 }
-                firstRun = false;
+                  firstRun = false;
             }
 
             /////////////////////////////////////////////////////////////////////////////////////////
@@ -116,10 +117,15 @@ void Server::run()
     }
 }
 
+
+
+
+
 void Server::manage_Progs(bool immediate)
 {
     if (immediate)
     {
+        manage_Internet(1);
         manage_ExternalLight(1);
         manage_BoilerACS(1);
         manage_WinterFIRE(1);
@@ -129,15 +135,34 @@ void Server::manage_Progs(bool immediate)
     }
     else
     {
+        manage_Internet(2*60);
         manage_ExternalLight(10*60);
         manage_BoilerACS(10*60);
         manage_PDC(5*60);
         manage_WinterFIRE(3*60);
         manage_evRooms(3*60);
-        if ( winter() ) manage_Camino(3*60);
+        if ( winter() )
+            manage_Camino(3*60);
     }
 }
 
+void Server::manage_Internet(int sec)
+{
+    if ( t_InternetConnection.elapsed() < sec * 1000 ) return;
+    t_InternetConnection.restart();
+
+    bool connected = CQHttpClient::PingGoogle();
+    dr.LogMessage("Ping Google:" + connected);
+
+    if (!connected)
+     {
+        // off
+        CQHttpClient client("192.168.1.210", 80, 10000 );
+        client.Request_Set("OFF");
+        sleep(5);
+        client.Request_Set("ON");
+     }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Server::manage_BoilerACS(int sec)
@@ -414,11 +439,15 @@ void  Server::manage_PDC( int sec )
                 dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
-
             else if (!dr.rPdc && surplus > 800 )
             {
                 dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
+            }
+            if (dr.rPdc && dr.wSurplus > 600 )
+            {    // molto surplus
+                dr.LogMessage("PDC ON Molto SurplusW:" + dr.wSurplus.svalue() );
+                needPdc_Night = false;
             }
         }
 

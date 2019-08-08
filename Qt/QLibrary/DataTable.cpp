@@ -13,7 +13,8 @@ void DataTable::LogMessage(QString s, bool logtofile)
 
     if (logtofile)
     {
-        QFile f("/var/log/dh.log");
+        QString fname = QString("/var/log/dh_") + QString('0'+QDateTime::currentDateTime().date().month()) + ".log";
+        QFile f(fname);
         if (f.open(QIODevice::WriteOnly | QIODevice::Append))
         {
             f.write(str.toLatin1());

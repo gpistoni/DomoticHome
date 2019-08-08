@@ -40,6 +40,7 @@ private:
     }
 
     QElapsedTimer t_UpdateValues;
+    QElapsedTimer t_InternetConnection;
     QElapsedTimer t_BoilerACS;
     QElapsedTimer t_ExternalLight;
     QElapsedTimer t_evRooms;
@@ -53,12 +54,14 @@ public:
 public:
     void manage_Progs(bool immediate);
 
+    void manage_Internet(int sec);
     void manage_BoilerACS(int sec);
     void manage_ExternalLight(int sec);
     void manage_evRooms(int sec);
     void manage_PDC(int sec);
     void manage_WinterFIRE(int sec);
     void manage_Camino(int sec);
+
 
 public slots:
     void run();
