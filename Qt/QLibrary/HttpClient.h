@@ -33,7 +33,7 @@ public:
     QString Request_Json();
     QString Request_Set(QString path);
 
-    static bool PingGoogle();
+    static bool PingGoogle(QString &out);
 };
 
 

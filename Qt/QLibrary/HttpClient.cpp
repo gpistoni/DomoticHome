@@ -2,6 +2,7 @@
 #include <QtNetwork/QHttpPart>
 #include <QThread>
 #include <iostream>
+#include <QProcess>
 
 
 CQHttpClient::CQHttpClient( QString serverName, quint16 serverPort, qint32 timeout )
@@ -91,18 +92,30 @@ QString CQHttpClient::Request_Json()
 
 QString CQHttpClient::Request_Set(QString path)
 {
-    return HTTPRequest( QString("/") + path, true );
+    return HTTPRequest( QString("/") + path, false );
 }
 
-bool CQHttpClient::PingGoogle()
+bool CQHttpClient::PingGoogle(QString &out)
 {
-    if (system("ping -c1 -s1 www.google.com"))
-    {
-        std::cout<<"There is no internet connection \n";
-        return false;
-    }
-    std::cout<<"There is internet connection available\n";
-    return true;
+    QProcess process;
+    process.start("ping -c1 -s1 -w1 www.google.com");
+    process.waitForFinished(-1);
+
+    out = process.readAllStandardOutput();
+    out += process.readAllStandardError();
+
+    if (out.contains("1 received"))
+        return true;
+    return false;
+
+
+//    if (system("ping -c1 -s1 -w1 www.google.com"))
+//    {
+//        std::cout<<"There is no internet connection \n";
+//        return false;
+//    }
+//    std::cout<<"There is internet connection available\n";
+//    return true;
 
 
     //    CURL *curl;

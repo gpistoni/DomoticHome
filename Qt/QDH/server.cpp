@@ -36,7 +36,7 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.1.4", true);
+        dr.LogMessage("VER 1.2.0", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
@@ -117,25 +117,22 @@ void Server::run()
     }
 }
 
-
-
-
-
 void Server::manage_Progs(bool immediate)
 {
     if (immediate)
     {
-        manage_Internet(1);
-        manage_ExternalLight(1);
-        manage_BoilerACS(1);
-        manage_WinterFIRE(1);
-        manage_PDC(1);
-        manage_evRooms(1);
-        if ( winter() ) manage_Camino(1);
+        dr.LogMessage("--- manage_Progs immediate ---"  );
+        manage_Internet(-1);
+        manage_ExternalLight(-1);
+        manage_BoilerACS(-1);
+        manage_WinterFIRE(-1);
+        manage_PDC(-1);
+        manage_evRooms(-1);
+        if ( winter() ) manage_Camino(-1);
     }
     else
     {
-        manage_Internet(2*60);
+        manage_Internet(5*60);
         manage_ExternalLight(10*60);
         manage_BoilerACS(10*60);
         manage_PDC(5*60);
@@ -151,17 +148,24 @@ void Server::manage_Internet(int sec)
     if ( t_InternetConnection.elapsed() < sec * 1000 ) return;
     t_InternetConnection.restart();
 
-    bool connected = CQHttpClient::PingGoogle();
-    dr.LogMessage("Ping Google:" + connected);
+    dr.LogMessage("--- RouterInternet ---"  );
+
+    QString str;
+    bool connected = CQHttpClient::PingGoogle(str);
+    dr.LogMessage("Ping Google:" + str);
 
     if (!connected)
      {
         // off
         CQHttpClient client("192.168.1.210", 80, 10000 );
-        client.Request_Set("OFF");
-        sleep(5);
-        client.Request_Set("ON");
-     }
+        dr.LogMessage("manage_Internet OFF"  );
+        client.Request_Set("off");
+        sleep(10);
+    }
+
+    CQHttpClient client2("192.168.1.210", 80, 10000 );
+    dr.LogMessage("manage_Internet ON"  );
+    client2.Request_Set("on");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
