@@ -9,8 +9,7 @@ QT += websockets network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-Release:TARGET = /root/dh/dh
-Debug:TARGET = dh
+TARGET = /root/dh/dh
 
 TEMPLATE = app
 

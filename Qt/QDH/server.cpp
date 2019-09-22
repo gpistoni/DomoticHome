@@ -36,17 +36,16 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.2.0", true);
+        dr.LogMessage("VER 1.2.2", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
         dr.progExternalLight.ModifyValue(true);
-        dr.progSummerPDC.ModifyValue(false);
 
         if ( winter() )
         {
             dr.progWinterFIRE.ModifyValue(true);
-            dr.progWinterPDC.ModifyValue(true);
+            dr.progWinterPDC_eco.ModifyValue(true);
             dr.progSummerPDC.ModifyValue(false);
             dr.progSummerPDC_eco.ModifyValue(false);
         }
@@ -54,6 +53,7 @@ void Server::run()
         {
             dr.progWinterFIRE.ModifyValue(false);
             dr.progWinterPDC.ModifyValue(false);
+            dr.progWinterPDC_eco.ModifyValue(true);
             dr.progSummerPDC_eco.ModifyValue(true);
         }
 
@@ -103,7 +103,7 @@ void Server::run()
                 {
                     manage_Progs(true);
                 }
-                  firstRun = false;
+                firstRun = false;
             }
 
             /////////////////////////////////////////////////////////////////////////////////////////
@@ -128,11 +128,12 @@ void Server::manage_Progs(bool immediate)
         manage_WinterFIRE(-1);
         manage_PDC(-1);
         manage_evRooms(-1);
-        if ( winter() ) manage_Camino(-1);
+        if ( winter() )
+            manage_Camino(-1);
     }
     else
     {
-        manage_Internet(5*60);
+        manage_Internet(1*60);
         manage_ExternalLight(10*60);
         manage_BoilerACS(10*60);
         manage_PDC(5*60);
@@ -150,21 +151,24 @@ void Server::manage_Internet(int sec)
 
     dr.LogMessage("--- RouterInternet ---"  );
 
-    QString str;
-    bool connected = CQHttpClient::PingGoogle(str);
-    dr.LogMessage("Ping Google:" + str);
+    static int decimation = 0;
+    if (++decimation%10==0)        // questa parte entra una volta su 10
+    {
+        QString str;
+        bool connected = CQHttpClient::PingGoogle(str);
+        dr.LogMessage("Ping Google:" + str);
 
-    if (!connected)
-     {
-        // off
-        CQHttpClient client("192.168.1.210", 80, 10000 );
-        dr.LogMessage("manage_Internet OFF"  );
-        client.Request_Set("off");
-        sleep(10);
+        if (!connected)
+        {
+            // off
+            CQHttpClient client("192.168.1.210", 80, 10000 );
+            dr.LogMessage("manage_Internet OFF/ON"  );
+            client.Request_Set("off");
+            sleep(10);
+        }
     }
 
     CQHttpClient client2("192.168.1.210", 80, 10000 );
-    dr.LogMessage("manage_Internet ON"  );
     client2.Request_Set("on");
 }
 
@@ -192,10 +196,10 @@ void Server::manage_BoilerACS(int sec)
         }
 
         //decido se accendere il boiler solo a mezzogiorno
-        if ( hour() > 12 && hour() < 16  )
+        if ( hour() >= 14 && hour() < 17  )
         {
             boilerACS = true;
-            dr.LogMessage("Condizione ON hour:" + QString::number( hour() ) + " >12 & <16");
+            dr.LogMessage("Condizione ON hour:" + QString::number( hour() ) + " >=14 & <17");
         }
 
         // solo se il camino non funziona
@@ -270,7 +274,7 @@ void  Server::manage_evRooms( int sec )
     bool allRoom = dr.progAllRooms;
 
     //attivo le stanze solo a determinate condizioni (INVERNO)
-    if (dr.progWinterPDC || dr.progWinterFIRE || dr.progSummerPDC || dr.progSummerPDC_eco )
+    if (dr.progWinterPDC || dr.progWinterPDC_eco || dr.progWinterFIRE || dr.progSummerPDC || dr.progSummerPDC_eco )
     {
         if ( (hour() >= 6 ) && (dr.rPompaPianoPrimo || dr.rPompaPianoTerra || dr.rPdcPompa || dr.tInputMixer > 30) )
         {
@@ -340,36 +344,29 @@ void  Server::manage_evRooms( int sec )
                 str += " tCuc " + dr.tCucina.svalue()  + ">" + dr.tCucina.ssetPoint(2);
                 cucina = true;
             }
-            if ( dr.tCameraS > dr.tCameraS.setPoint(2) )
+            if ( dr.tCameraS > 24 )
             {
-                str += " tCamS " + dr.tCameraS.svalue()  + ">" + dr.tCameraS.ssetPoint(2);
+                str += " tCamS " + dr.tCameraS.svalue()  + ">" + "24";
                 cameraS = true;
             }
-            if ( dr.tCameraD > dr.tCameraD.setPoint(2)  )
+            if ( dr.tCameraD >  24  )
             {
-                str += " tCamD " + dr.tCameraD.svalue()  + ">" + dr.tCameraD.ssetPoint(2);
+                str += " tCamD " + dr.tCameraD.svalue()  + ">" + "24";
                 cameraD = true;
-            }
-            if ( dr.tCameraD > dr.tCameraD.setPoint(3) )
-            {
                 cameraD2 = true;
             }
-            if ( dr.tCameraM > dr.tCameraM.setPoint(2) )
+            if ( dr.tCameraM > 24 )
             {
-                str += " tCamM " + dr.tCameraM.svalue()  + ">" + dr.tCameraM.ssetPoint(2);
+                str += " tCamM " + dr.tCameraM.svalue()  + ">" + "24";
                 cameraM = true;
-            }
-            if ( dr.tCameraM > dr.tCameraM.setPoint(2) )
-            {
                 cameraM2 = true;
             }
-
             dr.LogMessage(str);
         }
     }
 
     //**********************************************************************
-    dr.LogMessage("EvRooms s[" +  QString::number(sala) + "] " );
+    dr.LogMessage("EvRooms s[" +  QString::number(sala) + "] " + " c[" +  QString::number(cucina) + "] " + " cm[" +  QString::number(cameraM) + "] " + " cs[" +  QString::number(cameraS) + "] "+ " cd[" +  QString::number(cameraD) + "] ");
 
     // elettrovalvole stanze -----------------------------------------------------------------------
     dr.evCameraM1.ModifyValue(cameraM || allRoom);
@@ -394,39 +391,62 @@ void  Server::manage_PDC( int sec )
     bool needPdc_Pump = false;
     bool needPdc_Night = true;
     bool needPdc_Heat = false;
+    bool needPump_pt = false;
+    bool needPump_pp = false;
 
     dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() + " [L1]:" + dr.wL1.svalue() + " [L2]:" + dr.wL2.svalue() + " [L3]:" + dr.wL3.svalue());
 
     float surplus = dr.wSurplus;
 
-    if (dr.progWinterPDC)
+    if (dr.progWinterPDC  || dr.progWinterPDC_eco)
     {
-        //////////////////////////////////////////////////////////////////////////////////
-        //decido se accendere PDC
-        if (dr.rPdc && dr.wSurplus > 50 )
+        if (dr.progWinterPDC)
         {
-            dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
             needPdc = true;
         }
-        else if (!dr.rPdc && dr.wSurplus > 600 )
+        if (dr.progWinterPDC_eco)
         {
-            dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
-            needPdc = true;
+            //////////////////////////////////////////////////////////////////////////////////
+            //decido se accendere PDC
+            if (dr.rPdc && dr.wSurplus > 50 )
+            {
+                dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
+                needPdc = true;
+            }
+            else if (!dr.rPdc && dr.wSurplus > 600 )
+            {
+                dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
+                needPdc = true;
+            }
+            //pdc Gia Accesa
+            if (dr.rPdc && dr.wSurplus > 600 )
+            {    // molto surplus
+                dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
+                needPdc_Night = false;
+            }
+            if (dr.progAllRooms)
+            {
+                dr.LogMessage("PDC ON FORCED ALLROOMS");
+                needPdc = true;
+            }
         }
 
-        //pdc Gia Accesa
-        if (dr.rPdc && dr.wSurplus > 600 )
-        {    // molto surplus
-            dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
-            needPdc_Night = false;
-        }
-        if (dr.progAllRooms)
+        /**************************************************************************************************/
+        if (dr.tExternal > 20 )  // massima t esterna
         {
-            dr.LogMessage("PDC ON FORCED ALLROOMS");
-            needPdc = true;
+            dr.LogMessage("PDC OFF t estrerna 20 < " + dr.tExternal.svalue() );
+            needPdc = false;
         }
+
+        if (dr.tPufferHi > 28 )  // acqua calda in puffer
+        {
+            needPump_pp = true;  //accendo la pompa ricircolo
+            needPump_pt = true;  //accendo la pompa ricircolo
+        }
+
         needPdc_Heat = needPdc;
         needPdc_Pump = needPdc;
+
     }
     else if (dr.progSummerPDC || dr.progSummerPDC_eco)
     {
@@ -450,32 +470,30 @@ void  Server::manage_PDC( int sec )
             }
             if (dr.rPdc && dr.wSurplus > 600 )
             {    // molto surplus
-                dr.LogMessage("PDC ON Molto SurplusW:" + dr.wSurplus.svalue() );
+                dr.LogMessage("PDC NIGHT OFF Molto SurplusW:" + dr.wSurplus.svalue() );
                 needPdc_Night = false;
             }
         }
 
         /**************************************************************************************************/
-        if (needPdc && dr.tExternal < 25 )  // minima t esterna
+        if (dr.tExternal < 25 )  // minima t esterna
         {
             dr.LogMessage("PDC OFF t estrerna 25>" + dr.tExternal.svalue() );
             needPdc = false;
+        }
+
+        if (dr.tPufferHi < 23 )  // acqua fresca in puffer
+        {
+            needPump_pp = true;  //accendo la pompa ricircolo
         }
 
         needPdc_Pump = needPdc;
         needPdc_Heat = false;
 
         /**************************************************************************************************/
-        if (needPdc && dr.tInletFloor < 19 )  // minima t Acqua raffreddata
+        if (needPdc && dr.tInletFloor < 18.5 )  // minima t Acqua raffreddata
         {
-            dr.LogMessage("PDC OFF t inlet " + dr.tInletFloor.svalue() + "< 19" );
-            needPdc = false;
-        }
-
-        /**************************************************************************************************/
-        if (needPdc && dr.tInletFloor+dr.tReturnFloor < 40 )  // minima t Acqua
-        {
-            dr.LogMessage("PDC OFF t inlet " + dr.tInletFloor.svalue() +"+"+dr.tReturnFloor.svalue() + "< 40" );
+            dr.LogMessage("PDC OFF t inlet " + dr.tInletFloor.svalue() + "< 18.5" );
             needPdc = false;
         }
     }
@@ -492,9 +510,11 @@ void  Server::manage_PDC( int sec )
     dr.rPdcHeat.ModifyValue( needPdc && needPdc_Heat );
     //pompa
     dr.rPdcPompa.ModifyValue( needPdc_Pump );
-    dr.rPompaPianoPrimo.ModifyValue( needPdc_Pump );
     //night
     dr.rPdcNightMode.ModifyValue( needPdc && needPdc_Night );
+    //pompa pp
+    dr.rPompaPianoPrimo.ModifyValue( needPump_pp );
+    dr.rPompaPianoTerra.ModifyValue( needPump_pt );
 }
 
 /******************************************************************************************************************************************************************/
@@ -505,57 +525,55 @@ void  Server::manage_WinterFIRE( int sec )
 
     dr.LogMessage("--- Winter FIRE ---"  );
 
-    bool needPompa_pt = false;
-    bool needPompa_pp = false;
+    bool needPump_pt = false;
+    bool needPump_pp = false;
 
     if (dr.progWinterFIRE)
     {
         //////////////////////////////////////////////////////////////////////////////////
         // decido se accendere/spegnere pompa piano primo
-        needPompa_pp = true;
+        needPump_pp = true;
         if ( dr.tInputMixer < 27 && dr.tPufferHi < 28 && dr.tReturnFireplace < 28 )   // non ho temperatura
         {
             dr.LogMessage("Condizione Pompa PP insufficiente: tInletFloor: " + dr.tInletFloor.svalue() + " tReturnFloor: " + dr.tReturnFloor.svalue() );
-            needPompa_pp = false;
+            needPump_pp = false;
         }
         if ( (dr.tReturnFloor > 29) )  // ritorno troppo alto - non ne ho bisogno
         {
             dr.LogMessage("Stop Pompa: ritorno troppo alto tReturnFloor: " + dr.tReturnFloor.svalue() );
-            needPompa_pp = false;
+            needPump_pp = false;
         }
         if ( dr.tInletFloor > 35 )  // 35 è la sicurezza dopo al quale spengo la pompa
         {
             dr.LogMessage("Stop Pompa: Sicurezza temp ingreso impianto: tInletFloor: " + dr.tInletFloor.svalue() + " > 35" );
-            needPompa_pp = false;
+            needPump_pp = false;
         }
         if ( dr.tReturnFireplace < 35 && hour() < 6 ) // fuori oario spengo pompa
         {
             dr.LogMessage("Stop Pompa: orario " + QString::number( hour() ) );
-            needPompa_pp = false;
+            needPump_pp = false;
         }
         if ( dr.tReturnFireplace < 35 && hour() >= 11 ) // fuori oario spengo pompa
         {
             dr.LogMessage("Stop Pompa: orario " + QString::number( hour() ) );
-            needPompa_pp = false;
+            needPump_pp = false;
         }
         if ( dr.tPufferLow > 55 )   // emergenza
         {
             dr.LogMessage("Emergenza tPufferLow > 55 ");
-            needPompa_pp = true;
-            needPompa_pt = true;
+            needPump_pp = true;
+            needPump_pt = true;
         }
     }
 
-    dr.LogMessage("needPompa_pt: [" + QString::number(needPompa_pt) + "]" );
-    dr.LogMessage("NeedPompa_pp: [" + QString::number(needPompa_pp) + "]" );
+    dr.LogMessage("needPompa_pt: [" + QString::number(needPump_pt) + "]" );
+    dr.LogMessage("NeedPompa_pp: [" + QString::number(needPump_pp) + "]" );
 
     // comandi sulla centrale -----------------------------------------------------
     // accendo pompa pp
-    dr.rPompaPianoPrimo.ModifyValue( needPompa_pp );
-    //piano terra
-    dr.rPompaPianoTerra.ModifyValue( needPompa_pt );
+    dr.rPompaPianoPrimo.ModifyValue( needPump_pp );
+    dr.rPompaPianoTerra.ModifyValue( needPump_pt );
 }
-
 
 /******************************************************************************************************************************************************************/
 void  Server::manage_Camino( int sec )

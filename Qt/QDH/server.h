@@ -20,11 +20,11 @@ private:
 
     int winter()
     {
-        return month()<=4 || month()>=11;
+        return month()<=4 || month()>=10;
     }
     int summer()
     {
-        return month()>=6 && month()<=9;
+        return month()>=6 && month()<=8;
     }
     int month()
     {
