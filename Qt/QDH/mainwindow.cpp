@@ -32,6 +32,7 @@ void MainWindow::updateValues(DataTable* dr)
     {
         m_firstRun = false;
 
+        ui->tabWidget-> setTabPosition(QTabWidget::West);
         //*****************************************************************
         {
             QWidget *tab = new QWidget();

@@ -4,6 +4,7 @@
 #include "QThread"
 #include "QFile"
 #include <unistd.h>
+#include "effemeridi.h"
 
 
 // --- CONSTRUCTOR ---
@@ -215,6 +216,7 @@ void Server::manage_BoilerACS(int sec)
     dr.rBoilerACS.ModifyValue( boilerACS );
 }
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Server::manage_ExternalLight(int sec)
 {
@@ -229,18 +231,11 @@ void Server::manage_ExternalLight(int sec)
 
     if (dr.progExternalLight)
     {
-        if ( hour()>=17 || hour() <=7)
+        if (IsNight() )
         {
-            /**************************************************************************************************/
-            dr.LogMessage("darkExternal: " + dr.darkExternal.svalue() + " Request >" + QString::number( 32 - 2 * dr.lampLati )  );
-            if ( dr.darkExternal > (32 - 2 * dr.lampLati) ) // isteresi
-            {
-                lightSide = true;
-                lightLamp = true;
-            }
-
-            if ( hour() <= 7 )
-                lightLamp = false;
+            dr.LogMessage("IsNIGHT");
+            lightSide = true;
+            lightLamp = true;
         }
     }
 

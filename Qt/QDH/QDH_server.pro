@@ -53,6 +53,7 @@ HEADERS += \
     ../QWidget/InfoTempSetpoint.h \
     ../QWidget/ButtonVarForced.h \
     ../QWidget/ButtonVar.h \
-    ../QWidget/LogMessage.h
+    ../QWidget/LogMessage.h \
+    effemeridi.h
 
 FORMS +=
