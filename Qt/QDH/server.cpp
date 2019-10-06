@@ -13,6 +13,7 @@ Server::Server(bool runPrograms) :
     m_runPrograms(runPrograms)
 {
     t_UpdateValues.start();
+    t_DbLog.start();
     t_InternetConnection.start();
     t_BoilerACS.start();
     t_ExternalLight.start();
@@ -20,6 +21,9 @@ Server::Server(bool runPrograms) :
     t_PDC.start();
     t_WinterFIRE.start();
     t_Camino.start();
+
+
+    m_dbEvents.CreateTables();
 }
 
 // --- DECONSTRUCTOR ---
@@ -37,7 +41,7 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.2.2", true);
+        dr.LogMessage("VER 1.3.0", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
@@ -123,6 +127,7 @@ void Server::manage_Progs(bool immediate)
     if (immediate)
     {
         dr.LogMessage("--- manage_Progs immediate ---"  );
+        manage_DbLog(-1);
         manage_Internet(-1);
         manage_ExternalLight(-1);
         manage_BoilerACS(-1);
@@ -134,15 +139,26 @@ void Server::manage_Progs(bool immediate)
     }
     else
     {
-        manage_Internet(1*60);
+        manage_DbLog(5*60);
+        manage_Internet(2*60);
         manage_ExternalLight(10*60);
-        manage_BoilerACS(10*60);
-        manage_PDC(5*60);
-        manage_WinterFIRE(3*60);
-        manage_evRooms(3*60);
+        manage_BoilerACS(5*60);
+        manage_PDC(6*60);
+        manage_WinterFIRE(4*60);
+        manage_evRooms(10*60);
         if ( winter() )
             manage_Camino(3*60);
     }
+}
+
+void Server::manage_DbLog(int sec)
+{
+    if ( t_DbLog.elapsed() < sec * 1000 ) return;
+    t_DbLog.restart();
+
+    dr.LogMessage("--- DbLog ---"  );
+
+    m_dbEvents.LogEnergy( dr.wProduced, dr.wConsumed);
 }
 
 void Server::manage_Internet(int sec)
@@ -153,11 +169,11 @@ void Server::manage_Internet(int sec)
     dr.LogMessage("--- RouterInternet ---"  );
 
     static int decimation = 0;
-    if (++decimation%10==0)        // questa parte entra una volta su 10
+    if (++decimation%5==0)        // questa parte entra una volta su 5
     {
         QString str;
         bool connected = CQHttpClient::PingGoogle(str);
-        dr.LogMessage("Ping Google:" + str);
+        dr.LogMessage("Ping Google:");
 
         if (!connected)
         {
@@ -410,13 +426,13 @@ void  Server::manage_PDC( int sec )
             }
             else if (!dr.rPdc && dr.wSurplus > 600 )
             {
-                dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
+                dr.LogMessage("PDC OFF SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
             //pdc Gia Accesa
-            if (dr.rPdc && dr.wSurplus > 600 )
+            if (dr.rPdc && !dr.rPdcNightMode && dr.wSurplus > 500 )
             {    // molto surplus
-                dr.LogMessage("PDC Molto SurplusW:" + dr.wSurplus.svalue() );
+                dr.LogMessage("PDC ON Molto SurplusW:" + dr.wSurplus.svalue() );
                 needPdc_Night = false;
             }
             if (dr.progAllRooms)
@@ -433,7 +449,7 @@ void  Server::manage_PDC( int sec )
             needPdc = false;
         }
 
-        if (dr.tPufferHi > 28 )  // acqua calda in puffer
+        if (dr.tPufferHi > 27 )  // acqua calda in puffer
         {
             needPump_pp = true;  //accendo la pompa ricircolo
             needPump_pt = true;  //accendo la pompa ricircolo
@@ -460,12 +476,12 @@ void  Server::manage_PDC( int sec )
             }
             else if (!dr.rPdc && surplus > 800 )
             {
-                dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
+                dr.LogMessage("PDC OFF SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
-            if (dr.rPdc && dr.wSurplus > 600 )
+            if (dr.rPdc && !dr.rPdcNightMode && dr.wSurplus > 600 )
             {    // molto surplus
-                dr.LogMessage("PDC NIGHT OFF Molto SurplusW:" + dr.wSurplus.svalue() );
+                dr.LogMessage("PDC OFF Molto SurplusW:" + dr.wSurplus.svalue() );
                 needPdc_Night = false;
             }
         }
@@ -528,7 +544,7 @@ void  Server::manage_WinterFIRE( int sec )
         //////////////////////////////////////////////////////////////////////////////////
         // decido se accendere/spegnere pompa piano primo
         needPump_pp = true;
-        if ( dr.tInputMixer < 27 && dr.tPufferHi < 28 && dr.tReturnFireplace < 28 )   // non ho temperatura
+        if ( dr.tInputMixer < 27 && dr.tPufferHi < 27 && dr.tReturnFireplace < 27 )   // non ho temperatura
         {
             dr.LogMessage("Condizione Pompa PP insufficiente: tInletFloor: " + dr.tInletFloor.svalue() + " tReturnFloor: " + dr.tReturnFloor.svalue() );
             needPump_pp = false;

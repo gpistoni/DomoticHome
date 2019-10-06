@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_WEBSOCKETS_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_WEBSOCKETS_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -isystem /usr/include/arm-linux-gnueabihf/qt5 -isystem /usr/include/arm-linux-gnueabihf/qt5/QtWidgets -isystem /usr/include/arm-linux-gnueabihf/qt5/QtGui -isystem /usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -isystem /usr/include/arm-linux-gnueabihf/qt5/QtNetwork -isystem /usr/include/arm-linux-gnueabihf/qt5/QtCore -I. -I. -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++
+INCPATH       = -I. -isystem /usr/include/arm-linux-gnueabihf/qt5 -isystem /usr/include/arm-linux-gnueabihf/qt5/QtWidgets -isystem /usr/include/arm-linux-gnueabihf/qt5/QtGui -isystem /usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -isystem /usr/include/arm-linux-gnueabihf/qt5/QtNetwork -isystem /usr/include/arm-linux-gnueabihf/qt5/QtSql -isystem /usr/include/arm-linux-gnueabihf/qt5/QtCore -I. -I. -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++
 QMAKE         = /usr/lib/arm-linux-gnueabihf/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = dh1.0.0
 DISTDIR = /root/DomoticHome/Qt/QDH/.tmp/dh1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1
-LIBS          = $(SUBLIBS) -lQt5Widgets -lQt5Gui -lQt5WebSockets -lQt5Network -lQt5Core -lGLESv2 -lpthread 
+LIBS          = $(SUBLIBS) -lQt5Widgets -lQt5Gui -lQt5WebSockets -lQt5Network -lQt5Sql -lQt5Core -lGLESv2 -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -60,7 +60,8 @@ SOURCES       = mainwindow.cpp \
 		../QWidget/LogMessage.cpp \
 		../QWidget/InfoTempSetpoint.cpp \
 		../QWidget/InfoBarVar.cpp \
-		../QWidget/ButtonVar.cpp moc_mainwindow.cpp \
+		../QWidget/ButtonVar.cpp \
+		dbevents.cpp moc_mainwindow.cpp \
 		moc_server.cpp \
 		moc_HttpServer.cpp \
 		moc_ButtonVarForced.cpp \
@@ -81,6 +82,7 @@ OBJECTS       = mainwindow.o \
 		InfoTempSetpoint.o \
 		InfoBarVar.o \
 		ButtonVar.o \
+		dbevents.o \
 		moc_mainwindow.o \
 		moc_server.o \
 		moc_HttpServer.o \
@@ -167,7 +169,8 @@ DIST          = /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf \
 		../QWidget/LogMessage.h \
 		../QWidget/InfoTempSetpoint.h \
 		../QWidget/InfoBarVar.h \
-		../QWidget/ButtonVar.h mainwindow.cpp \
+		../QWidget/ButtonVar.h \
+		dbevents.h mainwindow.cpp \
 		server.cpp \
 		../QLibrary/HttpClient.cpp \
 		../QLibrary/HttpParser.cpp \
@@ -179,7 +182,8 @@ DIST          = /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf \
 		../QWidget/LogMessage.cpp \
 		../QWidget/InfoTempSetpoint.cpp \
 		../QWidget/InfoBarVar.cpp \
-		../QWidget/ButtonVar.cpp
+		../QWidget/ButtonVar.cpp \
+		dbevents.cpp
 QMAKE_TARGET  = dh
 DESTDIR       = ../../../dh/
 TARGET        = ../../../dh/dh
@@ -264,6 +268,7 @@ Makefile: QDH.pro /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++/qmake.conf 
 		/usr/lib/arm-linux-gnueabihf/libQt5Gui.prl \
 		/usr/lib/arm-linux-gnueabihf/libQt5WebSockets.prl \
 		/usr/lib/arm-linux-gnueabihf/libQt5Network.prl \
+		/usr/lib/arm-linux-gnueabihf/libQt5Sql.prl \
 		/usr/lib/arm-linux-gnueabihf/libQt5Core.prl
 	$(QMAKE) -spec linux-g++ -o Makefile QDH.pro
 /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf:
@@ -338,6 +343,7 @@ QDH.pro:
 /usr/lib/arm-linux-gnueabihf/libQt5Gui.prl:
 /usr/lib/arm-linux-gnueabihf/libQt5WebSockets.prl:
 /usr/lib/arm-linux-gnueabihf/libQt5Network.prl:
+/usr/lib/arm-linux-gnueabihf/libQt5Sql.prl:
 /usr/lib/arm-linux-gnueabihf/libQt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -spec linux-g++ -o Makefile QDH.pro
@@ -353,8 +359,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h server.h ../QLibrary/HttpClient.h ../QLibrary/HttpParser.h ../QLibrary/HttpServer.h ../QLibrary/DataTable.h ../QLibrary/DataVars.h ../QWidget/ButtonVarForced.h ../QWidget/LogMessage.h ../QWidget/InfoTempSetpoint.h ../QWidget/InfoBarVar.h ../QWidget/ButtonVar.h $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.cpp server.cpp ../QLibrary/HttpClient.cpp ../QLibrary/HttpParser.cpp ../QLibrary/HttpServer.cpp ../QLibrary/DataTable.cpp ../QLibrary/DataVars.cpp main.cpp ../QWidget/ButtonVarForced.cpp ../QWidget/LogMessage.cpp ../QWidget/InfoTempSetpoint.cpp ../QWidget/InfoBarVar.cpp ../QWidget/ButtonVar.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h server.h ../QLibrary/HttpClient.h ../QLibrary/HttpParser.h ../QLibrary/HttpServer.h ../QLibrary/DataTable.h ../QLibrary/DataVars.h ../QWidget/ButtonVarForced.h ../QWidget/LogMessage.h ../QWidget/InfoTempSetpoint.h ../QWidget/InfoBarVar.h ../QWidget/ButtonVar.h dbevents.h $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.cpp server.cpp ../QLibrary/HttpClient.cpp ../QLibrary/HttpParser.cpp ../QLibrary/HttpServer.cpp ../QLibrary/DataTable.cpp ../QLibrary/DataVars.cpp main.cpp ../QWidget/ButtonVarForced.cpp ../QWidget/LogMessage.cpp ../QWidget/InfoTempSetpoint.cpp ../QWidget/InfoBarVar.cpp ../QWidget/ButtonVar.cpp dbevents.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -386,46 +392,47 @@ compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainwindow.cpp moc_server.cpp moc_HttpServer.cpp moc_ButtonVarForced.cpp moc_LogMessage.cpp moc_InfoTempSetpoint.cpp moc_InfoBarVar.cpp moc_ButtonVar.cpp
 moc_mainwindow.cpp: mainwindow.h \
 		/usr/lib/arm-linux-gnueabihf/qt5/bin/moc
-	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include mainwindow.h -o moc_mainwindow.cpp
+	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtSql -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include mainwindow.h -o moc_mainwindow.cpp
 
 moc_server.cpp: ../QLibrary/DataTable.h \
 		../QLibrary/HttpClient.h \
 		../QLibrary/DataVars.h \
+		dbevents.h \
 		server.h \
 		/usr/lib/arm-linux-gnueabihf/qt5/bin/moc
-	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include server.h -o moc_server.cpp
+	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtSql -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include server.h -o moc_server.cpp
 
 moc_HttpServer.cpp: ../QLibrary/DataTable.h \
 		../QLibrary/HttpClient.h \
 		../QLibrary/DataVars.h \
 		../QLibrary/HttpServer.h \
 		/usr/lib/arm-linux-gnueabihf/qt5/bin/moc
-	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../QLibrary/HttpServer.h -o moc_HttpServer.cpp
+	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtSql -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../QLibrary/HttpServer.h -o moc_HttpServer.cpp
 
 moc_ButtonVarForced.cpp: ../QWidget/ButtonVar.h \
 		../QLibrary/DataVars.h \
 		../QWidget/ButtonVarForced.h \
 		/usr/lib/arm-linux-gnueabihf/qt5/bin/moc
-	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../QWidget/ButtonVarForced.h -o moc_ButtonVarForced.cpp
+	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtSql -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../QWidget/ButtonVarForced.h -o moc_ButtonVarForced.cpp
 
 moc_LogMessage.cpp: ../QWidget/LogMessage.h \
 		/usr/lib/arm-linux-gnueabihf/qt5/bin/moc
-	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../QWidget/LogMessage.h -o moc_LogMessage.cpp
+	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtSql -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../QWidget/LogMessage.h -o moc_LogMessage.cpp
 
 moc_InfoTempSetpoint.cpp: ../QLibrary/DataVars.h \
 		../QWidget/InfoTempSetpoint.h \
 		/usr/lib/arm-linux-gnueabihf/qt5/bin/moc
-	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../QWidget/InfoTempSetpoint.h -o moc_InfoTempSetpoint.cpp
+	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtSql -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../QWidget/InfoTempSetpoint.h -o moc_InfoTempSetpoint.cpp
 
 moc_InfoBarVar.cpp: ../QLibrary/DataVars.h \
 		../QWidget/InfoBarVar.h \
 		/usr/lib/arm-linux-gnueabihf/qt5/bin/moc
-	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../QWidget/InfoBarVar.h -o moc_InfoBarVar.cpp
+	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtSql -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../QWidget/InfoBarVar.h -o moc_InfoBarVar.cpp
 
 moc_ButtonVar.cpp: ../QLibrary/DataVars.h \
 		../QWidget/ButtonVar.h \
 		/usr/lib/arm-linux-gnueabihf/qt5/bin/moc
-	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../QWidget/ButtonVar.h -o moc_ButtonVar.cpp
+	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtSql -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../QWidget/ButtonVar.h -o moc_ButtonVar.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -456,14 +463,17 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		../QWidget/InfoTempSetpoint.h \
 		server.h \
 		../QLibrary/DataTable.h \
-		../QLibrary/HttpClient.h
+		../QLibrary/HttpClient.h \
+		dbevents.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
 server.o: server.cpp server.h \
 		../QLibrary/DataTable.h \
 		../QLibrary/HttpClient.h \
 		../QLibrary/DataVars.h \
-		../QLibrary/HttpServer.h
+		dbevents.h \
+		../QLibrary/HttpServer.h \
+		effemeridi.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o server.o server.cpp
 
 HttpClient.o: ../QLibrary/HttpClient.cpp ../QLibrary/HttpClient.h
@@ -494,7 +504,8 @@ main.o: main.cpp mainwindow.h \
 		server.h \
 		../QLibrary/DataTable.h \
 		../QLibrary/HttpClient.h \
-		../QLibrary/DataVars.h
+		../QLibrary/DataVars.h \
+		dbevents.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 ButtonVarForced.o: ../QWidget/ButtonVarForced.cpp ../QWidget/ButtonVarForced.h \
@@ -516,6 +527,9 @@ InfoBarVar.o: ../QWidget/InfoBarVar.cpp ../QWidget/InfoBarVar.h \
 ButtonVar.o: ../QWidget/ButtonVar.cpp ../QWidget/ButtonVar.h \
 		../QLibrary/DataVars.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ButtonVar.o ../QWidget/ButtonVar.cpp
+
+dbevents.o: dbevents.cpp dbevents.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dbevents.o dbevents.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
