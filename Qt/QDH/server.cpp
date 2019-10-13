@@ -155,7 +155,6 @@ void Server::manage_DbLog(int sec)
 {
     if ( t_DbLog.elapsed() < sec * 1000 ) return;
     t_DbLog.restart();
-
     dr.LogMessage("--- DbLog ---"  );
 
     m_dbEvents.LogEnergy( dr.wProduced, dr.wConsumed);
