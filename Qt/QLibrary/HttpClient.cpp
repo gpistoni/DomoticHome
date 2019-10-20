@@ -76,7 +76,7 @@ QString CQHttpClient::HTTPRequest(QString req, bool debugLog)
     }
     catch (...)
     {
-        return"";
+        return "";
     }
 }
 

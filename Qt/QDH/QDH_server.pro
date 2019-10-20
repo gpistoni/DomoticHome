@@ -6,6 +6,7 @@
 QT += core
 QT -= gui
 QT += websockets network
+QT += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -40,7 +41,8 @@ SOURCES += \
     ../QWidget/ButtonVarForced.cpp \
     ../QWidget/ButtonVar.cpp \
     main_server.cpp \
-    server.cpp
+    server.cpp \
+    dbevents.cpp
 
 HEADERS += \
     server.h \
@@ -53,6 +55,8 @@ HEADERS += \
     ../QWidget/InfoTempSetpoint.h \
     ../QWidget/ButtonVarForced.h \
     ../QWidget/ButtonVar.h \
-    ../QWidget/LogMessage.h
+    ../QWidget/LogMessage.h \
+    effemeridi.h \
+    dbevents.h
 
 FORMS +=

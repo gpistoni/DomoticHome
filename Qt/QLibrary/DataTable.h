@@ -15,19 +15,21 @@ public:
     VarB progBoilerACS          = VarB( "T0", "r0", "pBoilerACS" );
     VarB progSummerPDC_eco      = VarB( "T0", "r1", "EstatePDC_eco" );
     VarB progWinterFIRE         = VarB( "T0", "r2", "InverinoCAMINO" );
-    VarB progWinterPDC          = VarB( "T0", "r3", "InvernoPDC" );
+    VarB progWinterPDC_eco      = VarB( "T0", "r3", "InvernoPDC_eco" );
     VarB progExternalLight      = VarB( "T0", "r4", "LuciEsterno" );
 
     VarB progAllRooms           = VarB( "T0", "r7", "TutteLeStanze" );
     VarB progSummerPDC          = VarB( "T0", "r8", "EstatePDC" );
+    VarB progWinterPDC          = VarB( "T0", "r9", "InvernoPDC" );
 
     std::vector<VarB*>    progs = {&progBoilerACS,
                                    &progSummerPDC_eco,
+                                   &progSummerPDC,
                                    &progWinterFIRE,
+                                   &progWinterPDC_eco,
                                    &progWinterPDC,
                                    &progExternalLight,
-                                   &progAllRooms,
-                                   &progSummerPDC
+                                   &progAllRooms
                                   };
     //*****************************************************************************************
     VarF3SP tCucina                   = { "T1", "v0", "v8", "v16", -0.5, 22, "tCucina",   10, 30 };

@@ -9,6 +9,8 @@ int main(int argc, char *argv[])
     QStringList arg = aGui.arguments();
     qDebug() << arg;
 
+    aGui.setStyle("fusion");
+
     bool RunPrograms = false;
 
     // Server

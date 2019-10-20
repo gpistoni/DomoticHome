@@ -3,6 +3,7 @@
 #include "../QLibrary/DataTable.h"
 #include "QDateTime"
 #include "QTimer"
+#include "dbevents.h"
 
 class Server : public QObject
 {
@@ -13,18 +14,19 @@ public:
     ~Server();
 
 private:
-    DataTable dr;
+    DataTable dr;    
+    dbEvents m_dbEvents;
 
     bool m_running = true;
     bool m_runPrograms;
 
     int winter()
     {
-        return month()<=4 || month()>=11;
+        return month()<=4 || month()>=10;
     }
     int summer()
     {
-        return month()>=6 && month()<=9;
+        return month()>=6 && month()<=8;
     }
     int month()
     {
@@ -40,6 +42,7 @@ private:
     }
 
     QElapsedTimer t_UpdateValues;
+    QElapsedTimer t_DbLog;
     QElapsedTimer t_InternetConnection;
     QElapsedTimer t_BoilerACS;
     QElapsedTimer t_ExternalLight;
@@ -54,6 +57,7 @@ public:
 public:
     void manage_Progs(bool immediate);
 
+    void manage_DbLog(int sec);
     void manage_Internet(int sec);
     void manage_BoilerACS(int sec);
     void manage_ExternalLight(int sec);
