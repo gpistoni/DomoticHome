@@ -41,7 +41,7 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.3.0", true);
+        dr.LogMessage("VER 1.3.2", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
@@ -131,11 +131,9 @@ void Server::manage_Progs(bool immediate)
         manage_Internet(-1);
         manage_ExternalLight(-1);
         manage_BoilerACS(-1);
-        manage_WinterFIRE(-1);
+        manage_Pumps(-1);
         manage_PDC(-1);
         manage_evRooms(-1);
-        if ( winter() )
-            manage_Camino(-1);
     }
     else
     {
@@ -144,10 +142,8 @@ void Server::manage_Progs(bool immediate)
         manage_ExternalLight(10*60);
         manage_BoilerACS(5*60);
         manage_PDC(6*60);
-        manage_WinterFIRE(4*60);
+        manage_Pumps(4*60);
         manage_evRooms(10*60);
-        if ( winter() )
-            manage_Camino(3*60);
     }
 }
 
@@ -212,7 +208,7 @@ void Server::manage_BoilerACS(int sec)
         }
 
         //decido se accendere il boiler solo a mezzogiorno
-        if ( hour() >= 14 && hour() < 17  )
+        if ( hour() >= 14 && hour() <= 15  )
         {
             boilerACS = true;
             dr.LogMessage("Condizione ON hour:" + QString::number( hour() ) + " >=14 & <17");
@@ -401,8 +397,6 @@ void  Server::manage_PDC( int sec )
     bool needPdc_Pump = false;
     bool needPdc_Night = true;
     bool needPdc_Heat = false;
-    bool needPump_pt = false;
-    bool needPump_pp = false;
 
     dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() + " [L1]:" + dr.wL1.svalue() + " [L2]:" + dr.wL2.svalue() + " [L3]:" + dr.wL3.svalue());
 
@@ -448,14 +442,14 @@ void  Server::manage_PDC( int sec )
             needPdc = false;
         }
 
-        if (dr.tPufferHi > 27 )  // acqua calda in puffer
-        {
-            needPump_pp = true;  //accendo la pompa ricircolo
-            needPump_pt = true;  //accendo la pompa ricircolo
-        }
-
         needPdc_Heat = needPdc;
         needPdc_Pump = needPdc;
+
+        if ( dr.tInletFloor > 35 )  // 35 è la sicurezza dopo al quale spengo la pompa
+        {
+            dr.LogMessage("PDC OFF t inlet " + dr.tInletFloor.svalue() + "> 35" );
+            needPdc = false;
+        }
 
     }
     else if (dr.progSummerPDC || dr.progSummerPDC_eco)
@@ -492,11 +486,6 @@ void  Server::manage_PDC( int sec )
             needPdc = false;
         }
 
-        if (dr.tPufferHi < 23 )  // acqua fresca in puffer
-        {
-            needPump_pp = true;  //accendo la pompa ricircolo
-        }
-
         needPdc_Pump = needPdc;
         needPdc_Heat = false;
 
@@ -522,41 +511,34 @@ void  Server::manage_PDC( int sec )
     dr.rPdcPompa.ModifyValue( needPdc_Pump );
     //night
     dr.rPdcNightMode.ModifyValue( needPdc && needPdc_Night );
-    //pompa pp
-    dr.rPompaPianoPrimo.ModifyValue( needPump_pp );
-    dr.rPompaPianoTerra.ModifyValue( needPump_pt );
 }
 
 /******************************************************************************************************************************************************************/
-void  Server::manage_WinterFIRE( int sec )
+void  Server::manage_Pumps( int sec )
 {
     if ( t_WinterFIRE.elapsed() < sec * 1000 ) return;
     t_WinterFIRE.restart();
 
     dr.LogMessage("--- Winter FIRE ---"  );
 
+    bool needPCamino = false;
     bool needPump_pt = false;
     bool needPump_pp = false;
 
-    if (dr.progWinterFIRE)
+    if (dr.progWinterFIRE || dr.progWinterPDC  || dr.progWinterPDC_eco )
     {
         //////////////////////////////////////////////////////////////////////////////////
+        // decido se accendere pompa camino
+        dr.LogMessage("Condizione Pompa Camino: tReturnFireplace " + dr.tReturnFireplace.svalue() + " > 34 - " + "tPufferLow " + dr.tPufferLow.svalue() + " > dr.tPufferLow + 5");
+        if ( dr.tPufferLow < 45 && dr.tReturnFireplace > 34 && dr.tReturnFireplace > dr.tPufferLow + 5 )
+        {
+            needPCamino = true;
+        }
         // decido se accendere/spegnere pompa piano primo
-        needPump_pp = true;
-        if ( dr.tInputMixer < 27 && dr.tPufferHi < 27 && dr.tReturnFireplace < 27 )   // non ho temperatura
+        if ( dr.tInputMixer > 27 || dr.tPufferHi > 27 || dr.tReturnFireplace > 27 )   // ho temperatura
         {
             dr.LogMessage("Condizione Pompa PP insufficiente: tInletFloor: " + dr.tInletFloor.svalue() + " tReturnFloor: " + dr.tReturnFloor.svalue() );
-            needPump_pp = false;
-        }
-        if ( (dr.tReturnFloor > 29) )  // ritorno troppo alto - non ne ho bisogno
-        {
-            dr.LogMessage("Stop Pompa: ritorno troppo alto tReturnFloor: " + dr.tReturnFloor.svalue() );
-            needPump_pp = false;
-        }
-        if ( dr.tInletFloor > 35 )  // 35 è la sicurezza dopo al quale spengo la pompa
-        {
-            dr.LogMessage("Stop Pompa: Sicurezza temp ingreso impianto: tInletFloor: " + dr.tInletFloor.svalue() + " > 35" );
-            needPump_pp = false;
+            needPump_pp = true;
         }
         if ( dr.tReturnFireplace < 35 && hour() < 6 ) // fuori oario spengo pompa
         {
@@ -568,55 +550,39 @@ void  Server::manage_WinterFIRE( int sec )
             dr.LogMessage("Stop Pompa: orario " + QString::number( hour() ) );
             needPump_pp = false;
         }
-        if ( dr.tPufferLow > 55 )   // emergenza
+
+        if ( (dr.tReturnFloor > 29) )  // ritorno troppo alto - non ne ho bisogno
         {
-            dr.LogMessage("Emergenza tPufferLow > 55 ");
-            needPump_pp = true;
-            needPump_pt = true;
+            dr.LogMessage("Stop Pompa: ritorno troppo alto tReturnFloor: " + dr.tReturnFloor.svalue() );
+            needPump_pp = false;
+        }
+        if ( dr.tInletFloor > 35 )  // 35 è la sicurezza dopo al quale spengo la pompa
+        {
+            dr.LogMessage("Stop Pompa: Sicurezza temp ingreso impianto: tInletFloor: " + dr.tInletFloor.svalue() + " > 35" );
+            needPump_pp = false;
+        }
+
+        if (dr.tPufferHi > 35 && hour()>=16 &&  hour()<=19 )  // acqua calda in puffer
+        {
+            needPump_pt = true;  //accendo la pompa
         }
     }
 
-    dr.LogMessage("needPompa_pt: [" + QString::number(needPump_pt) + "]" );
+    if (dr.progSummerPDC || dr.progSummerPDC_eco)
+    {
+        if (dr.tPufferHi < 23 )  // acqua fresca in puffer
+        {
+            needPump_pp = true;  //accendo la pompa ricircolo
+        }
+    }
+
+    dr.LogMessage("NeedPompa_pt: [" + QString::number(needPump_pt) + "]" );
     dr.LogMessage("NeedPompa_pp: [" + QString::number(needPump_pp) + "]" );
 
     // comandi sulla centrale -----------------------------------------------------
+    // heat
+    dr.rPompaCamino.ModifyValue( needPCamino );
     // accendo pompa pp
     dr.rPompaPianoPrimo.ModifyValue( needPump_pp );
     dr.rPompaPianoTerra.ModifyValue( needPump_pt );
-}
-
-/******************************************************************************************************************************************************************/
-void  Server::manage_Camino( int sec )
-{
-    if ( t_Camino.elapsed() < sec * 1000 ) return;
-    t_Camino.restart();
-
-    dr.LogMessage("--- Camino ---" );
-    bool needPCamino=false;
-    bool needPompa_pt=false;
-
-    if (dr.progWinterFIRE)
-    {
-        //////////////////////////////////////////////////////////////////////////////////
-        // decido se accendere pompa camino
-        dr.LogMessage("Condizione Pompa Camino: tReturnFireplace " + dr.tReturnFireplace.svalue() + " > 34 - " + "tPufferLow " + dr.tPufferLow.svalue() + " > dr.tPufferLow + 5");
-        if ( dr.tPufferLow < 45 && dr.tReturnFireplace > 34 && dr.tReturnFireplace > dr.tPufferLow + 5 )
-        {
-            needPCamino = true;
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////
-        // decido se accendere piano terra
-        dr.LogMessage("Condizione dr.tPufferLow > 45 && dr.tReturnFireplace > 45");
-        if ( dr.tPufferLow > 45 && dr.tReturnFireplace > 45 )
-        {
-            needPompa_pt = true;
-        }
-    }
-
-    dr.LogMessage("NeedPCamino: [" + QString::number(needPCamino) + "]" );
-    dr.LogMessage("NeedPompa_pt: [" + QString::number(needPompa_pt) + "]" );
-
-    // heat
-    dr.rPompaCamino.ModifyValue( needPCamino );
 }
