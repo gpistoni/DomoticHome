@@ -37,7 +37,7 @@
       <property name="autoFillBackground">
        <bool>true</bool>
       </property>
-      <widget class="QWidget" name="tabWidgetPage1" native="true">
+      <widget class="QWidget" name="tabWidgetPage1">
        <attribute name="title">
         <string/>
        </attribute>
@@ -192,6 +192,16 @@
          <widget class="QPushButton" name="pushButton_3">
           <property name="text">
            <string>Surplus</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLabel" name="label_G">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>

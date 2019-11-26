@@ -61,7 +61,7 @@ public:
     VarBf rPdc                     = { "T3", "r0", "Pdc" };
     VarBf rPdcHeat                 = { "T3", "r1", "rPdcHeat" };
     VarBf rPdcPompa                = { "T3", "r2", "rPdcPompa" };
-    VarBf rPdcNightMode            = { "T3", "r3", "rPdcNightMode" };
+    VarBf rPdcFullPower            = { "T3", "r3", "rPdcFullPower" };
     VarBf rPompaPianoPrimo         = { "T3", "r4", "rPompaPianoPrimo" };
     VarBf rPompaPianoTerra         = { "T3", "r5", "rPompaPianoTerra" };
     VarBf rBoilerACS               = { "T3", "r6", "rBoilerACS" };
@@ -70,7 +70,7 @@ public:
     std::vector<VarBf*>    rcaldaia = {  &rPdc,
                                         &rPdcHeat,
                                         &rPdcPompa,
-                                        &rPdcNightMode,
+                                        &rPdcFullPower,
                                         &rPompaPianoPrimo,
                                         &rPompaPianoTerra,
                                         &rBoilerACS,
