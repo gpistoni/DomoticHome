@@ -63,8 +63,7 @@ public:
     void manage_ExternalLight(int sec);
     void manage_evRooms(int sec);
     void manage_PDC(int sec);
-    void manage_WinterFIRE(int sec);
-    void manage_Camino(int sec);
+    void manage_Pumps(int sec);
 
 
 public slots:

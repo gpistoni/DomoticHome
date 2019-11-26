@@ -3,9 +3,11 @@
 // scheda 4 x 2 rele  ( uscita 2-9)
 // risposta: stato rele
 // rev: 23 ago 2015
-// rev 4 dic 2016
-// rev 23 mar 2018 
+// rev: 4 dic 2016
+// rev: 23 mar 2018 
+// rev: 20 ott 2019 
 
+#include <cprobe.h>
 #include <dhprotocol.h>
 #include <OneWire.h>
 #include <SoftwareSerial.h>
@@ -19,10 +21,9 @@ void setup()
 {
   Slave.setup(3, 0, &mySerial);     // Terminal ID
 
-  for (int i = 0; i < 8; i++)   // 2-10 relay.
+  for (int i = 0; i < 8; i++)       // 2-10 relay.
   {
     pinMode(2 + i, OUTPUT);
-    digitalWrite(2 + i, 1);
   }
 
   Serial.begin(57600);
@@ -39,7 +40,7 @@ void loop()
   {
     digitalWrite(LED_BUILTIN, HIGH);
     
-    Serial.print( "Current Relay State: " );
+    Serial.print( "Current Relay PDC State: " );
     for (int i = 0; i < 8; i++)
     {
       Slave.sensor[i] = Slave.relay[i];
@@ -47,6 +48,8 @@ void loop()
       if (i != 0)  Serial.print( "," );
       Serial.print( Slave.relay[i] );
     }    
+    Serial.println("");
     Slave.sendData();
   }
+    delay(10);
 };
