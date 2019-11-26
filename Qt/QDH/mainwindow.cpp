@@ -17,7 +17,7 @@ MainWindow::MainWindow(Server *pserver, QWidget *parent) :
     //connect server signals
     {
         connect(m_pserver, SIGNAL(updateValues(DataTable*)), SLOT(updateValues(DataTable*)));
-    };
+    }
 }
 
 MainWindow::~MainWindow()
@@ -238,10 +238,4 @@ void MainWindow::updateValues(DataTable* dr)
 void MainWindow::Log(QString s)
 {
     m_logw->appendMessage(s);
-}
-
-
-void MainWindow::on_label_S1_linkActivated(const QString &link)
-{
-
 }

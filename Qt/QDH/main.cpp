@@ -6,6 +6,8 @@ int main(int argc, char *argv[])
 {
     QApplication aGui(argc, argv);
 
+    QApplication::setApplicationVersion("1.1");
+
     QStringList arg = aGui.arguments();
     qDebug() << arg;
 
