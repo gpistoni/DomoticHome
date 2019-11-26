@@ -41,7 +41,7 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.3.2", true);
+        dr.LogMessage("VER 1.4.0", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
@@ -395,43 +395,40 @@ void  Server::manage_PDC( int sec )
 
     bool needPdc = false;
     bool needPdc_Pump = false;
-    bool needPdc_Night = true;
+    bool needPdc_FullPower = false;
     bool needPdc_Heat = false;
 
     dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() + " [L1]:" + dr.wL1.svalue() + " [L2]:" + dr.wL2.svalue() + " [L3]:" + dr.wL3.svalue());
 
     float surplus = dr.wSurplus;
 
-    if (dr.progWinterPDC  || dr.progWinterPDC_eco)
+    if ( dr.progWinterPDC  || dr.progWinterPDC_eco)
     {
         if (dr.progWinterPDC)
         {
             needPdc = true;
+            needPdc_FullPower = false;
         }
         if (dr.progWinterPDC_eco)
         {
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accendere PDC
-            if (dr.rPdc && dr.wSurplus > 50 )
+            if (dr.rPdc && dr.wSurplus > 0 )
             {
                 dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
-            else if (!dr.rPdc && dr.wSurplus > 600 )
+            else if (!dr.rPdc && dr.wSurplus > 500 )
             {
                 dr.LogMessage("PDC OFF SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
+
             //pdc Gia Accesa
-            if (dr.rPdc && !dr.rPdcNightMode && dr.wSurplus > 500 )
+            if (dr.rPdc && !dr.rPdcFullPower && dr.wSurplus > 500 )
             {    // molto surplus
-                dr.LogMessage("PDC ON Molto SurplusW:" + dr.wSurplus.svalue() );
-                needPdc_Night = false;
-            }
-            if (dr.progAllRooms)
-            {
-                dr.LogMessage("PDC ON FORCED ALLROOMS");
-                needPdc = true;
+                dr.LogMessage("PDC FULL POWER SurplusW:" + dr.wSurplus.svalue() );
+                needPdc_FullPower = true;
             }
         }
 
@@ -445,18 +442,22 @@ void  Server::manage_PDC( int sec )
         needPdc_Heat = needPdc;
         needPdc_Pump = needPdc;
 
+        /**************************************************************************************************/
         if ( dr.tInletFloor > 35 )  // 35 è la sicurezza dopo al quale spengo la pompa
         {
             dr.LogMessage("PDC OFF t inlet " + dr.tInletFloor.svalue() + "> 35" );
             needPdc = false;
         }
-
     }
     else if (dr.progSummerPDC || dr.progSummerPDC_eco)
     {
+        // in estate uso la curva di regolazione termica
+        needPdc_FullPower = false;
+
         if (dr.progSummerPDC)
         {
             needPdc = true;
+            needPdc_FullPower = false;
         }
         if (dr.progSummerPDC_eco)
         {
@@ -472,25 +473,13 @@ void  Server::manage_PDC( int sec )
                 dr.LogMessage("PDC OFF SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
-            if (dr.rPdc && !dr.rPdcNightMode && dr.wSurplus > 600 )
-            {    // molto surplus
-                dr.LogMessage("PDC OFF Molto SurplusW:" + dr.wSurplus.svalue() );
-                needPdc_Night = false;
-            }
-        }
-
-        /**************************************************************************************************/
-        if (dr.tExternal < 25 )  // minima t esterna
-        {
-            dr.LogMessage("PDC OFF t estrerna 25>" + dr.tExternal.svalue() );
-            needPdc = false;
         }
 
         needPdc_Pump = needPdc;
         needPdc_Heat = false;
 
         /**************************************************************************************************/
-        if (needPdc && dr.tInletFloor < 18.5 )  // minima t Acqua raffreddata
+        if (needPdc && dr.tInletFloor < 18.5f )  // minima t Acqua raffreddata
         {
             dr.LogMessage("PDC OFF t inlet " + dr.tInletFloor.svalue() + "< 18.5" );
             needPdc = false;
@@ -498,7 +487,7 @@ void  Server::manage_PDC( int sec )
     }
 
     dr.LogMessage("NeedPdc: [" + QString::number(needPdc) + "]" );
-    dr.LogMessage("NeedPdc_Night: [" + QString::number(needPdc && needPdc_Night) + "]" );
+    dr.LogMessage("NeedPdc_FullPower: [" + QString::number(needPdc && needPdc_FullPower) + "]" );
     dr.LogMessage("NeedPdc_Pump [" + QString::number(needPdc_Pump) + "]");
     dr.LogMessage("NeedPdc_Heat [" + QString::number(needPdc && needPdc_Heat) + "]");
 
@@ -510,7 +499,7 @@ void  Server::manage_PDC( int sec )
     //pompa
     dr.rPdcPompa.ModifyValue( needPdc_Pump );
     //night
-    dr.rPdcNightMode.ModifyValue( needPdc && needPdc_Night );
+    dr.rPdcFullPower.ModifyValue( needPdc && needPdc_FullPower );
 }
 
 /******************************************************************************************************************************************************************/
@@ -540,12 +529,7 @@ void  Server::manage_Pumps( int sec )
             dr.LogMessage("Condizione Pompa PP insufficiente: tInletFloor: " + dr.tInletFloor.svalue() + " tReturnFloor: " + dr.tReturnFloor.svalue() );
             needPump_pp = true;
         }
-        if ( dr.tReturnFireplace < 35 && hour() < 6 ) // fuori oario spengo pompa
-        {
-            dr.LogMessage("Stop Pompa: orario " + QString::number( hour() ) );
-            needPump_pp = false;
-        }
-        if ( dr.tReturnFireplace < 35 && hour() >= 11 ) // fuori oario spengo pompa
+        if ( hour() < 6 || hour() >= 23  ) // fuori oario spengo pompa
         {
             dr.LogMessage("Stop Pompa: orario " + QString::number( hour() ) );
             needPump_pp = false;
@@ -562,7 +546,7 @@ void  Server::manage_Pumps( int sec )
             needPump_pp = false;
         }
 
-        if (dr.tPufferHi > 35 && hour()>=16 &&  hour()<=19 )  // acqua calda in puffer
+        if (dr.tPufferHi > 35 && hour()>=16 &&  hour()<19 )  // acqua calda in puffer
         {
             needPump_pt = true;  //accendo la pompa
         }
