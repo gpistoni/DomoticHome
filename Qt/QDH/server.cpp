@@ -529,12 +529,7 @@ void  Server::manage_Pumps( int sec )
             dr.LogMessage("Condizione Pompa PP insufficiente: tInletFloor: " + dr.tInletFloor.svalue() + " tReturnFloor: " + dr.tReturnFloor.svalue() );
             needPump_pp = true;
         }
-        if ( dr.tReturnFireplace < 35 && hour() < 6 ) // fuori oario spengo pompa
-        {
-            dr.LogMessage("Stop Pompa: orario " + QString::number( hour() ) );
-            needPump_pp = false;
-        }
-        if ( dr.tReturnFireplace < 35 && hour() >= 11 ) // fuori oario spengo pompa
+        if ( hour() < 6 || hour() >= 23  ) // fuori oario spengo pompa
         {
             dr.LogMessage("Stop Pompa: orario " + QString::number( hour() ) );
             needPump_pp = false;
@@ -551,7 +546,7 @@ void  Server::manage_Pumps( int sec )
             needPump_pp = false;
         }
 
-        if (dr.tPufferHi > 35 && hour()>=16 &&  hour()<=19 )  // acqua calda in puffer
+        if (dr.tPufferHi > 35 && hour()>=16 &&  hour()<19 )  // acqua calda in puffer
         {
             needPump_pt = true;  //accendo la pompa
         }
