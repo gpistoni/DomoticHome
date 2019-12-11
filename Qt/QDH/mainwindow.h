@@ -24,9 +24,6 @@ public:
 public slots:
     void updateValues(DataTable* dr );
 
-private slots:
-    void on_label_S1_linkActivated(const QString &link);
-
 private:
     Ui::MainWindow *ui;
 

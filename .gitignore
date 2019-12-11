@@ -2,5 +2,6 @@
 *.h~
 *.o
 *.user
+*.o
 /Qt/build-*
 /android/build*
