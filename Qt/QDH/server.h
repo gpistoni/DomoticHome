@@ -43,13 +43,15 @@ private:
 
     QElapsedTimer t_UpdateValues;
     QElapsedTimer t_DbLog;
-    QElapsedTimer t_InternetConnection;
     QElapsedTimer t_BoilerACS;
     QElapsedTimer t_ExternalLight;
     QElapsedTimer t_evRooms;
     QElapsedTimer t_WinterFIRE;
     QElapsedTimer t_PDC;
     QElapsedTimer t_Camino;
+
+    QElapsedTimer t_InternetConnection;
+    QElapsedTimer t_Remote212;
 
 public:
     void Stop(){m_running = false; }
@@ -58,13 +60,14 @@ public:
     void manage_Progs(bool immediate);
 
     void manage_DbLog(int sec);
-    void manage_Internet(int sec);
     void manage_BoilerACS(int sec);
     void manage_ExternalLight(int sec);
     void manage_evRooms(int sec);
     void manage_PDC(int sec);
     void manage_Pumps(int sec);
 
+    void manage_Internet(int sec);
+    void manage_Remote212(int sec);
 
 public slots:
     void run();

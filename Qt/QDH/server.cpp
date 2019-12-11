@@ -14,7 +14,6 @@ Server::Server(bool runPrograms) :
 {
     t_UpdateValues.start();
     t_DbLog.start();
-    t_InternetConnection.start();
     t_BoilerACS.start();
     t_ExternalLight.start();
     t_evRooms.start();
@@ -22,6 +21,8 @@ Server::Server(bool runPrograms) :
     t_WinterFIRE.start();
     t_Camino.start();
 
+    t_InternetConnection.start();
+    t_Remote212.start();
 
     m_dbEvents.CreateTables();
 }
@@ -41,7 +42,7 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.4.0", true);
+        dr.LogMessage("VER 1.4.1", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
@@ -128,22 +129,26 @@ void Server::manage_Progs(bool immediate)
     {
         dr.LogMessage("--- manage_Progs immediate ---"  );
         manage_DbLog(-1);
-        manage_Internet(-1);
         manage_ExternalLight(-1);
         manage_BoilerACS(-1);
         manage_Pumps(-1);
         manage_PDC(-1);
         manage_evRooms(-1);
+
+        manage_Internet(-1);
+        manage_Remote212(-1);
     }
     else
     {
         manage_DbLog(5*60);
-        manage_Internet(2*60);
         manage_ExternalLight(10*60);
         manage_BoilerACS(5*60);
         manage_PDC(6*60);
         manage_Pumps(4*60);
         manage_evRooms(10*60);
+
+        manage_Internet(2*60);
+        manage_Remote212(2*60);
     }
 }
 
@@ -154,6 +159,27 @@ void Server::manage_DbLog(int sec)
     dr.LogMessage("--- DbLog ---"  );
 
     m_dbEvents.LogEnergy( dr.wProduced, dr.wConsumed);
+}
+
+void Server::manage_Remote212(int sec)
+{
+    if ( t_Remote212.elapsed() < sec * 1000 ) return;
+    t_Remote212.restart();
+
+    dr.LogMessage("--- Remote212 ---"  );
+
+    if (hour()>=18)                                     // questa si avvia alle 19
+    {
+        CQHttpClient client2("192.168.1.212", 80, 10000 );
+        dr.LogMessage("manage_Remote212 ON");
+        client2.Request_Set("on");
+    }
+    else
+    {
+        CQHttpClient client2("192.168.1.212", 80, 10000 );
+        dr.LogMessage("manage_Remote212 OFF");
+        client2.Request_Set("off");
+    }
 }
 
 void Server::manage_Internet(int sec)
@@ -519,7 +545,7 @@ void  Server::manage_Pumps( int sec )
         //////////////////////////////////////////////////////////////////////////////////
         // decido se accendere pompa camino
         dr.LogMessage("Condizione Pompa Camino: tReturnFireplace " + dr.tReturnFireplace.svalue() + " > 34 - " + "tPufferLow " + dr.tPufferLow.svalue() + " > dr.tPufferLow + 5");
-        if ( dr.tPufferLow < 45 && dr.tReturnFireplace > 34 && dr.tReturnFireplace > dr.tPufferLow + 5 )
+        if ( hour() >= 23  && dr.tPufferLow < 45 && dr.tReturnFireplace > 34 && dr.tReturnFireplace > dr.tPufferLow + 5 )
         {
             needPCamino = true;
         }
