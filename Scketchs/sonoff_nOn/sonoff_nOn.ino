@@ -16,8 +16,10 @@ ESP8266WebServer server(80);
 // Replace with your network credentials
 const char* ssid_1 = "PistoniHome";
 const char* ssid_2 = "PistoniHome1";
+const char* ssid_3 = "PistoniHome2";
 const char* password_1 = "giaco1iren1dario";
 const char* password_2 = "giaco1iren1dario";
+const char* password_3 = "giaco1iren1dario";
 
 String web_on_html = "1 <p><a href=\"on\"><button>ON</button></a>&nbsp;<a href=\"off\"><button>OFF</button></a></p>";
 String web_off_html = "0 <p><a href=\"on\"><button>ON</button></a>&nbsp;<a href=\"off\"><button>OFF</button></a></p>";
@@ -47,6 +49,7 @@ void setup(void)
 // Setup Connessione
   wifiMulti.addAP(ssid_1, password_1);
   wifiMulti.addAP(ssid_2, password_2);
+  wifiMulti.addAP(ssid_3, password_3);
 
   Serial.println("Connecting to multiple wifi..");
 
