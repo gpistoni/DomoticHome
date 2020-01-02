@@ -120,6 +120,7 @@ public:
     VarF3 wL1                   = { "T6", "v2", "v10", "v18", "L1" , 0, 4000};
     VarF3 wL2                   = { "T6", "v3", "v11", "v19", "L2" , 0, 4000};
     VarF3 wL3                   = { "T6", "v4", "v12", "v20", "L3" , 0, 4000};
+    VarF3 wCounter              = { "T6", "v6", "v14", "v22", "Counter" , 0, 4000};
 
     // dato calcolato
     VarF3 wConsumed             = { "T6", "", "", "", "Consumed" , 0, 4000};
@@ -130,6 +131,7 @@ public:
                                       &wL1,
                                       &wL2,
                                       &wL3,
+                                      &wCounter,
                                       &wConsumed,
                                       &wSurplus
                                     };

@@ -42,7 +42,7 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.4.1", true);
+        dr.LogMessage("VER 1.5.0", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
@@ -86,6 +86,9 @@ void Server::run()
 
                 dr.wSurplus = dr.wProduced;
                 dr.wSurplus -= dr.wConsumed;
+
+                if ( dr.wCounter > 0  && dr.wSurplus > 0  )
+                    dr.wSurplus.m_value = 0;
 
                 dr.LogPoint();
                 emit updateValues( &dr );
@@ -140,10 +143,10 @@ void Server::manage_Progs(bool immediate)
     }
     else
     {
-        manage_DbLog(5*60);
+        manage_DbLog(10*60);
         manage_ExternalLight(10*60);
-        manage_BoilerACS(5*60);
-        manage_PDC(6*60);
+        manage_BoilerACS(8*60);
+        manage_PDC(5*60);
         manage_Pumps(4*60);
         manage_evRooms(10*60);
 
@@ -168,7 +171,7 @@ void Server::manage_Remote212(int sec)
 
     dr.LogMessage("--- Remote212 ---"  );
 
-    if (hour()>=18)                                     // questa si avvia alle 19
+    if (IsNight())                                         // questa si avvia alle 19
     {
         CQHttpClient client2("192.168.1.212", 80, 10000 );
         dr.LogMessage("manage_Remote212 ON");
@@ -222,12 +225,12 @@ void Server::manage_BoilerACS(int sec)
     /**************************************************************************************************/
     if ( dr.progBoilerACS )
     {
-        if ( dr.rBoilerACS && dr.wSurplus > 50 ) // se e gia acceso
+        if ( dr.rBoilerACS && dr.wSurplus > 0 ) // se e gia acceso
         {
             boilerACS = true;
             dr.LogMessage("Condizione ON surplusW:" + dr.wSurplus.svalue() );
         }
-        else if ( !dr.rBoilerACS && dr.wSurplus > 450 ) // se e spento
+        else if ( !dr.rBoilerACS && dr.wSurplus > 400 ) // se e spento
         {
             boilerACS = true;
             dr.LogMessage("Condizione ON surplusW:" + dr.wSurplus.svalue() );
@@ -252,7 +255,6 @@ void Server::manage_BoilerACS(int sec)
     dr.LogMessage("BoilerACS [" + QString::number( boilerACS ) + "]");
     dr.rBoilerACS.ModifyValue( boilerACS );
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Server::manage_ExternalLight(int sec)
@@ -439,7 +441,7 @@ void  Server::manage_PDC( int sec )
         {
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accendere PDC
-            if (dr.rPdc && dr.wSurplus > 0 )
+            if (dr.rPdc && dr.wSurplus>0 )
             {
                 dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
@@ -451,7 +453,7 @@ void  Server::manage_PDC( int sec )
             }
 
             //pdc Gia Accesa
-            if (dr.rPdc && !dr.rPdcFullPower && dr.wSurplus > 500 )
+            if (dr.rPdc && !dr.rPdcFullPower && dr.wSurplus > 300 )
             {    // molto surplus
                 dr.LogMessage("PDC FULL POWER SurplusW:" + dr.wSurplus.svalue() );
                 needPdc_FullPower = true;
@@ -545,12 +547,13 @@ void  Server::manage_Pumps( int sec )
         //////////////////////////////////////////////////////////////////////////////////
         // decido se accendere pompa camino
         dr.LogMessage("Condizione Pompa Camino: tReturnFireplace " + dr.tReturnFireplace.svalue() + " > 34 - " + "tPufferLow " + dr.tPufferLow.svalue() + " > dr.tPufferLow + 5");
-        if ( hour() >= 23  && dr.tPufferLow < 45 && dr.tReturnFireplace > 34 && dr.tReturnFireplace > dr.tPufferLow + 5 )
+        if ( hour() >= 23 && dr.tPufferLow < 45 && dr.tReturnFireplace > 34 && dr.tReturnFireplace > dr.tPufferLow + 5 )
         {
             needPCamino = true;
         }
+        float tempIn = std::fmax( dr.tInputMixer, std::fmax(dr.tPufferHi, dr.tReturnFireplace) );
         // decido se accendere/spegnere pompa piano primo
-        if ( dr.tInputMixer > 27 || dr.tPufferHi > 27 || dr.tReturnFireplace > 27 )   // ho temperatura
+        if ( tempIn > 27 && tempIn > dr.tReturnFloor + 4) // ho temperatura
         {
             dr.LogMessage("Condizione Pompa PP insufficiente: tInletFloor: " + dr.tInletFloor.svalue() + " tReturnFloor: " + dr.tReturnFloor.svalue() );
             needPump_pp = true;
@@ -584,6 +587,11 @@ void  Server::manage_Pumps( int sec )
         {
             needPump_pp = true;  //accendo la pompa ricircolo
         }
+    }
+
+    if (dr.rPdcPompa)
+    {
+       needPump_pp = true;  //accendo la pompa pp se ho acceso la pdc
     }
 
     dr.LogMessage("NeedPompa_pt: [" + QString::number(needPump_pt) + "]" );
