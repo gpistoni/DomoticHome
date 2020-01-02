@@ -87,8 +87,8 @@ void Server::run()
                 dr.wSurplus = dr.wProduced;
                 dr.wSurplus -= dr.wConsumed;
 
-                if ( dr.wCounter > 0  && dr.wSurplus > 0  )
-                    dr.wSurplus.m_value = 0;
+                //if ( dr.wCounter > 0 && dr.wSurplus > 0  )
+                //    dr.wSurplus.m_value = 0;
 
                 dr.LogPoint();
                 emit updateValues( &dr );
@@ -419,21 +419,20 @@ void  Server::manage_PDC( int sec )
     if ( t_PDC.elapsed() < sec * 1000 ) return;
     t_PDC.restart();
 
-    dr.LogMessage("--- PDC SURPLUS ---" );
+    dr.LogMessage("--- PDC ---" );
 
     bool needPdc = false;
     bool needPdc_Pump = false;
     bool needPdc_FullPower = false;
     bool needPdc_Heat = false;
 
-    dr.LogMessage("PDC surplusW:" + dr.wSurplus.svalue() + " [L1]:" + dr.wL1.svalue() + " [L2]:" + dr.wL2.svalue() + " [L3]:" + dr.wL3.svalue());
-
-    float surplus = dr.wSurplus;
+    dr.LogMessage("[Surplus]:" + dr.wSurplus.svalue() + " [L1]:" + dr.wL1.svalue() + " [L2]:" + dr.wL2.svalue() + " [L3]:" + dr.wL3.svalue());
 
     if ( dr.progWinterPDC  || dr.progWinterPDC_eco)
     {
         if (dr.progWinterPDC)
         {
+            dr.LogMessage("PDC ON progWinter" );
             needPdc = true;
             needPdc_FullPower = false;
         }
@@ -441,19 +440,23 @@ void  Server::manage_PDC( int sec )
         {
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accendere PDC
-            if (dr.rPdc && dr.wSurplus>0 )
+            if (dr.rPdc && dr.wSurplus > 0 )
             {
                 dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
-            else if (!dr.rPdc && dr.wSurplus > 500 )
+            if (!dr.rPdc && dr.wSurplus > 500 )
             {
-                dr.LogMessage("PDC OFF SurplusW:" + dr.wSurplus.svalue() );
+                dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
-
             //pdc Gia Accesa
-            if (dr.rPdc && !dr.rPdcFullPower && dr.wSurplus > 300 )
+            if (dr.rPdc && dr.rPdcFullPower && dr.wSurplus > 100 )
+            {    // molto surplus
+                dr.LogMessage("PDC FULL POWER SurplusW:" + dr.wSurplus.svalue() );
+                needPdc_FullPower = true;
+            }
+            if (dr.rPdc && !dr.rPdcFullPower && dr.wSurplus > 400 )
             {    // molto surplus
                 dr.LogMessage("PDC FULL POWER SurplusW:" + dr.wSurplus.svalue() );
                 needPdc_FullPower = true;
@@ -484,6 +487,7 @@ void  Server::manage_PDC( int sec )
 
         if (dr.progSummerPDC)
         {
+            dr.LogMessage("PDC ON progSummerPDC" );
             needPdc = true;
             needPdc_FullPower = false;
         }
@@ -491,12 +495,12 @@ void  Server::manage_PDC( int sec )
         {
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accendere PDC
-            if (dr.rPdc && surplus > 200 )
+            if (dr.rPdc &&  dr.wSurplus  > 200 )
             {
                 dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
-            else if (!dr.rPdc && surplus > 800 )
+            else if (!dr.rPdc &&  dr.wSurplus  > 800 )
             {
                 dr.LogMessage("PDC OFF SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
@@ -514,10 +518,10 @@ void  Server::manage_PDC( int sec )
         }
     }
 
-    dr.LogMessage("NeedPdc: [" + QString::number(needPdc) + "]" );
-    dr.LogMessage("NeedPdc_FullPower: [" + QString::number(needPdc && needPdc_FullPower) + "]" );
-    dr.LogMessage("NeedPdc_Pump [" + QString::number(needPdc_Pump) + "]");
-    dr.LogMessage("NeedPdc_Heat [" + QString::number(needPdc && needPdc_Heat) + "]");
+    dr.LogMessage("Pdc: [" + QString::number(needPdc) + "]" );
+    dr.LogMessage("Pdc_FullPower: [" + QString::number(needPdc && needPdc_FullPower) + "]" );
+    dr.LogMessage("Pdc_Pump [" + QString::number(needPdc_Pump) + "]");
+    dr.LogMessage("Pdc_Heat [" + QString::number(needPdc && needPdc_Heat) + "]");
 
     // comandi sulla centrale -----------------------------------------------------
     // accendo PDC
@@ -594,8 +598,8 @@ void  Server::manage_Pumps( int sec )
        needPump_pp = true;  //accendo la pompa pp se ho acceso la pdc
     }
 
-    dr.LogMessage("NeedPompa_pt: [" + QString::number(needPump_pt) + "]" );
-    dr.LogMessage("NeedPompa_pp: [" + QString::number(needPump_pp) + "]" );
+    dr.LogMessage("Pompa_pt: [" + QString::number(needPump_pt) + "]" );
+    dr.LogMessage("Pompa_pp: [" + QString::number(needPump_pp) + "]" );
 
     // comandi sulla centrale -----------------------------------------------------
     // heat
