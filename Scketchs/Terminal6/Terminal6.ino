@@ -94,9 +94,9 @@ void loop()
     totalwork[i] += work;
     totalElapsed[i] += elapsed / 1000.0;
 
-    Slave.sensor[i] = (int)( Slave.sensor[i] * 0.8 + (Irms * V_rete * 10.0) * 0.2); // watt
-    Slave.sensor[8 + i] = (int)( Slave.sensor[8 + i] * 0.8 + (totalwork[i] / 1000.0 * 10.0) * 0.2);
-    Slave.sensor[16 + i] = (int)(Slave.sensor[16 + i] * 0.8 + (totalElapsed[i] / 3600.0 * 10.0) * 0.2 );
+    Slave.sensor[i] = (int)(Irms * V_rete * 10.0); // watt
+    Slave.sensor[8 + i] = (int)(totalwork[i] / 1000.0 * 10.0);
+    Slave.sensor[16 + i] = (int)(totalElapsed[i] / 3600.0 * 10.0);
 
     if (rolling_i < 100 )
     {
