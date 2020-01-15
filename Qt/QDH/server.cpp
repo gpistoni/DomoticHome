@@ -555,7 +555,7 @@ void  Server::manage_Pumps( int sec )
         {
             needPCamino = true;
         }
-        float tempIn = std::fmax( dr.tInputMixer, std::fmax(dr.tPufferHi, dr.tReturnFireplace) );
+        float tempIn = std::max( dr.tInputMixer.m_value, std::max(dr.tPufferHi.m_value, dr.tReturnFireplace.m_value) );
         // decido se accendere/spegnere pompa piano primo
         if ( tempIn > 27 && tempIn > dr.tReturnFloor + 4) // ho temperatura
         {
