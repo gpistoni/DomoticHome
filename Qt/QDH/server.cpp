@@ -42,7 +42,7 @@ void Server::run()
     bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.5.0", true);
+        dr.LogMessage("VER 1.5.1", true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
@@ -161,7 +161,7 @@ void Server::manage_DbLog(int sec)
     t_DbLog.restart();
     dr.LogMessage("--- DbLog ---"  );
 
-    m_dbEvents.LogEnergy( dr.wProduced, dr.wConsumed);
+    m_dbEvents.LogEnergy( (int)dr.wProduced, (int)dr.wConsumed, (int)dr.wL1, (int)dr.wL2, (int)dr.wL3);
 }
 
 void Server::manage_Remote212(int sec)
