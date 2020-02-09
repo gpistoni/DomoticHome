@@ -35,7 +35,7 @@ void dbEvents::LogEnergy(int prod, int cons, int l1, int l2, int l3)
     str += ",";
     str += QString::number(l2);
     str += ",";
-    str += QString::number(l2);
+    str += QString::number(l3);
     str += " )";
 
     QSqlQuery query(m_db);
