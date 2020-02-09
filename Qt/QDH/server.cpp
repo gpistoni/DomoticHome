@@ -87,9 +87,6 @@ void Server::run()
                 dr.wSurplus = dr.wProduced;
                 dr.wSurplus -= dr.wConsumed;
 
-                //if ( dr.wCounter > 0 && dr.wSurplus > 0  )
-                //    dr.wSurplus.m_value = 0;
-
                 dr.LogPoint();
                 emit updateValues( &dr );
 
@@ -440,7 +437,7 @@ void  Server::manage_PDC( int sec )
         {
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accendere PDC
-            if (dr.rPdc && dr.wSurplus > 0 )
+            if (dr.rPdc && dr.wSurplus > 0)
             {
                 dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
@@ -479,10 +476,15 @@ void  Server::manage_PDC( int sec )
             dr.LogMessage("PDC OFF t inlet " + dr.tInletFloor.svalue() + "> 35" );
             needPdc = false;
         }
+        if ( dr.tPufferLow > 35 )  // 35 è la sicurezza dopo al quale spengo la pompa
+        {
+            dr.LogMessage("PDC OFF t puffer low " + dr.tPufferLow.svalue() + "> 35" );
+            needPdc = false;
+        }
     }
     else if (dr.progSummerPDC || dr.progSummerPDC_eco)
     {
-        // in estate uso la curva di regolazione termica
+        // in estate uso sempre la curva di regolazione termica
         needPdc_FullPower = false;
 
         if (dr.progSummerPDC)
@@ -557,9 +559,9 @@ void  Server::manage_Pumps( int sec )
         }
         float tempIn = std::max( dr.tInputMixer.m_value, std::max(dr.tPufferHi.m_value, dr.tReturnFireplace.m_value) );
         // decido se accendere/spegnere pompa piano primo
-        if ( tempIn > 27 && tempIn > dr.tReturnFloor + 4) // ho temperatura
+        if ( tempIn > 25 && tempIn > dr.tReturnFloor + 3) // ho temperatura
         {
-            dr.LogMessage("Condizione Pompa PP insufficiente: tInletFloor: " + dr.tInletFloor.svalue() + " tReturnFloor: " + dr.tReturnFloor.svalue() );
+            dr.LogMessage("Condizione Pompa PP insufficiente: tIn: " + dr.tInletFloor.svalue() + " tRet: " + dr.tReturnFloor.svalue() );
             needPump_pp = true;
         }
         if ( hour() < 6 || hour() >= 23  ) // fuori oario spengo pompa
@@ -579,9 +581,9 @@ void  Server::manage_Pumps( int sec )
             needPump_pp = false;
         }
 
-        if (dr.tPufferHi > 35 && hour()>=16 &&  hour()<19 )  // acqua calda in puffer
+        if (dr.tPufferHi > 33 && hour()>=16 &&  hour()<19 )  // acqua calda in puffer
         {
-            needPump_pt = true;  //accendo la pompa
+            needPump_pt = true;  //accendo la pompa piano terra
         }
     }
 

@@ -210,7 +210,10 @@ void MainWindow::updateValues(DataTable* dr)
     ui->label_S->setText( dr->wSurplus.svalue());
     ui->label_C->setText( dr->wConsumed.svalue());
 
-    ui->label_G->setText("COUNT: " + dr->wCounter.svalue());
+    if ( dr->wCounter > 0 )
+        ui->label_G->setText("COUNT: " + dr->wCounter.svalue() + " w:" + 100 * 3600 / dr->wCounter  );
+    else
+        ui->label_G->setText("COUNT: " + dr->wCounter.svalue() );
     ui->label_L1->setText("L1: " + dr->wL1.svalue());
     ui->label_L2->setText("L2: " + dr->wL2.svalue());
     ui->label_L3->setText("L3: " + dr->wL3.svalue());
