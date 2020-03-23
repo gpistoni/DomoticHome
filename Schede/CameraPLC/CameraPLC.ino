@@ -1,88 +1,106 @@
 // Import required libraries
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
+#include <WiFiUdp.h>
 #include <Hash.h>
-#include <ESPAsyncTCP.h>
 
-const char* ssid     = "ESP8266-AP";
-const char* password = "123456789";
+const char* ssid     = "PistoniHome";
+const char* password = "giaco1iren1dario";
+WiFiUDP ClientUdp;
+int localUdpPort = 1234;
+
+unsigned long MASTER_FREQ = 2000;
 
 int ENCODER1 = D0;
 int ENCODER2 = D1;
 
 int LIGHT = D2;
-
 int INPUT1 = D7;
 
-void setup() 
+void setup()
 {
   // Serial port for debugging purposes
   Serial.begin(115200);
 
   Serial.print("Setting AP (Access Point)…");
-  
+
   // Remove the password parameter, if you want the AP (Access Point) to be open
-  //WiFi.softAP(ssid, password);
+  WiFi.begin(ssid, password);
 
-  //IPAddress IP = WiFi.softAPIP();
-  Serial.print("AP IP address: ");
-//  Serial.println(IP);
 
-  // Print ESP8266 Local IP Address
-  //Serial.println(WiFi.localIP());
+  // Wait for connection
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.print("Connected to ");
+  Serial.println(ssid);
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
 
+  // Udp
+  ClientUdp.begin(localUdpPort);
 
   pinMode(ENCODER1, OUTPUT);
   pinMode(ENCODER2, OUTPUT);
-  
+
   pinMode(LIGHT, OUTPUT);
 
-  pinMode(INPUT1, INPUT);
-     
+
   pinMode(LED_BUILTIN, OUTPUT);
-  
+
+  pinMode(INPUT1, INPUT);
+  attachInterrupt(INPUT1, interrupt_SendMessage, RISING);
   // Start server
   //server.begin();
-  Serial.println("SETUP");
+  Serial.println("END SETUP");
 }
 
-unsigned long  MasterClock =0;
+unsigned long MasterClock = 0;
 
-void GenerateEncoder( int frequency)
+void GenerateMasterClock()
 {
-  static int Encoder_State = 0;
-  
-  static const unsigned long interval = 1000 * 1000 / frequency / 2;
-  static unsigned long previousMicro = 0;
-  unsigned long currentMicro = micros();
-  if (currentMicro - previousMicro >= interval)
+  static const unsigned long interval = 1000 * 1000 / MASTER_FREQ;
+  MasterClock =  micros() / interval;
+}
+
+void SendEncoder()
+{
+  static int oldMasterClock = 0;
+  if (MasterClock != oldMasterClock )
   {
-    // save the last time you updated the DHT values
-    previousMicro = currentMicro;
-    {
-      digitalWrite(ENCODER1, Encoder_State);
-      digitalWrite(ENCODER2, !Encoder_State);
-     
-      Encoder_State = !Encoder_State;
-      if (Encoder_State) MasterClock++;
-    }
+    int value = MasterClock % 2;
+    digitalWrite(ENCODER1, value);
+    digitalWrite(ENCODER2, !value);
+    oldMasterClock = MasterClock;
+
+    digitalWrite(LED_BUILTIN, (MasterClock / 1000 % 2)); // 1Hz
   }
 }
 
-void CheckSendMessage()
+void interrupt_SendMessage()
 {
-  int val = digitalRead(INPUT1);
-  if (val)
-    Serial.println(MasterClock);
+  const char ip[] = "192.168.1.113";
+  ClientUdp.beginPacket(ip, 80);
+  ClientUdp.write(MasterClock);
+  ClientUdp.endPacket();
+  //LOG
+  Serial.print("Send Packet:");
+  Serial.println(MasterClock);
+}
+
+void Light()
+{
+  int light = (MasterClock / 3000) % 2;
+  digitalWrite(LIGHT, light);
+  //Serial.println("Set Light:");
 }
 
 void loop()
 {
-  GenerateEncoder(2000); 
-  
-  int light = (MasterClock / 1000) % 2; 
-  digitalWrite(LIGHT, light);
-
-  CheckSendMessage();
-   
+  GenerateMasterClock();
+  SendEncoder();
+  Light();
 }
