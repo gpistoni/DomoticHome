@@ -9,7 +9,7 @@ const char* password = "giaco1iren1dario";
 WiFiUDP ClientUdp;
 int localUdpPort = 1234;
 
-unsigned long MASTER_FREQ = 2000;
+unsigned long MASTER_FREQ = 3000;
 
 int ENCODER1 = D0;
 int ENCODER2 = D1;
@@ -53,8 +53,8 @@ void setup()
 
   pinMode(INPUT1, INPUT);
   attachInterrupt(INPUT1, interrupt_SendMessage, RISING);
+
   // Start server
-  //server.begin();
   Serial.println("END SETUP");
 }
 
@@ -80,11 +80,31 @@ void SendEncoder()
   }
 }
 
+struct tPacket
+{
+  byte  revision; //0
+  byte  plcRow;   //1
+  int   tileID;   //2-5
+  int   code;     //6-9
+  byte  productiontest; //10
+  float quota;    //11-14
+  byte  terminator;   //15
+} __attribute__ ((packed)) ;
+
 void interrupt_SendMessage()
 {
   const char ip[] = "192.168.1.113";
-  ClientUdp.beginPacket(ip, 80);
-  ClientUdp.write(MasterClock);
+  ClientUdp.beginPacket(ip, 6365);
+  tPacket pack;
+  pack.revision = 11;
+  pack.plcRow = 1;
+  pack.tileID = 0;
+  pack.code = 0;
+  pack.productiontest = 1;
+  pack.quota = MasterClock;
+  pack.terminator = 0;
+
+  ClientUdp.write((uint8_t *)&pack, sizeof(pack) );
   ClientUdp.endPacket();
   //LOG
   Serial.print("Send Packet:");
