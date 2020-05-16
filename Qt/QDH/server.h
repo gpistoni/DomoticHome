@@ -5,13 +5,16 @@
 #include "QTimer"
 #include "dbevents.h"
 
-class Server : public QObject
+
+#define SERVER_VER "1.6.1"
+
+class ServerDH : public QObject
 {
     Q_OBJECT
 
 public:
-    Server(bool runPrograms);
-    ~Server();
+    ServerDH(bool runPrograms);
+    ~ServerDH();
 
 private:
     DataTable dr;    

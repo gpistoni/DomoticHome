@@ -5,7 +5,7 @@
 
 class DataTable;
 class LogMessage;
-class Server;
+class ServerDH;
 
 namespace Ui {
 class MainWindow;
@@ -16,7 +16,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(Server *pserver, QWidget *parent = nullptr);
+    explicit MainWindow(ServerDH *pserver, QWidget *parent = nullptr);
     ~MainWindow();
 
     void Log(QString s);
@@ -29,6 +29,6 @@ private:
 
     bool m_firstRun = true;
 
-    Server* m_pserver= nullptr;
+    ServerDH* m_pserver= nullptr;
     LogMessage* m_logw = nullptr;
 };

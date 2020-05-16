@@ -2,16 +2,15 @@
 #include "server.h"
 #include <QThread>
 
-
 int main(int argc, char *argv[])
 {
     QCoreApplication aCore(argc, argv);
 
-    std::cerr << "Start SERVER"<< std::endl;
+    std::cerr << "Start SERVER "<< SERVER_VER << std::endl;
 
     // Server
     QThread serverthread;
-    Server server(true);
+    ServerDH server(true);
 
     server.moveToThread(&serverthread);
     server.connect(&serverthread, SIGNAL(started()), &server, SLOT(run()));

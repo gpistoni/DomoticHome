@@ -8,7 +8,7 @@
 
 
 // --- CONSTRUCTOR ---
-Server::Server(bool runPrograms) :
+ServerDH::ServerDH(bool runPrograms) :
     dr("192.168.1.200", 80),
     m_runPrograms(runPrograms)
 {
@@ -28,21 +28,20 @@ Server::Server(bool runPrograms) :
 }
 
 // --- DECONSTRUCTOR ---
-Server::~Server() {
+ServerDH::~ServerDH() {
     // free resources
 }
 
 // --- PROCESS ---
 // Start processing data.
-void Server::run()
+void ServerDH::run()
 {
     CQHttpServer HttpServer(8080);
     HttpServer.startServer(&dr);
 
-    bool firstRun = true;
     while (m_running)
     {
-        dr.LogMessage("VER 1.6.0", true);
+        dr.LogMessage(SERVER_VER,true);
 
         // forced by date
         dr.progBoilerACS.ModifyValue(true);
@@ -66,12 +65,8 @@ void Server::run()
         try {
             while (m_running)
             {
-                QThread::msleep(500);  //milliseconds
+                QThread::msleep(400);  //milliseconds
 
-                if (!firstRun && !m_runPrograms)
-                {
-                    if (t_UpdateValues.elapsed() < 3000 ) continue;
-                }
                 t_UpdateValues.restart();
 
                 /////////////////////////////////////////////////////////////////////////////////////////
@@ -90,13 +85,7 @@ void Server::run()
                 dr.LogPoint();
                 emit updateValues( &dr );
 
-                ////////////////////////////////////////////////////////////////////////////////////////
-                if (firstRun)
-                {
-                    manage_Progs(true);
-                }
-
-                ////////////////////////////////////////////////////////////////////////////////////////
+               ////////////////////////////////////////////////////////////////////////////////////////
                 if (m_runPrograms)
                 {
                     manage_Progs(false);
@@ -109,7 +98,6 @@ void Server::run()
                 {
                     manage_Progs(true);
                 }
-                firstRun = false;
             }
 
             /////////////////////////////////////////////////////////////////////////////////////////
@@ -123,7 +111,7 @@ void Server::run()
     }
 }
 
-void Server::manage_Progs(bool immediate)
+void ServerDH::manage_Progs(bool immediate)
 {
     if (immediate)
     {
@@ -147,12 +135,12 @@ void Server::manage_Progs(bool immediate)
         manage_Pumps(4*60);
         manage_evRooms(10*60);
 
-        manage_Internet(2*60);
+        manage_Internet(1*60);
         manage_Remote212(2*60);
     }
 }
 
-void Server::manage_DbLog(int sec)
+void ServerDH::manage_DbLog(int sec)
 {
     if ( t_DbLog.elapsed() < sec * 1000 ) return;
     t_DbLog.restart();
@@ -161,7 +149,7 @@ void Server::manage_DbLog(int sec)
     m_dbEvents.LogEnergy( (int)dr.wProduced, (int)dr.wConsumed, (int)dr.wL1, (int)dr.wL2, (int)dr.wL3);
 }
 
-void Server::manage_Remote212(int sec)
+void ServerDH::manage_Remote212(int sec)
 {
     if ( t_Remote212.elapsed() < sec * 1000 ) return;
     t_Remote212.restart();
@@ -182,19 +170,31 @@ void Server::manage_Remote212(int sec)
     }
 }
 
-void Server::manage_Internet(int sec)
+void ServerDH::manage_Internet(int sec)
 {
     if ( t_InternetConnection.elapsed() < sec * 1000 ) return;
     t_InternetConnection.restart();
 
     dr.LogMessage("--- RouterInternet ---"  );
 
+    //restart programmati
+    static bool Restart_6 =0;
+    static bool Restart_13 =0;
+    if (hour()==0)
+    {
+        Restart_6 = 1;
+        Restart_13 = 1;
+    }
+
     static int decimation = 0;
-    if (++decimation%5==0)        // questa parte entra una volta su 5
+    if (++decimation%5==0)        // questa parte entra una volta su 5 (timer = x5)
     {
         QString str;
         bool connected = CQHttpClient::PingGoogle(str);
         dr.LogMessage("Ping Google:");
+
+        if (hour()==6 && Restart_6) { connected=false; Restart_6=0;}
+        if (hour()==13 && minute()>10 && Restart_13) { connected=false; Restart_13=0;}
 
         if (!connected)
         {
@@ -211,7 +211,7 @@ void Server::manage_Internet(int sec)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void Server::manage_BoilerACS(int sec)
+void ServerDH::manage_BoilerACS(int sec)
 {
     if ( t_BoilerACS.elapsed() < sec * 1000 ) return;
     t_BoilerACS.restart();
@@ -254,7 +254,7 @@ void Server::manage_BoilerACS(int sec)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void Server::manage_ExternalLight(int sec)
+void ServerDH::manage_ExternalLight(int sec)
 {
     if ( t_ExternalLight.elapsed() < sec * 1000 ) return;
     t_ExternalLight.restart();
@@ -286,7 +286,7 @@ void Server::manage_ExternalLight(int sec)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void  Server::manage_evRooms( int sec )
+void  ServerDH::manage_evRooms( int sec )
 {
     if ( t_evRooms.elapsed() < sec * 1000 ) return;
     t_evRooms.restart();
@@ -411,7 +411,7 @@ void  Server::manage_evRooms( int sec )
 }
 
 /******************************************************************************************************************************************************************/
-void  Server::manage_PDC( int sec )
+void  ServerDH::manage_PDC( int sec )
 {
     if ( t_PDC.elapsed() < sec * 1000 ) return;
     t_PDC.restart();
@@ -537,7 +537,7 @@ void  Server::manage_PDC( int sec )
 }
 
 /******************************************************************************************************************************************************************/
-void  Server::manage_Pumps( int sec )
+void  ServerDH::manage_Pumps( int sec )
 {
     if ( t_WinterFIRE.elapsed() < sec * 1000 ) return;
     t_WinterFIRE.restart();
@@ -593,11 +593,6 @@ void  Server::manage_Pumps( int sec )
         {
             needPump_pp = true;  //accendo la pompa ricircolo
         }
-    }
-
-    if (dr.rPdcPompa)
-    {
-       needPump_pp = true;  //accendo la pompa pp se ho acceso la pdc
     }
 
     dr.LogMessage("Pompa_pt: [" + QString::number(needPump_pt) + "]" );

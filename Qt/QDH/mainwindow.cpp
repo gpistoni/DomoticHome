@@ -7,7 +7,7 @@
 #include "QScrollArea"
 #include "server.h"
 
-MainWindow::MainWindow(Server *pserver, QWidget *parent) :
+MainWindow::MainWindow(ServerDH *pserver, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     m_pserver(pserver)
