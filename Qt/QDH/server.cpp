@@ -497,25 +497,24 @@ void  ServerDH::manage_PDC( int sec )
         {
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accendere PDC
-            if (dr.rPdc &&  dr.wSurplus  > 200 )
+            if (dr.rPdc &&  dr.wSurplus  > 500 )
             {
                 dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
-            else if (!dr.rPdc &&  dr.wSurplus  > 800 )
+            else if (!dr.rPdc &&  dr.wSurplus  > 1200 )
             {
                 dr.LogMessage("PDC OFF SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
         }
-
         needPdc_Pump = needPdc;
         needPdc_Heat = false;
 
         /**************************************************************************************************/
-        if (needPdc && dr.tInletFloor < 18.5f )  // minima t Acqua raffreddata
+        if (dr.tInletFloor < 18.5f ||  dr.tPufferHi < 19.f )  // minima t Acqua raffreddata
         {
-            dr.LogMessage("PDC OFF t inlet " + dr.tInletFloor.svalue() + "< 18.5" );
+            dr.LogMessage("PDC OFF tInletFloor " + dr.tInletFloor.svalue() + "< 18.5" );
             needPdc = false;
         }
     }
@@ -569,7 +568,6 @@ void  ServerDH::manage_Pumps( int sec )
             dr.LogMessage("Stop Pompa: orario " + QString::number( hour() ) );
             needPump_pp = false;
         }
-
         if ( (dr.tReturnFloor > 29) )  // ritorno troppo alto - non ne ho bisogno
         {
             dr.LogMessage("Stop Pompa: ritorno troppo alto tReturnFloor: " + dr.tReturnFloor.svalue() );
@@ -580,7 +578,6 @@ void  ServerDH::manage_Pumps( int sec )
             dr.LogMessage("Stop Pompa: Sicurezza temp ingreso impianto: tInletFloor: " + dr.tInletFloor.svalue() + " > 35" );
             needPump_pp = false;
         }
-
         if (dr.tPufferHi > 33 && hour()>=16 &&  hour()<19 )  // acqua calda in puffer
         {
             needPump_pt = true;  //accendo la pompa piano terra
