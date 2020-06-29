@@ -17,6 +17,8 @@ void DataTable::LogMessage(QString s, bool logtofile)
     {
         QString fname = QString("/var/log/dh_");
         fname += QString::number(QDateTime::currentDateTime().date().month());
+        fname += "_";
+        fname += QString::number(QDateTime::currentDateTime().date().day());
         fname += ".log";
         QFile f(fname);
         if (f.open(QIODevice::WriteOnly | QIODevice::Append))

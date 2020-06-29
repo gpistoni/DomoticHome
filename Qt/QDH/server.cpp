@@ -43,25 +43,31 @@ void ServerDH::run()
     {
         dr.LogMessage(SERVER_VER,true);
 
-        // forced by date
+        // force always
         dr.progBoilerACS.ModifyValue(true);
         dr.progExternalLight.ModifyValue(true);
 
+        // forced by date
         if ( winter() )
         {
+            dr.LogMessage("WINTER");
             dr.progWinterFIRE.ModifyValue(true);
             dr.progWinterPDC_eco.ModifyValue(true);
+            //------------------------------
             dr.progSummerPDC.ModifyValue(false);
             dr.progSummerPDC_eco.ModifyValue(false);
         }
         if ( summer() )
         {
+            dr.LogMessage("SUMMER");
             dr.progWinterFIRE.ModifyValue(false);
             dr.progWinterPDC.ModifyValue(false);
-            dr.progWinterPDC_eco.ModifyValue(true);
+            dr.progWinterPDC_eco.ModifyValue(false);
+            //------------------------------
             dr.progSummerPDC_eco.ModifyValue(true);
         }
 
+        int firstrun =1;
         try {
             while (m_running)
             {
@@ -85,7 +91,7 @@ void ServerDH::run()
                 dr.LogPoint();
                 emit updateValues( &dr );
 
-               ////////////////////////////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////////////////////
                 if (m_runPrograms)
                 {
                     manage_Progs(false);
@@ -94,9 +100,10 @@ void ServerDH::run()
                 ////////////////////////////////////////////////////////////////////////////////////////
                 //Send Changed
                 bool modifiedProg = dr.SendModifiedData();
-                if (modifiedProg)
+                if (modifiedProg || firstrun)
                 {
                     manage_Progs(true);
+                    firstrun =0;
                 }
             }
 
@@ -130,9 +137,9 @@ void ServerDH::manage_Progs(bool immediate)
     {
         manage_DbLog(10*60);
         manage_ExternalLight(10*60);
-        manage_BoilerACS(8*60);
-        manage_PDC(5*60);
-        manage_Pumps(4*60);
+        manage_BoilerACS(5*60);
+        manage_PDC(4*60);
+        manage_Pumps(1*60);
         manage_evRooms(10*60);
 
         manage_Internet(1*60);
@@ -175,34 +182,32 @@ void ServerDH::manage_Internet(int sec)
     if ( t_InternetConnection.elapsed() < sec * 1000 ) return;
     t_InternetConnection.restart();
 
-    dr.LogMessage("--- RouterInternet ---"  );
-
     //restart programmati
     static bool Restart_6 =0;
-    static bool Restart_13 =0;
+    // a mezzanotte riarmo
     if (hour()==0)
     {
         Restart_6 = 1;
-        Restart_13 = 1;
     }
 
     static int decimation = 0;
-    if (++decimation%5==0)        // questa parte entra una volta su 5 (timer = x5)
+    if (++decimation%5==0)        // questa parte entra una volta su 5 (timer = 5 minuti)
     {
+        dr.LogMessage("--- RouterInternet ---"  );
+
         QString str;
         bool connected = CQHttpClient::PingGoogle(str);
-        dr.LogMessage("Ping Google:");
+        dr.LogMessage("Ping Google");
 
         if (hour()==6 && Restart_6) { connected=false; Restart_6=0;}
-        if (hour()==13 && minute()>10 && Restart_13) { connected=false; Restart_13=0;}
 
         if (!connected)
         {
+            dr.LogMessage("Ping Google failed: RESTART");
             // off
             CQHttpClient client("192.168.1.210", 80, 10000 );
-            dr.LogMessage("manage_Internet OFF/ON"  );
             client.Request_Set("off");
-            sleep(10);
+            sleep(15);
         }
     }
 
@@ -305,7 +310,7 @@ void  ServerDH::manage_evRooms( int sec )
     bool allRoom = dr.progAllRooms;
 
     //attivo le stanze solo a determinate condizioni (INVERNO)
-    if (dr.progWinterPDC || dr.progWinterPDC_eco || dr.progWinterFIRE || dr.progSummerPDC || dr.progSummerPDC_eco )
+    if (dr.progWinterPDC || dr.progWinterPDC_eco || dr.progWinterFIRE )
     {
         if ( (hour() >= 6 ) && (dr.rPompaPianoPrimo || dr.rPompaPianoTerra || dr.rPdcPompa || dr.tInputMixer > 30) )
         {
@@ -429,7 +434,7 @@ void  ServerDH::manage_PDC( int sec )
     {
         if (dr.progWinterPDC)
         {
-            dr.LogMessage("PDC ON progWinter" );
+            dr.LogMessage("PDC ON progWinterPDC" );
             needPdc = true;
             needPdc_FullPower = false;
         }
@@ -439,12 +444,12 @@ void  ServerDH::manage_PDC( int sec )
             //decido se accendere PDC
             if (dr.rPdc && dr.wSurplus > 0)
             {
-                dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
+                dr.LogMessage("PDC ON progWinterPDC_eco SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
             if (!dr.rPdc && dr.wSurplus > 500 )
             {
-                dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
+                dr.LogMessage("PDC ON progWinterPDC_eco SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
             //pdc Gia Accesa
@@ -473,12 +478,12 @@ void  ServerDH::manage_PDC( int sec )
         /**************************************************************************************************/
         if ( dr.tInletFloor > 35 )  // 35 è la sicurezza dopo al quale spengo la pompa
         {
-            dr.LogMessage("PDC OFF t inlet " + dr.tInletFloor.svalue() + "> 35" );
+            dr.LogMessage("PDC OFF tInlet " + dr.tInletFloor.svalue() + "> 35" );
             needPdc = false;
         }
         if ( dr.tPufferLow > 35 )  // 35 è la sicurezza dopo al quale spengo la pompa
         {
-            dr.LogMessage("PDC OFF t puffer low " + dr.tPufferLow.svalue() + "> 35" );
+            dr.LogMessage("PDC OFF tPufferLow " + dr.tPufferLow.svalue() + "> 35" );
             needPdc = false;
         }
     }
@@ -499,12 +504,12 @@ void  ServerDH::manage_PDC( int sec )
             //decido se accendere PDC
             if (dr.rPdc &&  dr.wSurplus  > 500 )
             {
-                dr.LogMessage("PDC ON SurplusW:" + dr.wSurplus.svalue() );
+                dr.LogMessage("PDC ON progSummerPDC_eco SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
             else if (!dr.rPdc &&  dr.wSurplus  > 1200 )
             {
-                dr.LogMessage("PDC OFF SurplusW:" + dr.wSurplus.svalue() );
+                dr.LogMessage("PDC OFF progSummerPDC_eco SurplusW:" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
         }
@@ -512,9 +517,15 @@ void  ServerDH::manage_PDC( int sec )
         needPdc_Heat = false;
 
         /**************************************************************************************************/
-        if (dr.tInletFloor < 18.5f ||  dr.tPufferHi < 19.f )  // minima t Acqua raffreddata
+        if (dr.tInletFloor < 19.f )  // minima t Acqua raffreddata
         {
-            dr.LogMessage("PDC OFF tInletFloor " + dr.tInletFloor.svalue() + "< 18.5" );
+            dr.LogMessage("PDC OFF tInletFloor " + dr.tInletFloor.svalue() + "< 20" );
+            needPdc = false;
+        }
+
+        if ( dr.tPufferHi  < 19.f  )   // minima t Acqua raffreddata
+        {
+            dr.LogMessage("PDC OFF tPufferHi " + dr.tPufferHi.svalue() + "< 20" );
             needPdc = false;
         }
     }
@@ -541,11 +552,14 @@ void  ServerDH::manage_Pumps( int sec )
     if ( t_WinterFIRE.elapsed() < sec * 1000 ) return;
     t_WinterFIRE.restart();
 
-    dr.LogMessage("--- Winter FIRE ---"  );
+    dr.LogMessage("--- Manage PUMPS ---"  );
 
     bool needPCamino = false;
     bool needPump_pt = false;
     bool needPump_pp = false;
+
+    dr.LogMessage("[Temp] [pLOW]:" + dr.tPufferLow.svalue() + " [pHI]:" +  dr.tPufferHi.svalue()  + " [Inlet]:" + dr.tInletFloor.svalue() + " [Return]:" + dr.tReturnFloor.svalue());
+
 
     if (dr.progWinterFIRE || dr.progWinterPDC  || dr.progWinterPDC_eco )
     {
@@ -586,14 +600,13 @@ void  ServerDH::manage_Pumps( int sec )
 
     if (dr.progSummerPDC || dr.progSummerPDC_eco)
     {
-        if (dr.tPufferHi < 23 )  // acqua fresca in puffer
+        if (dr.tPufferLow < 23 && !IsNight()  )  // acqua fresca in puffer
         {
             needPump_pp = true;  //accendo la pompa ricircolo
         }
     }
 
-    dr.LogMessage("Pompa_pt: [" + QString::number(needPump_pt) + "]" );
-    dr.LogMessage("Pompa_pp: [" + QString::number(needPump_pp) + "]" );
+    dr.LogMessage("Pompa_pt: [" + QString::number(needPump_pt) + "]" + "\tPompa_pp: [" + QString::number(needPump_pp) + "]" );
 
     // comandi sulla centrale -----------------------------------------------------
     // heat

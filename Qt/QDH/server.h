@@ -5,7 +5,7 @@
 #include "QTimer"
 #include "dbevents.h"
 
-#define SERVER_VER "1.6.2"
+#define SERVER_VER "1.6.3"
 
 class ServerDH : public QObject
 {
@@ -28,7 +28,7 @@ private:
     }
     int summer()
     {
-        return month()>=6 && month()<=8;
+        return (month()>=6 && month()<=8);
     }
     int month()
     {
