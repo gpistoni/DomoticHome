@@ -517,15 +517,15 @@ void  ServerDH::manage_PDC( int sec )
         needPdc_Heat = false;
 
         /**************************************************************************************************/
-        if (dr.tInletFloor < 19.f )  // minima t Acqua raffreddata
+        if (dr.tInletFloor < 18.5f )  // minima t Acqua raffreddata
         {
-            dr.LogMessage("PDC OFF tInletFloor " + dr.tInletFloor.svalue() + "< 20" );
+            dr.LogMessage("PDC OFF tInletFloor " + dr.tInletFloor.svalue() + "< 18.5" );
             needPdc = false;
         }
 
-        if ( dr.tPufferHi  < 19.f  )   // minima t Acqua raffreddata
+        if ( dr.tPufferHi < 18.f || dr.tPufferLow < 18.f )   // minima t Acqua raffreddata
         {
-            dr.LogMessage("PDC OFF tPufferHi " + dr.tPufferHi.svalue() + "< 20" );
+            dr.LogMessage("PDC OFF tPufferHi " + dr.tPufferHi.svalue() + "< 18" );
             needPdc = false;
         }
     }
