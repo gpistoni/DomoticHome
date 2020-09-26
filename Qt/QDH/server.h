@@ -5,7 +5,7 @@
 #include "QTimer"
 #include "dbevents.h"
 
-#define SERVER_VER "1.6.3"
+#define SERVER_VER "1.6.6"
 
 class ServerDH : public QObject
 {
