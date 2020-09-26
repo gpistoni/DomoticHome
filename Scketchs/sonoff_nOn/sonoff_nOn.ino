@@ -5,12 +5,12 @@ WiFiServer server(80);
 // Ip utilizzati  210, 212, 218
 
 // Setup IP
-IPAddress local_IP(192, 168, 1, 218);
+IPAddress local_IP(192, 168, 1, 210);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 
 // Replace with your network credentials
-const char* ssid[3]     = { "PistoniHome", "PistoniHome1", "PistoniHome2" };
+const char* ssid = "PistoniHome";
 const char* password = "giaco1iren1dario";
 
 String web_on_html = "1 <p><a href=\"on\"><button>ON</button></a>&nbsp;<a href=\"off\"><button>OFF</button></a></p>";
@@ -19,8 +19,8 @@ String web_off_html = "0 <p><a href=\"on\"><button>ON</button></a>&nbsp;<a href=
 int gpio_13_led = 13;
 int gpio_12_relay = 12;
 
+// NORMALY ON
 int stato = 1;
-static unsigned long last_io = millis();
 
 //declare reset function @ address 0
 void(*resetFunc) (void) = 0;
@@ -43,36 +43,26 @@ void setup(void)
   {
     Serial.println("STA Failed to configure");
   }
-  Serial.println("Connecting to multiple wifi..");
+  Serial.println("Connecting to single wifi..");
 
   // Wait for multiple connection
-  int i = 0;
-  WiFi.begin(ssid[i], password);
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    WiFi.begin(ssid[i], password);
-    Serial.println("");
-    Serial.print("Try to Connect to WIFI");
-    Serial.print(ssid[i]);
+  Serial.print("Try to Connect to WIFI");
+  Serial.println(ssid);
+  WiFi.begin(ssid, password);
 
-    unsigned long tout = millis() + 10000;
-    while (WiFi.status() != WL_CONNECTED && millis() < tout)
-    {
-      Serial.print(".");
-      digitalWrite(gpio_13_led, LOW);
-      delay(1000);
-      digitalWrite(gpio_13_led, HIGH);
-      delay(1000);
-    }
-    if (WiFi.status() != WL_CONNECTED)
-    {
-      i = ++i % 3;
-    }
+  unsigned long tout = millis() + 10000;
+  while (WiFi.status() != WL_CONNECTED && millis() < tout)
+  {
+    Serial.print(".");
+    digitalWrite(gpio_13_led, LOW);
+    delay(200);
+    digitalWrite(gpio_13_led, HIGH);
+    delay(100);
   }
 
   Serial.println("");
   Serial.println("WiFi connected!");
-  Serial.print(ssid[i]);
+  Serial.print(ssid);
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
   Serial.print("ESP Mac Address: ");
@@ -84,74 +74,45 @@ void setup(void)
   Serial.print("DNS: ");
   Serial.println(WiFi.dnsIP());
 
-  //  server.on("/", []()
-  //  {
-  //    if (digitalRead(gpio_12_relay) == HIGH)  {
-  //      server.send(200, "text/html", web_on_html);
-  //    } else {
-  //      server.send(200, "text/html", web_off_html);
-  //    }
-  //    last_io = millis();
-  //  });
-  //
-  //  server.on("/on", []()
-  //  {
-  //    server.send(200, "text/html", web_on_html);
-  //    stato = HIGH;
-  //    digitalWrite(gpio_13_led, stato);
-  //    delay(100);
-  //    digitalWrite(gpio_13_led, !stato);
-  //    delay(100);
-  //    Serial.print(millis());
-  //    Serial.println(" State ON");
-  //    last_io = millis();
-  //  });
-  //
-  //  server.on("/off", []() {
-  //    server.send(200, "text/html", web_off_html);
-  //    stato = LOW;
-  //    digitalWrite(gpio_13_led, stato);
-  //    delay(100);
-  //    digitalWrite(gpio_13_led, !stato);
-  //    delay(100);
-  //    Serial.print(millis());
-  //    Serial.println(" State OFF");
-  //    last_io = millis();
-  //  });
-
-  last_io = millis();
   server.begin();
   Serial.println("Server ready..");
 }
 
+
+
 unsigned long currentTime = millis();
 unsigned long previousTime = 0;
 const long timeoutTime = 2000;
+unsigned long last_io = millis();
+static unsigned long last_act = 0;
+
 
 void loop(void)
 {
-  static unsigned long last = 0;
-
   WiFiClient client = server.available();
 
   if (client)
-  { // If a new client connects,
-    Serial.println("New Client.");          // print a message out in the serial port
+  { 
+    // If a new client connects,
     currentTime = millis();
     previousTime = currentTime;
     String header;
 
     while (client.connected() && currentTime - previousTime <= timeoutTime)
-    {                                       // loop while the client's connected
+    { 
+      // loop while the client's connected
       currentTime = millis();
       if (client.available())
-      {                                     // if there's bytes to read from the client,
+      { 
+        // if there's bytes to read from the client,
         char c = client.read();             // read a byte, then
         header += c;
         if (c == '\n')                      // if the byte is a newline character
         {
-          Serial.println(header);
-          
+          Serial.print(millis()/1000.0);
+          Serial.print(" ");
+          Serial.print(header);
+
           // if the current line is blank, you got two newline characters in a row.
           // that's the end of the client HTTP request, so send a response:
           // turns the GPIOs on and off
@@ -162,7 +123,7 @@ void loop(void)
             delay(100);
             digitalWrite(gpio_13_led, !stato);
             delay(100);
-            Serial.print(millis());
+            Serial.print(millis()/1000.0);
             Serial.println(" State ON");
             last_io = millis();
           }
@@ -173,7 +134,7 @@ void loop(void)
             delay(100);
             digitalWrite(gpio_13_led, !stato);
             delay(100);
-            Serial.print(millis());
+            Serial.print(millis()/1000.0);
             Serial.println(" State OFF");
             last_io = millis();
           }
@@ -183,7 +144,7 @@ void loop(void)
           client.println("Content-type:text/html");
           client.println("Connection: close");
           client.println();
-          
+
           if (stato)
             client.println(web_on_html);
           else
@@ -195,21 +156,27 @@ void loop(void)
   }
 
   //activity
-  if ( millis() - last > 30000 )  // 30 sec
+  if ( millis() - last_act > 1000 )  // 30 sec
   {
     digitalWrite(gpio_13_led, stato);
     delay(5);
-    digitalWrite(gpio_13_led, !stato);
-    delay(5);
-    last = millis();
-    Serial.println(millis());
+    last_act = millis();
+  }
+
+
+  //Force set on
+  if ( millis() - last_io > 1000 * 60 * 5 ||  WiFi.status() != WL_CONNECTED ) // 5 minutes
+  {
+    Serial.print(millis()/1000.0);
+    Serial.println(" FORCE SET ON");
+    stato = true;
   }
 
   //restart
-  if ( millis() - last_io > 360000 ||  WiFi.status() != WL_CONNECTED ) // 60 minutes
+  if ( millis() - last_io > 1000 * 60 * 60 ||  WiFi.status() != WL_CONNECTED ) // 60 minutes
   {
-    Serial.println(millis());
-    Serial.println("RESET");
+    Serial.print(millis()/1000.0);
+    Serial.println(" RESET");
     resetFunc();
   }
 
