@@ -216,8 +216,8 @@ int IsNight( int crepuscolo = 50 )  //50 minuti
     int month = QDateTime::currentDateTime().date().month();
     int day = QDateTime::currentDateTime().date().day();
     
-    int hour = QDateTime::currentDateTime().time().hour();
-    int minute =  QDateTime::currentDateTime().time().minute();
+    int hour = QDateTime::currentDateTimeUtc().time().hour();
+    int minute =  QDateTime::currentDateTimeUtc().time().minute();
 
     double latitude = 44.7000;
     double longitude = 10.6333;
@@ -230,7 +230,7 @@ int IsNight( int crepuscolo = 50 )  //50 minuti
     double srise = calcSunriseUTC( JD,  latitude,  longitude);
     double sset = calcSunsetUTC( JD,  latitude,  longitude);
 
-    double now = minute + hour*60;
+    double now = minute + hour * 60;
 
     printf("\nCurrent timeUTC %lf", now );
 
