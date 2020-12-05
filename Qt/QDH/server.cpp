@@ -137,7 +137,7 @@ void ServerDH::manage_Progs(bool immediate)
     {
         manage_DbLog(10*60);
         manage_ExternalLight(10*60);
-        manage_BoilerACS(5*60);
+        manage_BoilerACS(6*60);
         manage_PDC(5*60);
         manage_Pumps(2*60);
         manage_evRooms(10*60);
@@ -204,6 +204,7 @@ void ServerDH::manage_Internet(int sec)
 
         if (!connected)
         {
+            dr.LogEvent("NetworkFailed");
             dr.LogMessage("Ping Google failed: RESTART");
             // off
             CQHttpClient client("192.168.1.210", 80, 10000 );
@@ -233,25 +234,19 @@ void ServerDH::manage_BoilerACS(int sec)
             boilerACS = true;
             dr.LogMessage("Condizione ON surplusW:" + dr.wSurplus.svalue() );
         }
-        else if ( !dr.rBoilerACS && dr.wSurplus > 400 ) // se e spento
+        else if ( !dr.rBoilerACS && dr.wSurplus > 500 ) // se e spento
         {
             boilerACS = true;
             dr.LogMessage("Condizione ON surplusW:" + dr.wSurplus.svalue() );
         }
 
-        //decido se accendere il boiler solo a mezzogiorno
-        if ( hour() >= 13 && hour() <= 15  )
+        //decido se accendere il boiler solo a mezzogiorno e solo se il camino non funziona
+        if ( hour() >= 12 && hour() <= 15 && dr.tReturnFireplace < 30 )
         {
             boilerACS = true;
-            dr.LogMessage("Condizione ON hour:" + QString::number( hour() ) + " >=14 & <17");
+            dr.LogMessage("Condizione ON hour:" + QString::number( hour() ) + " >=12 & <15");
         }
 
-        // solo se il camino non funziona
-        if ( dr.tReturnFireplace > 30 )
-        {
-            boilerACS = false;
-            dr.LogMessage("Condizione OFF ReturnFireplace:" + dr.tReturnFireplace.svalue() + "> 30");
-        }
     }
     /**************************************************************************************************/
     // boiler
@@ -322,6 +317,10 @@ void  ServerDH::manage_evRooms( int sec )
             {
                 str += " tSal " + dr.tSala.svalue()  + "<" + dr.tSala.ssetPoint();
                 sala = true;
+            }
+            if ( dr.tSala < dr.tSala.setPoint(-1) )
+            {
+                str += " tSal2 " + dr.tSala.svalue()  + "<" + dr.tSala.ssetPoint();
                 sala2 = true;
             }
             if ( dr.tCucina < dr.tCucina.setPoint() )
@@ -358,7 +357,6 @@ void  ServerDH::manage_evRooms( int sec )
                 sala = true;
                 cucina = true;
             }
-
             dr.LogMessage(str);
         }
     }
@@ -403,7 +401,11 @@ void  ServerDH::manage_evRooms( int sec )
     }
 
     //**********************************************************************
-    dr.LogMessage("EvRooms s[" +  QString::number(sala) + "] " + " c[" +  QString::number(cucina) + "] " + " cm[" +  QString::number(cameraM) + "] " + " cs[" +  QString::number(cameraS) + "] "+ " cd[" +  QString::number(cameraD) + "] ");
+    dr.LogMessage("EvRooms sa[" +  QString::number(sala) + "]"
+                  + " cu[" +  QString::number(cucina) + "]"
+                  + " cm[" +  QString::number(cameraM) + "]"
+                  + " cs[" +  QString::number(cameraS) + "]"
+                  + " cd[" +  QString::number(cameraD) + "]");
 
     // elettrovalvole stanze -----------------------------------------------------------------------
     dr.evCameraM1.ModifyValue(cameraM || allRoom);
@@ -443,10 +445,10 @@ void  ServerDH::manage_PDC( int sec )
         {
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accendere PDC
-            if ((dr.rPdc && dr.wSurplus > 0) ||
-                    (!dr.rPdc && dr.wSurplus > 500))
+            if ((dr.rPdc && dr.wSurplus > 100) ||
+                    (!dr.rPdc && dr.wSurplus > 600))
             {
-                dr.LogMessage("PDC ON progWinterPDC_eco SurplusW:" + dr.wSurplus.svalue() );
+                dr.LogMessage("PDC ON progWinterPDC_eco SurplusW" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
             //////////////////////////////////////////////////////////////////////////////////
@@ -455,7 +457,7 @@ void  ServerDH::manage_PDC( int sec )
             if ((dr.rPdc && dr.rPdcFullPower && dr.wSurplus > 100) ||
                     (dr.rPdc && !dr.rPdcFullPower && dr.wSurplus > 400))
             {    // molto surplus
-                dr.LogMessage("PDC FULL POWER progWinterPDC_eco SurplusW:" + dr.wSurplus.svalue() );
+                dr.LogMessage("PDC FULL POWER progWinterPDC_eco SurplusW" + dr.wSurplus.svalue() );
                 needPdc_FullPower = true;
             }
             //////////////////////////////////////////////////////////////////////////////////
@@ -464,7 +466,7 @@ void  ServerDH::manage_PDC( int sec )
         /**************************************************************************************************/
         if (dr.tExternal > 20 )  // massima t esterna
         {
-            dr.LogMessage("PDC OFF t estrerna 20 < " + dr.tExternal.svalue() );
+            dr.LogMessage("PDC OFF tEsterna" + dr.tExternal.svalue() + " >20" );
             needPdc = false;
         }
 
@@ -474,7 +476,7 @@ void  ServerDH::manage_PDC( int sec )
         /**************************************************************************************************/
         if ( dr.tInletFloor > 38 )  // 35 è la sicurezza dopo la quale spengo la pompa
         {
-            dr.LogMessage("PDC OFF tInlet " + dr.tInletFloor.svalue() + "> 38" );
+            dr.LogMessage("PDC OFF tInlet" + dr.tInletFloor.svalue() + "> 38" );
             needPdc = false;
         }
     }
@@ -496,7 +498,7 @@ void  ServerDH::manage_PDC( int sec )
             if ((dr.rPdc &&  dr.wSurplus  > 300) ||
                     (!dr.rPdc &&  dr.wSurplus  > 1000))
             {
-                dr.LogMessage("PDC ON progSummerPDC_eco SurplusW:" + dr.wSurplus.svalue() );
+                dr.LogMessage("PDC ON progSummerPDC_eco SurplusW" + dr.wSurplus.svalue() );
                 needPdc = true;
             }
             //////////////////////////////////////////////////////////////////////////////////
@@ -505,7 +507,7 @@ void  ServerDH::manage_PDC( int sec )
             if ((dr.rPdc && dr.rPdcFullPower && dr.wSurplus > 300) ||
                     (dr.rPdc && !dr.rPdcFullPower && dr.wSurplus > 600 ))
             {    // molto surplus
-                dr.LogMessage("PDC FULL POWER progSummerPDC_eco SurplusW:" + dr.wSurplus.svalue() );
+                dr.LogMessage("PDC FULL POWER progSummerPDC_eco SurplusW" + dr.wSurplus.svalue() );
                 needPdc_FullPower = true;
             }
             //////////////////////////////////////////////////////////////////////////////////
@@ -516,13 +518,13 @@ void  ServerDH::manage_PDC( int sec )
         /**************************************************************************************************/
         if (dr.tInletFloor < 19.f )  // minima t Acqua raffreddata
         {
-            dr.LogMessage("PDC OFF tInletFloor " + dr.tInletFloor.svalue() + "< 19" );
+            dr.LogMessage("PDC OFF tInletFloor" + dr.tInletFloor.svalue() + "< 19" );
             needPdc = false;
         }
 
         if ( dr.tPufferHi < 18.f)   // minima t Acqua raffreddata
         {
-            dr.LogMessage("PDC OFF tPufferHi " + dr.tPufferHi.svalue() + "< 18" );
+            dr.LogMessage("PDC OFF tPufferHi" + dr.tPufferHi.svalue() + "< 18" );
             needPdc = false;
         }
     }
@@ -556,15 +558,15 @@ void  ServerDH::manage_Pumps( int sec )
     bool needPump_pt = false;
     bool needPump_pp = false;
 
-    dr.LogMessage("Temps pLOW:[" + dr.tPufferLow.svalue() + "] pHI:[" +  dr.tPufferHi.svalue()  + "] Inlet:[" + dr.tInletFloor.svalue() + "] Return:[" + dr.tReturnFloor.svalue() + "]");
+    dr.LogMessage("Temps pLOW:" + dr.tPufferLow.svalue() + " pHI:" +  dr.tPufferHi.svalue()  + " Inlet:" + dr.tInletFloor.svalue() + " Return:" + dr.tReturnFloor.svalue() );
 
     if (dr.progWinterFIRE || dr.progWinterPDC  || dr.progWinterPDC_eco )
     {
         //////////////////////////////////////////////////////////////////////////////////
         // decido se accendere pompa camino
-        dr.LogMessage("Condizione Pompa Camino: tReturnFireplace " + dr.tReturnFireplace.svalue() + " > 34 - " + "tPufferLow " + dr.tPufferLow.svalue() + " > dr.tPufferLow + 5");
-        if ( hour() >= 23 && dr.tPufferLow < 45 && dr.tReturnFireplace > 34 && dr.tReturnFireplace > dr.tPufferLow + 5 )
+        if (dr.tReturnFireplace > 35 && dr.tReturnFireplace > dr.tPufferLow + 5 )
         {
+            dr.LogMessage("Condizione Pompa Camino: tReturnFireplace" + dr.tReturnFireplace.svalue() + " > 35 && tReturnFireplace" + dr.tReturnFireplace.svalue() + " > " + "tPufferLow" + dr.tPufferLow.svalue() + " + 5");
             needPCamino = true;
         }
         /////////////////////////////////////////////////////////////////////////////////////
@@ -611,7 +613,9 @@ void  ServerDH::manage_Pumps( int sec )
         }
     }
 
-    dr.LogMessage("Pompa_pt:[" + QString::number(needPump_pt) + "] Pompa_pp:[" + QString::number(needPump_pp) + "]" );
+    dr.LogMessage("Pompa_pt:[" + QString::number(needPump_pt) +  "]" +
+                  " Pompa_pp:[" + QString::number(needPump_pp) + "]" +
+                  " Pompa_ca:[" + QString::number(needPCamino) + "]" );
 
     // comandi sulla centrale -----------------------------------------------------
     // heat

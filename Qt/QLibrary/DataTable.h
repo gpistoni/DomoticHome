@@ -68,14 +68,14 @@ public:
     VarBf rPompaCamino             = { "T3", "r7", "rPompaCamino" };
 
     std::vector<VarBf*>    rcaldaia = {  &rPdc,
-                                        &rPdcHeat,
-                                        &rPdcPompa,
-                                        &rPdcFullPower,
-                                        &rPompaPianoPrimo,
-                                        &rPompaPianoTerra,
-                                        &rBoilerACS,
-                                        &rPompaCamino
-                                     };
+                                         &rPdcHeat,
+                                         &rPdcPompa,
+                                         &rPdcFullPower,
+                                         &rPompaPianoPrimo,
+                                         &rPompaPianoTerra,
+                                         &rBoilerACS,
+                                         &rPompaCamino
+                                      };
     //*****************************************************************************************
     VarF tPufferHi          = { "T4", "v0", "PufferHi",0,60 };
     VarF tPufferLow         = { "T4", "v1", "PufferLow",0,60 };
@@ -106,14 +106,14 @@ public:
     VarBf evCameraD2         = { "T5", "r7", "CameraD2" };
 
     std::vector<VarBf*>    evStanze = { &evCameraM1,
-                                       &evCameraM2,
-                                       &evCucina,
-                                       &evSala1,
-                                       &evSala2,
-                                       &evCameraS,
-                                       &evCameraD1,
-                                       &evCameraD2
-                                     };
+                                        &evCameraM2,
+                                        &evCucina,
+                                        &evSala1,
+                                        &evSala2,
+                                        &evCameraS,
+                                        &evCameraD1,
+                                        &evCameraD2
+                                      };
     //*****************************************************************************************
     VarF3 wPowergrid            = { "T6", "v0", "v8", "v16", "PowerGrid" , 0, 4000};
     VarF3 wProduced             = { "T6", "v1", "v9", "v17", "Produced" , 0, 4000};
@@ -228,7 +228,7 @@ public:
             for( VarBf *elem : evStanze )
             {
                 SendModifiedValue( elem );
-            }            
+            }
         }
         catch(...)
         {
@@ -369,8 +369,12 @@ public:
         // std::cerr << ".";
     }
 
-   void LogMessage(QString s, bool logtofile = true);
+    void LogMessage(QString s, bool logtofile = true);
+    void LogEvent(QString s, bool logtofile = true);
 
     bool GetLogMessage( QString &s );
+
+private:
+    void LogFileMessage(QString s, bool logtofile, QString fname);
 };
 

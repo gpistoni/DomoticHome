@@ -3,6 +3,16 @@
 
 void DataTable::LogMessage(QString s, bool logtofile)
 {
+    LogFileMessage(s, logtofile, QString("/var/log/dh_"));
+}
+
+void DataTable::LogEvent(QString s, bool logtofile)
+{
+    LogFileMessage(s, logtofile, QString("/var/log/dh_ev_"));
+}
+
+void DataTable::LogFileMessage(QString s, bool logtofile, QString fname)
+{
     QString str;
     str += "\n";
     str += QDateTime::currentDateTime().time().toString();

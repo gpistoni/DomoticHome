@@ -181,7 +181,7 @@ public:
     {}
     virtual QString svalue() override
     {
-        return QString::number(static_cast<double>(m_value));
+        return QString("[") + QString::number(static_cast<double>(m_value)) + QString("]");
     }
     operator float()
     {

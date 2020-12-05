@@ -197,10 +197,10 @@ double calcSunsetUTC(double JD, double latitude, double longitude)
     double  timeDiff = 4 * delta;	// in minutes of time
     double  timeUTC = 720 + timeDiff - eqTime;	// in minutes
     double  newt = calcTimeJulianCent(calcJDFromJulianCent(t) + timeUTC/1440.0);
-        
+
     eqTime = calcEquationOfTime(newt);
     solarDec = calcSunDeclination(newt);
-        
+
     hourAngle = calcHourAngleSunset(latitude, solarDec);
     delta = longitude - radToDeg(hourAngle);
     timeDiff = 4 * delta;
@@ -216,23 +216,29 @@ int IsNight( int crepuscolo = 50 )  //50 minuti
     int month = QDateTime::currentDateTime().date().month();
     int day = QDateTime::currentDateTime().date().day();
     
-    int hour = QDateTime::currentDateTimeUtc().time().hour();
-    int minute =  QDateTime::currentDateTimeUtc().time().minute();
+    int hour = QDateTime::currentDateTime().time().hour();
+    int minute =  QDateTime::currentDateTime().time().minute();
 
     double latitude = 44.7000;
     double longitude = 10.6333;
 
     float JD = calcJD(year,month,day);
 
-    printf("\nSunrise timeUTC %lf", calcSunriseUTC( JD,  latitude,  longitude));
-    printf("\nSunset  timeUTC %lf", calcSunsetUTC( JD,  latitude,  longitude));
+    //printf("\nSunrise timeUTC %lf", calcSunriseUTC( JD,  latitude,  longitude));
+    //printf("\nSunset  timeUTC %lf", calcSunsetUTC( JD,  latitude,  longitude));
 
     double srise = calcSunriseUTC( JD,  latitude,  longitude);
     double sset = calcSunsetUTC( JD,  latitude,  longitude);
+    
+    if ( month > 5 && month <= 10)  // ora legale
+    {
+        srise -=1;
+        sset -=1;
+    }
 
     double now = minute + hour * 60;
 
-    printf("\nCurrent timeUTC %lf", now );
+    //printf("\nCurrent timeUTC %lf", now );
 
     if ((now < (srise-crepuscolo)) || ( now > (sset + crepuscolo)))
         return true;
