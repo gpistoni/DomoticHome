@@ -230,10 +230,10 @@ int IsNight( int crepuscolo = 50 )  //50 minuti
     double srise = calcSunriseUTC( JD,  latitude,  longitude);
     double sset = calcSunsetUTC( JD,  latitude,  longitude);
     
-    if ( month > 5 && month <= 10)  // ora legale
+    if ( month <=4 && month > 10)  // ora solare
     {
-        srise -=1;
-        sset -=1;
+        srise -= 60;
+        sset -= 60;
     }
 
     double now = minute + hour * 60;

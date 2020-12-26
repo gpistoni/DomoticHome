@@ -32,11 +32,11 @@ public:
                                    &progAllRooms
                                   };
     //*****************************************************************************************
-    VarF3SP tCucina                   = { "T1", "v0", "v8", "v16", -0.5, 22, "tCucina",   10, 30 };
-    VarF3SP tSala                     = { "T1", "v1", "v9", "v17",  0.5, 23, "tSala",     10, 30 };
-    VarF3SP tCameraS                  = { "T1", "v2", "v10", "v18", 1.5, 18, "tCameraS",  10, 30 };
-    VarF3SP tCameraD                  = { "T1", "v3", "v11", "v19", 0.5, 18, "tCameraD" , 10, 30 };
-    VarF3SP tCameraM                  = { "T1", "v4", "v12", "v20", 1,   16, "tCameraM" , 10, 30 };
+    VarF3SP tCucina                   = { "T1", "v0", "v8", "v16",  0.5, 22, "tCucina",   10, 30 };
+    VarF3SP tSala                     = { "T1", "v1", "v9", "v17",  1,   23, "tSala",     10, 30 };
+    VarF3SP tCameraS                  = { "T1", "v2", "v10", "v18", 1,   18, "tCameraS",  10, 30 };
+    VarF3SP tCameraD                  = { "T1", "v3", "v11", "v19", 0,   18, "tCameraD",  10, 30 };
+    VarF3SP tCameraM                  = { "T1", "v4", "v12", "v20", 1,   16, "tCameraM",  10, 30 };
     VarF3SP tBagno                    = { "T1", "v5", "v13", "v21", 2.5, 23, "tBagno" ,   10, 30 };
 
     std::vector<VarF3SP*>    temps = {  &tCucina,

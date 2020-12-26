@@ -8,7 +8,7 @@ void DataTable::LogMessage(QString s, bool logtofile)
 
 void DataTable::LogEvent(QString s, bool logtofile)
 {
-    LogFileMessage(s, logtofile, QString("/var/log/dh_ev_"));
+    LogFileMessage(s, logtofile, QString("/var/log/dhe_"));
 }
 
 void DataTable::LogFileMessage(QString s, bool logtofile, QString fname)
@@ -23,7 +23,6 @@ void DataTable::LogFileMessage(QString s, bool logtofile, QString fname)
 
     if (logtofile)
     {
-        QString fname = QString("/var/log/dh_");
         fname += QString::number(QDateTime::currentDateTime().date().month());
         fname += "_";
         int d = QDateTime::currentDateTime().date().day();

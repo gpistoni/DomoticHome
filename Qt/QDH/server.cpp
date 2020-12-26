@@ -183,38 +183,40 @@ void ServerDH::manage_Internet(int sec)
     if ( t_InternetConnection.elapsed() < sec * 1000 ) return;
     t_InternetConnection.restart();
 
-    //restart programmati
-    static bool Restart_6 =0;
-    // a mezzanotte riarmo
-    if (hour()==0)
+    //dr.LogMessage("--- RouterInternet ---"  );
+    QString str;
+    int ttt=0;
+    bool connected = CQHttpClient::PingGoogle(str); ttt++;
+    if (!connected)
     {
-        Restart_6 = 1;
-    }
-
-    static int decimation = 0;
-    if (++decimation%5==0)        // questa parte entra una volta su 5 (timer = 5 minuti)
-    {
-        dr.LogMessage("--- RouterInternet ---"  );
-
-        QString str;
-        bool connected = CQHttpClient::PingGoogle(str);
-        dr.LogMessage("Ping Google");
-
-        if (hour()==6 && Restart_6) { connected=false; Restart_6=0;}
-
-        if (!connected)
+        sleep(10);
+        bool connected2 = CQHttpClient::PingGoogle(str); ttt++;
+        if (!connected2)
         {
-            dr.LogEvent("NetworkFailed");
-            dr.LogMessage("Ping Google failed: RESTART");
-            // off
-            CQHttpClient client("192.168.1.210", 80, 10000 );
-            client.Request_Set("off");
-            sleep(15);
+            sleep(10);
+            bool connected3 = CQHttpClient::PingGoogle(str); ttt++;
+            if (!connected3)
+            {
+                dr.LogEvent("Network RESTART");
+                dr.LogMessage("Ping Google failed: RESTART");
+                // off
+                CQHttpClient client("192.168.1.210", 80, 10000 );
+                client.Request_Set("off");
+                sleep(15);
+                client.Request_Set("on");
+                return;
+            }
         }
     }
 
-    CQHttpClient client2("192.168.1.210", 80, 10000 );
-    client2.Request_Set("on");
+    dr.LogEvent("Network OK [" + QString::number( ttt ) + "]");
+
+    static int decimation = 0;
+    if (++decimation%10==0)        // questa parte entra una volta su 5 (timer = 5 minuti)
+    {
+        CQHttpClient client2("192.168.1.210", 80, 10000 );
+        client2.Request_Set("on");
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -241,7 +243,7 @@ void ServerDH::manage_BoilerACS(int sec)
         }
 
         //decido se accendere il boiler solo a mezzogiorno e solo se il camino non funziona
-        if ( hour() >= 12 && hour() <= 15 && dr.tReturnFireplace < 30 )
+        if ( hour() >= 12 && hour() <= 15 )
         {
             boilerACS = true;
             dr.LogMessage("Condizione ON hour:" + QString::number( hour() ) + " >=12 & <15");
