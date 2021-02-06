@@ -183,13 +183,16 @@ void ServerDH::manage_Internet(int sec)
     if ( t_InternetConnection.elapsed() < sec * 1000 ) return;
     t_InternetConnection.restart();
 
+    CQHttpClient client2("192.168.1.210", 80, 10000 );
+    client2.Request_Set("on");
+
     //dr.LogMessage("--- RouterInternet ---"  );
     QString str;
     int ttt=0;
     bool connected = CQHttpClient::PingGoogle(str); ttt++;
     if (!connected)
     {
-        sleep(10);
+        sleep(5);
         bool connected2 = CQHttpClient::PingGoogle(str); ttt++;
         if (!connected2)
         {
@@ -199,24 +202,20 @@ void ServerDH::manage_Internet(int sec)
             {
                 dr.LogEvent("Network RESTART");
                 dr.LogMessage("Ping Google failed: RESTART");
-                // off
+                // Off
                 CQHttpClient client("192.168.1.210", 80, 10000 );
                 client.Request_Set("off");
                 sleep(15);
                 client.Request_Set("on");
+                sleep(30);                          // aspetto un po'
+                t_InternetConnection.restart();     // rivvio il conteggio
                 return;
             }
         }
     }
 
     dr.LogEvent("Network OK [" + QString::number( ttt ) + "]");
-
-    static int decimation = 0;
-    if (++decimation%10==0)        // questa parte entra una volta su 5 (timer = 5 minuti)
-    {
-        CQHttpClient client2("192.168.1.210", 80, 10000 );
-        client2.Request_Set("on");
-    }
+    t_InternetConnection.restart();                    //   rivvio il conteggio
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -242,13 +241,12 @@ void ServerDH::manage_BoilerACS(int sec)
             dr.LogMessage("Condizione ON surplusW:" + dr.wSurplus.svalue() );
         }
 
-        //decido se accendere il boiler solo a mezzogiorno e solo se il camino non funziona
-        if ( hour() >= 12 && hour() <= 15 )
+        //decido se accendere il boiler solo a mezzogiorno
+        if ( hour() >= 13 && hour() <= 16 )
         {
             boilerACS = true;
-            dr.LogMessage("Condizione ON hour:" + QString::number( hour() ) + " >=12 & <15");
+            dr.LogMessage("Condizione ON hour:" + QString::number( hour() ) + " >=13&<=16");
         }
-
     }
     /**************************************************************************************************/
     // boiler
