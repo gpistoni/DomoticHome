@@ -1,0 +1,1315 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Device:CP C2
+U 1 1 6020AEB1
+P 6150 1700
+F 0 "C2" V 5895 1700 50  0000 C CNN
+F 1 "100uf" V 5986 1700 50  0000 C CNN
+F 2 "Capacitor_THT:CP_Radial_D7.5mm_P2.50mm" H 6188 1550 50  0001 C CNN
+F 3 "~" H 6150 1700 50  0001 C CNN
+	1    6150 1700
+	1    0    0    -1  
+$EndComp
+$Comp
+L pspice:DIODE DP1
+U 1 1 601ED81C
+P 5850 1100
+F 0 "DP1" V 5804 1228 50  0000 L CNN
+F 1 "DIODE" V 5895 1228 50  0000 L CNN
+F 2 "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" H 5850 1100 50  0001 C CNN
+F 3 "~" H 5850 1100 50  0001 C CNN
+	1    5850 1100
+	1    0    0    -1  
+$EndComp
+$Comp
+L Transistor_FET:IRF540N Q6
+U 1 1 601F8931
+P 9800 3550
+F 0 "Q6" H 10004 3596 50  0000 L CNN
+F 1 "IRF540N" H 10004 3505 50  0001 L CNN
+F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 10050 3475 50  0001 L CIN
+F 3 "http://www.irf.com/product-info/datasheets/data/irf540n.pdf" H 9800 3550 50  0001 L CNN
+	1    9800 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED D6
+U 1 1 60203687
+P 9050 3900
+F 0 "D6" V 9150 3950 50  0000 R CNN
+F 1 "LED" V 8998 3782 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 9050 3900 50  0001 C CNN
+F 3 "~" H 9050 3900 50  0001 C CNN
+	1    9050 3900
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:+5V #PWR0103
+U 1 1 60208A7F
+P 6950 2150
+F 0 "#PWR0103" H 6950 2000 50  0001 C CNN
+F 1 "+5V" H 6965 2323 50  0000 C CNN
+F 2 "" H 6950 2150 50  0001 C CNN
+F 3 "" H 6950 2150 50  0001 C CNN
+	1    6950 2150
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+24V #PWR0104
+U 1 1 602160C5
+P 7250 1100
+F 0 "#PWR0104" H 7250 950 50  0001 C CNN
+F 1 "+24V" H 7265 1273 50  0000 C CNN
+F 2 "" H 7250 1100 50  0001 C CNN
+F 3 "" H 7250 1100 50  0001 C CNN
+	1    7250 1100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6500 1100 7250 1100
+Wire Wire Line
+	7650 2150 6950 2150
+Wire Wire Line
+	6200 4650 6200 5700
+Connection ~ 8500 5700
+$Comp
+L Transistor_FET:IRF540N Q5
+U 1 1 60244AEA
+P 9800 3050
+F 0 "Q5" H 10004 3096 50  0000 L CNN
+F 1 "IRF540N" H 10004 3005 50  0001 L CNN
+F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 10050 2975 50  0001 L CIN
+F 3 "http://www.irf.com/product-info/datasheets/data/irf540n.pdf" H 9800 3050 50  0001 L CNN
+	1    9800 3050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Isolator:PC817 Uo4
+U 1 1 6027A2D2
+P 9400 2550
+F 0 "Uo4" H 9700 2550 50  0000 C CNN
+F 1 "PS2501" H 9000 2550 50  0000 C CNN
+F 2 "Package_DIP:DIP-4_W7.62mm" H 9200 2350 50  0001 L CIN
+F 3 "http://www.soselectronic.cz/a_info/resource/d/pc817.pdf" H 9400 2550 50  0001 L CNN
+	1    9400 2550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9700 2450 9850 2450
+Wire Wire Line
+	9700 2100 9850 2100
+Text Label 5550 4350 1    50   ~ 0
+10-13_Eth
+Wire Wire Line
+	9900 3350 10300 3350
+$Comp
+L Isolator:PC817 Uo1
+U 1 1 602C1EA9
+P 9400 1500
+F 0 "Uo1" H 9700 1500 50  0000 C CNN
+F 1 "PS2501" H 9000 1500 50  0000 C CNN
+F 2 "Package_DIP:DIP-4_W7.62mm" H 9200 1300 50  0001 L CIN
+F 3 "http://www.soselectronic.cz/a_info/resource/d/pc817.pdf" H 9400 1500 50  0001 L CNN
+	1    9400 1500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Isolator:PC817 Uo2
+U 1 1 602C1EAF
+P 9400 1850
+F 0 "Uo2" H 9700 1850 50  0000 C CNN
+F 1 "PS2501" H 9000 1850 50  0000 C CNN
+F 2 "Package_DIP:DIP-4_W7.62mm" H 9200 1650 50  0001 L CIN
+F 3 "http://www.soselectronic.cz/a_info/resource/d/pc817.pdf" H 9400 1850 50  0001 L CNN
+	1    9400 1850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9700 1750 9850 1750
+Wire Wire Line
+	9700 1400 9850 1400
+$Comp
+L Device:LED D5
+U 1 1 6034F1CE
+P 8900 3900
+F 0 "D5" V 9000 3950 50  0000 R CNN
+F 1 "LED" V 8848 3782 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 8900 3900 50  0001 C CNN
+F 3 "~" H 8900 3900 50  0001 C CNN
+	1    8900 3900
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	8500 4900 8500 5700
+$Comp
+L Device:R_Network04 RN1
+U 1 1 603B8874
+P 8300 4700
+F 0 "RN1" H 8020 4654 50  0000 R CNN
+F 1 "R_220" H 8020 4745 50  0000 R CNN
+F 2 "Resistor_THT:R_Array_SIP5" V 8575 4700 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 8300 4700 50  0001 C CNN
+	1    8300 4700
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	8500 5700 9200 5700
+$Comp
+L Isolator:PC817 Uo3
+U 1 1 6040AE89
+P 9400 2200
+F 0 "Uo3" H 9700 2200 50  0000 C CNN
+F 1 "PS2501" H 9000 2200 50  0000 C CNN
+F 2 "Package_DIP:DIP-4_W7.62mm" H 9200 2000 50  0001 L CIN
+F 3 "http://www.soselectronic.cz/a_info/resource/d/pc817.pdf" H 9400 2200 50  0001 L CNN
+	1    9400 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R_Network04 RN2
+U 1 1 6044A245
+P 9000 4700
+F 0 "RN2" H 8720 4654 50  0000 R CNN
+F 1 "R_220" H 8720 4745 50  0000 R CNN
+F 2 "Resistor_THT:R_Array_SIP5" V 9275 4700 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 9000 4700 50  0001 C CNN
+	1    9000 4700
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	9200 4900 9200 5700
+Wire Wire Line
+	8900 4050 8900 4500
+Wire Wire Line
+	9000 4200 9000 4500
+$Comp
+L Device:R R1
+U 1 1 60498ADA
+P 10100 1600
+F 0 "R1" V 9893 1600 50  0000 C CNN
+F 1 "R1k" V 9984 1600 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 10030 1600 50  0001 C CNN
+F 3 "~" H 10100 1600 50  0001 C CNN
+	1    10100 1600
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R2
+U 1 1 6049906A
+P 10100 1950
+F 0 "R2" V 9893 1950 50  0000 C CNN
+F 1 "R1k" V 9984 1950 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 10030 1950 50  0001 C CNN
+F 3 "~" H 10100 1950 50  0001 C CNN
+	1    10100 1950
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R3
+U 1 1 604994B0
+P 10100 2300
+F 0 "R3" V 9893 2300 50  0000 C CNN
+F 1 "R1k" V 9984 2300 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 10030 2300 50  0001 C CNN
+F 3 "~" H 10100 2300 50  0001 C CNN
+	1    10100 2300
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R4
+U 1 1 604999D3
+P 10100 2650
+F 0 "R4" V 9893 2650 50  0000 C CNN
+F 1 "R1k" V 9984 2650 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 10030 2650 50  0001 C CNN
+F 3 "~" H 10100 2650 50  0001 C CNN
+	1    10100 2650
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	9950 2650 9700 2650
+Wire Wire Line
+	9850 1400 9850 1100
+Connection ~ 9850 1400
+Wire Wire Line
+	9850 1400 9850 1750
+Wire Wire Line
+	9950 1600 9700 1600
+Wire Wire Line
+	9850 2100 9850 1750
+Connection ~ 9850 1750
+Wire Wire Line
+	9850 2450 9850 2100
+Connection ~ 9850 2100
+Wire Wire Line
+	9700 1950 9950 1950
+Wire Wire Line
+	9950 2300 9700 2300
+$Comp
+L Connector:Screw_Terminal_01x04 OUT3
+U 1 1 604E6147
+P 10600 2000
+F 0 "OUT3" V 10700 1850 50  0000 L CNN
+F 1 "Screw_Terminal_01x04" H 10680 1901 50  0001 L CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4-5.08_1x04_P5.08mm_Horizontal" H 10600 2000 50  0001 C CNN
+F 3 "~" H 10600 2000 50  0001 C CNN
+	1    10600 2000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10250 1600 10400 1600
+Wire Wire Line
+	10400 1600 10400 1900
+Wire Wire Line
+	10250 1950 10400 1950
+Wire Wire Line
+	10400 1950 10400 2000
+Wire Wire Line
+	10250 2300 10250 2100
+Wire Wire Line
+	10250 2100 10400 2100
+Wire Wire Line
+	10250 2650 10350 2650
+Wire Wire Line
+	10350 2650 10350 2200
+Wire Wire Line
+	10350 2200 10400 2200
+Wire Wire Line
+	6200 5700 8500 5700
+Wire Wire Line
+	6950 2150 6000 2150
+Wire Wire Line
+	6000 2150 6000 2650
+Connection ~ 6950 2150
+$Comp
+L Connector:Screw_Terminal_01x02 IN3
+U 1 1 6054F688
+P 1050 1450
+F 0 "IN3" V 1150 1500 50  0000 R CNN
+F 1 "Screw_Terminal_01x02" V 923 1262 50  0001 R CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" V 923 1262 50  0001 R CNN
+F 3 "~" H 1050 1450 50  0001 C CNN
+	1    1050 1450
+	-1   0    0    1   
+$EndComp
+Connection ~ 6000 2150
+Connection ~ 7250 1100
+Wire Wire Line
+	6050 1100 6500 1100
+Wire Wire Line
+	6150 1500 6500 1500
+Connection ~ 6500 1100
+Wire Wire Line
+	5600 3150 4150 3150
+$Comp
+L Transistor_FET:IRF540N Q7
+U 1 1 605BD132
+P 9800 4100
+F 0 "Q7" H 10004 4146 50  0000 L CNN
+F 1 "IRF540N" H 10004 4055 50  0001 L CNN
+F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 10050 4025 50  0001 L CIN
+F 3 "http://www.irf.com/product-info/datasheets/data/irf540n.pdf" H 9800 4100 50  0001 L CNN
+	1    9800 4100
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED D7
+U 1 1 605C7808
+P 9200 3900
+F 0 "D7" V 9300 3950 50  0000 R CNN
+F 1 "LED" V 9148 3782 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 9200 3900 50  0001 C CNN
+F 3 "~" H 9200 3900 50  0001 C CNN
+	1    9200 3900
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	9000 4200 9050 4200
+Wire Wire Line
+	9050 4200 9050 4050
+Wire Wire Line
+	9200 4050 9200 4250
+Wire Wire Line
+	9200 4250 9100 4250
+Wire Wire Line
+	9100 4250 9100 4500
+Wire Wire Line
+	9550 4100 9600 4100
+Wire Wire Line
+	8900 3050 9600 3050
+Wire Wire Line
+	8900 3050 8900 3750
+Wire Wire Line
+	5600 3250 4950 3250
+Wire Wire Line
+	4950 3250 4950 2250
+Wire Wire Line
+	9200 3750 9200 3500
+Wire Wire Line
+	9200 3500 9550 3500
+Wire Wire Line
+	9550 3500 9550 4100
+Wire Wire Line
+	5600 3350 5000 3350
+Wire Wire Line
+	5000 3350 5000 2300
+Wire Wire Line
+	5000 2300 7700 2300
+Connection ~ 9200 3500
+Wire Wire Line
+	9050 3450 9600 3450
+Wire Wire Line
+	9600 3450 9600 3550
+Wire Wire Line
+	9050 3450 9050 3750
+Wire Wire Line
+	5600 3450 5050 3450
+Wire Wire Line
+	5050 3450 5050 2350
+Wire Wire Line
+	5600 3550 5100 3550
+Wire Wire Line
+	5100 3550 5100 2400
+Wire Wire Line
+	5100 2400 7600 2400
+Wire Wire Line
+	7600 3450 9050 3450
+Connection ~ 9050 3450
+Wire Wire Line
+	5600 3650 5150 3650
+Wire Wire Line
+	5150 3650 5150 2450
+Wire Wire Line
+	5600 3750 5200 3750
+Wire Wire Line
+	5200 3750 5200 2500
+Wire Wire Line
+	5600 3850 5250 3850
+Wire Wire Line
+	5250 3850 5250 2550
+$Comp
+L Device:R_POT_TRIM RV1
+U 1 1 60658196
+P 4900 4200
+F 0 "RV1" H 4830 4246 50  0000 R CNN
+F 1 "R_POT_10k" H 4830 4155 50  0000 R CNN
+F 2 "Potentiometer_THT:Potentiometer_Vishay_T73YP_Vertical" H 4900 4200 50  0001 C CNN
+F 3 "~" H 4900 4200 50  0001 C CNN
+	1    4900 4200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R_POT_TRIM RV2
+U 1 1 6065A219
+P 4500 4200
+F 0 "RV2" H 4430 4246 50  0000 R CNN
+F 1 "R_POT_10k" H 4430 4155 50  0000 R CNN
+F 2 "Potentiometer_THT:Potentiometer_Vishay_T73YP_Vertical" H 4500 4200 50  0001 C CNN
+F 3 "~" H 4500 4200 50  0001 C CNN
+	1    4500 4200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4900 5700 6200 5700
+Connection ~ 6200 5700
+Connection ~ 4900 5700
+Wire Wire Line
+	5050 4750 6600 4750
+Wire Wire Line
+	6600 4750 6600 4350
+Wire Wire Line
+	4650 4200 4650 4800
+Wire Wire Line
+	4650 4800 6650 4800
+Wire Wire Line
+	6650 4800 6650 4250
+Wire Wire Line
+	6650 4250 6600 4250
+$Comp
+L Isolator:PC817 Ui4
+U 1 1 606A8F8C
+P 2550 3350
+F 0 "Ui4" H 2850 3350 50  0000 C CNN
+F 1 "PS2501" H 2150 3350 50  0000 C CNN
+F 2 "Package_DIP:DIP-4_W7.62mm" H 2350 3150 50  0001 L CIN
+F 3 "http://www.soselectronic.cz/a_info/resource/d/pc817.pdf" H 2550 3350 50  0001 L CNN
+	1    2550 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Isolator:PC817 Ui3
+U 1 1 606AA260
+P 2550 3750
+F 0 "Ui3" H 2850 3750 50  0000 C CNN
+F 1 "PS2501" H 2150 3750 50  0000 C CNN
+F 2 "Package_DIP:DIP-4_W7.62mm" H 2350 3550 50  0001 L CIN
+F 3 "http://www.soselectronic.cz/a_info/resource/d/pc817.pdf" H 2550 3750 50  0001 L CNN
+	1    2550 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Isolator:PC817 Ui2
+U 1 1 606AACF4
+P 2550 4150
+F 0 "Ui2" H 2850 4150 50  0000 C CNN
+F 1 "PS2501" H 2150 4150 50  0000 C CNN
+F 2 "Package_DIP:DIP-4_W7.62mm" H 2350 3950 50  0001 L CIN
+F 3 "http://www.soselectronic.cz/a_info/resource/d/pc817.pdf" H 2550 4150 50  0001 L CNN
+	1    2550 4150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Isolator:PC817 Ui1
+U 1 1 606AB3EA
+P 2550 4550
+F 0 "Ui1" H 2850 4550 50  0000 C CNN
+F 1 "PS2501" H 2150 4550 50  0000 C CNN
+F 2 "Package_DIP:DIP-4_W7.62mm" H 2350 4350 50  0001 L CIN
+F 3 "http://www.soselectronic.cz/a_info/resource/d/pc817.pdf" H 2550 4550 50  0001 L CNN
+	1    2550 4550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R_Network04 RN4
+U 1 1 606ABB7F
+P 1500 5500
+F 0 "RN4" H 1220 5454 50  0000 R CNN
+F 1 "R_2k" H 1220 5545 50  0000 R CNN
+F 2 "Resistor_THT:R_Array_SIP5" V 1775 5500 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 1500 5500 50  0001 C CNN
+	1    1500 5500
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x04 IN1
+U 1 1 6071439B
+P 650 3450
+F 0 "IN1" H 730 3442 50  0000 L CNN
+F 1 "Screw_Terminal_01x04" H 730 3351 50  0001 L CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4-5.08_1x04_P5.08mm_Horizontal" H 650 3450 50  0001 C CNN
+F 3 "~" H 650 3450 50  0001 C CNN
+	1    650  3450
+	-1   0    0    1   
+$EndComp
+Connection ~ 4900 2150
+$Comp
+L Device:R_Network04 RN3
+U 1 1 60788B21
+P 3100 5450
+F 0 "RN3" H 2820 5404 50  0000 R CNN
+F 1 "R_1k" H 2820 5495 50  0000 R CNN
+F 2 "Resistor_THT:R_Array_SIP5" V 3375 5450 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 3100 5450 50  0001 C CNN
+	1    3100 5450
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:LED Di4
+U 1 1 60797092
+P 1800 3250
+F 0 "Di4" V 1900 3300 50  0000 R CNN
+F 1 "LED" V 1748 3132 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 1800 3250 50  0001 C CNN
+F 3 "~" H 1800 3250 50  0001 C CNN
+	1    1800 3250
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:LED Di3
+U 1 1 607C2262
+P 1800 3650
+F 0 "Di3" V 1900 3700 50  0000 R CNN
+F 1 "LED" V 1748 3532 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 1800 3650 50  0001 C CNN
+F 3 "~" H 1800 3650 50  0001 C CNN
+	1    1800 3650
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:LED Di2
+U 1 1 607C27E3
+P 1800 4050
+F 0 "Di2" V 1900 4100 50  0000 R CNN
+F 1 "LED" V 1748 3932 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 1800 4050 50  0001 C CNN
+F 3 "~" H 1800 4050 50  0001 C CNN
+	1    1800 4050
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:LED Di1
+U 1 1 607C2D73
+P 1800 4450
+F 0 "Di1" V 1900 4500 50  0000 R CNN
+F 1 "LED" V 1748 4332 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 1800 4450 50  0001 C CNN
+F 3 "~" H 1800 4450 50  0001 C CNN
+	1    1800 4450
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	2850 3250 3200 3250
+Wire Wire Line
+	2850 4650 3000 4650
+Wire Wire Line
+	3000 4650 3000 5200
+Wire Wire Line
+	2850 4250 3100 4250
+Wire Wire Line
+	3100 4250 3100 5150
+Wire Wire Line
+	2850 3850 3200 3850
+Wire Wire Line
+	3200 3850 3200 5100
+Wire Wire Line
+	2850 3450 3300 3450
+Wire Wire Line
+	3300 3450 3300 5050
+Wire Wire Line
+	3300 5650 3300 5700
+Connection ~ 3300 5700
+Wire Wire Line
+	3000 5200 7100 5200
+Wire Wire Line
+	7100 5200 7100 3650
+Wire Wire Line
+	7100 3650 6600 3650
+Connection ~ 3000 5200
+Wire Wire Line
+	3000 5200 3000 5250
+Wire Wire Line
+	3100 5150 7050 5150
+Wire Wire Line
+	7050 5150 7050 3750
+Wire Wire Line
+	7050 3750 6600 3750
+Connection ~ 3100 5150
+Wire Wire Line
+	3100 5150 3100 5250
+Wire Wire Line
+	3200 5100 7000 5100
+Wire Wire Line
+	7000 5100 7000 3850
+Wire Wire Line
+	7000 3850 6600 3850
+Connection ~ 3200 5100
+Wire Wire Line
+	3200 5100 3200 5250
+Wire Wire Line
+	3300 5050 6950 5050
+Wire Wire Line
+	6950 5050 6950 3950
+Wire Wire Line
+	6950 3950 6600 3950
+Connection ~ 3300 5050
+Wire Wire Line
+	3300 5050 3300 5250
+Wire Wire Line
+	4900 2150 4900 3850
+Wire Wire Line
+	3300 5700 4300 5700
+Wire Wire Line
+	5050 4200 5050 4750
+Wire Wire Line
+	4500 4050 4500 3850
+Wire Wire Line
+	4500 3850 4900 3850
+Wire Wire Line
+	4500 4350 4500 4900
+Wire Wire Line
+	4500 4900 4900 4900
+Wire Wire Line
+	4900 4900 4900 5700
+Wire Wire Line
+	3300 2150 4400 2150
+Wire Wire Line
+	1700 5700 3300 5700
+Wire Wire Line
+	3300 3250 3300 2150
+Wire Wire Line
+	3200 3650 3200 3250
+Wire Wire Line
+	3200 3650 3100 3650
+Connection ~ 3200 3250
+Wire Wire Line
+	3200 3250 3300 3250
+Wire Wire Line
+	3100 4050 3100 3650
+Wire Wire Line
+	3100 4050 3000 4050
+Connection ~ 3100 3650
+Wire Wire Line
+	3100 3650 2850 3650
+Wire Wire Line
+	3000 4450 3000 4050
+Wire Wire Line
+	3000 4450 2850 4450
+Connection ~ 3000 4050
+Wire Wire Line
+	3000 4050 2850 4050
+$Comp
+L Connector:Screw_Terminal_01x02 IN2
+U 1 1 60DD9802
+P 1050 1800
+F 0 "IN2" V 1150 1850 50  0000 R CNN
+F 1 "Screw_Terminal_01x02" V 923 1612 50  0001 R CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" V 923 1612 50  0001 R CNN
+F 3 "~" H 1050 1800 50  0001 C CNN
+	1    1050 1800
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	3600 5000 6900 5000
+Wire Wire Line
+	6900 5000 6900 4050
+Wire Wire Line
+	6900 4050 6600 4050
+Wire Wire Line
+	3650 4950 6850 4950
+Wire Wire Line
+	6850 4950 6850 4150
+Wire Wire Line
+	6850 4150 6600 4150
+$Comp
+L Transistor_FET:IRF540N Q8
+U 1 1 60EDFF4F
+P 9800 4650
+F 0 "Q8" H 10004 4696 50  0000 L CNN
+F 1 "IRF540N" H 10004 4605 50  0001 L CNN
+F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 10050 4575 50  0001 L CIN
+F 3 "http://www.irf.com/product-info/datasheets/data/irf540n.pdf" H 9800 4650 50  0001 L CNN
+	1    9800 4650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9500 4650 9600 4650
+$Comp
+L Device:LED D8
+U 1 1 60F57694
+P 9350 3900
+F 0 "D8" V 9450 3950 50  0000 R CNN
+F 1 "LED" V 9298 3782 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 9350 3900 50  0001 C CNN
+F 3 "~" H 9350 3900 50  0001 C CNN
+	1    9350 3900
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	5600 3950 5300 3950
+Wire Wire Line
+	5300 3950 5300 2600
+Wire Wire Line
+	7400 2600 7400 3600
+Wire Wire Line
+	7400 3600 9350 3600
+Wire Wire Line
+	9500 3600 9500 4650
+Wire Wire Line
+	9350 3750 9350 3600
+Connection ~ 9350 3600
+Wire Wire Line
+	9350 3600 9500 3600
+Wire Wire Line
+	9350 4050 9350 4300
+Wire Wire Line
+	9350 4300 9200 4300
+Wire Wire Line
+	9200 4300 9200 4500
+$Comp
+L MCU_Module:Arduino_Nano_v2.x A1
+U 1 1 601EC25F
+P 6100 3650
+F 0 "A1" H 6400 2800 50  0000 C CNN
+F 1 "Arduino_Nano_v2.x" H 6100 4350 50  0000 C CNN
+F 2 "Module:Arduino_Nano" H 6100 3650 50  0001 C CIN
+F 3 "https://www.arduino.cc/en/uploads/Main/ArduinoNanoManual23.pdf" H 6100 3650 50  0001 C CNN
+	1    6100 3650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5300 2600 7400 2600
+Wire Wire Line
+	7650 1500 7650 2150
+Connection ~ 6150 1850
+Wire Wire Line
+	7250 1100 9850 1100
+Wire Wire Line
+	4300 1850 4300 2950
+Connection ~ 4300 5700
+Wire Wire Line
+	4300 5700 4900 5700
+$Comp
+L power:GND #PWR0101
+U 1 1 613E1CB8
+P 6150 1850
+F 0 "#PWR0101" H 6150 1600 50  0001 C CNN
+F 1 "GND" H 6155 1677 50  0000 C CNN
+F 2 "" H 6150 1850 50  0001 C CNN
+F 3 "" H 6150 1850 50  0001 C CNN
+	1    6150 1850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4900 4050 4900 3850
+Connection ~ 4900 3850
+Wire Wire Line
+	4900 4350 4900 4900
+Connection ~ 4900 4900
+$Comp
+L Device:CP C1
+U 1 1 602B260C
+P 7450 1650
+F 0 "C1" V 7195 1650 50  0000 C CNN
+F 1 "10uf" V 7286 1650 50  0000 C CNN
+F 2 "Capacitor_THT:CP_Radial_D7.5mm_P2.50mm" H 7488 1500 50  0001 C CNN
+F 3 "~" H 7450 1650 50  0001 C CNN
+	1    7450 1650
+	1    0    0    -1  
+$EndComp
+Connection ~ 7450 1500
+Wire Wire Line
+	7450 1500 7650 1500
+Wire Wire Line
+	850  3250 1650 3250
+Wire Wire Line
+	1950 3250 2250 3250
+Wire Wire Line
+	2300 3450 2250 3450
+Wire Wire Line
+	1400 3450 1400 5300
+Connection ~ 2250 3450
+Wire Wire Line
+	2250 3450 1400 3450
+Wire Wire Line
+	850  3350 1300 3350
+Wire Wire Line
+	1300 3350 1300 3650
+Wire Wire Line
+	1300 3650 1650 3650
+Wire Wire Line
+	1950 3650 2250 3650
+Wire Wire Line
+	2250 3850 1500 3850
+Wire Wire Line
+	1500 3850 1500 5300
+Wire Wire Line
+	850  3450 1250 3450
+Wire Wire Line
+	1250 3450 1250 4050
+Wire Wire Line
+	1250 4050 1650 4050
+Wire Wire Line
+	1950 4050 2250 4050
+Wire Wire Line
+	2250 4250 1600 4250
+Wire Wire Line
+	1600 4250 1600 5300
+Wire Wire Line
+	850  3550 1200 3550
+Wire Wire Line
+	1200 3550 1200 4450
+Wire Wire Line
+	1200 4450 1650 4450
+Wire Wire Line
+	1950 4450 2250 4450
+Wire Wire Line
+	2250 4650 1700 4650
+Wire Wire Line
+	1700 4650 1700 5300
+$Comp
+L Device:LED D1
+U 1 1 60352DDD
+P 8600 1400
+F 0 "D1" V 8700 1450 50  0000 R CNN
+F 1 "LED" V 8548 1282 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 8600 1400 50  0001 C CNN
+F 3 "~" H 8600 1400 50  0001 C CNN
+	1    8600 1400
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:LED D2
+U 1 1 603510AD
+P 8600 1750
+F 0 "D2" V 8700 1800 50  0000 R CNN
+F 1 "LED" V 8548 1632 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 8600 1750 50  0001 C CNN
+F 3 "~" H 8600 1750 50  0001 C CNN
+	1    8600 1750
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:LED D3
+U 1 1 60350BB9
+P 8600 2100
+F 0 "D3" V 8700 2150 50  0000 R CNN
+F 1 "LED" V 8548 1982 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 8600 2100 50  0001 C CNN
+F 3 "~" H 8600 2100 50  0001 C CNN
+	1    8600 2100
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:LED D4
+U 1 1 6034F6E7
+P 8600 2450
+F 0 "D4" V 8700 2500 50  0000 R CNN
+F 1 "LED" V 8548 2332 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 8600 2450 50  0001 C CNN
+F 3 "~" H 8600 2450 50  0001 C CNN
+	1    8600 2450
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	8750 2450 9100 2450
+Wire Wire Line
+	8750 1400 9100 1400
+Wire Wire Line
+	8750 1750 9100 1750
+Wire Wire Line
+	8750 2100 9100 2100
+Wire Wire Line
+	4950 2250 7900 2250
+Wire Wire Line
+	7900 2250 7900 1400
+Wire Wire Line
+	7900 1400 8450 1400
+Wire Wire Line
+	5050 2350 7950 2350
+Wire Wire Line
+	7950 2350 7950 1750
+Wire Wire Line
+	7950 1750 8450 1750
+Wire Wire Line
+	5200 2500 8000 2500
+Wire Wire Line
+	8000 2500 8000 2100
+Wire Wire Line
+	8000 2100 8450 2100
+Wire Wire Line
+	5250 2550 8050 2550
+Wire Wire Line
+	8050 2550 8050 2450
+Wire Wire Line
+	8050 2450 8450 2450
+Wire Wire Line
+	9100 2650 8500 2650
+Wire Wire Line
+	8500 2650 8500 4500
+Wire Wire Line
+	9100 2300 8400 2300
+Wire Wire Line
+	8400 2300 8400 4500
+Wire Wire Line
+	8300 1950 8300 4500
+Wire Wire Line
+	8300 1950 9100 1950
+Wire Wire Line
+	9100 1600 8200 1600
+Wire Wire Line
+	8200 1600 8200 4500
+Text Label 7900 1400 0    50   ~ 0
+d2
+Text Label 7700 3050 0    50   ~ 0
+d3
+Text Label 7950 1750 0    50   ~ 0
+d4
+Text Label 7700 3450 0    50   ~ 0
+d5
+Wire Wire Line
+	7700 3050 8900 3050
+Connection ~ 8900 3050
+Wire Wire Line
+	7600 2400 7600 3450
+Wire Wire Line
+	7700 2300 7700 3050
+Wire Wire Line
+	5150 2450 7550 2450
+Wire Wire Line
+	7550 2450 7550 3500
+Wire Wire Line
+	7550 3500 9200 3500
+Text Label 7550 3500 0    50   ~ 0
+d6
+Text Label 8000 2100 0    50   ~ 0
+d7
+Text Label 8050 2450 0    50   ~ 0
+d8
+Text Label 7400 3600 0    50   ~ 0
+d9
+$Comp
+L Connector:Screw_Terminal_01x02 OUT_5v1
+U 1 1 6068276F
+P 1050 1100
+F 0 "OUT_5v1" V 1150 1150 50  0000 R CNN
+F 1 "Screw_Terminal_01x02" V 923 912 50  0001 R CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" V 923 912 50  0001 R CNN
+F 3 "~" H 1050 1100 50  0001 C CNN
+	1    1050 1100
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	10150 4850 10150 4300
+Wire Wire Line
+	9900 4850 10150 4850
+$Comp
+L power:GNDPWR #PWR0102
+U 1 1 606C8A0F
+P 10150 5750
+F 0 "#PWR0102" H 10150 5550 50  0001 C CNN
+F 1 "GNDPWR" H 10154 5596 50  0000 C CNN
+F 2 "" H 10150 5700 50  0001 C CNN
+F 3 "" H 10150 5700 50  0001 C CNN
+	1    10150 5750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4900 2150 6000 2150
+Wire Wire Line
+	9900 4300 10150 4300
+Connection ~ 10150 4300
+Wire Wire Line
+	10150 4300 10150 3750
+Wire Wire Line
+	9900 3750 10150 3750
+Connection ~ 10150 3750
+Wire Wire Line
+	10150 3750 10150 3250
+Wire Wire Line
+	9900 3250 10150 3250
+$Comp
+L Connector:Screw_Terminal_01x02 IN-24v1
+U 1 1 60713196
+P 1050 700
+F 0 "IN-24v1" V 1150 750 50  0000 R CNN
+F 1 "Screw_Terminal_01x02" V 923 512 50  0001 R CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" V 923 512 50  0001 R CNN
+F 3 "~" H 1050 700 50  0001 C CNN
+	1    1050 700 
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5250 1100 5450 1100
+Wire Wire Line
+	10300 3350 10300 3200
+Wire Wire Line
+	9900 3900 10350 3900
+Wire Wire Line
+	9900 4450 10400 4450
+Wire Wire Line
+	9200 5700 10150 5700
+Wire Wire Line
+	10150 5700 10150 4850
+Connection ~ 9200 5700
+Connection ~ 10150 4850
+Connection ~ 6500 1500
+Wire Wire Line
+	6500 1100 6500 1500
+Wire Wire Line
+	7200 1500 7450 1500
+Wire Wire Line
+	6500 1500 6600 1500
+$Comp
+L Regulator_Linear:L7805 U1
+U 1 1 601FB59C
+P 6900 1500
+F 0 "U1" H 6900 1742 50  0000 C CNN
+F 1 "L7805" H 6900 1651 50  0000 C CNN
+F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 6925 1350 50  0001 L CIN
+F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 6900 1450 50  0001 C CNN
+	1    6900 1500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6150 1500 6150 1550
+Wire Wire Line
+	6150 1850 6900 1850
+Wire Wire Line
+	6900 1850 6900 1800
+Wire Wire Line
+	6900 1850 7450 1850
+Wire Wire Line
+	7450 1850 7450 1800
+Connection ~ 6900 1850
+Wire Wire Line
+	4100 3050 5600 3050
+$Comp
+L Device:R_Network04 RN5
+U 1 1 6033C195
+P 2450 2750
+F 0 "RN5" H 2170 2704 50  0000 R CNN
+F 1 "R_200" H 2170 2795 50  0000 R CNN
+F 2 "Resistor_THT:R_Array_SIP5" V 2725 2750 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 2450 2750 50  0001 C CNN
+	1    2450 2750
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x02 OUT1
+U 1 1 603456A6
+P 10700 3400
+F 0 "OUT1" V 10800 3450 50  0000 R CNN
+F 1 "Screw_Terminal_01x02" V 10573 3212 50  0001 R CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" V 10573 3212 50  0001 R CNN
+F 3 "~" H 10700 3400 50  0001 C CNN
+	1    10700 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x02 OUT2
+U 1 1 6034739C
+P 10700 3100
+F 0 "OUT2" V 10800 3150 50  0000 R CNN
+F 1 "Screw_Terminal_01x02" V 10573 2912 50  0001 R CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" V 10573 2912 50  0001 R CNN
+F 3 "~" H 10700 3100 50  0001 C CNN
+	1    10700 3100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10400 3500 10500 3500
+Wire Wire Line
+	10400 4450 10400 3500
+Wire Wire Line
+	10350 3400 10500 3400
+Wire Wire Line
+	10350 3900 10350 3400
+$Comp
+L Device:LED Di7
+U 1 1 603BE8FB
+P 2400 2150
+F 0 "Di7" V 2500 2200 50  0000 R CNN
+F 1 "LED" V 2348 2032 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 2400 2150 50  0001 C CNN
+F 3 "~" H 2400 2150 50  0001 C CNN
+	1    2400 2150
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED Di8
+U 1 1 603BE901
+P 2250 2150
+F 0 "Di8" V 2350 2200 50  0000 R CNN
+F 1 "LED" V 2198 2032 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 2250 2150 50  0001 C CNN
+F 3 "~" H 2250 2150 50  0001 C CNN
+	1    2250 2150
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED Di6
+U 1 1 603BE908
+P 2550 2150
+F 0 "Di6" V 2650 2200 50  0000 R CNN
+F 1 "LED" V 2498 2032 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 2550 2150 50  0001 C CNN
+F 3 "~" H 2550 2150 50  0001 C CNN
+	1    2550 2150
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED Di5
+U 1 1 603BE913
+P 2700 2150
+F 0 "Di5" V 2800 2200 50  0000 R CNN
+F 1 "LED" V 2648 2032 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 2700 2150 50  0001 C CNN
+F 3 "~" H 2700 2150 50  0001 C CNN
+	1    2700 2150
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	2650 2950 4300 2950
+Connection ~ 4300 2950
+Wire Wire Line
+	4300 2950 4300 5700
+Wire Wire Line
+	2700 2300 2700 2550
+Wire Wire Line
+	2700 2550 2650 2550
+Wire Wire Line
+	2550 2300 2550 2550
+Wire Wire Line
+	2400 2300 2400 2550
+Wire Wire Line
+	2400 2550 2450 2550
+Wire Wire Line
+	2250 2300 2250 2550
+Wire Wire Line
+	2250 2550 2350 2550
+Wire Wire Line
+	1250 1800 1450 1800
+Wire Wire Line
+	3600 1800 3600 5000
+Wire Wire Line
+	1250 1700 1800 1700
+Wire Wire Line
+	3650 1700 3650 4950
+Wire Wire Line
+	1250 1450 1450 1450
+Wire Wire Line
+	4100 1450 4100 3050
+Wire Wire Line
+	1250 1350 1800 1350
+Wire Wire Line
+	4150 1350 4150 3150
+Wire Wire Line
+	2250 2000 2250 1350
+Connection ~ 2250 1350
+Wire Wire Line
+	2250 1350 4150 1350
+Wire Wire Line
+	2400 2000 2400 1450
+Connection ~ 2400 1450
+Wire Wire Line
+	2400 1450 4100 1450
+Wire Wire Line
+	2550 2000 2550 1700
+Connection ~ 2550 1700
+Wire Wire Line
+	2550 1700 3650 1700
+Wire Wire Line
+	2700 2000 2700 1800
+Connection ~ 2700 1800
+Wire Wire Line
+	2700 1800 3600 1800
+$Comp
+L Connector:Screw_Terminal_01x02 OUT_24v1
+U 1 1 60597EBB
+P 10700 2550
+F 0 "OUT_24v1" V 10800 2600 50  0000 R CNN
+F 1 "Screw_Terminal_01x02" V 10573 2362 50  0001 R CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" V 10573 2362 50  0001 R CNN
+F 3 "~" H 10700 2550 50  0001 C CNN
+	1    10700 2550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10150 3250 10150 3000
+Wire Wire Line
+	10150 3000 10500 3000
+Wire Wire Line
+	10500 3000 10500 2650
+Connection ~ 10150 3250
+Wire Wire Line
+	9900 2850 10300 2850
+Wire Wire Line
+	10300 2850 10300 3100
+Wire Wire Line
+	10500 3200 10300 3200
+Wire Wire Line
+	10500 3100 10300 3100
+Wire Wire Line
+	9850 2450 10500 2450
+Wire Wire Line
+	10500 2450 10500 2550
+Connection ~ 9850 2450
+Wire Wire Line
+	4300 1850 4500 1850
+Connection ~ 4400 2150
+Wire Wire Line
+	4400 2150 4900 2150
+Wire Wire Line
+	4400 1100 4400 2150
+Wire Wire Line
+	1250 1100 4400 1100
+Wire Wire Line
+	4500 1000 4500 1850
+Wire Wire Line
+	1250 1000 4500 1000
+Connection ~ 4500 1850
+Wire Wire Line
+	4500 1850 6150 1850
+Wire Wire Line
+	1250 600  4500 600 
+Wire Wire Line
+	4500 600  4500 1000
+Connection ~ 4500 1000
+Wire Wire Line
+	1250 700  5250 700 
+Wire Wire Line
+	5250 700  5250 1100
+$Comp
+L power:+24V #PWR0105
+U 1 1 60815DC6
+P 5450 1100
+F 0 "#PWR0105" H 5450 950 50  0001 C CNN
+F 1 "+24V" H 5465 1273 50  0000 C CNN
+F 2 "" H 5450 1100 50  0001 C CNN
+F 3 "" H 5450 1100 50  0001 C CNN
+	1    5450 1100
+	1    0    0    -1  
+$EndComp
+Connection ~ 5450 1100
+Wire Wire Line
+	5450 1100 5650 1100
+Wire Wire Line
+	10150 5750 10150 5700
+Connection ~ 10150 5700
+$Comp
+L Device:R R8
+U 1 1 60834E2E
+P 1950 1350
+F 0 "R8" V 1743 1350 50  0000 C CNN
+F 1 "R1k" V 1834 1350 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 1880 1350 50  0001 C CNN
+F 3 "~" H 1950 1350 50  0001 C CNN
+	1    1950 1350
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	2100 1350 2250 1350
+$Comp
+L Device:R R5
+U 1 1 608383BC
+P 1600 1800
+F 0 "R5" V 1393 1800 50  0000 C CNN
+F 1 "R1k" V 1484 1800 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 1530 1800 50  0001 C CNN
+F 3 "~" H 1600 1800 50  0001 C CNN
+	1    1600 1800
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	1750 1800 2700 1800
+$Comp
+L Device:R R6
+U 1 1 608388BB
+P 1950 1700
+F 0 "R6" V 1743 1700 50  0000 C CNN
+F 1 "R1k" V 1834 1700 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 1880 1700 50  0001 C CNN
+F 3 "~" H 1950 1700 50  0001 C CNN
+	1    1950 1700
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	2100 1700 2550 1700
+$Comp
+L Device:R R7
+U 1 1 6085161A
+P 1600 1450
+F 0 "R7" V 1393 1450 50  0000 C CNN
+F 1 "R1k" V 1484 1450 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 1530 1450 50  0001 C CNN
+F 3 "~" H 1600 1450 50  0001 C CNN
+	1    1600 1450
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	1750 1450 2400 1450
+$EndSCHEMATC
