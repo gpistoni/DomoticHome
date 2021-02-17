@@ -16,14 +16,17 @@ $EndDescr
 $Comp
 L Device:C c1
 U 1 1 6020A2CA
-P 7450 1650
-F 0 "c1" H 7565 1696 50  0000 L CNN
-F 1 "100nF" H 7565 1605 50  0000 L CNN
-F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm" H 7488 1500 50  0001 C CNN
-F 3 "~" H 7450 1650 50  0001 C CNN
-	1    7450 1650
+P 7700 1650
+F 0 "c1" H 7815 1696 50  0000 L CNN
+F 1 "100nF" H 7815 1605 50  0000 L CNN
+F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm" H 7738 1500 50  0001 C CNN
+F 3 "~" H 7700 1650 50  0001 C CNN
+	1    7700 1650
 	-1   0    0    1   
 $EndComp
+Connection ~ 6000 1800
+Wire Wire Line
+	6000 1800 5500 1800
 $Comp
 L Regulator_Linear:L7805 U1
 U 1 1 601FB59C
@@ -35,17 +38,21 @@ F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b
 	1    6850 1500
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	6000 1500 6000 1800
 $Comp
 L Device:CP C2
 U 1 1 6020AEB1
-P 6150 1650
-F 0 "C2" V 5895 1650 50  0000 C CNN
-F 1 "10uf" V 5986 1650 50  0000 C CNN
-F 2 "Capacitor_THT:CP_Radial_D7.5mm_P2.50mm" H 6188 1500 50  0001 C CNN
-F 3 "~" H 6150 1650 50  0001 C CNN
-	1    6150 1650
-	-1   0    0    1   
+P 6150 1500
+F 0 "C2" V 5895 1500 50  0000 C CNN
+F 1 "10uf" V 5986 1500 50  0000 C CNN
+F 2 "Capacitor_THT:CP_Radial_D7.5mm_P2.50mm" H 6188 1350 50  0001 C CNN
+F 3 "~" H 6150 1500 50  0001 C CNN
+	1    6150 1500
+	0    1    1    0   
 $EndComp
+Wire Wire Line
+	6000 1800 6850 1800
 $Comp
 L pspice:DIODE DP1
 U 1 1 601ED81C
@@ -57,6 +64,8 @@ F 3 "~" H 5850 1100 50  0001 C CNN
 	1    5850 1100
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	5500 850  5500 1800
 $Comp
 L Transistor_FET:IRF540N Q3
 U 1 1 601F8931
@@ -104,21 +113,26 @@ $EndComp
 $Comp
 L power:+24V #PWR0104
 U 1 1 602160C5
-P 7250 1100
-F 0 "#PWR0104" H 7250 950 50  0001 C CNN
-F 1 "+24V" H 7265 1273 50  0000 C CNN
-F 2 "" H 7250 1100 50  0001 C CNN
-F 3 "" H 7250 1100 50  0001 C CNN
-	1    7250 1100
+P 7250 1350
+F 0 "#PWR0104" H 7250 1200 50  0001 C CNN
+F 1 "+24V" H 7265 1523 50  0000 C CNN
+F 2 "" H 7250 1350 50  0001 C CNN
+F 3 "" H 7250 1350 50  0001 C CNN
+	1    7250 1350
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6500 1100 7250 1100
+	6500 1350 7250 1350
 Wire Wire Line
-	7450 1800 6850 1800
+	7700 1800 6850 1800
 Connection ~ 6850 1800
+Connection ~ 7250 1500
 Wire Wire Line
-	7650 2150 6950 2150
+	7250 1500 7700 1500
+Wire Wire Line
+	7250 2150 6950 2150
+Wire Wire Line
+	7250 1500 7250 2150
 $Comp
 L Connector:Screw_Terminal_01x02 PO3
 U 1 1 6022382A
@@ -364,6 +378,7 @@ F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 9000 4700 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	9200 4900 9200 5700
+Connection ~ 9200 5700
 Wire Wire Line
 	8900 4050 8900 4500
 Wire Wire Line
@@ -415,7 +430,11 @@ $EndComp
 Wire Wire Line
 	9950 2650 9700 2650
 Wire Wire Line
-	9850 1400 9850 1100
+	9850 1400 9850 1000
+Wire Wire Line
+	7650 1350 7650 1000
+Wire Wire Line
+	7650 1000 9850 1000
 Connection ~ 9850 1400
 Wire Wire Line
 	9850 1400 9850 1750
@@ -475,6 +494,10 @@ Wire Wire Line
 Wire Wire Line
 	6000 2150 6000 2650
 Connection ~ 6950 2150
+Wire Wire Line
+	9200 5700 10900 5700
+Wire Wire Line
+	10900 850  10900 5700
 $Comp
 L Connector:Screw_Terminal_01x02 TXRX1
 U 1 1 6054F688
@@ -498,13 +521,22 @@ F 3 "~" H 5250 600 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 Wire Wire Line
-	7150 1500 7450 1500
+	7150 1500 7250 1500
+Wire Wire Line
+	5500 850  10900 850 
+Wire Wire Line
+	5150 800  5150 1800
+Wire Wire Line
+	5150 1800 5500 1800
+Connection ~ 5500 1800
 Wire Wire Line
 	5250 800  5250 2150
 Wire Wire Line
 	5250 2150 6000 2150
 Connection ~ 6000 2150
-Connection ~ 7250 1100
+Connection ~ 7250 1350
+Wire Wire Line
+	7250 1350 7650 1350
 Wire Wire Line
 	6050 1100 6500 1100
 Wire Wire Line
@@ -512,10 +544,12 @@ Wire Wire Line
 Wire Wire Line
 	5350 1100 5650 1100
 Wire Wire Line
-	6150 1500 6500 1500
+	6500 1100 6500 1350
 Wire Wire Line
-	6500 1100 6500 1500
-Connection ~ 6500 1100
+	6300 1500 6500 1500
+Wire Wire Line
+	6500 1350 6500 1500
+Connection ~ 6500 1350
 Connection ~ 6500 1500
 Wire Wire Line
 	6500 1500 6550 1500
@@ -691,7 +725,11 @@ F 3 "~" H 4500 4200 50  0001 C CNN
 $EndComp
 Connection ~ 5250 2150
 Wire Wire Line
+	4500 4050 4500 4350
+Wire Wire Line
 	4900 5700 6200 5700
+Wire Wire Line
+	4900 4350 4900 4900
 Connection ~ 6200 5700
 Connection ~ 4900 5700
 Wire Wire Line
@@ -890,17 +928,23 @@ Wire Wire Line
 Wire Wire Line
 	4900 2150 4900 3850
 Wire Wire Line
-	3300 5700 4300 5700
+	3300 5700 4900 5700
 Wire Wire Line
 	5050 4200 5050 4750
 Wire Wire Line
 	4500 4050 4500 3850
 Wire Wire Line
 	4500 3850 4900 3850
+Connection ~ 4500 4050
+Connection ~ 4900 3850
+Wire Wire Line
+	4900 3850 4900 4050
 Wire Wire Line
 	4500 4350 4500 4900
 Wire Wire Line
 	4500 4900 4900 4900
+Connection ~ 4500 4350
+Connection ~ 4900 4900
 Wire Wire Line
 	4900 4900 4900 5700
 Wire Wire Line
@@ -1080,10 +1124,10 @@ Wire Wire Line
 Wire Wire Line
 	9500 4650 9600 4650
 $Comp
-L Device:LED D7
+L Device:LED D?
 U 1 1 60F57694
 P 9350 3900
-F 0 "D7" V 9450 3950 50  0000 R CNN
+F 0 "D?" V 9450 3950 50  0000 R CNN
 F 1 "LED" V 9298 3782 50  0001 R CNN
 F 2 "LED_THT:LED_D3.0mm" H 9350 3900 50  0001 C CNN
 F 3 "~" H 9350 3900 50  0001 C CNN
@@ -1124,43 +1168,4 @@ F 3 "https://www.arduino.cc/en/uploads/Main/ArduinoNanoManual23.pdf" H 6100 3650
 $EndComp
 Wire Wire Line
 	5300 2600 7500 2600
-Wire Wire Line
-	5150 800  5150 1800
-Wire Wire Line
-	7450 1500 7650 1500
-Wire Wire Line
-	7650 1500 7650 2150
-Connection ~ 7450 1500
-Connection ~ 6150 1800
-Wire Wire Line
-	6150 1800 6850 1800
-Wire Wire Line
-	7250 1100 9850 1100
-Wire Wire Line
-	5150 1800 6150 1800
-Wire Wire Line
-	5150 1800 4300 1800
-Wire Wire Line
-	4300 1800 4300 5700
-Connection ~ 5150 1800
-Connection ~ 4300 5700
-Wire Wire Line
-	4300 5700 4900 5700
-$Comp
-L power:GND #PWR0101
-U 1 1 613E1CB8
-P 6150 1800
-F 0 "#PWR0101" H 6150 1550 50  0001 C CNN
-F 1 "GND" H 6155 1627 50  0000 C CNN
-F 2 "" H 6150 1800 50  0001 C CNN
-F 3 "" H 6150 1800 50  0001 C CNN
-	1    6150 1800
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4900 4050 4900 3850
-Connection ~ 4900 3850
-Wire Wire Line
-	4900 4350 4900 4900
-Connection ~ 4900 4900
 $EndSCHEMATC
