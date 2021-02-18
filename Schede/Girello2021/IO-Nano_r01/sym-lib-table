@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name IO-Nano-rescue)(type Legacy)(uri ${KIPRJMOD}/IO-Nano-rescue.lib)(options "")(descr ""))
+)
