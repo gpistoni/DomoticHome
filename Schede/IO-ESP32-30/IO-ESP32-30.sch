@@ -27,12 +27,12 @@ $EndComp
 $Comp
 L pspice:DIODE DP1
 U 1 1 601ED81C
-P 5850 1100
-F 0 "DP1" H 5850 1365 50  0000 C CNN
-F 1 "DIODE" H 5850 1274 50  0000 C CNN
-F 2 "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" H 5850 1100 50  0001 C CNN
-F 3 "~" H 5850 1100 50  0001 C CNN
-	1    5850 1100
+P 5450 850
+F 0 "DP1" H 5450 1115 50  0000 C CNN
+F 1 "DIODE" H 5450 1024 50  0000 C CNN
+F 2 "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" H 5450 850 50  0001 C CNN
+F 3 "~" H 5450 850 50  0001 C CNN
+	1    5450 850 
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -140,10 +140,10 @@ Connection ~ 9850 2100
 Wire Wire Line
 	9950 2300 9700 2300
 $Comp
-L Connector:Screw_Terminal_01x04 OUT2
+L Connector:Screw_Terminal_01x04 OUT1
 U 1 1 604E6147
 P 11150 1900
-F 0 "OUT2" V 11250 1750 50  0000 L CNN
+F 0 "OUT1" V 11250 1750 50  0000 L CNN
 F 1 "Screw_Terminal_01x04" H 11230 1801 50  0001 L CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4-5.08_1x04_P5.08mm_Horizontal" H 11150 1900 50  0001 C CNN
 F 3 "~" H 11150 1900 50  0001 C CNN
@@ -153,10 +153,7 @@ $EndComp
 Connection ~ 6950 2150
 Connection ~ 7250 1100
 Wire Wire Line
-	6050 1100 6500 1100
-Wire Wire Line
 	6150 1500 6500 1500
-Connection ~ 6500 1100
 $Comp
 L Device:R_POT_TRIM RV1
 U 1 1 60658196
@@ -298,12 +295,12 @@ Connection ~ 4300 5700
 $Comp
 L power:GND #PWR0101
 U 1 1 613E1CB8
-P 6150 1850
-F 0 "#PWR0101" H 6150 1600 50  0001 C CNN
-F 1 "GND" H 6155 1677 50  0000 C CNN
-F 2 "" H 6150 1850 50  0001 C CNN
-F 3 "" H 6150 1850 50  0001 C CNN
-	1    6150 1850
+P 4300 5700
+F 0 "#PWR0101" H 4300 5450 50  0001 C CNN
+F 1 "GND" H 4305 5527 50  0000 C CNN
+F 2 "" H 4300 5700 50  0001 C CNN
+F 3 "" H 4300 5700 50  0001 C CNN
+	1    4300 5700
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -426,29 +423,16 @@ Wire Wire Line
 Wire Wire Line
 	8200 1600 8200 2700
 $Comp
-L power:GNDPWR #PWR0102
-U 1 1 606C8A0F
-P 10150 5750
-F 0 "#PWR0102" H 10150 5550 50  0001 C CNN
-F 1 "GNDPWR" H 10154 5596 50  0000 C CNN
-F 2 "" H 10150 5700 50  0001 C CNN
-F 3 "" H 10150 5700 50  0001 C CNN
-	1    10150 5750
-	1    0    0    -1  
-$EndComp
-$Comp
-L Connector:Screw_Terminal_01x02 GND-24v
+L Connector:Screw_Terminal_01x02 24-GND
 U 1 1 60713196
 P 4250 850
-F 0 "GND-24v" H 4168 617 50  0000 C CNN
+F 0 "24-GND" H 4168 617 50  0000 C CNN
 F 1 "Screw_Terminal_01x02" V 4123 662 50  0001 R CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" V 4123 662 50  0001 R CNN
 F 3 "~" H 4250 850 50  0001 C CNN
 	1    4250 850 
 	-1   0    0    1   
 $EndComp
-Wire Wire Line
-	5250 1100 5450 1100
 Connection ~ 6500 1500
 Wire Wire Line
 	6500 1100 6500 1500
@@ -485,27 +469,6 @@ Wire Wire Line
 	4500 1850 6150 1850
 Wire Wire Line
 	4450 750  4500 750 
-Wire Wire Line
-	4450 850  5250 850 
-Wire Wire Line
-	5250 850  5250 1100
-$Comp
-L power:+24V #PWR0105
-U 1 1 60815DC6
-P 5450 1100
-F 0 "#PWR0105" H 5450 950 50  0001 C CNN
-F 1 "+24V" H 5465 1273 50  0000 C CNN
-F 2 "" H 5450 1100 50  0001 C CNN
-F 3 "" H 5450 1100 50  0001 C CNN
-	1    5450 1100
-	1    0    0    -1  
-$EndComp
-Connection ~ 5450 1100
-Wire Wire Line
-	5450 1100 5650 1100
-Wire Wire Line
-	10150 5750 10150 5700
-Connection ~ 10150 5700
 Wire Wire Line
 	4400 2150 6950 2150
 Wire Wire Line
@@ -623,8 +586,6 @@ Wire Wire Line
 	10400 2500 10400 2850
 Wire Wire Line
 	10600 2850 10400 2850
-Wire Wire Line
-	10150 5700 10400 5700
 Wire Wire Line
 	10400 2850 10400 3100
 Connection ~ 10400 2850
@@ -855,10 +816,10 @@ Connection ~ 9850 4300
 Wire Wire Line
 	9950 4500 9700 4500
 $Comp
-L Connector:Screw_Terminal_01x04 OUT1
+L Connector:Screw_Terminal_01x04 OUT2
 U 1 1 60AA96A9
 P 11150 4100
-F 0 "OUT1" V 11250 3950 50  0000 L CNN
+F 0 "OUT2" V 11250 3950 50  0000 L CNN
 F 1 "Screw_Terminal_01x04" H 11230 4001 50  0001 L CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4-5.08_1x04_P5.08mm_Horizontal" H 11150 4100 50  0001 C CNN
 F 3 "~" H 11150 4100 50  0001 C CNN
@@ -990,9 +951,7 @@ Wire Wire Line
 	10400 5050 10400 5700
 Connection ~ 10400 5050
 Wire Wire Line
-	9850 2500 9850 3600
-Wire Wire Line
-	9000 3600 9200 3600
+	9850 2450 9850 3600
 Wire Wire Line
 	8300 3700 8300 3950
 Wire Wire Line
@@ -1031,8 +990,6 @@ Wire Wire Line
 	8700 5550 8700 5700
 Connection ~ 8700 5700
 Wire Wire Line
-	8700 5700 10150 5700
-Wire Wire Line
 	9100 4150 8500 4150
 Wire Wire Line
 	8500 4150 8500 5150
@@ -1057,12 +1014,12 @@ Wire Wire Line
 	7050 4800 4000 4800
 Connection ~ 4000 4800
 $Comp
-L ESP32:DOIT-ESP32-30PIN U?
+L ESP32:DOIT-ESP32-30PIN U2
 U 1 1 60305997
 P 6200 3200
-F 0 "U?" H 6175 3765 50  0000 C CNN
+F 0 "U2" H 6175 3765 50  0000 C CNN
 F 1 "DOIT-ESP32-30PIN" H 6175 3674 50  0000 C CNN
-F 2 "" H 6150 3650 50  0001 C CNN
+F 2 "ESP32:ESP32-DOIT-DEVKIT" H 6150 3650 50  0001 C CNN
 F 3 "" H 6150 3650 50  0001 C CNN
 	1    6200 3200
 	1    0    0    -1  
@@ -1277,21 +1234,16 @@ Wire Wire Line
 	10250 4000 10400 4000
 Connection ~ 10400 4000
 $Comp
-L Connector:Screw_Terminal_01x02 GND-24v
+L Connector:Screw_Terminal_01x02 24-GND
 U 1 1 60AA6264
 P 10750 850
-F 0 "GND-24v" H 10830 796 50  0000 L CNN
+F 0 "24-GND" H 10830 796 50  0000 L CNN
 F 1 "Screw_Terminal_01x02" V 10623 662 50  0001 R CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" V 10623 662 50  0001 R CNN
 F 3 "~" H 10750 850 50  0001 C CNN
 	1    10750 850 
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	10550 850  9850 850 
-Wire Wire Line
-	9850 850  9850 1100
-Connection ~ 9850 1100
 Wire Wire Line
 	10400 1800 10400 950 
 Wire Wire Line
@@ -1306,10 +1258,10 @@ Wire Wire Line
 Wire Wire Line
 	4750 2750 4750 3800
 $Comp
-L Connector:Screw_Terminal_01x04 AUX
+L Connector:Screw_Terminal_01x04 AUX1
 U 1 1 609AA000
 P 4850 2550
-F 0 "AUX" H 4930 2542 50  0000 L CNN
+F 0 "AUX1" H 4930 2542 50  0000 L CNN
 F 1 "Screw_Terminal_01x04" H 4930 2451 50  0001 L CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4-5.08_1x04_P5.08mm_Horizontal" H 4850 2550 50  0001 C CNN
 F 3 "~" H 4850 2550 50  0001 C CNN
@@ -1353,4 +1305,29 @@ Wire Wire Line
 Wire Wire Line
 	8000 4900 8000 4450
 Connection ~ 7500 4900
+Wire Wire Line
+	6050 1100 6500 1100
+Connection ~ 6500 1100
+Wire Wire Line
+	5650 850  6050 850 
+Wire Wire Line
+	6050 850  6050 1100
+Wire Wire Line
+	4450 850  5100 850 
+Wire Wire Line
+	8700 5700 10400 5700
+Connection ~ 9850 2450
+Wire Wire Line
+	9000 3600 9100 3600
+Wire Wire Line
+	6500 850  6500 600 
+Wire Wire Line
+	6500 600  5100 600 
+Wire Wire Line
+	5100 600  5100 850 
+Wire Wire Line
+	6500 850  10550 850 
+Connection ~ 5100 850 
+Wire Wire Line
+	5100 850  5250 850 
 $EndSCHEMATC
