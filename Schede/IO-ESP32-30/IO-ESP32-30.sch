@@ -423,10 +423,10 @@ Wire Wire Line
 Wire Wire Line
 	8200 1600 8200 2700
 $Comp
-L Connector:Screw_Terminal_01x02 24-GND
+L Connector:Screw_Terminal_01x02 24-GND1
 U 1 1 60713196
 P 4250 850
-F 0 "24-GND" H 4168 617 50  0000 C CNN
+F 0 "24-GND1" H 4168 617 50  0000 C CNN
 F 1 "Screw_Terminal_01x02" V 4123 662 50  0001 R CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" V 4123 662 50  0001 R CNN
 F 3 "~" H 4250 850 50  0001 C CNN
@@ -1234,10 +1234,10 @@ Wire Wire Line
 	10250 4000 10400 4000
 Connection ~ 10400 4000
 $Comp
-L Connector:Screw_Terminal_01x02 24-GND
+L Connector:Screw_Terminal_01x02 24-GND2
 U 1 1 60AA6264
 P 10750 850
-F 0 "24-GND" H 10830 796 50  0000 L CNN
+F 0 "24-GND2" H 10830 796 50  0000 L CNN
 F 1 "Screw_Terminal_01x02" V 10623 662 50  0001 R CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" V 10623 662 50  0001 R CNN
 F 3 "~" H 10750 850 50  0001 C CNN
@@ -1313,7 +1313,7 @@ Wire Wire Line
 Wire Wire Line
 	6050 850  6050 1100
 Wire Wire Line
-	4450 850  5100 850 
+	4450 850  4850 850 
 Wire Wire Line
 	8700 5700 10400 5700
 Connection ~ 9850 2450
@@ -1330,4 +1330,34 @@ Wire Wire Line
 Connection ~ 5100 850 
 Wire Wire Line
 	5100 850  5250 850 
+Text Label 10700 1400 0    50   ~ 0
+P1
+Text Label 10700 1750 0    50   ~ 0
+P2
+Text Label 10700 2100 0    50   ~ 0
+P3
+Text Label 10700 2450 0    50   ~ 0
+P4
+Text Label 10700 3600 0    50   ~ 0
+P5
+Text Label 10700 3950 0    50   ~ 0
+P6
+Text Label 10700 4300 0    50   ~ 0
+P7
+Text Label 10700 4650 0    50   ~ 0
+P8
+$Comp
+L power:VCC #PWR?
+U 1 1 60347DEF
+P 4850 850
+F 0 "#PWR?" H 4850 700 50  0001 C CNN
+F 1 "VCC" H 4865 1023 50  0000 C CNN
+F 2 "" H 4850 850 50  0001 C CNN
+F 3 "" H 4850 850 50  0001 C CNN
+	1    4850 850 
+	1    0    0    -1  
+$EndComp
+Connection ~ 4850 850 
+Wire Wire Line
+	4850 850  5100 850 
 $EndSCHEMATC
