@@ -5,3 +5,5 @@
 *.o
 /Qt/build-*
 /android/build*
+/Schede/IO-ESP32-30-Relay/gerber
+/Schede/IO-ESP32-30/gerber
