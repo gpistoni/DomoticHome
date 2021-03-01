@@ -5,3 +5,4 @@
 *.o
 /Qt/build-*
 /android/build*
+fp-info-cache
