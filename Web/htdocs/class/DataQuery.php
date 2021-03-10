@@ -48,4 +48,12 @@ class DataQuery
 		//DEBUG// printf("\n ID inserted: %d", $id );
 		return $id;
     }
+	
+	public function Wattage_day() 
+	{
+        $query = "select * FROM Wattage_day";
+        $Result = $this->ds->select($query);
+		return $Result;
+    }
+	
 }
