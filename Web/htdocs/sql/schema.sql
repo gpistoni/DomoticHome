@@ -8,8 +8,8 @@ USE DATABASE my_pistonihome;
 
 CREATE TABLE `registered_users` (
   `id` int(8) NOT NULL,
-  `user_name` varchar(255) NOT NULL,
-  `display_name` varchar(255) NOT NULL,
+  `user_name` varchar(255) NOT NULL UNIQUE,
+  `display_name` varchar(255) NOT NULL UNIQUE,
   `password` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

@@ -14,6 +14,7 @@ if (! empty($_SESSION["userId"])) {
     }
 }
 ?>
+
 <html>
 <head>
 <title>User Login</title>
@@ -25,6 +26,11 @@ if (! empty($_SESSION["userId"])) {
             <div class="member-dashboard">Welcome <b><?php echo $displayName; ?></b>, You have successfully logged in!<br>
                 Click to <a href="./logout.php" class="logout-button">Logout</a>
             </div>
+        </div>
+		<div class="dashboard">
+			<div class="member-dashboard">DASHBOARD</a>
+			 </div>
+         </div>
         </div>
     </div>
 </body>
