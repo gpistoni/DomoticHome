@@ -42,7 +42,8 @@ SOURCES += \
     ../QWidget/ButtonVar.cpp \
     main_server.cpp \
     server.cpp \
-    dbevents.cpp
+    dbevents.cpp \
+    ../QLibrary/HttpRequest.cpp
 
 HEADERS += \
     server.h \
@@ -57,6 +58,7 @@ HEADERS += \
     ../QWidget/ButtonVar.h \
     ../QWidget/LogMessage.h \
     effemeridi.h \
-    dbevents.h
+    dbevents.h \
+    ../QLibrary/HttpRequest.h
 
 FORMS +=

@@ -14,6 +14,7 @@ dbEvents::dbEvents()
 //    query.exec("INSERT into person values(101, 'Danny', 'Young') ");
 //    query.exec("SELECT * FROM person");
 //    m_db.close();
+
 }
 
 

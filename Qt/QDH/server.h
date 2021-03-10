@@ -5,7 +5,7 @@
 #include "QTimer"
 #include "dbevents.h"
 
-#define SERVER_VER "1.7.2"
+#define SERVER_VER "1.8.0"
 
 class ServerDH : public QObject
 {
@@ -45,6 +45,7 @@ private:
 
     QElapsedTimer t_UpdateValues;
     QElapsedTimer t_DbLog;
+    QElapsedTimer t_PushWebData;
     QElapsedTimer t_BoilerACS;
     QElapsedTimer t_ExternalLight;
     QElapsedTimer t_evRooms;
@@ -62,9 +63,11 @@ public:
     void manage_Progs(bool immediate);
 
     void manage_DbLog(int sec);
+    void manage_PushWebData(int sec);
+
     void manage_BoilerACS(int sec);
     void manage_ExternalLight(int sec);
-    void manage_evRooms(int sec);
+    void manage_EvRooms(int sec);
     void manage_PDC(int sec);
     void manage_Pumps(int sec);
 

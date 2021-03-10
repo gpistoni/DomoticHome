@@ -1,6 +1,7 @@
 #include "server.h"
 #include "../QLibrary/DataTable.h"
 #include "../QLibrary/HttpServer.h"
+#include "../QLibrary/HttpRequest.h"
 #include "QThread"
 #include "QFile"
 #include <unistd.h>
@@ -14,6 +15,7 @@ ServerDH::ServerDH(bool runPrograms) :
 {
     t_UpdateValues.start();
     t_DbLog.start();
+    t_PushWebData.start();
     t_BoilerACS.start();
     t_ExternalLight.start();
     t_evRooms.start();
@@ -124,11 +126,13 @@ void ServerDH::manage_Progs(bool immediate)
     {
         dr.LogMessage("--- Manage_Progs immediate ---"  );
         manage_DbLog(-1);
+        manage_PushWebData(-1);
+
         manage_ExternalLight(-1);
         manage_BoilerACS(-1);
         manage_Pumps(-1);
         manage_PDC(-1);
-        manage_evRooms(-1);
+        manage_EvRooms(-1);
 
         manage_Internet(-1);
         manage_Remote212(-1);
@@ -136,16 +140,43 @@ void ServerDH::manage_Progs(bool immediate)
     else
     {
         manage_DbLog(10*60);
+        manage_PushWebData(15*60);
+
         manage_ExternalLight(10*60);
         manage_BoilerACS(6*60);
         manage_PDC(5*60);
         manage_Pumps(2*60);
-        manage_evRooms(10*60);
+        manage_EvRooms(10*60);
 
         manage_Internet(1*60);
         manage_Remote212(2*60);
     }
 }
+
+void ServerDH::manage_PushWebData(int sec)
+{
+    if ( t_PushWebData.elapsed() < sec * 1000 ) return;
+    t_PushWebData.restart();
+    dr.LogMessage("--- PushWebData ---"  );
+
+    QString url("http://pistonihome.altervista.org/data/wattagerow.php?");
+    url += "Prod=";
+    url += QString::number((int)dr.wProduced);
+    url += "&Cons=";
+    url += QString::number((int)dr.wConsumed);
+    url += "&L1=";
+    url += QString::number((int)dr.wL1);
+    url += "&L2=";
+    url += QString::number((int)dr.wL2);
+    url += "&L3=";
+    url += QString::number((int)dr.wL3);
+
+    dr.LogMessage(url);
+
+    HttpRequest request(&dr);
+    request.executeGet(url);
+}
+
 
 void ServerDH::manage_DbLog(int sec)
 {
@@ -260,8 +291,8 @@ void ServerDH::manage_ExternalLight(int sec)
     if ( t_ExternalLight.elapsed() < sec * 1000 ) return;
     t_ExternalLight.restart();
 
-    dr.LogMessage(QDateTime::currentDateTime().date().toString() );
     dr.LogMessage("--- ExternalLight ---"  );
+    dr.LogMessage(QDateTime::currentDateTime().date().toString() );
 
     bool lightSide = false;
     bool lightLamp = false;
@@ -287,7 +318,7 @@ void ServerDH::manage_ExternalLight(int sec)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void  ServerDH::manage_evRooms( int sec )
+void  ServerDH::manage_EvRooms( int sec )
 {
     if ( t_evRooms.elapsed() < sec * 1000 ) return;
     t_evRooms.restart();

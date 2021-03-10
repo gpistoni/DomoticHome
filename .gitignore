@@ -5,7 +5,7 @@
 *.o
 /Qt/build-*
 /android/build*
-<<<<<<< HEAD
+
 /Qt/QDH/moc_ButtonVar.cpp
 /Qt/QDH/moc_ButtonVarForced.cpp
 /Qt/QDH/moc_HttpServer.cpp
@@ -15,7 +15,4 @@
 /Qt/QDH/moc_mainwindow.cpp
 /Qt/QDH/moc_server.cpp
 /Qt/QDH/ui_mainwindow.h
-=======
-/Schede/IO-ESP32-30-Relay/gerber
-/Schede/IO-ESP32-30/gerber
->>>>>>> c0eb752d7e02fdc650086efca95e23a94665e5e4
+
