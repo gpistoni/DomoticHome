@@ -2,7 +2,9 @@
 namespace Phppot;
 use \Phppot\DataSource;
 
-class Member
+// class contains the query used to add rows and print tables
+
+class DataQuery
 {
     private $dbConn;
     private $ds;
@@ -12,7 +14,7 @@ class Member
         require_once "DataSource.php";
         $this->ds = new DataSource();
     }
-
+/*
     function getMemberById($memberId)
     {
         $query = "select * FROM registered_users WHERE id = ?";
@@ -45,5 +47,16 @@ class Member
 		printf("%d Row inserted:", $id );
 		return $id;
     }
-
+	*/
+	
+	public function addWattageRow($produced, $consumed, $l1, $l2, $l3)
+	{
+        //$passwordHash = md5($password);		
+		$query = "INSERT INTO `wattage` (`Dt`, `Produced`, `Consumed`, `L1`, `L2`, `L3`) VALUES (CURRENT_TIME(), ?, ?, ?, ?, ?) ";
+        $paramType = "iiiii";
+        $paramArray = array($produced, $consumed, $l1, $l2, $l3);
+		$id = $this->ds->insert($query, $paramType, $paramArray);
+		printf("\n Row inserted:", $id );
+		return $id;
+    }
 }

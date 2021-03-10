@@ -1,5 +1,6 @@
 CREATE TABLE `Wattage` (
- `DT` datetime NOT NULL,
+ `id` int NOT NULL AUTO_INCREMENT,
+ `Dt` datetime NOT NULL,
  `Produced` int NOT NULL,
  `Consumed` int NOT NULL,
  `L1` int, 
@@ -9,6 +10,7 @@ CREATE TABLE `Wattage` (
 
 ALTER TABLE `Wattage` 
   ADD PRIMARY KEY (`DT`);
+  
 
 --
 -- Dumping data for table `registered_users`

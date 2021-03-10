@@ -1,7 +1,7 @@
 <?php
 namespace Phppot;
-
 use \Phppot\Member;
+
 if (!empty($_POST["login"])) 
 {
     session_start();

@@ -1,6 +1,5 @@
 <?php
 namespace Phppot;
-
 use \Phppot\Member;
 
 if (! empty($_SESSION["userId"])) 

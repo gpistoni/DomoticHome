@@ -4,8 +4,6 @@ namespace Phppot;
 /**
  * Generic datasource class for handling DB operations.
  * Uses MySqli and PreparedStatements.
- *
- * @version 2.3
  */
 class DataSource
 {
@@ -94,7 +92,7 @@ class DataSource
      */
     public function insert($query, $paramType, $paramArray)
     {
-        print $query;
+        //DEBUG// print $query;
         $stmt = $this->conn->prepare($query);
         $this->bindQueryParams($stmt, $paramType, $paramArray);
         $stmt->execute();
