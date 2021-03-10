@@ -33,7 +33,7 @@ if (! empty($_SESSION["userId"]))
 	require_once "./class/DataQuery.php";
 	
 	$dataquery = new DataQuery();
-	$result = $dataquery->Wattage_day();
+	$result = $dataquery->Wattage_dayh();
 
 	$sz = count($result);
 

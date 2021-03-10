@@ -12,9 +12,38 @@ ALTER TABLE `Wattage`
   ADD PRIMARY KEY (`DT`);
   
 
---
--- Dumping data for table `registered_users`
---
-INSERT INTO `wattage` (`DT`, `Produced`, `Consumed`, `L1`, `L2`, `L3`) VALUES (CURRENT_TIME(), '1', '2', '3', '4', '5') 
+CREATE VIEW `Wattage_day` AS 
+SELECT CAST(`Dt` as DATE) AS Day, 
+AVG(`Produced`) AS Produced,
+AVG(`Consumed`) AS Consumed,
+AVG(`L1`) AS L1, 
+AVG(`L2`) AS L2, 
+AVG(`L3`) AS L3 
+FROM `Wattage` 
+WHERE 1 
+GROUP BY CAST(`Dt` as DATE);
 
-COMMIT;
+CREATE VIEW `Wattage_dayh` AS 
+SELECT CAST(`Dt` as DATETIME) AS Day, 
+AVG(`Produced`) AS Produced,
+AVG(`Consumed`) AS Consumed,
+AVG(`L1`) AS L1, 
+AVG(`L2`) AS L2, 
+AVG(`L3`) AS L3 
+FROM `Wattage` 
+WHERE 1 
+GROUP BY HOUR(`Dt`), DAY(`Dt`);
+
+CREATE VIEW `Wattage_dayh4` AS 
+SELECT CAST(`Dt` as DATETIME) AS Day, 
+AVG(`Produced`) AS Produced,
+AVG(`Consumed`) AS Consumed,
+AVG(`L1`) AS L1, 
+AVG(`L2`) AS L2, 
+AVG(`L3`) AS L3 
+FROM `Wattage` 
+WHERE 1 
+GROUP BY FLOOR( HOUR(`Dt`) / 4 ), DAY(`Dt`);
+
+
+

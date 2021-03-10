@@ -20,8 +20,7 @@ class DataQuery
         $query = "select * FROM registered_users WHERE id = ?";
         $paramType = "i";
         $paramArray = array($memberId);
-        $memberResult = $this->ds->select($query, $paramType, $paramArray);
-        
+        $memberResult = $this->ds->select($query, $paramType, $paramArray);        
         return $memberResult;
     }
     
@@ -52,6 +51,13 @@ class DataQuery
 	public function Wattage_day() 
 	{
         $query = "select * FROM Wattage_day";
+        $Result = $this->ds->select($query);
+		return $Result;
+    }
+	
+	public function Wattage_dayh() 
+	{
+        $query = "select * FROM Wattage_dayh";
         $Result = $this->ds->select($query);
 		return $Result;
     }
