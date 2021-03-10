@@ -24,17 +24,11 @@ if (! empty($_SESSION["userId"]))
     <div>
 		<div class="dashboard">
 			<div class="member-dashboard">
-			DASHBOARD
+			WATTAGE
 			</div>
-			<?php require_once './view/_topMenu.php'; ?>
          </div>
-		 <div
-			<form name="TopMenuForm" action="./index.php" method="POST">
-				<input type="submit" name="NewPage" value="Wattage" />
-				<input type="submit" name="NewPage" value="Status" />
-			</form>
-		</div>
-	</div>
+		 <?php require_once './view/_topMenu.php'; ?>
+        </div>
     </div>
 </body>
 </html>

@@ -36,27 +36,16 @@ class DataQuery
             return true;
         }
     }
-	
-	public function addUser($username, $password, $email)
-	{
-        $passwordHash = md5($password);		
-		$query = "INSERT INTO `registered_users` (`user_name`, `display_name`, `password`, `email`) VALUES (?, ?, ?, ?)";
-        $paramType = "ssss";
-        $paramArray = array( $username, $username, $passwordHash, $email);
-		$id = $this->ds->insert($query, $paramType, $paramArray);
-		printf("%d Row inserted:", $id );
-		return $id;
-    }
-	*/
+	*/	
 	
 	public function addWattageRow($produced, $consumed, $l1, $l2, $l3)
 	{
-        //$passwordHash = md5($password);		
+	
 		$query = "INSERT INTO `wattage` (`Dt`, `Produced`, `Consumed`, `L1`, `L2`, `L3`) VALUES (CURRENT_TIME(), ?, ?, ?, ?, ?) ";
         $paramType = "iiiii";
         $paramArray = array($produced, $consumed, $l1, $l2, $l3);
 		$id = $this->ds->insert($query, $paramType, $paramArray);
-		printf("\n Row inserted:", $id );
+		//DEBUG// printf("\n ID inserted: %d", $id );
 		return $id;
     }
 }
