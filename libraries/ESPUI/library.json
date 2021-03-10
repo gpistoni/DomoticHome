@@ -6,28 +6,24 @@
     "type": "git",
     "url": "https://github.com/s00500/ESPUI.git"
   },
-  "authors": [
-    {
-      "name": "Lukas Bachschwell",
-      "email": "lukas@lbsfilm.at",
-      "url": "https://lbsfilm.at",
-      "maintainer": true
-    }
-  ],
-  "dependencies": [
-    {
+  "authors": [{
+    "name": "Lukas Bachschwell",
+    "email": "lukas@lbsfilm.at",
+    "url": "https://lbsfilm.at",
+    "maintainer": true
+  }],
+  "dependencies": [{
       "name": "ESP Async WebServer",
       "authors": "Hristo Gochkov",
       "frameworks": "arduino"
     },
     {
       "name": "ArduinoJson",
-      "version": "5.13.4",
       "authors": "Benoit Blanchon",
       "frameworks": "arduino"
     }
   ],
-  "version": "1.6.3",
+  "version": "2.0.2",
   "frameworks": "arduino",
   "platforms": "*"
 }
