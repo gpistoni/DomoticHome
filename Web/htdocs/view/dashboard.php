@@ -17,24 +17,13 @@ if (! empty($_SESSION["userId"]))
 
 <html>
 <head>
-<title>User Login</title>
-<link href="./view/css/style.css" rel="stylesheet" type="text/css" />
+	<title>DASHBOARD</title>
+	<link href="./view/css/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <div>
-		<div class="dashboard">
-			<div class="member-dashboard">
-			DASHBOARD
-			</div>
-			<?php require_once './view/_topMenu.php'; ?>
-         </div>
-		 <div
-			<form name="TopMenuForm" action="./index.php" method="POST">
-				<input type="submit" name="NewPage" value="Wattage" />
-				<input type="submit" name="NewPage" value="Status" />
-			</form>
-		</div>
-	</div>
-    </div>
+	<?php 
+	 $displayPage = "DASHBOARD";
+	 require_once './view/_topMenu.php'; 
+	?>
 </body>
 </html>

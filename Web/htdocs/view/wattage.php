@@ -17,18 +17,13 @@ if (! empty($_SESSION["userId"]))
 
 <html>
 <head>
-<title>User Login</title>
-<link href="./view/css/style.css" rel="stylesheet" type="text/css" />
+	<title>WATTAGE</title>
+	<link href="./view/css/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <div>
-		<div class="dashboard">
-			<div class="member-dashboard">
-			WATTAGE
-			</div>
-         </div>
-		 <?php require_once './view/_topMenu.php'; ?>
-        </div>
-    </div>
+	<?php 
+	 $displayPage = "WATTAGE";
+	 require_once './view/_topMenu.php'; 
+	?>
 </body>
 </html>
