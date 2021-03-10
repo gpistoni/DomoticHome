@@ -24,6 +24,6 @@ ALTER TABLE `registered_users`
 -- Dumping data for table `registered_users`
 --
 INSERT INTO `registered_users` (`id`, `user_name`, `display_name`, `password`, `email`) VALUES
-(1, 'pistoni', 'pistoni', 'gpisto', 'mia@mail.com');
+(1, 'pistoni', 'pistoni', '17275ea800af2cdce9a1a82fe9fa1eea', 'mia@mail.com');
 
 COMMIT;

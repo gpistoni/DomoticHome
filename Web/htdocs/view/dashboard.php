@@ -3,7 +3,8 @@ namespace Phppot;
 
 use \Phppot\Member;
 
-if (! empty($_SESSION["userId"])) {
+if (! empty($_SESSION["userId"])) 
+{
     require_once __DIR__ . './../class/Member.php';
     $member = new Member();
     $memberResult = $member->getMemberById($_SESSION["userId"]);

@@ -15,7 +15,7 @@ class DataSource
     const HOST = 'localhost';
     const USERNAME = 'root';
     const PASSWORD = '';
-    const DATABASENAME = 'db';
+    const DATABASENAME = 'my_pistonihome';
 
     private $conn;
 
@@ -63,20 +63,24 @@ class DataSource
     {
         $stmt = $this->conn->prepare($query);
         
-        if(!empty($paramType) && !empty($paramArray)) {
+        if(!empty($paramType) && !empty($paramArray)) 
+		{
             $this->bindQueryParams($stmt, $paramType, $paramArray);
         }
         
         $stmt->execute();
         $result = $stmt->get_result();
         
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
+        if ($result->num_rows > 0) 
+		{
+            while ($row = $result->fetch_assoc()) 
+			{
                 $resultset[] = $row;
             }
         }
         
-        if (! empty($resultset)) {
+        if (! empty($resultset)) 
+		{
             return $resultset;
         }
     }
@@ -108,7 +112,8 @@ class DataSource
     {
         $stmt = $this->conn->prepare($query);
         
-        if(!empty($paramType) && !empty($paramArray)) {
+        if(!empty($paramType) && !empty($paramArray)) 
+		{
             $this->bindQueryParams($stmt, $paramType="", $paramArray=array());
         }
         $stmt->execute();
@@ -124,13 +129,11 @@ class DataSource
     public function bindQueryParams($stmt, $paramType, $paramArray=array())
     {
         $paramValueReference[] = & $paramType;
-        for ($i = 0; $i < count($paramArray); $i ++) {
+        for ($i = 0; $i < count($paramArray); $i ++) 
+		{
             $paramValueReference[] = & $paramArray[$i];
         }
-        call_user_func_array(array(
-            $stmt,
-            'bind_param'
-        ), $paramValueReference);
+        call_user_func_array(array($stmt,'bind_param'), $paramValueReference);
     }
     
     /**
@@ -144,7 +147,8 @@ class DataSource
     {
         $stmt = $this->conn->prepare($query);
         
-        if(!empty($paramType) && !empty($paramArray)) {
+        if(!empty($paramType) && !empty($paramArray)) 
+		{
             $this->bindQueryParams($stmt, $paramType, $paramArray);
         }
         
