@@ -7,8 +7,8 @@ CREATE TABLE `Wattage` (
  `L3` int ) 
  ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-ALTER TABLE `registered_users`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `Wattage` 
+  ADD PRIMARY KEY (`DT`);
 
 --
 -- Dumping data for table `registered_users`

@@ -45,4 +45,17 @@ class Member
 		printf("%d Row inserted:", $id );
 		return $id;
     }
+	
+	
+	public function addWattageRow($produced, $consumed, $l1, $l2, $l3)
+	{
+        $passwordHash = md5($password);		
+		/*$query = "INSERT INTO `registered_users` (`user_name`, `display_name`, `password`, `email`) VALUES (?, ?, ?, ?)";*/
+		$query = "INSERT INTO `wattage` (`DT`, `Produced`, `Consumed`, `L1`, `L2`, `L3`) VALUES (CURRENT_TIME(), ?, ?, ?, ?, ?) ";
+        $paramType = "iiiii";
+        $paramArray = array($produced, $consumed, $l1, $l2, $l3);
+		$id = $this->ds->insert($query, $paramType, $paramArray);
+		printf("%d Row inserted:", $id );
+		return $id;
+    }
 }

@@ -2,9 +2,9 @@
 -- Table structure for table `registered_users`
 --
 
-CREATE DATABASE db;
+CREATE DATABASE my_pistonihome;
 
-USE DATABASE db;
+USE DATABASE my_pistonihome;
 
 CREATE TABLE `registered_users` (
   `id` int(8) NOT NULL,
