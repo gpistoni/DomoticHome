@@ -18,13 +18,8 @@ if(isset($_GET['L3']))		$L3 = $_GET['L3']; 		else $L3 =0;
 
 <?php if (isset($newID)) {?> 
 <html>
-<head>
-<title>AddWattageRow</title>
-</head>
 <body>
-    <div>
-        AddWattageRow ID: <?php echo $newID; ?> 
-    </div>
+    AddWattageRow ID: <?php echo $newID; ?> 
 </body>
 </html>
 <?php }?>
