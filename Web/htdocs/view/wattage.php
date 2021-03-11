@@ -23,7 +23,7 @@ if (! empty($_SESSION["userId"]))
 <body>
 	<?php 
 	 $displayPage = "WATTAGE";
-	 require_once './view/_topMenu.php'; 
+	  require_once (__DIR__ . "/_TopMenu.php");
 	?>
 	
 	
@@ -52,7 +52,7 @@ if (! empty($_SESSION["userId"]))
 		$row = $result[$i];
 		
 		echo "<tr>";
-		echo "<td>" . $row['Day'] . "</td>";
+		echo "<td>" . $row['Dt'] . "</td>";
 		echo "<td>" . $row['Produced'] . "</td>";
 		echo "<td>" . $row['Consumed'] . "</td>";
 		echo "<td>" . $row['L1'] . "</td>";
@@ -64,7 +64,12 @@ if (! empty($_SESSION["userId"]))
 	
 	echo "</br>";
 	//DEBUG//
-	print_r($row);
+	for($i=0; $i<$sz; $i++)
+	{
+		$row = $result[$i];
+		print_r($row);
+		}
+		
 			
 	?>
 
