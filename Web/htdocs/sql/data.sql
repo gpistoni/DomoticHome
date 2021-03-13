@@ -1,17 +1,13 @@
 CREATE TABLE `Wattage` (
- `id` int NOT NULL AUTO_INCREMENT,
+ `id` int PRIMARY KEY  AUTO_INCREMENT,
  `Dt` datetime NOT NULL,
- `Produced` int NOT NULL,
- `Consumed` int NOT NULL,
+ `Produced` int,
+ `Consumed` int,
  `L1` int, 
  `L2` int, 
- `L3` int ) 
- ENGINE=InnoDB DEFAULT CHARSET=latin1;
+ `L3` int );
 
-ALTER TABLE `Wattage` 
-  ADD PRIMARY KEY (`DT`);
   
-
 CREATE VIEW `Wattage_day` AS 
 SELECT CAST(`Dt` as DATE) AS Day, 
 AVG(`Produced`) AS Produced,

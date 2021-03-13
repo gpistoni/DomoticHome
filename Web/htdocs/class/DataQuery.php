@@ -40,24 +40,24 @@ class DataQuery
 	public function addWattageRow($produced, $consumed, $l1, $l2, $l3)
 	{
 	
-		$query = "INSERT INTO `wattage` (`Dt`, `Produced`, `Consumed`, `L1`, `L2`, `L3`) VALUES (CURRENT_TIME(), ?, ?, ?, ?, ?) ";
-        $paramType = "iiiii";
-        $paramArray = array($produced, $consumed, $l1, $l2, $l3);
+		$query = "INSERT INTO `Wattage` (`Dt`, `Produced`, `Consumed`, `L1`, `L2`, `L3`) VALUES (CURRENT_TIME(), ?, ?, ?, ?, ?) ";
+        	$paramType = "iiiii";
+        	$paramArray = array($produced, $consumed, $l1, $l2, $l3);
 		$id = $this->ds->insert($query, $paramType, $paramArray);
 		//DEBUG// printf("\n ID inserted: %d", $id );
 		return $id;
-    }
+    	}
 	
 	public function Wattage_day() 
 	{
-        $query = "select * FROM Wattage_day";
+        $query = "select * FROM Wattage";
         $Result = $this->ds->select($query);
 		return $Result;
-    }
+    	}
 	
 	public function Wattage_dayh() 
 	{
-        $query = "select * FROM Wattage_dayh";
+        $query = "select * FROM Wattage";
         $Result = $this->ds->select($query);
 		return $Result;
     }

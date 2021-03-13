@@ -14,8 +14,6 @@ if(isset($_GET['L3']))		$L3 = $_GET['L3']; 		else $L3 =0;
  $dataquery = new DataQuery();
  $newID = $dataquery->addWattageRow($Prod, $Cons, $L1, $L2, $L3);
 
-//INSERT INTO `wattage` (`DT`, `Produced`, `Consumed`, `L1`, `L2`, `L3`) VALUES (CURRENT_TIME(), '1', '2', '3', '4', '5') 
-
 ?> 
 
 <?php if (isset($newID)) {?> 

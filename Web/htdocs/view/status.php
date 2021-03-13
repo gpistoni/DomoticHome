@@ -23,7 +23,7 @@ if (! empty($_SESSION["userId"]))
 <body>
 	<?php 
 	 $displayPage = "STATUS";
-	 require_once './view/_topMenu.php'; 
+	  require_once (__DIR__ . "/_TopMenu.php");
 	?>
 </body>
 </html>
