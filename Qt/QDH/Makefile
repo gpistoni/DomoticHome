@@ -61,14 +61,16 @@ SOURCES       = mainwindow.cpp \
 		../QWidget/InfoTempSetpoint.cpp \
 		../QWidget/InfoBarVar.cpp \
 		../QWidget/ButtonVar.cpp \
-		dbevents.cpp moc_mainwindow.cpp \
+		dbevents.cpp \
+		../QLibrary/HttpRequest.cpp moc_mainwindow.cpp \
 		moc_server.cpp \
 		moc_HttpServer.cpp \
 		moc_ButtonVarForced.cpp \
 		moc_LogMessage.cpp \
 		moc_InfoTempSetpoint.cpp \
 		moc_InfoBarVar.cpp \
-		moc_ButtonVar.cpp
+		moc_ButtonVar.cpp \
+		moc_HttpRequest.cpp
 OBJECTS       = mainwindow.o \
 		server.o \
 		HttpClient.o \
@@ -83,6 +85,7 @@ OBJECTS       = mainwindow.o \
 		InfoBarVar.o \
 		ButtonVar.o \
 		dbevents.o \
+		HttpRequest.o \
 		moc_mainwindow.o \
 		moc_server.o \
 		moc_HttpServer.o \
@@ -90,7 +93,8 @@ OBJECTS       = mainwindow.o \
 		moc_LogMessage.o \
 		moc_InfoTempSetpoint.o \
 		moc_InfoBarVar.o \
-		moc_ButtonVar.o
+		moc_ButtonVar.o \
+		moc_HttpRequest.o
 DIST          = /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/common/unix.conf \
 		/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/common/linux.conf \
@@ -170,7 +174,8 @@ DIST          = /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf \
 		../QWidget/InfoTempSetpoint.h \
 		../QWidget/InfoBarVar.h \
 		../QWidget/ButtonVar.h \
-		dbevents.h mainwindow.cpp \
+		dbevents.h \
+		../QLibrary/HttpRequest.h mainwindow.cpp \
 		server.cpp \
 		../QLibrary/HttpClient.cpp \
 		../QLibrary/HttpParser.cpp \
@@ -183,7 +188,8 @@ DIST          = /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf \
 		../QWidget/InfoTempSetpoint.cpp \
 		../QWidget/InfoBarVar.cpp \
 		../QWidget/ButtonVar.cpp \
-		dbevents.cpp
+		dbevents.cpp \
+		../QLibrary/HttpRequest.cpp
 QMAKE_TARGET  = QDH
 DESTDIR       = ../../../
 TARGET        = ../../../QDH
@@ -359,8 +365,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h server.h ../QLibrary/HttpClient.h ../QLibrary/HttpParser.h ../QLibrary/HttpServer.h ../QLibrary/DataTable.h ../QLibrary/DataVars.h ../QWidget/ButtonVarForced.h ../QWidget/LogMessage.h ../QWidget/InfoTempSetpoint.h ../QWidget/InfoBarVar.h ../QWidget/ButtonVar.h dbevents.h $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.cpp server.cpp ../QLibrary/HttpClient.cpp ../QLibrary/HttpParser.cpp ../QLibrary/HttpServer.cpp ../QLibrary/DataTable.cpp ../QLibrary/DataVars.cpp main.cpp ../QWidget/ButtonVarForced.cpp ../QWidget/LogMessage.cpp ../QWidget/InfoTempSetpoint.cpp ../QWidget/InfoBarVar.cpp ../QWidget/ButtonVar.cpp dbevents.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h server.h ../QLibrary/HttpClient.h ../QLibrary/HttpParser.h ../QLibrary/HttpServer.h ../QLibrary/DataTable.h ../QLibrary/DataVars.h ../QWidget/ButtonVarForced.h ../QWidget/LogMessage.h ../QWidget/InfoTempSetpoint.h ../QWidget/InfoBarVar.h ../QWidget/ButtonVar.h dbevents.h ../QLibrary/HttpRequest.h $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.cpp server.cpp ../QLibrary/HttpClient.cpp ../QLibrary/HttpParser.cpp ../QLibrary/HttpServer.cpp ../QLibrary/DataTable.cpp ../QLibrary/DataVars.cpp main.cpp ../QWidget/ButtonVarForced.cpp ../QWidget/LogMessage.cpp ../QWidget/InfoTempSetpoint.cpp ../QWidget/InfoBarVar.cpp ../QWidget/ButtonVar.cpp dbevents.cpp ../QLibrary/HttpRequest.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -387,9 +393,9 @@ benchmark: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_server.cpp moc_HttpServer.cpp moc_ButtonVarForced.cpp moc_LogMessage.cpp moc_InfoTempSetpoint.cpp moc_InfoBarVar.cpp moc_ButtonVar.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_server.cpp moc_HttpServer.cpp moc_ButtonVarForced.cpp moc_LogMessage.cpp moc_InfoTempSetpoint.cpp moc_InfoBarVar.cpp moc_ButtonVar.cpp moc_HttpRequest.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_server.cpp moc_HttpServer.cpp moc_ButtonVarForced.cpp moc_LogMessage.cpp moc_InfoTempSetpoint.cpp moc_InfoBarVar.cpp moc_ButtonVar.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_server.cpp moc_HttpServer.cpp moc_ButtonVarForced.cpp moc_LogMessage.cpp moc_InfoTempSetpoint.cpp moc_InfoBarVar.cpp moc_ButtonVar.cpp moc_HttpRequest.cpp
 moc_mainwindow.cpp: mainwindow.h \
 		/usr/lib/arm-linux-gnueabihf/qt5/bin/moc
 	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtSql -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include mainwindow.h -o moc_mainwindow.cpp
@@ -434,6 +440,13 @@ moc_ButtonVar.cpp: ../QLibrary/DataVars.h \
 		/usr/lib/arm-linux-gnueabihf/qt5/bin/moc
 	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtSql -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../QWidget/ButtonVar.h -o moc_ButtonVar.cpp
 
+moc_HttpRequest.cpp: ../QLibrary/DataTable.h \
+		../QLibrary/HttpClient.h \
+		../QLibrary/DataVars.h \
+		../QLibrary/HttpRequest.h \
+		/usr/lib/arm-linux-gnueabihf/qt5/bin/moc
+	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtSql -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../QLibrary/HttpRequest.h -o moc_HttpRequest.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
 compiler_uic_make_all: ui_mainwindow.h
@@ -473,6 +486,7 @@ server.o: server.cpp server.h \
 		../QLibrary/DataVars.h \
 		dbevents.h \
 		../QLibrary/HttpServer.h \
+		../QLibrary/HttpRequest.h \
 		effemeridi.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o server.o server.cpp
 
@@ -528,8 +542,17 @@ ButtonVar.o: ../QWidget/ButtonVar.cpp ../QWidget/ButtonVar.h \
 		../QLibrary/DataVars.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ButtonVar.o ../QWidget/ButtonVar.cpp
 
-dbevents.o: dbevents.cpp dbevents.h
+dbevents.o: dbevents.cpp dbevents.h \
+		../QLibrary/DataTable.h \
+		../QLibrary/HttpClient.h \
+		../QLibrary/DataVars.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dbevents.o dbevents.cpp
+
+HttpRequest.o: ../QLibrary/HttpRequest.cpp ../QLibrary/HttpRequest.h \
+		../QLibrary/DataTable.h \
+		../QLibrary/HttpClient.h \
+		../QLibrary/DataVars.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o HttpRequest.o ../QLibrary/HttpRequest.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
@@ -554,6 +577,9 @@ moc_InfoBarVar.o: moc_InfoBarVar.cpp
 
 moc_ButtonVar.o: moc_ButtonVar.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_ButtonVar.o moc_ButtonVar.cpp
+
+moc_HttpRequest.o: moc_HttpRequest.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_HttpRequest.o moc_HttpRequest.cpp
 
 ####### Install
 

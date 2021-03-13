@@ -40,7 +40,8 @@ SOURCES += \
     ../QWidget/InfoTempSetpoint.cpp \
     ../QWidget/InfoBarVar.cpp \
     ../QWidget/ButtonVar.cpp \
-    dbevents.cpp
+    dbevents.cpp \
+    ../QLibrary/HttpRequest.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -55,7 +56,8 @@ HEADERS += \
     ../QWidget/InfoTempSetpoint.h \
     ../QWidget/InfoBarVar.h \
     ../QWidget/ButtonVar.h \
-    dbevents.h
+    dbevents.h \
+    ../QLibrary/HttpRequest.h
 
 FORMS += \
         mainwindow.ui
