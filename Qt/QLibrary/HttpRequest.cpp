@@ -2,40 +2,83 @@
 #include <QDebug>
 #include <QUrlQuery>
 #include <QEventLoop>
+#include <QThread>
+#include <QProgressDialog>
+#include <unistd.h>
 
-HttpRequest::HttpRequest(DataTable *dr, QObject* parent) :
-    QObject(parent),
-    mAccessManager(),
-    m_dr(dr)
+HttpRequest::HttpRequest(QObject* parent) :
+    QObject(parent)
 {
-   connect(&mAccessManager, &QNetworkAccessManager::finished, this, &HttpRequest::replyFinished);
+   //connect(&mAccessManager, &QNetworkAccessManager::finished, this, &HttpRequest::replyFinished);
 }
 
-void HttpRequest::executeGet(QUrl url)
+void HttpRequest::executeGet(const QUrl &url)
 {
-    mAccessManager.get(QNetworkRequest(url));
+    //url =             // "https://pistonihome.altervista.org/data/wattagerow.php?Prod=10&Cons=5010&L1=10&L2=20&L3=30";
+
+//    if ( QThread::currentThread()!= this->thread())  qDebug()<<"ERR";
+//    reply = mAccessManager.get(QNetworkRequest(url));
+
+    //connect(reply, &QNetworkReply::finished, this, &HttpRequest::httpFinished);
+    //connect(reply, &QIODevice::readyRead, this, &HttpRequest::httpReadyRead);
+    qDebug()<<"";
+    qDebug()<<url;
+
+    mAccessManager = new QNetworkAccessManager();
+    connect(mAccessManager, SIGNAL(finished(QNetworkReply*)), this, SLOT( replyFinished(QNetworkReply*) ));
+    reply = mAccessManager->get(QNetworkRequest(url));
+    connect(reply, &QNetworkReply::finished, this, &HttpRequest::httpFinished);
+    connect(reply, &QIODevice::readyRead, this, &HttpRequest::httpReadyRead);
+    sleep(1);
+    qDebug() << " GET result:" << reply->readAll();
+    reply->deleteLater();
 }
+
+void HttpRequest::httpFinished()
+{
+     qDebug()<<"httpFinished";
+
+    if (reply->error())
+    {
+        reply->deleteLater();
+        reply = nullptr;
+        return;
+    }
+
+    reply->deleteLater();
+    reply = nullptr;
+}
+
+void HttpRequest::httpReadyRead()
+{
+    // this slot gets called every time the QNetworkReply has new data.
+    // We read all of its new data and write it into the file.
+    // That way we use less RAM than when reading it at the finished()
+    // signal of the QNetworkReply
+    qDebug()<< "Test" << QString(reply->readAll());
+}
+
 
 void HttpRequest::executePost()
 {
-    QNetworkRequest request(QUrl("http://httpbin.org/post"));
-    request.setHeader(QNetworkRequest::ContentTypeHeader,
-                      "application/x-www-form-urlencoded");
-    QUrlQuery urlQuery;
-    urlQuery.addQueryItem("book", "Mastering Qt 5");
+//    QNetworkRequest request(QUrl("http://httpbin.org/post"));
+//    request.setHeader(QNetworkRequest::ContentTypeHeader,
+//                      "application/x-www-form-urlencoded");
+//    QUrlQuery urlQuery;
+//    urlQuery.addQueryItem("book", "Mastering Qt 5");
 
-    QUrl params;
-    params.setQuery(urlQuery);
+//    QUrl params;
+//    params.setQuery(urlQuery);
 
-    QNetworkReply* reply = mAccessManager.post(request, params.toEncoded());
-    connect(reply, &QNetworkReply::readyRead, [reply] ()
-    {
-        qDebug() << "Ready to read from reply";
-    });
-    connect(reply, &QNetworkReply::sslErrors, [this] (QList<QSslError> errors)
-    {
-        qWarning() << "SSL errors" << errors;
-    });
+//    QNetworkReply* reply = mAccessManager.post(request, params.toEncoded());
+//    connect(reply, &QNetworkReply::readyRead, [reply] ()
+//    {
+//        qDebug() << "Ready to read from reply";
+//    });
+//    connect(reply, &QNetworkReply::sslErrors, [this] (QList<QSslError> errors)
+//    {
+//        qWarning() << "SSL errors" << errors;
+//    });
 }
 
 void HttpRequest::executeBlockingGet()
@@ -66,11 +109,13 @@ void HttpRequest::replyFinished(QNetworkReply* reply)
         if (reply->error())
         {
             QString err = reply->errorString();
-            m_dr->LogMessage(err);
+            qDebug() << err;
+            //m_dr->LogMessage(err);
         }
 
         QString answer = reply->readAll();
-        m_dr->LogMessage(answer);
+           qDebug() << answer;
+        //m_dr->LogMessage(answer);
     }
 
     reply->deleteLater();
@@ -80,3 +125,4 @@ void HttpRequest::replyReadyRead()
 {
 
 }
+

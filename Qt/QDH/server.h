@@ -1,6 +1,7 @@
 #pragma once
 #include <QObject>
 #include "../QLibrary/DataTable.h"
+#include "../QLibrary/HttpRequest.h"
 #include "QDateTime"
 #include "QTimer"
 #include "dbevents.h"
@@ -17,7 +18,7 @@ public:
 
 private:
     DataTable dr;    
-    dbEvents m_dbEvents;
+    //dbEvents m_dbEvents;
 
     bool m_running = true;
     bool m_runPrograms;

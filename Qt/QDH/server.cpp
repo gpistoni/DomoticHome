@@ -1,7 +1,6 @@
 #include "server.h"
 #include "../QLibrary/DataTable.h"
 #include "../QLibrary/HttpServer.h"
-#include "../QLibrary/HttpRequest.h"
 #include "QThread"
 #include "QFile"
 #include <unistd.h>
@@ -9,7 +8,7 @@
 
 
 // --- CONSTRUCTOR ---
-ServerDH::ServerDH(bool runPrograms) :
+ServerDH::ServerDH(bool runPrograms ) :
     dr("192.168.1.200", 80),
     m_runPrograms(runPrograms)
 {
@@ -26,7 +25,7 @@ ServerDH::ServerDH(bool runPrograms) :
     t_InternetConnection.start();
     t_Remote212.start();
 
-    m_dbEvents.CreateTables();
+    //m_dbEvents.CreateTables();
 }
 
 // --- DECONSTRUCTOR ---
@@ -171,9 +170,9 @@ void ServerDH::manage_PushWebData(int sec)
     url += "&L3=";
     url += QString::number((int)dr.wL3);
 
-    dr.LogMessage(url);
+    //dr.LogMessage(url);
 
-    HttpRequest request(&dr);
+    HttpRequest request;
     request.executeGet(url);
 }
 
@@ -182,10 +181,10 @@ void ServerDH::manage_DbLog(int sec)
 {
     if ( t_DbLog.elapsed() < sec * 1000 ) return;
     t_DbLog.restart();
-    dr.LogMessage("--- DbLog ---"  );
 
-    m_dbEvents.LogEnergy( (int)dr.wProduced, (int)dr.wConsumed, (int)dr.wL1, (int)dr.wL2, (int)dr.wL3);
-    m_dbEvents.LogTemperature( dr );
+    //dr.LogMessage("--- DbLog ---"  );
+    //m_dbEvents.LogEnergy( (int)dr.wProduced, (int)dr.wConsumed, (int)dr.wL1, (int)dr.wL2, (int)dr.wL3);
+    //m_dbEvents.LogTemperature( dr );
 }
 
 void ServerDH::manage_Remote212(int sec)

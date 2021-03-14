@@ -8,6 +8,21 @@ int main(int argc, char *argv[])
 
     std::cerr << "Start SERVER "<< SERVER_VER << std::endl;
 
+    /*
+    QNetworkAccessManager qnam;
+    QUrl url( "https://pistonihome.altervista.org/data/wattagerow.php?Prod=100&Cons=5010&L1=10&L2=20&L3=30");
+    qnam.get(QNetworkRequest(url));
+    */
+
+    //HttpRequest pHttpRequest;
+    //pHttpRequest = std::make_shared<HttpRequest>();
+    //m_pHttpRequest->executeGet(url);
+
+    // Primo giro a vuoto
+    QUrl url( "http://pistonihome.altervista.org/data/wattagerow.php");
+    HttpRequest request;
+    request.executeGet(url);
+
     // Server
     QThread serverthread;
     ServerDH server(true);
