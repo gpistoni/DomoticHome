@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     //m_pHttpRequest->executeGet(url);
 
     // Primo giro a vuoto
-    QUrl url( "http://pistonihome.altervista.org/data/wattagerow.php");
+    QUrl url( "http://pistonihome.altervista.org/data/set.php?Cons=1");
     HttpRequest request;
     request.executeGet(url);
 

@@ -10,22 +10,20 @@ class HttpRequest : public QObject
     Q_OBJECT
 
 private:
-    QNetworkAccessManager *mAccessManager;
-    QNetworkReply *reply;
-
+    static QNetworkAccessManager mAccessManager;
 public:
     HttpRequest(QObject* parent = 0);
 
-    void executeGet(const QUrl &requestedUrl);
+    QString executeGet(const QUrl &requestedUrl);
     void executePost();
-    void executeBlockingGet();
+    QString executeBlockingGet(const QUrl &requestedUrl);
 
-private slots:
-    void replyFinished(QNetworkReply* reply);
-    void replyReadyRead();   
+//private slots:
+//    void replyFinished(QNetworkReply* reply);
+//    void replyReadyRead();
 
-    void httpFinished();
-    void httpReadyRead();
+//    void httpFinished();
+//    void httpReadyRead();
 
 };
 
