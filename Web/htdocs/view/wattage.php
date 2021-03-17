@@ -33,7 +33,7 @@ if (! empty($_SESSION["userId"]))
 	require_once "./class/DataQuery.php";
 	
 	$dataquery = new DataQuery();
-	$result = $dataquery->Wattage_day();
+	$result = $dataquery->Wattage_dayh(4);
 
 	$sz = count($result);
 
@@ -63,7 +63,7 @@ if (! empty($_SESSION["userId"]))
 	echo "</table>";
 	
 	//////////////////////////////////////////////////////////
-	$result = $dataquery->Wattage_dayh("4");
+	$result = $dataquery->Wattage_all();
 
 	$sz = count($result);
 
@@ -82,7 +82,7 @@ if (! empty($_SESSION["userId"]))
 		$row = $result[$i];
 		
 		echo "<tr>";
-		echo "<td>" . $row['Day'] . "</td>";
+		echo "<td>" . $row['Dt'] . "</td>";
 		echo "<td>" . $row['Produced'] . "</td>";
 		echo "<td>" . $row['Consumed'] . "</td>";
 		echo "<td>" . $row['L1'] . "</td>";

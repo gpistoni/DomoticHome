@@ -59,7 +59,7 @@ public function Wattage_remove()
 
 public function Wattage_all() 
 {
-	$query = "select * FROM Wattage";
+	$query = "SELECT * FROM Wattage";
 	$Result = $this->ds->select($query);
 	return $Result;
 }
@@ -76,8 +76,8 @@ public function Wattage_day()
 	$query .= "AVG(`L3`) AS L3 "; 
 	$query .= "FROM `Wattage` ";
 	$query .= "WHERE 1 ";
-	$query .= "GROUP BY CAST(`Dt` as DATE) "; 
-	
+	$query .= "GROUP BY CAST(`Dt` as DATE) ";
+
 	$Result = $this->ds->select($query);
 	return $Result;
 }
