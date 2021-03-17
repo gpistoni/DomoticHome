@@ -1,8 +1,10 @@
-CREATE TABLE `Wattage` (
+CREATE TABLE IF NOT EXIST `Wattage` (
  `id` int PRIMARY KEY  AUTO_INCREMENT,
  `Dt` datetime NOT NULL,
  `Produced` int,
  `Consumed` int,
+ `SelfConsumed` int,
+ `Surplus` int, 
  `L1` int, 
  `L2` int, 
  `L3` int );

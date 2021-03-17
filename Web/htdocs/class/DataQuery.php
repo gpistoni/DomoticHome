@@ -37,16 +37,31 @@ class DataQuery
     }
 	*/	
 	
-	public function addWattageRow($produced, $consumed, $l1, $l2, $l3)
-	{
+	public function addWattageTable()
+	{	
+		$query =  "CREATE TABLE IF NOT EXIST `Wattage` (";
+		$query .= "`id` int PRIMARY KEY  AUTO_INCREMENT,";
+		$query .= "`Dt` datetime NOT NULL,";
+		$query .= "`Produced` int,";
+		$query .= "`Consumed` int,";
+		$query .= "`SelfConsumed` int,";
+		$query .= "`Surplus` int, ";
+		$query .= "`L1` int, ";
+		$query .= "`L2` int, ";
+		$query .= "`L3` int );";
+		
+		$id = $this->ds->execute($query);
+		return $id;
+	}
 	
+	public function addWattageRow($produced, $consumed, $l1, $l2, $l3)
+	{	
 		$query = "INSERT INTO `Wattage` (`Dt`, `Produced`, `Consumed`, `L1`, `L2`, `L3`) VALUES (CURRENT_TIME(), ?, ?, ?, ?, ?) ";
         	$paramType = "iiiii";
         	$paramArray = array($produced, $consumed, $l1, $l2, $l3);
 		$id = $this->ds->insert($query, $paramType, $paramArray);
-		//DEBUG// printf("\n ID inserted: %d", $id );
 		return $id;
-    	}
+    }
 	
 	public function Wattage_day() 
 	{
