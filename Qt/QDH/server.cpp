@@ -125,7 +125,7 @@ void ServerDH::manage_Progs(bool immediate)
     {
         dr.LogMessage("--- Manage_Progs immediate ---"  );
         manage_DbLog(-1);
-        manage_PushWebData(-1);
+        manage_PushWebData(0);
 
         manage_ExternalLight(-1);
         manage_BoilerACS(-1);
@@ -154,11 +154,11 @@ void ServerDH::manage_Progs(bool immediate)
 
 void ServerDH::manage_PushWebData(int sec)
 {
-    if ( t_PushWebData.elapsed() < sec * 1000 ) return;
+    if (!t_PushWebData.hasExpired(sec * 1000)) return;
     t_PushWebData.restart();
     dr.LogMessage("--- PushWebData ---"  );
 
-    QString url("http://pistonihome.altervista.org/data/wattagerow.php?");
+    QString url("http://pistonihome.altervista.org/data/set.php?");
     url += "Prod=";
     url += QString::number((int)dr.wProduced);
     url += "&Cons=";
@@ -170,16 +170,22 @@ void ServerDH::manage_PushWebData(int sec)
     url += "&L3=";
     url += QString::number((int)dr.wL3);
 
-    //dr.LogMessage(url);
+    dr.LogMessage(url);
 
-    HttpRequest request;
-    request.executeGet(url);
+  //  HttpRequest request;
+  //  std::string result = request.executeGet(url);
+  //  dr.LogMessage(result.c_str());
+
+    //sleep(10);
+    HttpRequest request2;
+    QString result2 = request2.executeBlockingGet(url);
+    dr.LogMessage(result2);
 }
 
 
 void ServerDH::manage_DbLog(int sec)
 {
-    if ( t_DbLog.elapsed() < sec * 1000 ) return;
+    if (!t_DbLog.hasExpired(sec * 1000) ) return;
     t_DbLog.restart();
 
     //dr.LogMessage("--- DbLog ---"  );

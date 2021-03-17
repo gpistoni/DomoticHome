@@ -1,56 +1,50 @@
-<?php
-namespace Phppot;
-use \Phppot\Member;
+ <?php require_once (__DIR__ . "/_head.php"); ?>
 
-if (! empty($_SESSION["userId"])) 
-{
-    require_once __DIR__ . './../class/Member.php';
-    $member = new Member();
-    $memberResult = $member->getMemberById($_SESSION["userId"]);
-    if(!empty($memberResult[0]["display_name"])) {
-        $displayName = ucwords($memberResult[0]["display_name"]);
-    } else {
-        $displayName = $memberResult[0]["user_name"];
-    }
-}
-?>
-
-<html>
-<head>
-	<title>WATTAGE</title>
-	<link href="./view/css/style.css" rel="stylesheet" type="text/css" />
-</head>
 <body>
-	<?php 
-	 $displayPage = "WATTAGE";
-	  require_once (__DIR__ . "/_TopMenu.php");
-	?>
+<!-- Barra superiore -->
+<?php require_once (__DIR__ . "/_topbar.php"); ?>
+<div class="container-fluid">
+  <div class="row">
+	<!-- Barra sinistra con menu -->
+	<?php require_once (__DIR__ . "/_leftbar.php"); ?>
+	<!-------------------------------------------------------------------------------------------------------------->
+	<!-- CENTRALE -->
+	 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+	<!-- titolo -->
+	<div id="Wattage" class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom ">
+			<h1 class="h2">Produzione</h1>
+			<div class="btn-toolbar mb-2 mb-md-0">
+			  <div class="btn-group me-2">
+				<button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+				<button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+			  </div>
+			</div>
+	</div>
 	
-	
-	<?php
-	use \Phppot\DataQuery;
-
-	require_once "./class/DataQuery.php";
-	
+<<<<<<< HEAD
 	$dataquery = new DataQuery();
 	$result = $dataquery->Wattage_dayh(4);
 
 	$sz = count($result);
-
-	echo "<table border='1'>
-	<tr>
-	<th>Day</th>
-	<th>Produced</th>
-	<th>Consumed</th>
-	<th>L1</th>
-	<th>L2</th>
-	<th>L3</th>
-	</tr>";
-
-	for($i=0; $i<$sz; $i++)
-	{
-		$row = $result[$i];
+=======
+	<ul class="list-group">
+		<li>
+		<p>Produzione Oraria</p>
 		
+		<?php
+		use \Phppot\DataQuery;
+		use \Phppot\PrintObjects;
+>>>>>>> 62ff707c3d9c6fbe04d8b70f3e9bc9b535b9e884
+
+		require_once "./class/DataQuery.php";
+		require_once "./class/PrintObjects.php";
+		
+		$dataquery = new DataQuery();
+		$result = $dataquery->Wattage_dayh();
+
+		$sz = count($result);
+		
+<<<<<<< HEAD
 		echo "<tr>";
 		echo "<td>" . $row['Day'] . "</td>";
 		echo "<td>" . $row['Produced'] . "</td>";
@@ -100,6 +94,18 @@ if (! empty($_SESSION["userId"]))
 	//	print_r($row);
 	//	}	
 	?>
+=======
+		echo PrintObjects::BuildTable( $result, "class='table table-striped table-sm w-auto'");
+		
+		//print_r($result);
+		?>
+		
+		</li>
+	</ul>
+>>>>>>> 62ff707c3d9c6fbe04d8b70f3e9bc9b535b9e884
 	
 </body>
 </html>
+	
+	
+ <?php require_once (__DIR__ . "/_tail.php"); ?>

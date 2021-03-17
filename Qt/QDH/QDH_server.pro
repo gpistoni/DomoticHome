@@ -10,7 +10,7 @@ QT += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-# TARGET = /root/dh/dh_server
+TARGET = /root/dh/dh_server
 
 CONFIG += console
 CONFIG -= app_bundle

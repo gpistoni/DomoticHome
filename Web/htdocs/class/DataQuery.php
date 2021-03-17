@@ -37,6 +37,7 @@ class DataQuery
     }
 	*/	
 	
+<<<<<<< HEAD
 public function addWattageRow($produced, $consumed, $l1, $l2, $l3)
 {
 
@@ -67,6 +68,34 @@ public function Wattage_all()
 public function Wattage_day() 
 {
 	$this->Wattage_remove();
+=======
+	public function addWattageTable()
+	{	
+		$query =  "CREATE TABLE IF NOT EXIST `Wattage` (";
+		$query .= "`id` int PRIMARY KEY  AUTO_INCREMENT,";
+		$query .= "`Dt` datetime NOT NULL,";
+		$query .= "`Produced` int,";
+		$query .= "`Consumed` int,";
+		$query .= "`SelfConsumed` int,";
+		$query .= "`Surplus` int, ";
+		$query .= "`L1` int, ";
+		$query .= "`L2` int, ";
+		$query .= "`L3` int );";
+		
+		$id = $this->ds->execute($query);
+		return $id;
+	}
+	
+	public function addWattageRow($produced, $consumed, $selfConsumed, $surplus, $l1, $l2, $l3)
+	{	
+		$query = "INSERT INTO `Wattage` (`Dt`, `Produced`, `Consumed`, `SelfConsumed`, `Surplus`, `L1`, `L2`, `L3`)";
+		$query .= "VALUES (CURRENT_TIME(), ?, ?, ?, ?, ?, ?, ?) ";
+        $paramType = "iiiiiii";
+        $paramArray = array($produced, $consumed, $selfConsumed, $surplus, $l1, $l2, $l3);
+		$id = $this->ds->insert($query, $paramType, $paramArray);
+		return $id;
+    }
+>>>>>>> 62ff707c3d9c6fbe04d8b70f3e9bc9b535b9e884
 	
 	$query = "SELECT CAST(`Dt` as DATE) AS Day, ";
 	$query .= "AVG(`Produced`) AS Produced, ";
