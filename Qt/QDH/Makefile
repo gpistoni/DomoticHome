@@ -48,7 +48,8 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = mainwindow.cpp \
+SOURCES       = dbmanager.cpp \
+		mainwindow.cpp \
 		server.cpp \
 		../QLibrary/HttpClient.cpp \
 		../QLibrary/HttpParser.cpp \
@@ -71,7 +72,8 @@ SOURCES       = mainwindow.cpp \
 		moc_InfoBarVar.cpp \
 		moc_ButtonVar.cpp \
 		moc_HttpRequest.cpp
-OBJECTS       = mainwindow.o \
+OBJECTS       = dbmanager.o \
+		mainwindow.o \
 		server.o \
 		HttpClient.o \
 		HttpParser.o \
@@ -162,7 +164,8 @@ DIST          = /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/lex.prf \
-		QDH.pro mainwindow.h \
+		QDH.pro dbmanager.h \
+		mainwindow.h \
 		server.h \
 		../QLibrary/HttpClient.h \
 		../QLibrary/HttpParser.h \
@@ -175,7 +178,8 @@ DIST          = /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf \
 		../QWidget/InfoBarVar.h \
 		../QWidget/ButtonVar.h \
 		dbevents.h \
-		../QLibrary/HttpRequest.h mainwindow.cpp \
+		../QLibrary/HttpRequest.h dbmanager.cpp \
+		mainwindow.cpp \
 		server.cpp \
 		../QLibrary/HttpClient.cpp \
 		../QLibrary/HttpParser.cpp \
@@ -365,8 +369,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h server.h ../QLibrary/HttpClient.h ../QLibrary/HttpParser.h ../QLibrary/HttpServer.h ../QLibrary/DataTable.h ../QLibrary/DataVars.h ../QWidget/ButtonVarForced.h ../QWidget/LogMessage.h ../QWidget/InfoTempSetpoint.h ../QWidget/InfoBarVar.h ../QWidget/ButtonVar.h dbevents.h ../QLibrary/HttpRequest.h $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.cpp server.cpp ../QLibrary/HttpClient.cpp ../QLibrary/HttpParser.cpp ../QLibrary/HttpServer.cpp ../QLibrary/DataTable.cpp ../QLibrary/DataVars.cpp main.cpp ../QWidget/ButtonVarForced.cpp ../QWidget/LogMessage.cpp ../QWidget/InfoTempSetpoint.cpp ../QWidget/InfoBarVar.cpp ../QWidget/ButtonVar.cpp dbevents.cpp ../QLibrary/HttpRequest.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents dbmanager.h mainwindow.h server.h ../QLibrary/HttpClient.h ../QLibrary/HttpParser.h ../QLibrary/HttpServer.h ../QLibrary/DataTable.h ../QLibrary/DataVars.h ../QWidget/ButtonVarForced.h ../QWidget/LogMessage.h ../QWidget/InfoTempSetpoint.h ../QWidget/InfoBarVar.h ../QWidget/ButtonVar.h dbevents.h ../QLibrary/HttpRequest.h $(DISTDIR)/
+	$(COPY_FILE) --parents dbmanager.cpp mainwindow.cpp server.cpp ../QLibrary/HttpClient.cpp ../QLibrary/HttpParser.cpp ../QLibrary/HttpServer.cpp ../QLibrary/DataTable.cpp ../QLibrary/DataVars.cpp main.cpp ../QWidget/ButtonVarForced.cpp ../QWidget/LogMessage.cpp ../QWidget/InfoTempSetpoint.cpp ../QWidget/InfoBarVar.cpp ../QWidget/ButtonVar.cpp dbevents.cpp ../QLibrary/HttpRequest.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -403,7 +407,8 @@ moc_mainwindow.cpp: mainwindow.h \
 moc_server.cpp: ../QLibrary/DataTable.h \
 		../QLibrary/HttpClient.h \
 		../QLibrary/DataVars.h \
-		dbevents.h \
+		../QLibrary/HttpRequest.h \
+		dbmanager.h \
 		server.h \
 		/usr/lib/arm-linux-gnueabihf/qt5/bin/moc
 	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtSql -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include server.h -o moc_server.cpp
@@ -440,10 +445,7 @@ moc_ButtonVar.cpp: ../QLibrary/DataVars.h \
 		/usr/lib/arm-linux-gnueabihf/qt5/bin/moc
 	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtSql -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../QWidget/ButtonVar.h -o moc_ButtonVar.cpp
 
-moc_HttpRequest.cpp: ../QLibrary/DataTable.h \
-		../QLibrary/HttpClient.h \
-		../QLibrary/DataVars.h \
-		../QLibrary/HttpRequest.h \
+moc_HttpRequest.cpp: ../QLibrary/HttpRequest.h \
 		/usr/lib/arm-linux-gnueabihf/qt5/bin/moc
 	/usr/lib/arm-linux-gnueabihf/qt5/bin/moc $(DEFINES) -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/root/DomoticHome/Qt/QDH -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtWebSockets -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtSql -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/arm-linux-gnueabihf/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/arm-linux-gnueabihf/6/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/6/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../QLibrary/HttpRequest.h -o moc_HttpRequest.cpp
 
@@ -466,6 +468,13 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 
 ####### Compile
 
+dbmanager.o: dbmanager.cpp dbmanager.h \
+		../QLibrary/DataTable.h \
+		../QLibrary/HttpClient.h \
+		../QLibrary/DataVars.h \
+		../QLibrary/HttpRequest.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dbmanager.o dbmanager.cpp
+
 mainwindow.o: mainwindow.cpp mainwindow.h \
 		ui_mainwindow.h \
 		../QWidget/ButtonVarForced.h \
@@ -477,16 +486,17 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		server.h \
 		../QLibrary/DataTable.h \
 		../QLibrary/HttpClient.h \
-		dbevents.h
+		../QLibrary/HttpRequest.h \
+		dbmanager.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
 server.o: server.cpp server.h \
 		../QLibrary/DataTable.h \
 		../QLibrary/HttpClient.h \
 		../QLibrary/DataVars.h \
-		dbevents.h \
-		../QLibrary/HttpServer.h \
 		../QLibrary/HttpRequest.h \
+		dbmanager.h \
+		../QLibrary/HttpServer.h \
 		effemeridi.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o server.o server.cpp
 
@@ -519,7 +529,8 @@ main.o: main.cpp mainwindow.h \
 		../QLibrary/DataTable.h \
 		../QLibrary/HttpClient.h \
 		../QLibrary/DataVars.h \
-		dbevents.h
+		../QLibrary/HttpRequest.h \
+		dbmanager.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 ButtonVarForced.o: ../QWidget/ButtonVarForced.cpp ../QWidget/ButtonVarForced.h \
@@ -548,10 +559,7 @@ dbevents.o: dbevents.cpp dbevents.h \
 		../QLibrary/DataVars.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dbevents.o dbevents.cpp
 
-HttpRequest.o: ../QLibrary/HttpRequest.cpp ../QLibrary/HttpRequest.h \
-		../QLibrary/DataTable.h \
-		../QLibrary/HttpClient.h \
-		../QLibrary/DataVars.h
+HttpRequest.o: ../QLibrary/HttpRequest.cpp ../QLibrary/HttpRequest.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o HttpRequest.o ../QLibrary/HttpRequest.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 

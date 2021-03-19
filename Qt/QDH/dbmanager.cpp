@@ -13,10 +13,10 @@ void DbManager::LogEnergy()
     url += QString::number((int)m_dt->wProduced);
     url += "&Cons=";
     url += QString::number((int)m_dt->wConsumed);
-    url += "&SCons=";
+    url += "&SelfCons=";
     url += QString::number((int)m_dt->wSelfConsumed);
     url += "&Surplus=";
-    url += QString::number((int)fabs(m_dt->wSurplus));
+    url += QString::number(abs((int)m_dt->wSurplus.value_1()));
     url += "&L1=";
     url += QString::number((int)m_dt->wL1);
     url += "&L2=";

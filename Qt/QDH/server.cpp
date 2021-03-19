@@ -40,7 +40,7 @@ void ServerDH::run()
     CQHttpServer HttpServer(8080);
     HttpServer.startServer(&dr);
 
-    m_DbManager.init(&dr);
+    m_DbManager.Init(&dr);
 
     while (m_running)
     {
@@ -91,7 +91,8 @@ void ServerDH::run()
                 dr.wSurplus = dr.wProduced;
                 dr.wSurplus -= dr.wConsumed;
 
-                dr.wSelfConsumed = fmin(dr.wConsumed, dr.wProduced)
+                if (dr.wConsumed<dr.wProduced) dr.wSelfConsumed = dr.wConsumed;
+                if (dr.wProduced<dr.wConsumed) dr.wSelfConsumed = dr.wProduced;
 
                 dr.LogPoint();
                 emit updateValues( &dr );
@@ -162,28 +163,7 @@ void ServerDH::manage_PushWebData(int sec)
     t_PushWebData.restart();
     dr.LogMessage("--- PushWebData ---"  );
 
-    QString url("http://pistonihome.altervista.org/data/set.php?");
-    url += "Prod=";
-    url += QString::number((int)dr.wProduced);
-    url += "&Cons=";
-    url += QString::number((int)dr.wConsumed);
-    url += "&L1=";
-    url += QString::number((int)dr.wL1);
-    url += "&L2=";
-    url += QString::number((int)dr.wL2);
-    url += "&L3=";
-    url += QString::number((int)dr.wL3);
-
-    dr.LogMessage(url);
-
-  //  HttpRequest request;
-  //  std::string result = request.executeGet(url);
-  //  dr.LogMessage(result.c_str());
-
-    //sleep(10);
-    HttpRequest request2;
-    QString result2 = request2.executeBlockingGet(url);
-    dr.LogMessage(result2);
+    m_DbManager.LogEnergy();
 }
 
 
