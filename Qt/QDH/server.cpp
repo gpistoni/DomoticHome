@@ -3,7 +3,7 @@
 #include "../QLibrary/HttpServer.h"
 #include "QThread"
 #include "QFile"
-#include <unistd.h>
+//#include <unistd.h>
 #include "effemeridi.h"
 
 
@@ -39,6 +39,8 @@ void ServerDH::run()
 {
     CQHttpServer HttpServer(8080);
     HttpServer.startServer(&dr);
+
+    m_DbManager.init(&dr);
 
     while (m_running)
     {
@@ -88,6 +90,8 @@ void ServerDH::run()
 
                 dr.wSurplus = dr.wProduced;
                 dr.wSurplus -= dr.wConsumed;
+
+                dr.wSelfConsumed = fmin(dr.wConsumed, dr.wProduced)
 
                 dr.LogPoint();
                 emit updateValues( &dr );
@@ -228,11 +232,11 @@ void ServerDH::manage_Internet(int sec)
     bool connected = CQHttpClient::PingGoogle(str); ttt++;
     if (!connected)
     {
-        sleep(5);
+        QThread::msleep(5);
         bool connected2 = CQHttpClient::PingGoogle(str); ttt++;
         if (!connected2)
         {
-            sleep(10);
+            QThread::msleep(10);
             bool connected3 = CQHttpClient::PingGoogle(str); ttt++;
             if (!connected3)
             {
@@ -241,9 +245,9 @@ void ServerDH::manage_Internet(int sec)
                 // Off
                 CQHttpClient client("192.168.1.210", 80, 10000 );
                 client.Request_Set("off");
-                sleep(15);
+                QThread::msleep(15);
                 client.Request_Set("on");
-                sleep(30);                          // aspetto un po'
+                QThread::msleep(30);                          // aspetto un po'
                 t_InternetConnection.restart();     // rivvio il conteggio
                 return;
             }

@@ -27,6 +27,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    dbmanager.cpp \
         mainwindow.cpp \
     server.cpp \
     ../QLibrary/HttpClient.cpp \
@@ -44,6 +45,7 @@ SOURCES += \
     ../QLibrary/HttpRequest.cpp
 
 HEADERS += \
+    dbmanager.h \
         mainwindow.h \
     server.h \
     ../QLibrary/HttpClient.h \

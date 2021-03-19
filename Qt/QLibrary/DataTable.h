@@ -125,6 +125,7 @@ public:
     // dato calcolato
     VarF3 wConsumed             = { "T6", "", "", "", "Consumed" , 0, 4000};
     VarF3 wSurplus              = { "T6", "", "", "", "Surplus" , 0, 4000};
+    VarF3 wSelfConsumed         = { "T7", "", "", "", "SelfConsumed" , 0, 4000};
 
     std::vector<VarF3*>    ampers = { &wPowergrid,
                                       &wProduced,
@@ -133,7 +134,8 @@ public:
                                       &wL3,
                                       &wCounter,
                                       &wConsumed,
-                                      &wSurplus
+                                      &wSurplus,
+                                      &wSelfConsumed
                                     };
     //*****************************************************************************************
 };

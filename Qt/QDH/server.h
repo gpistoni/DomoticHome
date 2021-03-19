@@ -4,7 +4,7 @@
 #include "../QLibrary/HttpRequest.h"
 #include "QDateTime"
 #include "QTimer"
-#include "dbevents.h"
+#include "dbmanager.h"
 
 #define SERVER_VER "1.9.1"
 
@@ -18,7 +18,7 @@ public:
 
 private:
     DataTable dr;    
-    //dbEvents m_dbEvents;
+    DbManager m_DbManager;
 
     bool m_running = true;
     bool m_runPrograms;

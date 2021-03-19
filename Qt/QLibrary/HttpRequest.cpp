@@ -4,7 +4,6 @@
 #include <QEventLoop>
 #include <QThread>
 #include <QProgressDialog>
-#include <unistd.h>
 
 QNetworkAccessManager HttpRequest::mAccessManager;
 
@@ -15,14 +14,16 @@ HttpRequest::HttpRequest(QObject* parent) :
    //connect(&mAccessManager, &QNetworkAccessManager::finished, this, &HttpRequest::replyFinished);
 }
 
+/*
 QString HttpRequest::executeGet(const QUrl &url)
 {
     QNetworkReply* reply = mAccessManager.get(QNetworkRequest(url));
-    sleep(1);
+    QThread::msleep(1);
     QString str(reply->readAll());
     reply->deleteLater();
     return str;
 }
+*/
 
 //void HttpRequest::httpFinished()
 //{
