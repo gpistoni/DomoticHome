@@ -1,11 +1,12 @@
 <?php
+$newPage = "";
 session_start();
 if(!empty($_SESSION["userId"])) 
 {
 	if(!empty($_POST["NewPage"]))		// richiesta nuova pagina
 	{
-		$newP = $_POST["NewPage"];
-		require_once (__DIR__ . '/view/' .$newP. '.php');
+		$newPage = $_POST["NewPage"];
+		require_once (__DIR__ . '/view/' .$newPage. '.php');
 	}
 	else								// richiesta dashboard
 	{

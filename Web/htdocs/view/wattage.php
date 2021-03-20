@@ -31,7 +31,7 @@ require_once "./class/PrintObjects.php";
 
 	<ul class="list-group">
 		<li>
-		<p>Produzione Oraria</p>
+		<div id="Oraria"><p>Produzione Oraria</p></div>
 		
 		<?php	
 		
@@ -47,7 +47,7 @@ require_once "./class/PrintObjects.php";
 		</li>
 		
 		<li>
-		<p>Produzione Media</p>		
+		<div id="Giornaliera"><p>Produzione Giornaliera</p></div>	
 		<?php
 	
 		$dataquery = new DataQuery();

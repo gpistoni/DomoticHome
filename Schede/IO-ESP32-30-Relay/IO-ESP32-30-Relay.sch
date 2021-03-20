@@ -25,10 +25,10 @@ F 3 "~" H 2800 6350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Screw_Terminal_01x02 5V-GND1
+L Connector:Screw_Terminal_01x02 5V1
 U 1 1 6038763E
 P 1600 6350
-F 0 "5V-GND1" V 1700 6300 50  0000 C CNN
+F 0 "5V1" V 1700 6300 50  0000 C CNN
 F 1 "Screw_Terminal_01x02" V 1473 6162 50  0001 R CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" V 1473 6162 50  0001 R CNN
 F 3 "~" H 1600 6350 50  0001 C CNN
@@ -55,7 +55,7 @@ Wire Wire Line
 Wire Wire Line
 	6900 3550 7450 3550
 Wire Wire Line
-	5700 4650 6600 4650
+	5700 4650 6050 4650
 Wire Wire Line
 	6600 4650 6600 4150
 Wire Wire Line
@@ -374,10 +374,10 @@ Wire Wire Line
 Wire Wire Line
 	4150 3650 4150 3550
 $Comp
-L Connector:Screw_Terminal_01x02 3v3-GND1
+L Connector:Screw_Terminal_01x02 3v3
 U 1 1 60633DF4
 P 1600 5950
-F 0 "3v3-GND1" V 1700 5900 50  0000 C CNN
+F 0 "3v3" V 1700 5900 50  0000 C CNN
 F 1 "Screw_Terminal_01x02" V 1473 5762 50  0001 R CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" V 1473 5762 50  0001 R CNN
 F 3 "~" H 1600 5950 50  0001 C CNN
@@ -484,7 +484,7 @@ Wire Wire Line
 Connection ~ 4750 5800
 Connection ~ 2950 5850
 Wire Wire Line
-	4400 4650 4400 5850
+	4400 4650 4400 5300
 $Comp
 L ESP32:PinHeader_3x2 JP1
 U 1 1 603F47B2
@@ -599,4 +599,30 @@ Wire Wire Line
 	1900 5950 1800 5950
 Wire Wire Line
 	1900 5950 4750 5950
+$Comp
+L power:GND #PWR0104
+U 1 1 6056639E
+P 6600 4750
+F 0 "#PWR0104" H 6600 4500 50  0001 C CNN
+F 1 "GND" H 6605 4577 50  0000 C CNN
+F 2 "" H 6600 4750 50  0001 C CNN
+F 3 "" H 6600 4750 50  0001 C CNN
+	1    6600 4750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6600 4750 6600 4650
+Connection ~ 6600 4650
+Wire Wire Line
+	4400 5300 6050 5300
+Wire Wire Line
+	6050 5300 6050 4650
+Connection ~ 4400 5300
+Wire Wire Line
+	4400 5300 4400 5850
+Connection ~ 6050 4650
+Wire Wire Line
+	6050 4650 6600 4650
+Text Label 10750 7650 0    50   ~ 0
+2.0
 $EndSCHEMATC

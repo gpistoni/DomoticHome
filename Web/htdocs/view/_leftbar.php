@@ -1,8 +1,24 @@
+<?php 
+
+function active($pagecheck) 
+{
+	global $newPage; 
+	if ($newPage==$pagecheck) echo "active";
+}
+
+function hidden($pagecheck) 
+{
+	global $newPage; 
+	if ($newPage!=$pagecheck) echo "d-none";
+}
+
+?>
+
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
 			<li class="nav-item">
-				<form class="nav-link" action="" method="POST">
+				<form class="nav-link <?php active("dashboard"); ?>" action="" method="POST">
 				<button type="submit" class="btn btn-flat btn-lg" name="NewPage" value="dashboard">
 					<span data-feather="home"></span>
 					Dashboard
@@ -10,15 +26,29 @@
 				</form>			
 			</li>
 			<li class="nav-item">
-				<form class="nav-link" action="" method="POST">
+				<form class="nav-link <?php active("wattage"); ?>" action="" method="POST">
 				<button type="submit" class="btn btn-flat btn-lg" name="NewPage" value="wattage">
 					<span data-feather="file"></span>
 					Wattage
 				</button>
 				</form>	
+				<ul class="nav flex-column mb-2 <?php hidden("wattage"); ?> ">
+				  <li class="nav-item">
+				    <a class="nav-link   ?>" href="#Oraria">
+				      <span data-feather="file-text"></span>
+				      Oraria
+				    </a>
+				  </li>
+				  <li class="nav-item">
+				    <a class="nav-link" href="#Giornaliera">
+				      <span data-feather="file-text"></span>
+				      Giornaliera
+				    </a>
+				  </li>
+				</ul>
 			</li>
 			<li class="nav-item">
-				<form class="nav-link" action="" method="POST">
+				<form class="nav-link <?php active("status"); ?>" action="" method="POST">
 				<button type="submit" class="btn btn-flat btn-lg" name="NewPage" value="status" >
 					<span data-feather="shopping-cart"></span>
 				Status
@@ -26,10 +56,10 @@
 				</form>
             </li>
 			<li class="nav-item">
-				<form class="nav-link" action="" method="POST">
-				<button type="submit" class="btn btn-flat btn-lg" name="NewPage" value="status" >
-					<span data-feather="users"></span>
-				Users
+				<form class="nav-link <?php active("database"); ?>" action="" method="POST">
+				<button type="submit" class="btn btn-flat btn-lg" name="NewPage" value="database" >
+					<span data-feather="database"></span>
+				Database
 				</button>
 				</form>
             </li>
@@ -37,7 +67,7 @@
 			    <span data-feather="bar-chart-2"></span>
      		</li>
 			<li class="nav-item">				
-					<span data-feather="layers"></span>		
+				<span data-feather="layers"></span>		
 			</li>	
         </ul>
 
