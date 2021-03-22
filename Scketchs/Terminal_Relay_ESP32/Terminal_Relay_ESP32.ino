@@ -172,7 +172,7 @@ void handleRoot()
   }
   server.send(200, "text/plain", message);
 
-  Serial.println(server.uri());
+  Serial.println(message);
   digitalWrite(LED1pin, ledValue);
   ledValue = !ledValue;
 }

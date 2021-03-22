@@ -18,6 +18,8 @@ CProbe(){};
 
     void setup(int in0, int in1=0,int in2=0,int in3=0, int in4=0, int in5=0, int in6=0, int in7=0 );
     void readvalues();
+    
+    float Temperature(int i){ if (i<nums) return t[i]; return 0;};
 
 private:
     float _getTemp(int i);
