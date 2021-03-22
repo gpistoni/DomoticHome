@@ -1,6 +1,55 @@
 #pragma once
 #include "qstring.h"
 
+class WebVar
+{
+private:
+    int m_value;
+    int m_terminal;
+    QString m_line;
+    QString m_descr;
+
+    bool m_modified;
+    bool m_isForceOn;
+    bool m_isForceOff;
+
+public:
+    WebVar(int terminal, QString line, QString descr, int defValue=0):
+        m_value(defValue),
+        m_terminal(terminal),
+        m_line(line),
+        m_descr(descr),
+        m_modified(0),
+        m_isForceOn(0),
+        m_isForceOff(0)
+    {}
+
+    void SetValue(int value)
+    {
+        m_value = value;
+        m_modified = true;
+    }
+
+    bool GetOnOff()
+    {
+        if (m_isForceOn) return true;
+        if (m_isForceOff) return false;
+        return m_value;
+    }
+
+    bool GetValueI()
+    {
+        return m_value;
+    }
+
+    QString Description()
+    {
+        return m_descr;
+    }
+
+
+};
+
 //********************************************************************************************
 class Var
 {
@@ -18,8 +67,8 @@ public:
         m_descr = descr;
     }
 
-    virtual ~Var()
-    {}
+    virtual ~Var() {}
+
     virtual QString svalue()=0;
     QString terminal()  {   return m_t;    }
     QString descr()     {   return m_descr ;   }

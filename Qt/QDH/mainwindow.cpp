@@ -79,9 +79,9 @@ void MainWindow::updateValues(DataTable* dr)
             gridLayout->setSpacing(6);
             gridLayout->setContentsMargins(11, 11, 11, 11);
 
-            for( VarB *elem : dr->lights )
+            for( WebVar *elem : dr->lights )
             {
-                ButtonVar *but= new ButtonVar(elem);
+                ButtonWebVar *but= new ButtonWebVar(elem);
                 connect(m_pserver, SIGNAL(updateValues(DataTable*)), but, SLOT(Update()));
                 gridLayout->addWidget(but);
             }

@@ -300,10 +300,26 @@ void ServerDH::manage_ExternalLight(int sec)
     dr.LogMessage("LightSide [" +  QString::number(lightSide) + "]" );
 
     // attuatori
-    dr.lampAngoli.ModifyValue(lightSide);
-    dr.lampLati.ModifyValue(lightSide);
-    dr.lampPalo.ModifyValue(lightLamp);
-    dr.lampExtra.ModifyValue(lightLamp);
+    dr.lampAngoli.SetValue(lightSide);
+    dr.lampLati.SetValue(lightSide);
+    dr.lampPalo.SetValue(lightLamp);
+    dr.lampExtra.SetValue(lightLamp);
+
+    QString Request = "http://192.168.1.21/?";
+    Request += "L1=" + QString::number(lightSide);
+    Request += "&L2=" + QString::number(lightSide);
+    Request += "&L3=" + QString::number(lightLamp);
+    Request += "&L4=" + QString::number(lightLamp);
+    Request += "&L5=0";
+    Request += "&L6=0";
+    Request += "&L7=0";
+    Request += "&L8=0";
+
+    HttpRequest request;
+    QString result = request.executeBlockingGet(Request);
+
+    dr.LogMessage(Request);
+    dr.LogMessage(result);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

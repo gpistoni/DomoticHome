@@ -43,7 +43,8 @@ SOURCES += \
     main_server.cpp \
     server.cpp \
     dbevents.cpp \
-    ../QLibrary/HttpRequest.cpp
+    ../QLibrary/HttpRequest.cpp \
+    dbmanager.cpp
 
 HEADERS += \
     server.h \
@@ -59,6 +60,7 @@ HEADERS += \
     ../QWidget/LogMessage.h \
     effemeridi.h \
     dbevents.h \
-    ../QLibrary/HttpRequest.h
+    ../QLibrary/HttpRequest.h \
+    dbmanager.h
 
 FORMS +=

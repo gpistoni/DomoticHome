@@ -47,16 +47,16 @@ public:
                                         &tBagno
                                      };
     //*****************************************************************************************
-    VarB lampAngoli                    = { "T2", "r0", "lampAngoli" };
-    VarB lampLati                      = { "T2", "r1", "lampLati" };
-    VarB lampPalo                      = { "T2", "r2", "lampPalo" };
-    VarB lampExtra                     = { "T2", "r3", "lampExtra" };
+    WebVar lampAngoli               = { 22, "L1", "lampAngoli" };
+    WebVar lampLati                 = { 22, "L2", "lampLati" };
+    WebVar lampPalo                 = { 22, "L3", "lampPalo" };
+    WebVar lampExtra                = { 22, "L4", "lampExtra" };
 
-    std::vector<VarB*>    lights = {  &lampAngoli,
-                                      &lampLati,
-                                      &lampPalo,
-                                      &lampExtra
-                                   };
+    std::vector<WebVar*>    lights = {  &lampAngoli,
+                                        &lampLati,
+                                        &lampPalo,
+                                        &lampExtra
+                                     };
     //*****************************************************************************************
     VarBf rPdc                     = { "T3", "r0", "Pdc" };
     VarBf rPdcHeat                 = { "T3", "r1", "rPdcHeat" };
@@ -178,10 +178,10 @@ public:
             {
                 UpdateVal( elem );
             }
-            for( VarB *elem : lights )
+            /*for( VarB *elem : lights )
             {
                 UpdateRelay( elem );
-            }
+            }*/
             for( VarBf *elem : rcaldaia )
             {
                 UpdateRelay( elem );
@@ -219,10 +219,12 @@ public:
             {
                 UpdateVal( elem );
             }*/
-            for( VarB *elem : lights )
+            /*
+             * for( VarB *elem : lights )
             {
                 SendModifiedValue( elem );
             }
+            */
             for( VarBf *elem : rcaldaia )
             {
                 SendModifiedValue( elem );

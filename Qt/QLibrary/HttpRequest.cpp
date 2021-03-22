@@ -14,7 +14,7 @@ HttpRequest::HttpRequest(QObject* parent) :
    //connect(&mAccessManager, &QNetworkAccessManager::finished, this, &HttpRequest::replyFinished);
 }
 
-/*
+
 QString HttpRequest::executeGet(const QUrl &url)
 {
     QNetworkReply* reply = mAccessManager.get(QNetworkRequest(url));
@@ -23,7 +23,6 @@ QString HttpRequest::executeGet(const QUrl &url)
     reply->deleteLater();
     return str;
 }
-*/
 
 //void HttpRequest::httpFinished()
 //{
