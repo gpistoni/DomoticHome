@@ -3,7 +3,6 @@
 
 DbManager::DbManager()
 {
-
 }
 
 void DbManager::LogEnergy()

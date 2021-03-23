@@ -250,7 +250,7 @@ void ServerDH::manage_BoilerACS(int sec)
     /**************************************************************************************************/
     if ( dr.progBoilerACS )
     {
-        if ( dr.rBoilerACS && dr.wSurplus > 0 ) // se e gia acceso
+        if ( dr.rBoilerACS && dr.wSurplus > 100 ) // se e gia acceso
         {
             boilerACS = true;
             dr.LogMessage("Condizione ON surplusW:" + dr.wSurplus.svalue() );
@@ -490,11 +490,14 @@ void  ServerDH::manage_PDC( int sec )
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accender FULL POWER
             //pdc Gia Accesa
-            if ((dr.rPdc && dr.rPdcFullPower && dr.wSurplus > 100) ||
-                    (dr.rPdc && !dr.rPdcFullPower && dr.wSurplus > 400))
-            {    // molto surplus
-                dr.LogMessage("PDC FULL POWER progWinterPDC_eco SurplusW" + dr.wSurplus.svalue() );
-                needPdc_FullPower = true;
+            if (dr.rPdc)
+            {
+                if( (!dr.rPdcNightMode && dr.wSurplus > 200) ||
+                        (dr.rPdcNightMode && dr.wSurplus > 500) )
+                {    // molto surplus
+                    dr.LogMessage("PDC FULL POWER progWinterPDC_eco SurplusW" + dr.wSurplus.svalue() );
+                    needPdc_FullPower = true;
+                }
             }
             //////////////////////////////////////////////////////////////////////////////////
         }
@@ -532,7 +535,7 @@ void  ServerDH::manage_PDC( int sec )
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accendere PDC
             if ((dr.rPdc &&  dr.wSurplus  > 300) ||
-                    (!dr.rPdc &&  dr.wSurplus  > 1000))
+                    (!dr.rPdc &&  dr.wSurplus  > 800))
             {
                 dr.LogMessage("PDC ON progSummerPDC_eco SurplusW" + dr.wSurplus.svalue() );
                 needPdc = true;
@@ -540,35 +543,38 @@ void  ServerDH::manage_PDC( int sec )
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accender FULL POWER
             //pdc Gia Accesa
-            if ((dr.rPdc && dr.rPdcFullPower && dr.wSurplus > 300) ||
-                    (dr.rPdc && !dr.rPdcFullPower && dr.wSurplus > 600 ))
-            {    // molto surplus
-                dr.LogMessage("PDC FULL POWER progSummerPDC_eco SurplusW" + dr.wSurplus.svalue() );
-                needPdc_FullPower = true;
+            if (dr.rPdc)
+            {
+                if( (!dr.rPdcNightMode && dr.wSurplus > 300) ||
+                        (dr.rPdcNightMode && dr.wSurplus > 600) )
+                {    // molto surplus
+                    dr.LogMessage("PDC FULL POWER progSummerPDC_eco SurplusW" + dr.wSurplus.svalue() );
+                    needPdc_FullPower = true;
+                }
             }
             //////////////////////////////////////////////////////////////////////////////////
-        }
-        needPdc_Pump = needPdc;
-        needPdc_Heat = false;
+            needPdc_Pump = needPdc;
+            needPdc_Heat = false;
 
-        /**************************************************************************************************/
-        if (dr.tInletFloor < 19.f )  // minima t Acqua raffreddata
-        {
-            dr.LogMessage("PDC OFF tInletFloor" + dr.tInletFloor.svalue() + "< 19" );
-            needPdc = false;
-        }
+            /**************************************************************************************************/
+            if (dr.tInletFloor < 19.f )  // minima t Acqua raffreddata
+            {
+                dr.LogMessage("PDC OFF tInletFloor" + dr.tInletFloor.svalue() + "< 19" );
+                needPdc = false;
+            }
 
-        if ( dr.tPufferHi < 18.f)   // minima t Acqua raffreddata
-        {
-            dr.LogMessage("PDC OFF tPufferHi" + dr.tPufferHi.svalue() + "< 18" );
-            needPdc = false;
+            if ( dr.tPufferHi < 18.f)   // minima t Acqua raffreddata
+            {
+                dr.LogMessage("PDC OFF tPufferHi" + dr.tPufferHi.svalue() + "< 18" );
+                needPdc = false;
+            }
         }
     }
 
     dr.LogMessage("Pdc:[" + QString::number(needPdc) + "] " +
-                  + "FullPower:[" + QString::number(needPdc_FullPower) + "] "+
+                  + "NightMode:[" + QString::number(needPdc && !needPdc_FullPower) + "] "+
                   + "Pump:[" + QString::number(needPdc_Pump) + "] " +
-                  + "Heat:[" + QString::number(needPdc && needPdc_Heat) + "] ");
+                  + "Heat:[" + QString::number(needPdc_Heat) + "] ");
 
     // comandi sulla centrale -----------------------------------------------------
     // accendo PDC
@@ -578,7 +584,7 @@ void  ServerDH::manage_PDC( int sec )
     //pompa
     dr.rPdcPompa.ModifyValue( needPdc_Pump );
     //night
-    dr.rPdcFullPower.ModifyValue( needPdc && needPdc_FullPower );
+    dr.rPdcNightMode.ModifyValue( needPdc && !needPdc_FullPower );
 
 }
 
