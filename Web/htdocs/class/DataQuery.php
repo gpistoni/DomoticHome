@@ -63,16 +63,16 @@ public function WattageTable()
 	$query .= "L2 int, ";
 	$query .= "L3 int )";
 	
-	$id = $this->ds->execute($query);
+	$Result .= $this->ds->execute($query);
 	
 	$query =  "ALTER TABLE Wattage ADD INDEX(Dt)";
 	
-	$id2 = $this->ds->execute($query);
+	$Result .= $this->ds->execute($query);
 	
 	$query =  "DELETE FROM Wattage ";
 	$query .= "WHERE Dt < ADDDATE( NOW(), INTERVAL -360 DAY)";
 	
-	$Result = $this->ds->execute($query);
+	$Result .= $this->ds->execute($query);
 	return $Result;
 }
 	
@@ -96,11 +96,14 @@ public function Wattage_all()
 
 public function Wattage_day() 
 {
-	$this->Wattage_remove();
+	//$this->Wattage_remove();
 	
 	$query = "SELECT CAST(`Dt` as DATE) AS Day, ";
 	$query .= "AVG(`Produced`) AS Produced, ";
 	$query .= "AVG(`Consumed`) AS Consumed, ";
+	$query .= "AVG(SelfConsumed) AS SelfConsumed,";
+	$query .= "AVG(Consumed-SelfConsumed) AS NetConsumed,";
+	$query .= "AVG(`Surplus`) AS Surplus, ";
 	$query .= "AVG(`L1`) AS L1, ";
 	$query .= "AVG(`L2`) AS L2, "; 
 	$query .= "AVG(`L3`) AS L3 "; 
@@ -117,6 +120,9 @@ public function Wattage_dayh($hours)
 	$query = "SELECT CAST(`Dt` as DATETIME) AS Day, ";
 	$query .= "AVG(`Produced`) AS Produced, ";
 	$query .= "AVG(`Consumed`) AS Consumed, ";
+	$query .= "AVG(SelfConsumed) AS SelfConsumed,";
+	$query .= "AVG(Consumed-SelfConsumed) AS NetConsumed,";
+	$query .= "AVG(`Surplus`) AS Surplus, ";
 	$query .= "AVG(`L1`) AS L1, ";
 	$query .= "AVG(`L2`) AS L2, "; 
 	$query .= "AVG(`L3`) AS L3 "; 
@@ -127,5 +133,30 @@ public function Wattage_dayh($hours)
 	$Result = $this->ds->select($query);
 	return $Result;
 }
+//*******************************************************************************************************
+public function LuciTable()
+{	
+	$query =  "DROP TABLE Light; ";
+	$Result .= $this->ds->execute($query);
 	
+	$query =  "CREATE TABLE Light (";
+	$query .= " Line int PRIMARY KEY,";
+	$query .= " Name varchar(256),";
+	$query .= " Value int,";
+	$query .= " ForceOn int, ";
+	$query .= " ForceOff int ); ";
+	
+	$Result .= $this->ds->execute($query);
+	
+	$query =  "INSERT INTO Light (`Line`, `Name`, `Value`, `ForceOn`, `ForceOff`) VALUES ";
+	$query .= "('1', 'lampAngoli', '0', '0', '0'), ";
+	$query .= "('2', 'lampLati', '0', '0', '0'), ";
+	$query .= "('3', 'lampPalo', '0', '0', '0'), ";
+	$query .= "('4', 'lampExtra', '0', '0', '0'); ";
+	
+	$Result .= $this->ds->insert($query);
+	
+	
+	return $Result;
+}
 }

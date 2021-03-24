@@ -26,13 +26,13 @@ function hidden($pagecheck)
 				</form>			
 			</li>
 			<li class="nav-item">
-				<form class="nav-link <?php active("wattage"); ?>" action="" method="POST">
-				<button type="submit" class="btn btn-flat btn-lg" name="NewPage" value="wattage">
+				<form class="nav-link <?php active("energia"); ?>" action="" method="POST">
+				<button type="submit" class="btn btn-flat btn-lg" name="NewPage" value="energia">
 					<span data-feather="file"></span>
-					Wattage
+					Energia
 				</button>
 				</form>	
-				<ul class="nav flex-column mb-2 <?php hidden("wattage"); ?> ">
+				<ul class="nav flex-column mb-2 <?php hidden("energia"); ?> ">
 				  <li class="nav-item">
 				    <a class="nav-link   ?>" href="#Oraria">
 				      <span data-feather="file-text"></span>
@@ -47,6 +47,14 @@ function hidden($pagecheck)
 				  </li>
 				</ul>
 			</li>
+			<li class="nav-item">
+				<form class="nav-link <?php active("luci"); ?>" action="" method="POST">
+				<button type="submit" class="btn btn-flat btn-lg" name="NewPage" value="luci" >
+					<span data-feather="shopping-cart"></span>
+				Luci
+				</button>
+				</form>
+            </li>
 			<li class="nav-item">
 				<form class="nav-link <?php active("status"); ?>" action="" method="POST">
 				<button type="submit" class="btn btn-flat btn-lg" name="NewPage" value="status" >

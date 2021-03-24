@@ -47,7 +47,7 @@ public:
                                         &tBagno
                                      };
     //*****************************************************************************************
-    WebVar lampAngoli               = { 22, "L1", "lampAngoli" };
+    WebVar lampAngoli               = { 22, "L1", "L1" };
     WebVar lampLati                 = { 22, "L2", "lampLati" };
     WebVar lampPalo                 = { 22, "L3", "lampPalo" };
     WebVar lampExtra                = { 22, "L4", "lampExtra" };

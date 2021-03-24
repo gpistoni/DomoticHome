@@ -18,8 +18,15 @@ class PrintObjects
 		// data rows
 		foreach( $array as $key=>$value){
 			$html .= '<tr>';
+			$firstCol = true;
 			foreach($value as $key2=>$value2){
-				$html .= '<td>' . htmlspecialchars($value2) . '</td>';
+				if ($firstCol)
+				{
+					$html .= '<td>' . get_class($a). htmlspecialchars($value2) . '</td>';
+					$firstCol = false;
+					}
+				else
+					$html .= '<td>' . get_class($a) . htmlspecialchars(intval($value2)) . '</td>';					
 			}
 			$html .= '</tr>';
 		}
@@ -29,3 +36,4 @@ class PrintObjects
 		return $html;
    	}
 }
+

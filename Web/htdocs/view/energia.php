@@ -20,7 +20,7 @@ require_once "./class/PrintObjects.php";
 	 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 	<!-- titolo -->
 	<div id="Wattage" class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom ">
-			<h1 class="h2">Produzione</h1>
+			<h1 class="h2">Energia</h1>
 			<div class="btn-toolbar mb-2 mb-md-0">
 			  <div class="btn-group me-2">
 				<button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -31,12 +31,13 @@ require_once "./class/PrintObjects.php";
 
 	<ul class="list-group">
 		<li>
-		<div id="Oraria"><p>Produzione Oraria</p></div>
+		<div id="Oraria" class="d-flex" >
+		<p>Produzione Oraria</p></div>
 		
 		<?php	
 		
 		$dataquery = new DataQuery();
-		$result = $dataquery->Wattage_dayh(1);
+		$result = $dataquery->Wattage_dayh(4);
 
 		$sz = count($result);
 		
@@ -51,7 +52,7 @@ require_once "./class/PrintObjects.php";
 		<?php
 	
 		$dataquery = new DataQuery();
-		$result = $dataquery->Wattage_dayh(8);
+		$result = $dataquery->Wattage_day();
 	
 		$sz = count($result);
 		

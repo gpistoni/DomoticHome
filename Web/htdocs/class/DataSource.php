@@ -90,11 +90,14 @@ class DataSource
      * @param array $paramArray
      * @return int
      */
-    public function insert($query, $paramType, $paramArray)
+    public function insert($query, $paramType="", $paramArray=array())
     {
         //print $query;
         $stmt = $this->conn->prepare($query);
-        $this->bindQueryParams($stmt, $paramType, $paramArray);
+		if(!empty($paramType) && !empty($paramArray)) 
+		{
+            $this->bindQueryParams($stmt, $paramType="", $paramArray=array());
+        }
         $stmt->execute();
         $insertId = $stmt->insert_id;
         return $insertId;
@@ -108,8 +111,8 @@ class DataSource
      */
     public function execute($query, $paramType="", $paramArray=array())
     {
-        $stmt = $this->conn->prepare($query);
-        
+		//print $query;
+        $stmt = $this->conn->prepare($query);        
         if(!empty($paramType) && !empty($paramArray)) 
 		{
             $this->bindQueryParams($stmt, $paramType="", $paramArray=array());
@@ -148,8 +151,7 @@ class DataSource
         if(!empty($paramType) && !empty($paramArray)) 
 		{
             $this->bindQueryParams($stmt, $paramType, $paramArray);
-        }
-        
+        }        
         $stmt->execute();
         $stmt->store_result();
         $recordCount = $stmt->num_rows;
