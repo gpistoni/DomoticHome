@@ -93,23 +93,61 @@ F 3 "~" H 4650 1350 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 Text Label 4850 1650 0    50   ~ 0
-I1=tPufferHi
+T1=tPufferHi
 Text Label 4850 1550 0    50   ~ 0
-I2=tPufferLow
+T2=tPufferLow
 Text Label 4850 1450 0    50   ~ 0
-I3=tInputMixer
+T3=tInputMixer
 Text Label 4850 1350 0    50   ~ 0
-I4=tReturnFireplace
+T4=tReturnFireplace
 Text Label 4850 1250 0    50   ~ 0
-I5=tReturnFloor
+T5=tReturnFloor
 Text Label 4850 1150 0    50   ~ 0
-I6=tInletFloor
+T6=tInletFloor
 Text Label 4850 1050 0    50   ~ 0
-I7=tExternal
+T7=tExternal
 Wire Notes Line
-	5700 600  5700 2300
+	6500 600  6500 2300
+$Comp
+L ESP32:PinHeader_3x2 J1
+U 1 1 6072A0BF
+P 5950 1950
+F 0 "J1" H 6000 2381 50  0000 C CNN
+F 1 "PinHeader_3x2" H 6000 2290 50  0000 C CNN
+F 2 "ESP32:PinHeader_3in2" H 5950 1950 50  0001 C CNN
+F 3 "~" H 5950 1950 50  0001 C CNN
+	1    5950 1950
+	1    0    0    -1  
+$EndComp
+Text Notes 5200 2200 0    50   ~ 0
+6-5 Res 2.5K\n3-1 Link
+$Comp
+L Device:R R1
+U 1 1 6072BE50
+P 5550 1850
+F 0 "R1" H 5620 1896 50  0000 L CNN
+F 1 "2k5" H 5620 1805 50  0000 L CNN
+F 2 "" V 5480 1850 50  0001 C CNN
+F 3 "~" H 5550 1850 50  0001 C CNN
+	1    5550 1850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5900 1700 5550 1700
+Wire Wire Line
+	5750 1950 5750 2000
+Wire Wire Line
+	5750 2000 5550 2000
+Wire Wire Line
+	6000 2000 6000 2250
+Wire Wire Line
+	6000 2250 6250 2250
+Wire Wire Line
+	6250 2250 6250 2000
 Wire Notes Line
-	2500 600  5700 600 
+	2500 600  6500 600 
+Text Notes 5850 1200 0    50   ~ 0
+Dallas Probe\nRed 3v3\nGray GNd\nYellow Signal\n
 Wire Notes Line
-	2500 2300 5700 2300
+	2500 2300 6500 2300
 $EndSCHEMATC

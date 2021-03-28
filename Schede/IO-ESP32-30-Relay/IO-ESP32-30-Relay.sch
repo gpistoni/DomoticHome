@@ -49,8 +49,6 @@ F 3 "" H 2200 6350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5050 4750 4450 4750
-Wire Wire Line
 	6900 5400 6900 4650
 Wire Wire Line
 	6900 3550 7450 3550
@@ -138,26 +136,24 @@ Wire Wire Line
 $Comp
 L Device:LED D1
 U 1 1 60334896
-P 4250 5000
-F 0 "D1" V 4350 5050 50  0000 R CNN
-F 1 "LED" V 4198 4882 50  0001 R CNN
-F 2 "LED_THT:LED_D3.0mm" H 4250 5000 50  0001 C CNN
-F 3 "~" H 4250 5000 50  0001 C CNN
-	1    4250 5000
+P 4150 4600
+F 0 "D1" V 4250 4650 50  0000 R CNN
+F 1 "LED" V 4098 4482 50  0001 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 4150 4600 50  0001 C CNN
+F 3 "~" H 4150 4600 50  0001 C CNN
+	1    4150 4600
 	0    -1   -1   0   
 $EndComp
-Wire Wire Line
-	4250 4350 4250 4850
 $Comp
 L Device:R R1
 U 1 1 6033E0DA
-P 4900 5150
-F 0 "R1" V 4693 5150 50  0000 C CNN
-F 1 "220" V 4784 5150 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 4830 5150 50  0001 C CNN
-F 3 "~" H 4900 5150 50  0001 C CNN
-	1    4900 5150
-	0    1    1    0   
+P 4150 5000
+F 0 "R1" V 4050 5000 50  0000 C CNN
+F 1 "220" V 4150 5000 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 4080 5000 50  0001 C CNN
+F 3 "~" H 4150 5000 50  0001 C CNN
+	1    4150 5000
+	-1   0    0    1   
 $EndComp
 $Comp
 L Connector:Screw_Terminal_01x08 J2
@@ -199,7 +195,7 @@ Wire Wire Line
 Wire Wire Line
 	1850 3850 1400 3850
 Wire Wire Line
-	4400 4650 4450 4650
+	4350 4650 4450 4650
 $Comp
 L ESP32:PinHeader_3x2 JP4
 U 1 1 6046CAD0
@@ -264,27 +260,23 @@ Wire Wire Line
 Wire Wire Line
 	3700 2700 5950 2700
 Wire Wire Line
-	3750 2750 3750 5150
-Wire Wire Line
 	3750 2750 5900 2750
 Wire Wire Line
-	4150 5250 4150 4250
+	4000 5250 4000 4250
 Wire Wire Line
-	4150 4250 4450 4250
+	4000 4250 4450 4250
 Wire Wire Line
-	4450 4150 4100 4150
+	4450 4150 3950 4150
 Wire Wire Line
-	4100 4150 4100 4900
+	3950 4150 3950 4900
 Wire Wire Line
-	4050 4550 4050 4050
+	3900 4550 3900 4050
 Wire Wire Line
-	4050 4050 4450 4050
+	3900 4050 4450 4050
 Wire Wire Line
-	3300 4200 4000 4200
+	3850 4200 3850 3950
 Wire Wire Line
-	4000 4200 4000 3950
-Wire Wire Line
-	4000 3950 4450 3950
+	3850 3950 4450 3950
 Wire Wire Line
 	2650 3550 4150 3550
 Wire Wire Line
@@ -340,7 +332,7 @@ Wire Wire Line
 Wire Wire Line
 	3750 5150 2500 5150
 Wire Wire Line
-	4150 5250 2500 5250
+	4000 5250 2500 5250
 $Comp
 L ESP32:PinHeader_3x2 JP3
 U 1 1 6046C1D0
@@ -353,7 +345,7 @@ F 3 "~" H 2700 4500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3000 4550 4050 4550
+	3000 4550 3900 4550
 Wire Wire Line
 	3650 4450 3000 4450
 Wire Wire Line
@@ -362,11 +354,9 @@ Connection ~ 2650 4250
 Wire Wire Line
 	2500 4500 1900 4500
 Wire Wire Line
-	5050 4750 5050 5150
-Wire Wire Line
 	4450 3450 4250 3450
 Wire Wire Line
-	4250 3450 4250 2900
+	4250 3450 4250 3000
 Wire Wire Line
 	4450 3550 4200 3550
 Wire Wire Line
@@ -454,8 +444,6 @@ Wire Wire Line
 Connection ~ 2400 4600
 Wire Wire Line
 	3700 4800 2750 4800
-Wire Wire Line
-	4100 4900 2750 4900
 $Comp
 L ESP32:PinHeader_3x2 JP2
 U 1 1 6046BDBF
@@ -484,7 +472,7 @@ Wire Wire Line
 Connection ~ 4750 5800
 Connection ~ 2950 5850
 Wire Wire Line
-	4400 4650 4400 5300
+	4350 4650 4350 5300
 $Comp
 L ESP32:PinHeader_3x2 JP1
 U 1 1 603F47B2
@@ -519,9 +507,9 @@ Wire Wire Line
 Wire Wire Line
 	2150 3500 1950 3500
 Wire Wire Line
-	4250 2900 3150 2900
+	4250 3000 3150 3000
 Wire Wire Line
-	3150 2900 3150 2850
+	3150 3000 3150 2850
 $Comp
 L Device:R_Network04 RN2
 U 1 1 608F85E2
@@ -551,7 +539,7 @@ Wire Wire Line
 	2750 3350 2750 3400
 Connection ~ 3550 5850
 Wire Wire Line
-	3550 5850 4400 5850
+	3550 5850 4350 5850
 Wire Wire Line
 	2950 5850 3550 5850
 Wire Wire Line
@@ -569,13 +557,6 @@ Wire Wire Line
 Connection ~ 2300 3250
 Wire Wire Line
 	5050 5400 6900 5400
-Wire Wire Line
-	4250 4350 4450 4350
-Connection ~ 5050 5150
-Wire Wire Line
-	5050 5150 5050 5400
-Wire Wire Line
-	4250 5150 4750 5150
 Wire Wire Line
 	7450 4650 6900 4650
 Connection ~ 6900 4650
@@ -614,15 +595,51 @@ Wire Wire Line
 	6600 4750 6600 4650
 Connection ~ 6600 4650
 Wire Wire Line
-	4400 5300 6050 5300
-Wire Wire Line
 	6050 5300 6050 4650
-Connection ~ 4400 5300
+Connection ~ 4350 5300
 Wire Wire Line
-	4400 5300 4400 5850
+	4350 5300 4350 5850
 Connection ~ 6050 4650
 Wire Wire Line
 	6050 4650 6600 4650
 Text Label 10750 7650 0    50   ~ 0
 2.0
+Wire Wire Line
+	4450 5400 4450 4750
+Wire Wire Line
+	4450 5400 5050 5400
+Wire Wire Line
+	4150 4750 4150 4850
+Wire Wire Line
+	4350 5300 4150 5300
+Wire Wire Line
+	4150 5150 4150 5300
+Wire Wire Line
+	4350 5300 6050 5300
+Wire Wire Line
+	4150 4350 4450 4350
+Wire Wire Line
+	4150 4350 4150 4450
+Text Label 3900 5250 0    50   ~ 0
+14
+Wire Wire Line
+	3950 4900 2750 4900
+Text Label 3850 4900 0    50   ~ 0
+27
+Text Label 3800 4550 0    50   ~ 0
+26
+Text Label 4050 3550 0    50   ~ 0
+35
+Text Label 4050 3200 0    50   ~ 0
+34
+Text Label 4050 3000 0    50   ~ 0
+39
+Text Label 4050 2850 0    50   ~ 0
+36
+Wire Wire Line
+	3750 2750 3750 5150
+Wire Wire Line
+	3300 4200 3850 4200
+Text Label 3800 4200 0    50   ~ 0
+25
 $EndSCHEMATC
