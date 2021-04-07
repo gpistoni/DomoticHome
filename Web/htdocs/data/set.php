@@ -22,9 +22,13 @@ $L2 = GetVar('L2');
 $L3 = GetVar('L3');
 
 $dataquery = new DataQuery();
-$newID=0;
-if ($Cons>0)	$newID .= $dataquery->addWattageRow($Prod, $Cons, $SelfCons, $Surplus, $L1, $L2, $L3);
 
+$newID='';
+if ($Cons>0)
+{
+	$newID .= " WattageRow:";
+	$newID .= $dataquery->addWattageRow($Prod, $Cons, $SelfCons, $Surplus, $L1, $L2, $L3);
+}
 
 echo $newID;
 
