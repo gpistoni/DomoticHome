@@ -15,7 +15,9 @@ void DbManager::LogEnergy()
     url += "&SelfCons=";
     url += QString::number((int)m_dt->wSelfConsumed);
     url += "&Surplus=";
-    url += QString::number(abs((int)m_dt->wSurplus.value_1()));
+    float sp = m_dt->wSurplus;
+    if (sp<0) sp=0;
+    url += QString::number((int)sp);
     url += "&L1=";
     url += QString::number((int)m_dt->wL1);
     url += "&L2=";
