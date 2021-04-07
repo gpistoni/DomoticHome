@@ -158,12 +158,12 @@ $EndComp
 $Comp
 L Connector:Screw_Terminal_01x08 J2
 U 1 1 603718E5
-P 1200 3650
-F 0 "J2" H 1118 3025 50  0000 C CNN
-F 1 "Screw_Terminal_01x08" H 1118 3116 50  0000 C CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-8-5.08_1x08_P5.08mm_Horizontal" H 1200 3650 50  0001 C CNN
-F 3 "~" H 1200 3650 50  0001 C CNN
-	1    1200 3650
+P 1200 3600
+F 0 "J2" H 1118 2975 50  0000 C CNN
+F 1 "Screw_Terminal_01x08" H 1118 3066 50  0000 C CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-8-5.08_1x08_P5.08mm_Horizontal" H 1200 3600 50  0001 C CNN
+F 3 "~" H 1200 3600 50  0001 C CNN
+	1    1200 3600
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
@@ -191,9 +191,9 @@ Wire Wire Line
 	5900 4250 5900 2750
 Connection ~ 5900 4250
 Wire Wire Line
-	1400 3950 1800 3950
+	1400 3900 1600 3900
 Wire Wire Line
-	1850 3850 1400 3850
+	1650 3800 1400 3800
 Wire Wire Line
 	4350 4650 4450 4650
 $Comp
@@ -208,27 +208,27 @@ F 3 "~" H 3000 4150 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1800 3950 1800 5200
+	1600 3900 1600 5200
 Wire Wire Line
-	1850 3850 1850 4850
+	1650 3800 1650 4850
 Wire Wire Line
-	1900 3750 1400 3750
+	1700 3700 1400 3700
 Wire Wire Line
-	1950 3650 1400 3650
+	1750 3600 1400 3600
 Wire Wire Line
-	2400 3150 1900 3150
+	2400 3150 1750 3150
 Wire Wire Line
-	1900 3450 1400 3450
+	1750 3400 1400 3400
 Wire Wire Line
-	1850 2800 1850 3350
+	1700 2800 1700 3300
 Wire Wire Line
-	1850 3350 1400 3350
+	1700 3300 1400 3300
 Wire Wire Line
-	1400 3250 1800 3250
+	1400 3200 1650 3200
 Wire Wire Line
-	1800 3250 1800 2450
+	1650 3200 1650 2450
 Wire Wire Line
-	1800 2450 2900 2450
+	1650 2450 2900 2450
 Wire Wire Line
 	3400 2400 6250 2400
 Wire Wire Line
@@ -291,20 +291,6 @@ Wire Wire Line
 	3400 2850 4300 2850
 Wire Wire Line
 	4300 2850 4300 3350
-Wire Wire Line
-	2550 2900 2300 3250
-Connection ~ 2550 2900
-$Comp
-L ESP32:PinHeader_3x2 JP5
-U 1 1 6046CF51
-P 2350 3500
-F 0 "JP5" H 2500 3450 50  0000 R CNN
-F 1 "PinHeader_3x2" H 2106 3455 50  0001 R CNN
-F 2 "ESP32:PinHeader_3in2" H 2350 3500 50  0001 C CNN
-F 3 "~" H 2350 3500 50  0001 C CNN
-	1    2350 3500
-	1    0    0    -1  
-$EndComp
 $Comp
 L ESP32:PinHeader_3x2 JP6
 U 1 1 6046DA09
@@ -328,7 +314,7 @@ F 3 "~" H 3100 2450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2000 5200 1800 5200
+	2000 5200 1600 5200
 Wire Wire Line
 	3750 5150 2500 5150
 Wire Wire Line
@@ -349,10 +335,7 @@ Wire Wire Line
 Wire Wire Line
 	3650 4450 3000 4450
 Wire Wire Line
-	2950 3900 2650 4250
-Connection ~ 2650 4250
-Wire Wire Line
-	2500 4500 1900 4500
+	2500 4500 1700 4500
 Wire Wire Line
 	4450 3450 4250 3450
 Wire Wire Line
@@ -375,14 +358,14 @@ F 3 "~" H 1600 5950 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	1800 5850 2000 5850
+	1800 5850 2100 5850
 Wire Wire Line
-	2000 6250 2000 5850
+	2100 6250 2100 5850
 Wire Wire Line
-	1800 6250 2000 6250
-Connection ~ 2000 5850
+	1800 6250 2100 6250
+Connection ~ 2100 5850
 Wire Wire Line
-	2000 5850 2950 5850
+	2100 5850 2950 5850
 Wire Wire Line
 	2200 6350 2600 6350
 Connection ~ 2200 6350
@@ -416,12 +399,7 @@ $EndComp
 Wire Wire Line
 	3550 6350 5050 6350
 Wire Wire Line
-	2650 2800 1850 2800
-Connection ~ 2800 2550
-Wire Wire Line
-	2800 2550 2550 2900
-Wire Wire Line
-	2800 2550 3050 2200
+	2650 2800 1700 2800
 Wire Wire Line
 	3450 2750 3150 2750
 $Comp
@@ -436,25 +414,9 @@ F 3 "~" H 2850 2800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2250 4850 1850 4850
-Wire Wire Line
-	2650 4250 2400 4600
-Wire Wire Line
-	2400 4600 2150 4950
-Connection ~ 2400 4600
+	2250 4850 1650 4850
 Wire Wire Line
 	3700 4800 2750 4800
-$Comp
-L ESP32:PinHeader_3x2 JP2
-U 1 1 6046BDBF
-P 2450 4850
-F 0 "JP2" H 2600 4800 50  0000 R CNN
-F 1 "PinHeader_3x2" H 2206 4805 50  0001 R CNN
-F 2 "ESP32:PinHeader_3in2" H 2450 4850 50  0001 C CNN
-F 3 "~" H 2450 4850 50  0001 C CNN
-	1    2450 4850
-	1    0    0    -1  
-$EndComp
 $Comp
 L Device:R_Network04 RN1
 U 1 1 603540B2
@@ -495,17 +457,13 @@ Wire Wire Line
 Wire Wire Line
 	2350 5450 2650 5450
 Wire Wire Line
-	1900 3750 1900 4500
+	1700 3700 1700 4500
 Wire Wire Line
-	1950 3650 1950 4150
+	1750 3600 1750 4150
 Wire Wire Line
-	1950 4150 2800 4150
-Wire Wire Line
-	1400 3550 1950 3550
+	1750 4150 2800 4150
 Wire Wire Line
 	2650 3450 3550 3450
-Wire Wire Line
-	2150 3500 1950 3500
 Wire Wire Line
 	4250 3000 3150 3000
 Wire Wire Line
@@ -549,12 +507,9 @@ Wire Wire Line
 Wire Wire Line
 	3250 5450 3350 3750
 Wire Wire Line
-	1900 3150 1900 3450
+	1750 3150 1750 3400
 Wire Wire Line
-	2300 3250 2300 4600
-Wire Wire Line
-	2300 4600 2400 4600
-Connection ~ 2300 3250
+	1950 4600 2400 4600
 Wire Wire Line
 	5050 5400 6900 5400
 Wire Wire Line
@@ -568,18 +523,6 @@ Wire Wire Line
 	5850 4750 5700 4750
 Wire Wire Line
 	4750 5800 5850 5800
-Wire Wire Line
-	1950 3550 1950 3500
-Wire Wire Line
-	2150 4950 1900 4950
-Wire Wire Line
-	1900 4950 1900 5950
-Connection ~ 2150 4950
-Connection ~ 1900 5950
-Wire Wire Line
-	1900 5950 1800 5950
-Wire Wire Line
-	1900 5950 4750 5950
 $Comp
 L power:GND #PWR0104
 U 1 1 6056639E
@@ -642,4 +585,70 @@ Wire Wire Line
 	3300 4200 3850 4200
 Text Label 3800 4200 0    50   ~ 0
 25
+$Comp
+L ESP32:PinHeader_3x2 JP2
+U 1 1 6046BDBF
+P 2450 4850
+F 0 "JP2" H 2600 4800 50  0000 R CNN
+F 1 "PinHeader_3x2" H 2206 4805 50  0001 R CNN
+F 2 "ESP32:PinHeader_3in2" H 2450 4850 50  0001 C CNN
+F 3 "~" H 2450 4850 50  0001 C CNN
+	1    2450 4850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2650 4250 1950 4250
+Wire Wire Line
+	2950 3900 1950 3900
+Wire Wire Line
+	1950 2900 2550 2900
+Wire Wire Line
+	2800 2550 1950 2550
+Wire Wire Line
+	1950 2550 1950 2900
+Wire Wire Line
+	1950 5950 4750 5950
+Wire Wire Line
+	1950 5950 1800 5950
+Connection ~ 1950 5950
+Wire Wire Line
+	2150 4950 1950 4950
+Wire Wire Line
+	1950 4950 1950 5950
+$Comp
+L ESP32:PinHeader_3x2 JP5
+U 1 1 6046CF51
+P 2350 3500
+F 0 "JP5" H 2500 3450 50  0000 R CNN
+F 1 "PinHeader_3x2" H 2106 3455 50  0001 R CNN
+F 2 "ESP32:PinHeader_3in2" H 2350 3500 50  0001 C CNN
+F 3 "~" H 2350 3500 50  0001 C CNN
+	1    2350 3500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1950 2900 1950 3250
+Connection ~ 1950 2900
+Connection ~ 1950 4950
+Connection ~ 1950 3900
+Wire Wire Line
+	1950 3900 1950 4250
+Connection ~ 1950 4250
+Wire Wire Line
+	1950 4250 1950 4600
+Connection ~ 1950 4600
+Wire Wire Line
+	1950 4600 1950 4950
+Wire Wire Line
+	2300 3250 1950 3250
+Connection ~ 1950 3250
+Wire Wire Line
+	1950 3250 1950 3900
+Wire Wire Line
+	1950 2200 1950 2550
+Wire Wire Line
+	1950 2200 3050 2200
+Connection ~ 1950 2550
+Wire Wire Line
+	1400 3500 2150 3500
 $EndSCHEMATC
