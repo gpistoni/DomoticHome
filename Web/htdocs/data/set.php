@@ -12,7 +12,7 @@ function GetVar($varname)
 	return 0;
 }
 
-
+//Wattage
 $Prod = GetVar('Prod');
 $Cons = GetVar('Cons');
 $SelfCons = GetVar('SelfCons');
@@ -22,13 +22,9 @@ $L2 = GetVar('L2');
 $L3 = GetVar('L3');
 
 $dataquery = new DataQuery();
-
 $newID=0;
+if ($Cons>0)	$newID .= $dataquery->addWattageRow($Prod, $Cons, $SelfCons, $Surplus, $L1, $L2, $L3);
 
-if ($Cons>0)
-{
-	$newID .= $dataquery->addWattageRow($Prod, $Cons, $SelfCons, $Surplus, $L1, $L2, $L3);
-}
 
 echo $newID;
 
