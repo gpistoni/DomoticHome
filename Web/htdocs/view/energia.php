@@ -34,11 +34,45 @@ require_once "./class/PrintObjects.php";
 		<div id="Oraria" class="d-flex" >
 		<p>Produzione Oraria</p></div>
 		
+		<div class="container">	
+		    <div class="row">
+			<div class="col-12">
+			    <div class="card">
+				<div class="card-body">
+				    <canvas id="chLine_h"></canvas>
+				</div>
+			    </div>
+			</div>
+		     </div>     
+		</div>
+		
 		<?php	
 		
 		$dataquery = new DataQuery();
 		$result = $dataquery->Wattage_dayh(4);
 
+		//loop through the returned data
+		foreach( $result as $key=>$row)
+		 {
+			$Item_Produced_h.= $row['Produced'] .',';
+			$Item_Consumed_h.= $row['Consumed'] .',';
+			$Item_SelfC_h.= $row['SelfConsumed'] .',';
+			$Item_NetC_h.= $row['NetConsumed'] .',';
+			
+			$date = $row['Day'];
+			$createDate = new DateTime($date);
+			$strip = $createDate->format('d-m-Y');
+			$Item_day_h .= '"'. $strip .'",';
+		}
+	 
+		// removing the final comma with rtrim
+		$Item_day_h = rtrim($Item_day_h,",");
+		$Item_Produced_h = rtrim($Item_Produced_h,",");
+		$Item_Consumed_h = rtrim($Item_Consumed_h,",");
+		$Item_SelfC_h = rtrim($Item_SelfC_h,",");
+		$Item_NetC_h = rtrim($Item_NetC_h,",");
+		//End SQL
+		
 		$sz = count($result);
 		
 		echo PrintObjects::BuildTable( $result, "class='table table-striped table-sm w-auto'");
@@ -55,7 +89,7 @@ require_once "./class/PrintObjects.php";
 			<div class="col-12">
 			    <div class="card">
 				<div class="card-body">
-				    <canvas id="chLine"></canvas>
+				    <canvas id="chLine_d"></canvas>
 				</div>
 			    </div>
 			</div>
@@ -63,26 +97,30 @@ require_once "./class/PrintObjects.php";
 		</div>
 		
 		<?php
-	
+		
 		$dataquery = new DataQuery();
 		$result = $dataquery->Wattage_day();
 	
 		//loop through the returned data
 		foreach( $result as $key=>$row)
 		 {
-			$Item_Produced.= $row['Produced'] .',';
-			$Item_Consumed.= $row['Consumed'] .',';
+			$Item_Produced_d.= $row['Produced'] .',';
+			$Item_Consumed_d.= $row['Consumed'] .',';
+			$Item_SelfC_d.= $row['SelfConsumed'] .',';
+			$Item_NetC_d.= $row['NetConsumed'] .',';
 			
 			$date = $row['Day'];
 			$createDate = new DateTime($date);
 			$strip = $createDate->format('d-m-Y');
-			$Item_day .= '"'. $strip .'",';
+			$Item_day_d .= '"'. $strip .'",';
 		}
 	 
 		// removing the final comma with rtrim
-		$Item_day = rtrim($Item_day,",");
-		$Item_Produced = rtrim($Item_Produced,",");
-		$Item_Consumed = rtrim($Item_Consumed,",");
+		$Item_day_d = rtrim($Item_day_d ,",");
+		$Item_Produced_d = rtrim($Item_Produced_d ,",");
+		$Item_Consumed_d = rtrim($Item_Consumed_d ,",");
+		$Item_SelfC_d = rtrim($Item_SelfC_d ,",");
+		$Item_NetC_d = rtrim($Item_NetC_d ,",");
 		//End SQL		
 		
 		$sz = count($result);
@@ -106,21 +144,35 @@ require_once "./class/PrintObjects.php";
 // chart colors
 var colors = ['#007bff','#28a745','#333333','#c3e6cb','#dc3545','#6c757d'];
 
+<!-------------------------------------------------------------------------------------------------------------->
 /* large line chart */
-var chLine = document.getElementById("chLine");
+var chLine_h = document.getElementById("chLine_h");
+var chLine_d = document.getElementById("chLine_d");
 
-var chartData = 
+var chartData_h = 
 {
-  labels: [<?php echo $Item_day; ?>],
+  labels: [<?php echo $Item_day_h; ?>],
   datasets: [{
-    data: [<?php echo $Item_Produced; ?>],
-    backgroundColor: 'transparent',
+    data: [<?php echo $Item_Produced_h; ?>],
+    backgroundColor: 'lightgreen',
     borderColor: 'green',
     borderWidth: 4,
     pointBackgroundColor: 'green',
   },
   {
-    data: [<?php echo $Item_Consumed; ?>],
+    data: [<?php echo $Item_SelfC_h; ?>],
+    backgroundColor: 'transparent',
+    borderColor: 'yellow',
+    borderWidth: 4,
+  },
+  {
+    data: [<?php echo $Item_NetC_h; ?>],
+    backgroundColor: 'transparent',
+    borderColor: 'orange',
+    borderWidth: 4,
+  },
+  {
+    data: [<?php echo $Item_Consumed_h; ?>],
     backgroundColor: 'coral',
     borderColor: 'red',
     borderWidth: 4,
@@ -128,15 +180,46 @@ var chartData =
   }]
 };
 
-if (chLine) {
-  new Chart(chLine, {
+var chartData_d = 
+{
+  labels: [<?php echo $Item_day_d; ?>],
+  datasets: [{
+    data: [<?php echo $Item_Produced_d; ?>],
+    backgroundColor: 'lightgreen',
+    borderColor: 'green',
+    borderWidth: 4,
+    pointBackgroundColor: 'green',
+  },
+  {
+    data: [<?php echo $Item_SelfC_d; ?>],
+    backgroundColor: 'transparent',
+    borderColor: 'yellow',
+    borderWidth: 4,
+  },
+  {
+    data: [<?php echo $Item_NetC_d; ?>],
+    backgroundColor: 'transparent',
+    borderColor: 'orange',
+    borderWidth: 4,
+  },
+  {
+    data: [<?php echo $Item_Consumed_d; ?>],
+    backgroundColor: 'coral',
+    borderColor: 'red',
+    borderWidth: 4,
+    pointBackgroundColor: 'red'
+  }]
+};
+
+if (chLine_h) {
+  new Chart(chLine_h, {
   type: 'line',
-  data: chartData,
+  data: chartData_h,
   options: {
     scales: {
       yAxes: [{
         ticks: {
-          beginAtZero: false
+          beginAtZero: true
         }
       }]
     },
@@ -147,6 +230,26 @@ if (chLine) {
   });
 }
 
+if (chLine_d) {
+  new Chart(chLine_d, {
+  type: 'line',
+  data: chartData_d,
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    },
+    legend: {
+      display: false
+    }
+  }
+  });
+}
+
+<!-------------------------------------------------------------------------------------------------------------->
 </script>	
 	
  <?php require_once (__DIR__ . "/_tail.php"); ?>
