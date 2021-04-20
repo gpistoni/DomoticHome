@@ -50,6 +50,8 @@ require_once "./class/PrintObjects.php";
 		
 		$dataquery = new DataQuery();
 		$result = $dataquery->Wattage_dayh(4);
+		$oldstrip = "";
+			$hour = 0;
 
 		//loop through the returned data
 		foreach( $result as $key=>$row)
@@ -62,7 +64,17 @@ require_once "./class/PrintObjects.php";
 			$date = $row['Day'];
 			$createDate = new DateTime($date);
 			$strip = $createDate->format('d-m-Y');
-			$Item_day_h .= '"'. $strip .'",';
+			if ($strip!=$oldstrip)
+				{
+				$Item_day_h .= '"'. $strip .'",';
+				$hour=0;
+				}
+			else
+				{
+				$Item_day_h .= '"h'. $hour .'",';
+				$hour+=4;
+				$oldstrip=$strip;
+				}
 		}
 	 
 		// removing the final comma with rtrim
