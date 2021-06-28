@@ -245,4 +245,23 @@ int IsNight( int crepuscolo = 50 )  //50 minuti
     return false;
 }
 
+int Is8_20Day()
+{
+    int hour = QDateTime::currentDateTime().time().hour();
+    //int minute =  QDateTime::currentDateTime().time().minute();
+
+    if (hour>=8 && hour<20)  return true;
+    return false;
+}
+
+int Is8_24Day()
+{
+    int hour = QDateTime::currentDateTime().time().hour();
+    //int minute =  QDateTime::currentDateTime().time().minute();
+
+    if (hour>=8)  return true;
+    return false;
+}
+
+
 

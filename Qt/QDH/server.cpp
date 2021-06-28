@@ -147,13 +147,13 @@ void ServerDH::manage_Progs(bool immediate)
         manage_PushWebData(15*60);
 
         manage_ExternalLight(10*60);
-        manage_BoilerACS(6*60);
+        manage_BoilerACS(9*60);
         manage_PDC(5*60);
         manage_Pumps(2*60);
         manage_EvRooms(10*60);
 
         manage_Internet(1*60);
-        manage_Remote212(2*60);
+        manage_Remote212(4*60);
     }
 }
 
@@ -184,7 +184,7 @@ void ServerDH::manage_Remote212(int sec)
 
     dr.LogMessage("--- Remote212 ---"  );
 
-    if (IsNight())                                         // questa si avvia alle 19
+    if (dr.wSurplus > 300 || Is8_24Day())                                         // questa si avvia con suplus oppure dalle 8 alle 20
     {
         CQHttpClient client2("192.168.1.212", 80, 10000 );
         dr.LogMessage("manage_Remote212 ON");
@@ -255,13 +255,13 @@ void ServerDH::manage_BoilerACS(int sec)
             boilerACS = true;
             dr.LogMessage("Condizione ON surplusW:" + dr.wSurplus.svalue() );
         }
-        else if ( !dr.rBoilerACS && dr.wSurplus > 500 ) // se e spento
+        else if ( !dr.rBoilerACS && dr.wSurplus > 600 ) // se e spento
         {
             boilerACS = true;
             dr.LogMessage("Condizione ON surplusW:" + dr.wSurplus.svalue() );
         }
 
-        //decido se accendere il boiler solo a mezzogiorno
+        //decido se accendere il boiler versomezzogiorno
         if ( hour() >= 13 && hour() <= 16 )
         {
             boilerACS = true;
@@ -319,7 +319,7 @@ void ServerDH::manage_ExternalLight(int sec)
     QString result = request.executeBlockingGet(Request);
 
     dr.LogMessage(Request);
-    dr.LogMessage(result);
+    //dr.LogMessage(result);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -404,31 +404,31 @@ void  ServerDH::manage_EvRooms( int sec )
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accendere le stanze
             QString str = "Stanze";
-            if ( dr.tSala > dr.tSala.setPoint(2)  )
+            if ( dr.tSala > 25  )
             {
-                str += " tSala " + dr.tSala.svalue()  + ">" + dr.tSala.ssetPoint(2) ;
+                str += " tSala " + dr.tSala.svalue()   + ">" + "25";
                 sala = true;
                 sala2 = true;
             }
-            if ( dr.tCucina > dr.tCucina.setPoint(2)  )
+            if ( dr.tCucina > 25  )
             {
-                str += " tCuc " + dr.tCucina.svalue()  + ">" + dr.tCucina.ssetPoint(2);
+                str += " tCuc " + dr.tCucina.svalue()  + ">" + "25";
                 cucina = true;
             }
-            if ( dr.tCameraS > 24 )
+            if ( dr.tCameraS > 23 )
             {
-                str += " tCamS " + dr.tCameraS.svalue()  + ">" + "24";
+                str += " tCamS " + dr.tCameraS.svalue()  + ">" + "23";
                 cameraS = true;
             }
-            if ( dr.tCameraD >  24  )
+            if ( dr.tCameraD >  23 )
             {
-                str += " tCamD " + dr.tCameraD.svalue()  + ">" + "24";
+                str += " tCamD " + dr.tCameraD.svalue()  + ">" + "23";
                 cameraD = true;
                 cameraD2 = true;
             }
-            if ( dr.tCameraM > 24 )
+            if ( dr.tCameraM > 23 )
             {
-                str += " tCamM " + dr.tCameraM.svalue()  + ">" + "24";
+                str += " tCamM " + dr.tCameraM.svalue()  + ">" + "23";
                 cameraM = true;
                 cameraM2 = true;
             }
