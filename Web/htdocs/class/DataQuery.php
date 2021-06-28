@@ -78,12 +78,18 @@ public function WattageTable()
 	
 public function addWattageRow($produced, $consumed, $selfConsumed, $surplus, $l1, $l2, $l3)
 {	
-	$query = "INSERT INTO Wattage (Dt, Produced, Consumed, SelfConsumed, Surplus, L1, L2, L3) ";
-	$query .= "VALUES (CURRENT_TIME(), ?, ?, ?, ?, ?, ?, ?) ";
-        $paramType = "iiiiiii";
-        $paramArray = array($produced, $consumed, $selfConsumed, $surplus, $l1, $l2, $l3);
-	$id = $this->ds->insert($query, $paramType, $paramArray);
-	return $id;
+	//$query = "INSERT INTO Wattage (Dt, Produced, Consumed, SelfConsumed, Surplus, L1, L2, L3) ";
+	//$query .= "VALUES (CURRENT_TIME(), ?, ?, ?, ?, ?, ?, ?) ";
+        //$paramType = "iiiiiii";
+        //$paramArray = array($produced, $consumed, $selfConsumed, $surplus, $l1, $l2, $l3);
+	//$id = $this->ds->insert($query, $paramType, $paramArray);
+	//return $id;
+	
+	$query =  "INSERT INTO Wattage (Dt, Produced, Consumed, SelfConsumed, Surplus, L1, L2, L3)  VALUES ";
+	$query .= "(CURRENT_TIME(), ".$produced.",".$consumed.",".$selfConsumed.",".$surplus.",".$l1.",".$l2.",".$l3.")";
+	
+	$Result .= $this->ds->insert($query);	
+	return $Result;
 }
 
 
