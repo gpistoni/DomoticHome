@@ -146,14 +146,14 @@ void ServerDH::manage_Progs(bool immediate)
         manage_DbLog(10*60);
         manage_PushWebData(15*60);
 
-        manage_ExternalLight(10*60);
+        manage_ExternalLight(6*60);
         manage_BoilerACS(9*60);
         manage_PDC(5*60);
         manage_Pumps(2*60);
         manage_EvRooms(10*60);
 
         manage_Internet(1*60);
-        manage_Remote212(4*60);
+        manage_Remote212(5*60);
     }
 }
 
@@ -250,7 +250,7 @@ void ServerDH::manage_BoilerACS(int sec)
     /**************************************************************************************************/
     if ( dr.progBoilerACS )
     {
-        if ( dr.rBoilerACS && dr.wSurplus > 100 ) // se e gia acceso
+        if ( dr.rBoilerACS && dr.wSurplus > 200 ) // se e gia acceso
         {
             boilerACS = true;
             dr.LogMessage("Condizione ON surplusW:" + dr.wSurplus.svalue() );
@@ -294,6 +294,9 @@ void ServerDH::manage_ExternalLight(int sec)
             lightSide = true;
             lightLamp = true;
         }
+        int hour = QDateTime::currentDateTime().time().hour();
+        if (hour<10)
+             lightLamp = false;
     }
 
     dr.LogMessage("LightLamp [" +  QString::number(lightLamp) + "] " );
@@ -546,7 +549,7 @@ void  ServerDH::manage_PDC( int sec )
             if (dr.rPdc)
             {
                 if( (!dr.rPdcNightMode && dr.wSurplus > 300) ||
-                        (dr.rPdcNightMode && dr.wSurplus > 600) )
+                        (dr.rPdcNightMode && dr.wSurplus > 800) )
                 {    // molto surplus
                     dr.LogMessage("PDC FULL POWER progSummerPDC_eco SurplusW" + dr.wSurplus.svalue() );
                     needPdc_FullPower = true;

@@ -27,7 +27,6 @@ void DbManager::LogEnergy()
 
     HttpRequest request2;
     QString result2 = request2.executeBlockingGet(url);
-
     m_dt->LogMessage(url);
-    m_dt->LogMessage(result2);
+    m_dt->LogMessage(result2.trimmed());
 }
