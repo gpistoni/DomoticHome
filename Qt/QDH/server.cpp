@@ -130,7 +130,6 @@ void ServerDH::manage_Progs(bool immediate)
     {
         dr.LogMessage("--- Manage_Progs immediate ---"  );
         manage_DbLog(-1);
-        manage_PushWebData(0);
 
         manage_ExternalLight(-1);
         manage_BoilerACS(-1);
@@ -146,7 +145,7 @@ void ServerDH::manage_Progs(bool immediate)
         manage_DbLog(10*60);
         manage_PushWebData(15*60);
 
-        manage_ExternalLight(6*60);
+        manage_ExternalLight(15*60);
         manage_BoilerACS(9*60);
         manage_PDC(5*60);
         manage_Pumps(2*60);
@@ -187,13 +186,13 @@ void ServerDH::manage_Remote212(int sec)
     if (dr.wSurplus > 300 || Is8_24Day())                                         // questa si avvia con suplus oppure dalle 8 alle 20
     {
         CQHttpClient client2("192.168.1.212", 80, 10000 );
-        dr.LogMessage("manage_Remote212 ON");
+        dr.LogMessage("manage_Remote212 [1]");
         client2.Request_Set("on");
     }
     else
     {
         CQHttpClient client2("192.168.1.212", 80, 10000 );
-        dr.LogMessage("manage_Remote212 OFF");
+        dr.LogMessage("manage_Remote212 [0]");
         client2.Request_Set("off");
     }
 }
@@ -203,20 +202,33 @@ void ServerDH::manage_Internet(int sec)
     if ( t_InternetConnection.elapsed() < sec * 1000 ) return;
     t_InternetConnection.restart();
 
+    // watchdog
+    emit tickWatchdog();
+
     CQHttpClient client2("192.168.1.210", 80, 10000 );
+
+    if ( hour()< 17 )
+    {
+        client2.Request_Set("off");
+        dr.LogEvent("Network DISABLED");
+        return;
+    }
+
     client2.Request_Set("on");
 
-    //dr.LogMessage("--- RouterInternet ---"  );
+    dr.LogMessage("--- RouterInternet ---"  );
     QString str;
     int ttt=0;
     bool connected = CQHttpClient::PingGoogle(str); ttt++;
     if (!connected)
     {
-        QThread::msleep(5);
+        dr.LogMessage("Ping Google failed");
+        QThread::msleep(50);
         bool connected2 = CQHttpClient::PingGoogle(str); ttt++;
         if (!connected2)
         {
-            QThread::msleep(10);
+            dr.LogMessage("Ping Google failed");
+            QThread::msleep(50);
             bool connected3 = CQHttpClient::PingGoogle(str); ttt++;
             if (!connected3)
             {
@@ -225,9 +237,9 @@ void ServerDH::manage_Internet(int sec)
                 // Off
                 CQHttpClient client("192.168.1.210", 80, 10000 );
                 client.Request_Set("off");
-                QThread::msleep(15);
+                QThread::msleep(50);
                 client.Request_Set("on");
-                QThread::msleep(30);                          // aspetto un po'
+                QThread::msleep(500);               // aspetto un po'
                 t_InternetConnection.restart();     // rivvio il conteggio
                 return;
             }
@@ -296,7 +308,7 @@ void ServerDH::manage_ExternalLight(int sec)
         }
         int hour = QDateTime::currentDateTime().time().hour();
         if (hour<10)
-             lightLamp = false;
+            lightLamp = false;
     }
 
     dr.LogMessage("LightLamp [" +  QString::number(lightLamp) + "] " );
@@ -322,7 +334,7 @@ void ServerDH::manage_ExternalLight(int sec)
     QString result = request.executeBlockingGet(Request);
 
     dr.LogMessage(Request);
-    //dr.LogMessage(result);
+    dr.LogMessage(result);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -546,7 +558,7 @@ void  ServerDH::manage_PDC( int sec )
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accender FULL POWER
             //pdc Gia Accesa
-            if (dr.rPdc)
+            if (dr.rPdc && dr.rBoilerACS)
             {
                 if( (!dr.rPdcNightMode && dr.wSurplus > 300) ||
                         (dr.rPdcNightMode && dr.wSurplus > 800) )

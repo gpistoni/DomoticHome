@@ -1,27 +1,23 @@
 #pragma once
 #include <QObject>
-#include "../QLibrary/DataTable.h"
-#include "../QLibrary/HttpRequest.h"
 #include "QDateTime"
 #include "QTimer"
 #include "dbmanager.h"
 
-#define SERVER_VER "1.10.3"
-
-class ServerDH : public QObject
+class Watchdog : public QTimer
 {
     Q_OBJECT
 
 public:
-    ServerDH(bool runPrograms);
-    ~ServerDH();
+    Watchdog();
+
+    ~Watchdog();
 
 private:
-    DataTable dr;    
-    DbManager m_DbManager;
+    DataTable dr;
+    QDateTime m_dtime;
 
     bool m_running = true;
-    bool m_runPrograms;
 
     int winter()
     {
@@ -44,43 +40,15 @@ private:
         return QDateTime::currentDateTime().time().minute();
     }
 
-    QElapsedTimer t_UpdateValues;
-    QElapsedTimer t_DbLog;
-    QElapsedTimer t_PushWebData;
-    QElapsedTimer t_BoilerACS;
-    QElapsedTimer t_ExternalLight;
-    QElapsedTimer t_evRooms;
-    QElapsedTimer t_WinterFIRE;
-    QElapsedTimer t_PDC;
-    QElapsedTimer t_Camino;
-
-    QElapsedTimer t_InternetConnection;
-    QElapsedTimer t_Remote212;
-
-public:
-    void Stop(){m_running = false; }
-
-public:
-    void manage_Progs(bool immediate);
-
-    void manage_DbLog(int sec);
-    void manage_PushWebData(int sec);
-
-    void manage_BoilerACS(int sec);
-    void manage_ExternalLight(int sec);
-    void manage_EvRooms(int sec);
-    void manage_PDC(int sec);
-    void manage_Pumps(int sec);
-
-    void manage_Internet(int sec);
-    void manage_Remote212(int sec);
-
 public slots:
     void run();
+    void tick();
+
+public:
+    void Stop(){ m_running = false; }
 
 signals:
     void finished();
     void error(QString err);
-    void updateValues(DataTable *v);
 };
 

@@ -76,7 +76,7 @@ QString HttpRequest::executeBlockingGet(const QUrl &url)
     QNetworkAccessManager localManager;
 
     QEventLoop eventLoop;
-    QObject::connect(&localManager, &QNetworkAccessManager::finished,&eventLoop, &QEventLoop::quit);
+    QObject::connect(&localManager, &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit);
 
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::UserAgentHeader, "MasteringQt5Browser 1.0");

@@ -44,10 +44,10 @@ SOURCES += \
     server.cpp \
     dbevents.cpp \
     ../QLibrary/HttpRequest.cpp \
-    dbmanager.cpp
+    dbmanager.cpp \
+    watchdog.cpp
 
 HEADERS += \
-    server.h \
     ../QLibrary/HttpClient.h \
     ../QLibrary/HttpParser.h \
     ../QLibrary/HttpServer.h \
@@ -61,6 +61,8 @@ HEADERS += \
     effemeridi.h \
     dbevents.h \
     ../QLibrary/HttpRequest.h \
-    dbmanager.h
+    dbmanager.h \
+    server.h \
+    watchdog.h
 
 FORMS +=

@@ -1,4 +1,5 @@
 #include <QApplication>
+#include "watchdog.h"
 #include "server.h"
 #include <QThread>
 
@@ -23,13 +24,28 @@ int main(int argc, char *argv[])
     HttpRequest request;
     request.executeGet(url);
 
-    // Server
+    QThread::sleep(1);
+    std::cerr << "Start WATCHDOG "<< std::endl;
+
+    // Watchdog -------------------------------------------------------------
+    Watchdog watchdog;
+
+    QObject::connect(&watchdog, &QTimer::timeout, &watchdog, &Watchdog::run);
+    //watchdog.connect(&watchdogthread, SIGNAL(started()), &watchdog, SLOT(run()));
+    watchdog.start();
+
+    QThread::sleep(1);
+    std::cerr << "Start SERVER "<< std::endl;
+
+    // Server -------------------------------------------------------------
     QThread serverthread;
     ServerDH server(true);
 
     server.moveToThread(&serverthread);
     server.connect(&serverthread, SIGNAL(started()), &server, SLOT(run()));
     server.connect(&server, SIGNAL(finished()), &serverthread, SLOT(quit()));
+    server.connect(&server, SIGNAL(tickWatchdog()), &watchdog, SLOT(tick()));
+    //QObject::connect(&server, &ServerDH::tickWatchdog, &watchdog, &Watchdog::tick);
     serverthread.start();
 
     aCore.exec();
