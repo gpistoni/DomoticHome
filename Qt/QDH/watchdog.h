@@ -6,7 +6,7 @@
 #include "QTimer"
 #include "dbmanager.h"
 
-#define SERVER_VER "1.11.0"
+#define SERVER_VER "1.10.3"
 
 class ServerDH : public QObject
 {
@@ -82,8 +82,5 @@ signals:
     void finished();
     void error(QString err);
     void updateValues(DataTable *v);
-
-signals:
-    void tickWatchdog();
 };
 
