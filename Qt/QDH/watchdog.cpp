@@ -20,7 +20,7 @@ Watchdog::~Watchdog()
 // -- RUN --
 void Watchdog::run()
 {
-    dr.LogMessage("WATCHDOG");
+    //dr.LogMessage("WATCHDOG");
 
     if ( m_dtime.secsTo(QDateTime::currentDateTime()) > 600)
     {

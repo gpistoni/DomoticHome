@@ -80,17 +80,12 @@ QString CQHttpClient::HTTPRequest(QString req, bool debugLog)
     }
 }
 
-QString CQHttpClient::Request_Get(QString path)
-{
-    return HTTPRequest( QString("/") + path, true );
-}
-
 QString CQHttpClient::Request_Json()
 {
     return HTTPRequest( QString("json"));
 }
 
-QString CQHttpClient::Request_Set(QString path)
+QString CQHttpClient::Request(QString path)
 {
     return HTTPRequest( QString("/") + path, false );
 }
@@ -99,7 +94,7 @@ bool CQHttpClient::PingGoogle(QString &out)
 {
     QProcess process;
     process.start("ping -c1 -s1 -w1 www.google.com");
-    process.waitForFinished(-1);
+    process.waitForFinished(5000);
 
     out = process.readAllStandardOutput();
     out += process.readAllStandardError();

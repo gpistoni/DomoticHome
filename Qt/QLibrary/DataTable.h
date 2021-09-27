@@ -325,7 +325,7 @@ public:
             {
                 CQHttpClient client(m_host, m_port, 10000 );
                 QString str = var->m_t.toLower() + "." + var->m_r.toLower() + "=" + QString::number(newval);
-                client.Request_Set(str);
+                client.Request(str);
                 return true;
             }
         }
@@ -343,7 +343,7 @@ public:
             {
                 CQHttpClient client(m_host, m_port, 10000 );
                 QString str = var->m_t.toLower() + "." + var->m_r.toLower() + "=" + QString::number(newval);
-                client.Request_Set(str);
+                client.Request(str);
                 return true;
             }
         }
