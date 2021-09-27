@@ -183,7 +183,7 @@ void ServerDH::manage_Remote212(int sec)
 
     dr.LogMessage("--- Remote212 ---"  );
 
-    if (dr.wSurplus > 300 || Is8_24Day())                   // questa si avvia con suplus oppure dalle 8 alle 20
+    if (dr.wSurplus > 300 || Is9_22Day())                   // questa si avvia con suplus oppure dalle 9 alle 22
     {
         CQHttpClient client2("192.168.1.212", 80, 10000 );
         dr.LogMessage("manage_Remote212 [1]");
@@ -308,7 +308,7 @@ void ServerDH::manage_ExternalLight(int sec)
             lightLamp = true;
         }
         int hour = QDateTime::currentDateTime().time().hour();
-        if (hour<10)
+        if (hour<12)
             lightLamp = false;
     }
 

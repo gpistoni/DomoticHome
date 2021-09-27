@@ -257,9 +257,14 @@ int Is8_20Day()
 int Is8_24Day()
 {
     int hour = QDateTime::currentDateTime().time().hour();
-    //int minute =  QDateTime::currentDateTime().time().minute();
-
     if (hour>=8)  return true;
+    return false;
+}
+
+int Is9_22Day()
+{
+    int hour = QDateTime::currentDateTime().time().hour();
+    if (hour>=9 && hour<=21)  return true;
     return false;
 }
 
