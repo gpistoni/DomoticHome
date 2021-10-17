@@ -6,7 +6,7 @@
 #include "QTimer"
 #include "dbmanager.h"
 
-#define SERVER_VER "1.11.2"
+#define SERVER_VER "1.11.3"
 
 class ServerDH : public QObject
 {

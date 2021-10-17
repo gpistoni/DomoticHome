@@ -635,11 +635,11 @@ void  ServerDH::manage_Pumps( int sec )
             dr.LogMessage("Condizione Pompa PP ON: " + QString::number( tempIn ) + "> 25  && >tRet: " + dr.tReturnFloor.svalue() );
             needPump_pp = true;
         }
-        if (dr.rPdc)    // se va la pdc deve andare la pompa necessariamente
-        {
-            dr.LogMessage("Condizione Pompa PP ON: Pdc On");
-            needPump_pp = true;
-        }
+//        if (dr.rPdc)    // se va la pdc deve andare la pompa necessariamente
+//        {
+//            dr.LogMessage("Condizione Pompa PP ON: Pdc On");
+//            needPump_pp = true;
+//        }
         if ( hour() < 6 || hour() >= 23  ) // fuori oario spengo pompa
         {
             dr.LogMessage("Stop Pompa: orario " + QString::number( hour() ) );

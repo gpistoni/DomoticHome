@@ -27,6 +27,7 @@ void Watchdog::run()
         dr.LogMessage("****** CRITICAL ******");
         dr.LogMessage("** Watchdog TIMEOUT **");
         dr.LogMessage("****** EXIT **********");
+        dr.LogEvent("** Watchdog TIMEOUT **");
         QThread::sleep(1);
         exit(-1);
     }
@@ -35,6 +36,6 @@ void Watchdog::run()
 void Watchdog::tick()
 {
     m_dtime = QDateTime::currentDateTime();
-    dr.LogMessage("Watchdog TICK");
+    //dr.LogMessage("Watchdog TICK");
 }
 
