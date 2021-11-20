@@ -630,16 +630,16 @@ void  ServerDH::manage_Pumps( int sec )
         /////////////////////////////////////////////////////////////////////////////////////
         float tempIn = std::max( dr.tInputMixer.m_value, std::max(dr.tPufferHi.m_value, dr.tReturnFireplace.m_value) );
         // decido se accendere/spegnere pompa piano primo
-        if ( tempIn > 25 && tempIn > dr.tReturnFloor + 3) // ho temperatura
+        if ( tempIn > 25 && tempIn > dr.tReturnFloor + 4) // ho temperatura
         {
             dr.LogMessage("Condizione Pompa PP ON: " + QString::number( tempIn ) + "> 25  && >tRet: " + dr.tReturnFloor.svalue() );
             needPump_pp = true;
         }
-//        if (dr.rPdc)    // se va la pdc deve andare la pompa necessariamente
-//        {
-//            dr.LogMessage("Condizione Pompa PP ON: Pdc On");
-//            needPump_pp = true;
-//        }
+        if (dr.rPdc)    // se va la pdc deve andare la pompa necessariamente
+        {
+            dr.LogMessage("Condizione Pompa PP ON: Pdc On");
+            needPump_pp = true;
+        }
         if ( hour() < 6 || hour() >= 23  ) // fuori oario spengo pompa
         {
             dr.LogMessage("Stop Pompa: orario " + QString::number( hour() ) );
@@ -656,7 +656,7 @@ void  ServerDH::manage_Pumps( int sec )
             needPump_pp = false;
         }
         /////////////////////////////////////////////////////////////////////////////////////
-        if (dr.tPufferHi > 38 && hour()>=16 &&  hour()<19 )  // acqua calda in puffer
+        if (dr.tPufferHi > 39 && hour()>=16 &&  hour()<19 )  // acqua calda in puffer
         {
             dr.LogMessage("Condizione Pompa PT ON: tPufferHi: " + dr.tPufferHi.svalue() );
             needPump_pt = true;  //accendo la pompa piano terra
