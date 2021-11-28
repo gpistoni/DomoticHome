@@ -5,10 +5,10 @@
 #-------------------------------------------------
 
 QT += core gui
-QT += websockets network
+QT += websockets
+QT += network
 QT += sql
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += widgets
 
 TARGET = ../../../QDH
 

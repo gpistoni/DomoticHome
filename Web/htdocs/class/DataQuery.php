@@ -114,7 +114,7 @@ public function Wattage_day()
 	$query .= "AVG(`L2`) AS L2, "; 
 	$query .= "AVG(`L3`) AS L3 "; 
 	$query .= "FROM `Wattage` ";
-	$query .= "WHERE 1 ";
+	$query .= "WHERE `Dt` > (current_date - interval 3 month) ";
 	$query .= "GROUP BY CAST(`Dt` as DATE) ";
 
 	$Result = $this->ds->select($query);
@@ -133,12 +133,32 @@ public function Wattage_dayh($hours)
 	$query .= "AVG(`L2`) AS L2, "; 
 	$query .= "AVG(`L3`) AS L3 "; 
 	$query .= "FROM `Wattage` ";
-	$query .= "WHERE 1 ";
+	$query .= "WHERE `Dt` > (current_date - interval 1 month) ";
 	$query .= "GROUP BY FLOOR( HOUR(`Dt`) / " . $hours . " ), DAY(`Dt`); "; 
 	
 	$Result = $this->ds->select($query);
 	return $Result;
 }
+
+public function Wattage_month() 
+{
+	$query = "SELECT CAST(`Dt` as DATETIME) AS Day, ";
+	$query .= "AVG(`Produced`) AS Produced, ";
+	$query .= "AVG(`Consumed`) AS Consumed, ";
+	$query .= "AVG(SelfConsumed) AS SelfConsumed,";
+	$query .= "AVG(Consumed-SelfConsumed) AS NetConsumed,";
+	$query .= "AVG(`Surplus`) AS Surplus, ";
+	$query .= "AVG(`L1`) AS L1, ";
+	$query .= "AVG(`L2`) AS L2, "; 
+	$query .= "AVG(`L3`) AS L3 "; 
+	$query .= "FROM `Wattage` ";
+	$query .= "WHERE 1 ";
+	$query .= "GROUP BY MONTH(`Dt`),YEAR(`Dt`) ; "; 
+	
+	$Result = $this->ds->select($query);
+	return $Result;
+}
+
 //*******************************************************************************************************
 public function LuciTable()
 {	

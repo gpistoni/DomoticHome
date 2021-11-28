@@ -30,9 +30,9 @@ require_once "./class/PrintObjects.php";
 	</div>
 
 	<ul class="list-group">
+		<!-------------------------------------------------------------------------------------------------------------->
 		<li>
-		<div id="Oraria" class="d-flex" >
-		<p>Produzione Oraria</p></div>
+		<div id="Oraria"><h2>Grafico Oraria (30gg)</h2></div>	
 		
 		<div class="container">	
 		    <div class="row">
@@ -51,7 +51,7 @@ require_once "./class/PrintObjects.php";
 		$dataquery = new DataQuery();
 		$result = $dataquery->Wattage_dayh(4);
 		$oldstrip = "";
-			$hour = 0;
+		$hour = 0;
 
 		//loop through the returned data
 		foreach( $result as $key=>$row)
@@ -87,14 +87,14 @@ require_once "./class/PrintObjects.php";
 		
 		$sz = count($result);
 		
-		echo PrintObjects::BuildTable( $result, "class='table table-striped table-sm w-auto'");
+		//echo PrintObjects::BuildTable( $result, "class='table table-striped table-sm w-auto'");
 		
 		//print_r($result);
 		?>
 		</li>
-		
+		<!-------------------------------------------------------------------------------------------------------------->
 		<li>
-		<div id="Giornaliera"><h2>Produzione Giornaliera</h2></div>	
+		<div id="Giornaliera"><h2>Grafico Giornaliera (3m)</h2></div>	
 		
 		<div class="container">	
 		    <div class="row">
@@ -137,11 +137,61 @@ require_once "./class/PrintObjects.php";
 		
 		$sz = count($result);
 		
-		echo PrintObjects::BuildTable( $result, "class='table table-striped table-sm w-auto'");
+		//echo PrintObjects::BuildTable( $result, "class='table table-striped table-sm w-auto'");
 		
 		//print_r($result);
 		?>		
 		</li>
+		<!-------------------------------------------------------------------------------------------------------------->
+		<li>
+		<div id="Mensile"><h2>Produzione Mensile</h2></div>	
+		
+		<div class="container">	
+		    <div class="row">
+			<div class="col-12">
+			    <div class="card">
+				<div class="card-body">
+				    <canvas id="chLine_m"></canvas>
+				</div>
+			    </div>
+			</div>
+		     </div>     
+		</div>
+		
+		<?php
+		
+		$dataquery = new DataQuery();
+		$result = $dataquery->Wattage_month();
+	
+		//loop through the returned data
+		foreach( $result as $key=>$row)
+		 {
+			$Item_Produced_m.= $row['Produced'] .',';
+			$Item_Consumed_m.= $row['Consumed'] .',';
+			$Item_SelfC_m.= $row['SelfConsumed'] .',';
+			$Item_NetC_m.= $row['NetConsumed'] .',';
+			
+			$date = $row['Day'];
+			$createDate = new DateTime($date);
+			$strip = $createDate->format('d-m-Y');
+			$Item_day_m .= '"'. $strip .'",';
+		}
+	 
+		// removing the final comma with rtrim
+		$Item_day_m = rtrim($Item_day_m ,",");
+		$Item_Produced_m = rtrim($Item_Produced_m ,",");
+		$Item_Consumed_m = rtrim($Item_Consumed_m ,",");
+		$Item_SelfC_m = rtrim($Item_SelfC_m ,",");
+		$Item_NetC_m = rtrim($Item_NetC_m ,",");
+		//End SQL		
+		
+		$sz = count($result);
+		
+		echo PrintObjects::BuildTable( $result, "class='table table-striped table-sm w-auto'");
+		
+		//print_r($result);
+		?>		
+		</li>			
 	</ul>
 	
 </body>
@@ -160,6 +210,7 @@ var colors = ['#007bff','#28a745','#333333','#c3e6cb','#dc3545','#6c757d'];
 /* large line chart */
 var chLine_h = document.getElementById("chLine_h");
 var chLine_d = document.getElementById("chLine_d");
+var chLine_m = document.getElementById("chLine_m");
 
 var chartData_h = 
 {
@@ -223,6 +274,37 @@ var chartData_d =
   }]
 };
 
+var chartData_m = 
+{
+  labels: [<?php echo $Item_day_m; ?>],
+  datasets: [{
+    data: [<?php echo $Item_Produced_m; ?>],
+    backgroundColor: 'lightgreen',
+    borderColor: 'green',
+    borderWidth: 4,
+    pointBackgroundColor: 'green',
+  },
+  {
+    data: [<?php echo $Item_SelfC_m; ?>],
+    backgroundColor: 'transparent',
+    borderColor: 'yellow',
+    borderWidth: 4,
+  },
+  {
+    data: [<?php echo $Item_NetC_m; ?>],
+    backgroundColor: 'transparent',
+    borderColor: 'orange',
+    borderWidth: 4,
+  },
+  {
+    data: [<?php echo $Item_Consumed_m; ?>],
+    backgroundColor: 'coral',
+    borderColor: 'red',
+    borderWidth: 4,
+    pointBackgroundColor: 'red'
+  }]
+};
+
 if (chLine_h) {
   new Chart(chLine_h, {
   type: 'line',
@@ -261,6 +343,24 @@ if (chLine_d) {
   });
 }
 
+if (chLine_m) {
+  new Chart(chLine_m, {
+  type: 'line',
+  data: chartData_m,
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    },
+    legend: {
+      display: false
+    }
+  }
+  });
+}
 <!-------------------------------------------------------------------------------------------------------------->
 </script>	
 	

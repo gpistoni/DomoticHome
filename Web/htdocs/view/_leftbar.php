@@ -45,6 +45,12 @@ function hidden($pagecheck)
 				      Giornaliera
 				    </a>
 				  </li>
+				   <li class="nav-item">
+				    <a class="nav-link" href="#Mensile">
+				      <span data-feather="file-text"></span>
+				      Mensile
+				    </a>
+				  </li>
 				</ul>
 			</li>
 			<li class="nav-item">
