@@ -1,6 +1,7 @@
 #include "server.h"
 #include "../QLibrary/DataTable.h"
 #include "../QLibrary/HttpServer.h"
+#include "../QLibrary/HttpServer2.h"
 #include "QThread"
 #include "QFile"
 //#include <unistd.h>
@@ -37,8 +38,7 @@ ServerDH::~ServerDH() {
 // Start processing data.
 void ServerDH::run()
 {
-    CQHttpServer HttpServer(8080);
-    HttpServer.startServer(&dr);
+    //HttpServer.startServer(&dr);
 
     m_DbManager.Init(&dr);
 

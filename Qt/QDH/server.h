@@ -2,11 +2,13 @@
 #include <QObject>
 #include "../QLibrary/DataTable.h"
 #include "../QLibrary/HttpRequest.h"
+#include "../QLibrary/HttpServer.h"
+#include "../QLibrary/HttpServer2.h"
 #include "QDateTime"
 #include "QTimer"
 #include "dbmanager.h"
 
-#define SERVER_VER "1.11.4"
+#define SERVER_VER "1.12.b"
 
 class ServerDH : public QObject
 {
