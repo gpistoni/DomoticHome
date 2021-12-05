@@ -40,3 +40,26 @@ public slots:
     void onClicked();
     void Update();
 };
+
+class Q_WIDGETS_EXPORT ButtonWebVar : public StdButton
+{
+    Q_OBJECT
+
+protected:
+    WebVar *var;
+
+    QLabel *text;
+
+    QPushButton *buttonON;
+    QPushButton *buttonOFF;
+
+public:
+    explicit ButtonWebVar(WebVar *v);
+    virtual ~ButtonWebVar(){}
+
+    void SetColor();
+
+public slots:
+    void onClicked();
+    void Update();
+};

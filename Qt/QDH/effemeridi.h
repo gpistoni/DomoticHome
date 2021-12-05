@@ -1,5 +1,4 @@
 #pragma once
-
 #include <sys/time.h>
 #include <time.h>
 #include <stdlib.h>
@@ -197,10 +196,10 @@ double calcSunsetUTC(double JD, double latitude, double longitude)
     double  timeDiff = 4 * delta;	// in minutes of time
     double  timeUTC = 720 + timeDiff - eqTime;	// in minutes
     double  newt = calcTimeJulianCent(calcJDFromJulianCent(t) + timeUTC/1440.0);
-        
+
     eqTime = calcEquationOfTime(newt);
     solarDec = calcSunDeclination(newt);
-        
+
     hourAngle = calcHourAngleSunset(latitude, solarDec);
     delta = longitude - radToDeg(hourAngle);
     timeDiff = 4 * delta;
@@ -224,20 +223,50 @@ int IsNight( int crepuscolo = 50 )  //50 minuti
 
     float JD = calcJD(year,month,day);
 
-    printf("\nSunrise timeUTC %lf", calcSunriseUTC( JD,  latitude,  longitude));
-    printf("\nSunset  timeUTC %lf", calcSunsetUTC( JD,  latitude,  longitude));
+    //printf("\nSunrise timeUTC %lf", calcSunriseUTC( JD,  latitude,  longitude));
+    //printf("\nSunset  timeUTC %lf", calcSunsetUTC( JD,  latitude,  longitude));
 
     double srise = calcSunriseUTC( JD,  latitude,  longitude);
     double sset = calcSunsetUTC( JD,  latitude,  longitude);
+    
+    if ( month <=4 && month > 10)  // ora solare
+    {
+        srise -= 60;
+        sset -= 60;
+    }
 
-    double now = minute + hour*60;
+    double now = minute + hour * 60;
 
-    printf("\nCurrent timeUTC %lf", now );
+    //printf("\nCurrent timeUTC %lf", now );
 
     if ((now < (srise-crepuscolo)) || ( now > (sset + crepuscolo)))
         return true;
 
     return false;
 }
+
+int Is8_20Day()
+{
+    int hour = QDateTime::currentDateTime().time().hour();
+    //int minute =  QDateTime::currentDateTime().time().minute();
+
+    if (hour>=8 && hour<20)  return true;
+    return false;
+}
+
+int Is8_24Day()
+{
+    int hour = QDateTime::currentDateTime().time().hour();
+    if (hour>=8)  return true;
+    return false;
+}
+
+int Is9_22Day()
+{
+    int hour = QDateTime::currentDateTime().time().hour();
+    if (hour>=9 && hour<=21)  return true;
+    return false;
+}
+
 
 

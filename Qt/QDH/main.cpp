@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 
     // Server
     QThread serverthread;
-    Server server(RunPrograms);
+    ServerDH server(RunPrograms);
 
     server.moveToThread(&serverthread);
     server.connect(&serverthread, SIGNAL(started()), &server, SLOT(run()));

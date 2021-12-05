@@ -3,11 +3,17 @@
     "arguments": [
         "clang++",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -17,10 +23,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -46,22 +57,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++",
         "/home/pistoni/Documenti/DomoticHome/Qt/QDH/mainwindow.cpp"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QDH/mainwindow.cpp"
 },
 {
     "arguments": [
         "clang++",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -71,10 +115,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -100,22 +149,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++",
         "/home/pistoni/Documenti/DomoticHome/Qt/QDH/server.cpp"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QDH/server.cpp"
 },
 {
     "arguments": [
         "clang++",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -125,10 +207,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -154,22 +241,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++",
         "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/HttpClient.cpp"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/HttpClient.cpp"
 },
 {
     "arguments": [
         "clang++",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -179,10 +299,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -208,22 +333,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++",
         "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/HttpParser.cpp"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/HttpParser.cpp"
 },
 {
     "arguments": [
         "clang++",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -233,10 +391,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -262,22 +425,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++",
         "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/HttpServer.cpp"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/HttpServer.cpp"
 },
 {
     "arguments": [
         "clang++",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -287,10 +483,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -316,22 +517,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++",
         "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/DataTable.cpp"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/DataTable.cpp"
 },
 {
     "arguments": [
         "clang++",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -341,10 +575,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -370,22 +609,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++",
         "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/DataVars.cpp"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/DataVars.cpp"
 },
 {
     "arguments": [
         "clang++",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -395,10 +667,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -424,22 +701,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++",
         "/home/pistoni/Documenti/DomoticHome/Qt/QDH/main.cpp"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QDH/main.cpp"
 },
 {
     "arguments": [
         "clang++",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -449,10 +759,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -478,22 +793,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++",
         "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/ButtonVarForced.cpp"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/ButtonVarForced.cpp"
 },
 {
     "arguments": [
         "clang++",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -503,10 +851,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -532,22 +885,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++",
         "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/LogMessage.cpp"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/LogMessage.cpp"
 },
 {
     "arguments": [
         "clang++",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -557,10 +943,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -586,22 +977,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++",
         "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/InfoTempSetpoint.cpp"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/InfoTempSetpoint.cpp"
 },
 {
     "arguments": [
         "clang++",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -611,10 +1035,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -640,22 +1069,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++",
         "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/InfoBarVar.cpp"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/InfoBarVar.cpp"
 },
 {
     "arguments": [
         "clang++",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -665,10 +1127,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -694,15 +1161,43 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++",
         "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/ButtonVar.cpp"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/ButtonVar.cpp"
 },
 {
     "arguments": [
+<<<<<<< HEAD
         "clang",
         "-c",
         "-m32",
@@ -710,6 +1205,13 @@
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "clang++",
+        "-c",
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -719,10 +1221,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -748,22 +1255,104 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+        "-x",
+        "c++",
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH/dbevents.cpp"
+    ],
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+    "file": "/home/pistoni/Documenti/DomoticHome/Qt/QDH/dbevents.cpp"
+},
+{
+    "arguments": [
+        "clang",
+        "-c",
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+        "-std=gnu++14",
+        "-fcxx-exceptions",
+        "-fexceptions",
+        "-DQT_DEPRECATED_WARNINGS",
+        "-DQT_NO_DEBUG",
+        "-DQT_WIDGETS_LIB",
+        "-DQT_GUI_LIB",
+        "-DQT_WEBSOCKETS_LIB",
+        "-DQT_NETWORK_LIB",
+        "-DQT_SQL_LIB",
+        "-DQT_CORE_LIB",
+        "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
+        "-fPIC",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++-header",
         "/home/pistoni/Documenti/DomoticHome/Qt/QDH/mainwindow.h"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QDH/mainwindow.h"
 },
 {
     "arguments": [
         "clang",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -773,10 +1362,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -802,22 +1396,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++-header",
         "/home/pistoni/Documenti/DomoticHome/Qt/QDH/server.h"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QDH/server.h"
 },
 {
     "arguments": [
         "clang",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -827,10 +1454,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -856,22 +1488,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++-header",
         "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/HttpClient.h"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/HttpClient.h"
 },
 {
     "arguments": [
         "clang",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -881,10 +1546,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -910,22 +1580,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++-header",
         "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/HttpParser.h"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/HttpParser.h"
 },
 {
     "arguments": [
         "clang",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -935,10 +1638,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -964,22 +1672,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++-header",
         "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/HttpServer.h"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/HttpServer.h"
 },
 {
     "arguments": [
         "clang",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -989,10 +1730,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -1018,22 +1764,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++-header",
         "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/DataTable.h"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/DataTable.h"
 },
 {
     "arguments": [
         "clang",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -1043,10 +1822,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -1072,22 +1856,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++-header",
         "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/DataVars.h"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QLibrary/DataVars.h"
 },
 {
     "arguments": [
         "clang",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -1097,10 +1914,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -1126,22 +1948,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++-header",
         "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/ButtonVarForced.h"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/ButtonVarForced.h"
 },
 {
     "arguments": [
         "clang",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -1151,10 +2006,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -1180,22 +2040,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++-header",
         "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/LogMessage.h"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/LogMessage.h"
 },
 {
     "arguments": [
         "clang",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -1205,10 +2098,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -1234,22 +2132,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++-header",
         "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/InfoTempSetpoint.h"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/InfoTempSetpoint.h"
 },
 {
     "arguments": [
         "clang",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -1259,10 +2190,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -1288,22 +2224,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++-header",
         "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/InfoBarVar.h"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/InfoBarVar.h"
 },
 {
     "arguments": [
         "clang",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -1313,10 +2282,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -1342,22 +2316,55 @@
         "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
         "-I",
         "/home/pistoni/Qt/5.12.1/android_armv7/mkspecs/android-clang",
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-x",
         "c++-header",
         "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/ButtonVar.h"
     ],
+<<<<<<< HEAD
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
+=======
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/QWidget/ButtonVar.h"
 },
 {
     "arguments": [
         "clang",
         "-c",
+<<<<<<< HEAD
         "-m32",
         "-target",
         "arm-linux-androideabi",
         "-target",
         "arm-linux-androideabi",
+=======
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-std=gnu++14",
         "-fcxx-exceptions",
         "-fexceptions",
@@ -1367,10 +2374,15 @@
         "-DQT_GUI_LIB",
         "-DQT_WEBSOCKETS_LIB",
         "-DQT_NETWORK_LIB",
+<<<<<<< HEAD
+=======
+        "-DQT_SQL_LIB",
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
         "-DQT_CORE_LIB",
         "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
         "-fPIC",
         "-I",
+<<<<<<< HEAD
         "/home/pistoni/Android/android-ndk-r18b/sysroot/usr/include/arm-linux-androideabi",
         "-I",
         "/home/pistoni/Android/android-ndk-r18b/sources/cxx-stl/llvm-libc++/include",
@@ -1402,5 +2414,83 @@
     ],
     "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release",
     "file": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Android_for_armeabi_v7a_Clang_Qt_5_12_1_for_Android_ARMv7-Release/ui_mainwindow.h"
+=======
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+        "-x",
+        "c++-header",
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH/dbevents.h"
+    ],
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+    "file": "/home/pistoni/Documenti/DomoticHome/Qt/QDH/dbevents.h"
+},
+{
+    "arguments": [
+        "clang",
+        "-c",
+        "-m64",
+        "-target",
+        "x86_64-linux-gnu",
+        "-std=gnu++14",
+        "-fcxx-exceptions",
+        "-fexceptions",
+        "-DQT_DEPRECATED_WARNINGS",
+        "-DQT_NO_DEBUG",
+        "-DQT_WIDGETS_LIB",
+        "-DQT_GUI_LIB",
+        "-DQT_WEBSOCKETS_LIB",
+        "-DQT_NETWORK_LIB",
+        "-DQT_SQL_LIB",
+        "-DQT_CORE_LIB",
+        "-DBOOST_TYPE_INDEX_CTTI_USER_DEFINED_PARSING=(39, 1, true, \"T = \")",
+        "-fPIC",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/QDH",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtWebSockets",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtSql",
+        "-I",
+        "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+        "-I",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+        "-I",
+        "/usr/include/libdrm",
+        "-I",
+        "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+        "-x",
+        "c++-header",
+        "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release/ui_mainwindow.h"
+    ],
+    "directory": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release",
+    "file": "/home/pistoni/Documenti/DomoticHome/Qt/build-QDH-Unnamed-Release/ui_mainwindow.h"
+>>>>>>> 8fb5107a7ea0126b4f7ee20bc1cb0388f0d83091
 }
 ]

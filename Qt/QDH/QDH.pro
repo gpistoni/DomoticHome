@@ -5,12 +5,12 @@
 #-------------------------------------------------
 
 QT += core gui
-QT += websockets network
+QT += websockets
+QT += network
 QT += sql
+QT += widgets
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-#TARGET = /root/dh/dh
+TARGET = ../../../QDH
 
 TEMPLATE = app
 
@@ -27,6 +27,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    dbmanager.cpp \
         mainwindow.cpp \
     server.cpp \
     ../QLibrary/HttpClient.cpp \
@@ -40,9 +41,11 @@ SOURCES += \
     ../QWidget/InfoTempSetpoint.cpp \
     ../QWidget/InfoBarVar.cpp \
     ../QWidget/ButtonVar.cpp \
-    dbevents.cpp
+    dbevents.cpp \
+    ../QLibrary/HttpRequest.cpp
 
 HEADERS += \
+    dbmanager.h \
         mainwindow.h \
     server.h \
     ../QLibrary/HttpClient.h \
@@ -55,7 +58,8 @@ HEADERS += \
     ../QWidget/InfoTempSetpoint.h \
     ../QWidget/InfoBarVar.h \
     ../QWidget/ButtonVar.h \
-    dbevents.h
+    dbevents.h \
+    ../QLibrary/HttpRequest.h
 
 FORMS += \
         mainwindow.ui

@@ -32,11 +32,11 @@ public:
                                    &progAllRooms
                                   };
     //*****************************************************************************************
-    VarF3SP tCucina                   = { "T1", "v0", "v8", "v16", -0.5, 22, "tCucina",   10, 30 };
-    VarF3SP tSala                     = { "T1", "v1", "v9", "v17",  0.5, 23, "tSala",     10, 30 };
-    VarF3SP tCameraS                  = { "T1", "v2", "v10", "v18", 1.5, 18, "tCameraS",  10, 30 };
-    VarF3SP tCameraD                  = { "T1", "v3", "v11", "v19", 0.5, 18, "tCameraD" , 10, 30 };
-    VarF3SP tCameraM                  = { "T1", "v4", "v12", "v20", 1,   16, "tCameraM" , 10, 30 };
+    VarF3SP tCucina                   = { "T1", "v0", "v8", "v16",  0.5, 22, "tCucina",   10, 30 };
+    VarF3SP tSala                     = { "T1", "v1", "v9", "v17",  1,   23, "tSala",     10, 30 };
+    VarF3SP tCameraS                  = { "T1", "v2", "v10", "v18", 1,   18, "tCameraS",  10, 30 };
+    VarF3SP tCameraD                  = { "T1", "v3", "v11", "v19", 0,   18, "tCameraD",  10, 30 };
+    VarF3SP tCameraM                  = { "T1", "v4", "v12", "v20", 1,   16, "tCameraM",  10, 30 };
     VarF3SP tBagno                    = { "T1", "v5", "v13", "v21", 2.5, 23, "tBagno" ,   10, 30 };
 
     std::vector<VarF3SP*>    temps = {  &tCucina,
@@ -47,35 +47,35 @@ public:
                                         &tBagno
                                      };
     //*****************************************************************************************
-    VarB lampAngoli                    = { "T2", "r0", "lampAngoli" };
-    VarB lampLati                      = { "T2", "r1", "lampLati" };
-    VarB lampPalo                      = { "T2", "r2", "lampPalo" };
-    VarB lampExtra                     = { "T2", "r3", "lampExtra" };
+    WebVar lampAngoli               = { 22, "L1", "L1" };
+    WebVar lampLati                 = { 22, "L2", "lampLati" };
+    WebVar lampPalo                 = { 22, "L3", "lampPalo" };
+    WebVar lampExtra                = { 22, "L4", "lampExtra" };
 
-    std::vector<VarB*>    lights = {  &lampAngoli,
-                                      &lampLati,
-                                      &lampPalo,
-                                      &lampExtra
-                                   };
+    std::vector<WebVar*>    lights = {  &lampAngoli,
+                                        &lampLati,
+                                        &lampPalo,
+                                        &lampExtra
+                                     };
     //*****************************************************************************************
     VarBf rPdc                     = { "T3", "r0", "Pdc" };
     VarBf rPdcHeat                 = { "T3", "r1", "rPdcHeat" };
     VarBf rPdcPompa                = { "T3", "r2", "rPdcPompa" };
-    VarBf rPdcFullPower            = { "T3", "r3", "rPdcFullPower" };
+    VarBf rPdcNightMode            = { "T3", "r3", "rPdcNightMode" };
     VarBf rPompaPianoPrimo         = { "T3", "r4", "rPompaPianoPrimo" };
     VarBf rPompaPianoTerra         = { "T3", "r5", "rPompaPianoTerra" };
     VarBf rBoilerACS               = { "T3", "r6", "rBoilerACS" };
     VarBf rPompaCamino             = { "T3", "r7", "rPompaCamino" };
 
     std::vector<VarBf*>    rcaldaia = {  &rPdc,
-                                        &rPdcHeat,
-                                        &rPdcPompa,
-                                        &rPdcFullPower,
-                                        &rPompaPianoPrimo,
-                                        &rPompaPianoTerra,
-                                        &rBoilerACS,
-                                        &rPompaCamino
-                                     };
+                                         &rPdcHeat,
+                                         &rPdcPompa,
+                                         &rPdcNightMode,
+                                         &rPompaPianoPrimo,
+                                         &rPompaPianoTerra,
+                                         &rBoilerACS,
+                                         &rPompaCamino
+                                      };
     //*****************************************************************************************
     VarF tPufferHi          = { "T4", "v0", "PufferHi",0,60 };
     VarF tPufferLow         = { "T4", "v1", "PufferLow",0,60 };
@@ -106,14 +106,14 @@ public:
     VarBf evCameraD2         = { "T5", "r7", "CameraD2" };
 
     std::vector<VarBf*>    evStanze = { &evCameraM1,
-                                       &evCameraM2,
-                                       &evCucina,
-                                       &evSala1,
-                                       &evSala2,
-                                       &evCameraS,
-                                       &evCameraD1,
-                                       &evCameraD2
-                                     };
+                                        &evCameraM2,
+                                        &evCucina,
+                                        &evSala1,
+                                        &evSala2,
+                                        &evCameraS,
+                                        &evCameraD1,
+                                        &evCameraD2
+                                      };
     //*****************************************************************************************
     VarF3 wPowergrid            = { "T6", "v0", "v8", "v16", "PowerGrid" , 0, 4000};
     VarF3 wProduced             = { "T6", "v1", "v9", "v17", "Produced" , 0, 4000};
@@ -125,6 +125,7 @@ public:
     // dato calcolato
     VarF3 wConsumed             = { "T6", "", "", "", "Consumed" , 0, 4000};
     VarF3 wSurplus              = { "T6", "", "", "", "Surplus" , 0, 4000};
+    VarF3 wSelfConsumed         = { "T7", "", "", "", "SelfConsumed" , 0, 4000};
 
     std::vector<VarF3*>    ampers = { &wPowergrid,
                                       &wProduced,
@@ -133,7 +134,8 @@ public:
                                       &wL3,
                                       &wCounter,
                                       &wConsumed,
-                                      &wSurplus
+                                      &wSurplus,
+                                      &wSelfConsumed
                                     };
     //*****************************************************************************************
 };
@@ -176,10 +178,10 @@ public:
             {
                 UpdateVal( elem );
             }
-            for( VarB *elem : lights )
+            /*for( VarB *elem : lights )
             {
                 UpdateRelay( elem );
-            }
+            }*/
             for( VarBf *elem : rcaldaia )
             {
                 UpdateRelay( elem );
@@ -217,10 +219,12 @@ public:
             {
                 UpdateVal( elem );
             }*/
-            for( VarB *elem : lights )
+            /*
+             * for( VarB *elem : lights )
             {
                 SendModifiedValue( elem );
             }
+            */
             for( VarBf *elem : rcaldaia )
             {
                 SendModifiedValue( elem );
@@ -228,7 +232,7 @@ public:
             for( VarBf *elem : evStanze )
             {
                 SendModifiedValue( elem );
-            }            
+            }
         }
         catch(...)
         {
@@ -321,7 +325,7 @@ public:
             {
                 CQHttpClient client(m_host, m_port, 10000 );
                 QString str = var->m_t.toLower() + "." + var->m_r.toLower() + "=" + QString::number(newval);
-                client.Request_Set(str);
+                client.Request(str);
                 return true;
             }
         }
@@ -339,7 +343,7 @@ public:
             {
                 CQHttpClient client(m_host, m_port, 10000 );
                 QString str = var->m_t.toLower() + "." + var->m_r.toLower() + "=" + QString::number(newval);
-                client.Request_Set(str);
+                client.Request(str);
                 return true;
             }
         }
@@ -369,8 +373,12 @@ public:
         // std::cerr << ".";
     }
 
-   void LogMessage(QString s, bool logtofile = true);
+    void LogMessage(QString s, bool logtofile = true);
+    void LogEvent(QString s, bool logtofile = true);
 
     bool GetLogMessage( QString &s );
+
+private:
+    void LogFileMessage(QString s, bool logtofile, QString fname);
 };
 

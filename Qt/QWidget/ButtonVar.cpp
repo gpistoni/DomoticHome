@@ -70,3 +70,66 @@ void ButtonVar::Update()
 {
     SetColor();
 }
+
+//**************************************************************************************************************
+ButtonWebVar::ButtonWebVar(WebVar *v)
+{
+    var = v;
+
+    text = new QLabel();
+    buttonON = new QPushButton();
+    buttonOFF = new QPushButton();
+
+    connect(buttonON, SIGNAL(clicked()), this, SLOT(onClicked()));
+    connect(buttonOFF, SIGNAL(clicked()), this, SLOT(onClicked()));
+
+    text->setMinimumWidth(300);
+    text->setText(var->Description());
+
+    QHBoxLayout * hl = new QHBoxLayout();
+    buttonON->setText("ON");
+    buttonON->setLayout(hl);
+
+    buttonOFF->setText("OFF");
+    buttonOFF->setLayout(hl);
+
+    QSpacerItem *spacer = new QSpacerItem(1,1, QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+    m_gl.addWidget(text);
+    m_gl.addSpacerItem(spacer);
+    m_gl.addWidget(buttonOFF);
+    m_gl.addWidget(buttonON);
+
+    setLayout(&m_gl);
+    SetColor();
+}
+
+void ButtonWebVar::onClicked()
+{
+    QPushButton *button = static_cast<QPushButton*>(sender());
+    if (button==buttonON)
+        var->SetValue(1);
+    if (button==buttonOFF)
+        var->SetValue(0);
+    SetColor();
+}
+
+void ButtonWebVar::SetColor( )
+{
+    if (var->GetOnOff())
+    {
+        buttonON->setPalette(m_pON);
+        buttonOFF->setPalette(m_pDIS);
+    }
+    else
+    {
+        buttonON->setPalette(m_pDIS);
+        buttonOFF->setPalette(m_pOFF);
+    }
+    update();
+}
+
+void ButtonWebVar::Update()
+{
+    SetColor();
+}

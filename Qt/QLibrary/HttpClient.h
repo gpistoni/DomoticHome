@@ -29,9 +29,8 @@ private:
     QString HTTPRequest(QString path, bool debugLog = false);
 
 public:
-    QString Request_Get(QString path );
     QString Request_Json();
-    QString Request_Set(QString path);
+    QString Request(QString path);
 
     static bool PingGoogle(QString &out);
 };

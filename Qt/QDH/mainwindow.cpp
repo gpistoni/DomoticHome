@@ -7,7 +7,7 @@
 #include "QScrollArea"
 #include "server.h"
 
-MainWindow::MainWindow(Server *pserver, QWidget *parent) :
+MainWindow::MainWindow(ServerDH *pserver, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     m_pserver(pserver)
@@ -79,9 +79,9 @@ void MainWindow::updateValues(DataTable* dr)
             gridLayout->setSpacing(6);
             gridLayout->setContentsMargins(11, 11, 11, 11);
 
-            for( VarB *elem : dr->lights )
+            for( WebVar *elem : dr->lights )
             {
-                ButtonVar *but= new ButtonVar(elem);
+                ButtonWebVar *but= new ButtonWebVar(elem);
                 connect(m_pserver, SIGNAL(updateValues(DataTable*)), but, SLOT(Update()));
                 gridLayout->addWidget(but);
             }
@@ -210,7 +210,13 @@ void MainWindow::updateValues(DataTable* dr)
     ui->label_S->setText( dr->wSurplus.svalue());
     ui->label_C->setText( dr->wConsumed.svalue());
 
-    ui->label_G->setText("COUNT: " + dr->wCounter.svalue());
+    float WSurplus = 100 * 3600 / dr->wCounter;
+
+    if ( WSurplus > 0 )
+        ui->label_G->setText("COUNT: " + dr->wCounter.svalue() + " w:" + QString::number(WSurplus)  );
+    else
+        ui->label_G->setText("COUNT: " + dr->wCounter.svalue() );
+
     ui->label_L1->setText("L1: " + dr->wL1.svalue());
     ui->label_L2->setText("L2: " + dr->wL2.svalue());
     ui->label_L3->setText("L3: " + dr->wL3.svalue());

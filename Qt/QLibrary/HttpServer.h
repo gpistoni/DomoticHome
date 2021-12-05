@@ -1,34 +1,35 @@
-#pragma once
-#include <QObject>
-#include <QTcpSocket>
-#include <QTcpServer>
-#include <QThreadPool>
-#include "DataTable.h"
+//#pragma once
+//#include <QObject>
+//#include <QTcpSocket>
+//#include <QTcpServer>
+//#include <QThreadPool>
+//#include "DataTable.h"
 
 
-class CQHttpServer : public QTcpServer
-{
-    Q_OBJECT
-public:
-    explicit CQHttpServer(quint16 port, bool debug = false, QObject *parent = nullptr);
-    ~CQHttpServer();
+//class CQHttpServer : public QTcpServer
+//{
+//    Q_OBJECT
+//public:
+//    explicit CQHttpServer(quint16 port, bool debug = false, QObject *parent = nullptr);
+//    ~CQHttpServer();
 
-    DataValues *m_dv;
+//    DataValues *m_dv;
 
-Q_SIGNALS:
-    void closed();
+//Q_SIGNALS:
+//    void closed();
 
-private Q_SLOTS:
+//private Q_SLOTS:
 
-public:
-    void startServer(DataValues *dv);
+//public:
+//    void startServer(DataValues *dv);
 
-protected:
-    void incomingConnection( qintptr handle );
+//protected:
+//    void incomingConnection( qintptr handle );
 
-private:
-    QThreadPool *m_pool;
-    quint16 m_port;
-    bool m_debug;
-};
+//private:
+//    QThreadPool *m_pool;
+//    quint16 m_port;
+//    bool m_debug;
+//};
+
 
