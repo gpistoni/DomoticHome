@@ -2,11 +2,13 @@
 #include <QObject>
 #include "../QLibrary/DataTable.h"
 #include "../QLibrary/HttpRequest.h"
+#include "../QLibrary/HttpServer.h"
+#include "../QLibrary/HttpServer2.h"
 #include "QDateTime"
 #include "QTimer"
 #include "dbmanager.h"
 
-#define SERVER_VER "1.11.3"
+#define SERVER_VER "1.12.b"
 
 class ServerDH : public QObject
 {
@@ -35,6 +37,10 @@ private:
     {
         return QDateTime::currentDateTime().date().month();
     }
+    int day()
+    {
+        return QDateTime::currentDateTime().date().day();
+    }
     int hour()
     {
         return QDateTime::currentDateTime().time().hour();
@@ -44,7 +50,6 @@ private:
         return QDateTime::currentDateTime().time().minute();
     }
 
-    QElapsedTimer t_UpdateValues;
     QElapsedTimer t_DbLog;
     QElapsedTimer t_PushWebData;
     QElapsedTimer t_BoilerACS;
@@ -56,6 +61,7 @@ private:
 
     QElapsedTimer t_InternetConnection;
     QElapsedTimer t_Remote212;
+    QElapsedTimer t_Remote216;
 
 public:
     void Stop(){m_running = false; }
@@ -72,8 +78,9 @@ public:
     void manage_PDC(int sec);
     void manage_Pumps(int sec);
 
-    void manage_Internet(int sec);
-    void manage_Remote212(int sec);
+    void manage_Remote210_Internet(int sec);
+    void manage_Remote212_Freezer(int sec);
+    void manage_Remote216_Christmas(int sec);
 
 public slots:
     void run();

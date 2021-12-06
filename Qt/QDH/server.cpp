@@ -1,6 +1,7 @@
 #include "server.h"
 #include "../QLibrary/DataTable.h"
 #include "../QLibrary/HttpServer.h"
+#include "../QLibrary/HttpServer2.h"
 #include "QThread"
 #include "QFile"
 //#include <unistd.h>
@@ -12,7 +13,6 @@ ServerDH::ServerDH(bool runPrograms ) :
     dr("192.168.1.200", 80),
     m_runPrograms(runPrograms)
 {
-    t_UpdateValues.start();
     t_DbLog.start();
     t_PushWebData.start();
     t_BoilerACS.start();
@@ -24,6 +24,7 @@ ServerDH::ServerDH(bool runPrograms ) :
 
     t_InternetConnection.start();
     t_Remote212.start();
+    t_Remote216.start();
 
     //m_dbEvents.CreateTables();
 }
@@ -37,8 +38,7 @@ ServerDH::~ServerDH() {
 // Start processing data.
 void ServerDH::run()
 {
-    CQHttpServer HttpServer(8080);
-    HttpServer.startServer(&dr);
+    //HttpServer.startServer(&dr);
 
     m_DbManager.Init(&dr);
 
@@ -74,9 +74,7 @@ void ServerDH::run()
         try {
             while (m_running)
             {
-                QThread::msleep(500);  //milliseconds
-
-                t_UpdateValues.restart();
+                QThread::msleep(1000);  //milliseconds
 
                 /////////////////////////////////////////////////////////////////////////////////////////
                 dr.ReadData();
@@ -137,22 +135,24 @@ void ServerDH::manage_Progs(bool immediate)
         manage_PDC(-1);
         manage_EvRooms(-1);
 
-        manage_Internet(-1);
-        manage_Remote212(-1);
+        manage_Remote210_Internet(-1);
+        manage_Remote212_Freezer(-1);
+        manage_Remote216_Christmas(-1);
     }
     else
     {
         manage_DbLog(10*60);
         manage_PushWebData(15*60);
 
-        manage_ExternalLight(15*60);
+        manage_ExternalLight(5*60);
         manage_BoilerACS(9*60);
         manage_PDC(5*60);
         manage_Pumps(3*60);
         manage_EvRooms(10*60);
 
-        manage_Internet(3*60);
-        manage_Remote212(5*60);
+        manage_Remote210_Internet(3*60);        //Remote bug - 5 minute max pool time
+        manage_Remote212_Freezer(5*60);
+        manage_Remote216_Christmas(5*60);
     }
 }
 
@@ -176,12 +176,12 @@ void ServerDH::manage_DbLog(int sec)
     //m_dbEvents.LogTemperature( dr );
 }
 
-void ServerDH::manage_Remote212(int sec)
+void ServerDH::manage_Remote212_Freezer(int sec)
 {
     if ( t_Remote212.elapsed() < sec * 1000 ) return;
     t_Remote212.restart();
 
-    dr.LogMessage("--- Remote212 ---"  );
+    dr.LogMessage("--- Remote212_Freezer ---"  );
 
     if (dr.wSurplus > 300 || Is9_22Day())                   // questa si avvia con suplus oppure dalle 9 alle 22
     {
@@ -197,7 +197,29 @@ void ServerDH::manage_Remote212(int sec)
     }
 }
 
-void ServerDH::manage_Internet(int sec)
+void ServerDH::manage_Remote216_Christmas(int sec)
+{
+    if ( t_Remote216.elapsed() < sec * 1000 ) return;
+    t_Remote216.restart();
+
+    dr.LogMessage("--- Remote216_Christmas ---"  );
+
+    if ( (IsNight() && hour()>17) || (IsNight() && day()==25 && month()==12) )
+    {
+        dr.LogMessage(QString("IsNight && Hour:") +  hour() +  ">17");
+        CQHttpClient client2("192.168.1.216", 80, 10000 );
+        dr.LogMessage("manage_Remote216 [1]");
+        client2.Request("on");
+    }
+    else
+    {
+        CQHttpClient client2("192.168.1.216", 80, 10000 );
+        dr.LogMessage("manage_Remote216 [0]");
+        client2.Request("off");
+    }
+}
+
+void ServerDH::manage_Remote210_Internet(int sec)
 {
     if ( t_InternetConnection.elapsed() < sec * 1000 ) return;
     t_InternetConnection.restart();
@@ -301,7 +323,7 @@ void ServerDH::manage_ExternalLight(int sec)
 
     if (dr.progExternalLight)
     {
-        if (IsNight() )
+        if (IsNight())
         {
             dr.LogMessage("IsNIGHT");
             lightSide = true;

@@ -45,7 +45,8 @@ SOURCES += \
     dbevents.cpp \
     ../QLibrary/HttpRequest.cpp \
     dbmanager.cpp \
-    watchdog.cpp
+    watchdog.cpp \
+    ../QLibrary/HttpServer2.cpp
 
 HEADERS += \
     ../QLibrary/HttpClient.h \
@@ -63,6 +64,7 @@ HEADERS += \
     ../QLibrary/HttpRequest.h \
     dbmanager.h \
     server.h \
-    watchdog.h
+    watchdog.h \
+    ../QLibrary/HttpServer2.h
 
 FORMS +=

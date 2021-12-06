@@ -37,6 +37,9 @@ int main(int argc, char *argv[])
     QThread::sleep(1);
     std::cerr << "Start SERVER "<< std::endl;
 
+    // HTTP -------------------------------------------------------------
+    HTTPServer HttpServer;
+
     // Server -------------------------------------------------------------
     QThread serverthread;
     ServerDH server(true);
