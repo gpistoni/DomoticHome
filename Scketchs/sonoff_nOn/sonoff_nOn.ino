@@ -2,10 +2,15 @@
 
 WiFiServer server(80);
 
-// Ip utilizzati  210, 212, 218
+// To flash the new software to our SONOFF, we have to start Sonoff in flash mode. 
+// Follow this steps process:Connection of USB converter to SONOFFHold down the SONOFF buttonToggle 
+// the switch to apply power to the Sonoff circuitThen, we can release the SONOFF buttonAfter SONOFF
+// is in flash mode, we can upload new software.This program is very simple, so it is great for first flashing.
+
+// Ip utilizzati  210, 212, 214, 216, 218
 
 // Setup IP
-IPAddress local_IP(192, 168, 1, 210);
+IPAddress local_IP(192, 168, 1, 214);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 
@@ -165,7 +170,7 @@ void loop(void)
 
 
   //Force set on
-  if ( millis() - last_io > 1000 * 60 * 5 ||  WiFi.status() != WL_CONNECTED ) // 5 minutes
+  if ( millis() - last_io > 1000 * 60 * 10 ||  WiFi.status() != WL_CONNECTED ) // 10 minutes
   {
     Serial.print(millis()/1000.0);
     Serial.println(" FORCE SET ON");
