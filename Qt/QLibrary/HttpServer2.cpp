@@ -153,7 +153,7 @@ HTTPServer::HTTPServer(QObject *parent)
 
 void HTTPServer::incomingConnection(qintptr socketDescriptor)
 {
-    qDebug() << "IncomingConnection";
+    qDebug() << "IncomingConnection" << socketDescriptor;
     QString content;
     content = "<p><a href='on'><button>ON</button>";
     content += "\n";
@@ -184,9 +184,27 @@ void HTTPThread::run()
         return;
     }
 
+    while (tcpSocket.canReadLine()) {
+        QStringList tokens = QString(tcpSocket.readLine()).split(QRegExp("[ \r\n][ \r\n]*"));
+
+        qDebug() << "QStringList ---------";
+        for (QList<QString>::iterator i = tokens.begin(); i != tokens.end(); ++i)
+            qDebug() << (*i);
+    }
+
+
+//    QStringList tokens = QString(tcpSocket.readLine()).split(QRegExp("[ \r\n][ \r\n]*"));
+//    qDebug() << tokens[0];
+//    if (tokens[0] == "GET")
+//    {
+//        ;
+//    }
+
+    qDebug() << "-----------------------------------";
     qDebug() << text;
     tcpSocket.write(text.toLatin1(), text.length());
+    tcpSocket.waitForBytesWritten();
     tcpSocket.disconnectFromHost();
-    tcpSocket.waitForDisconnected();
+    //tcpSocket.waitForDisconnected();
 }
 
