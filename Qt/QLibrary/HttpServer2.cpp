@@ -142,16 +142,7 @@ void CQHttpServer::incomingConnection(qintptr socketDescriptor)
 HTTPServer::HTTPServer(QObject *parent)
     : QTcpServer(parent)
 {
-    fortunes << tr("You've been leading a dog's life. Stay off the furniture.")
-             << tr("You've got to think about tomorrow.")
-             << tr("You will be surprised by a loud noise.")
-             << tr("You will feel hungry again in another hour.")
-             << tr("You might have mail.")
-             << tr("You cannot kill time without injuring eternity.")
-             << tr("Computers are not intelligent. They only think they are.");
-
-
-    if (!listen())
+    if (!listen(QHostAddress::Any, 8080))
     {
         qDebug() << "Unable to start the server:" << errorString();
     }
@@ -162,10 +153,18 @@ HTTPServer::HTTPServer(QObject *parent)
 
 void HTTPServer::incomingConnection(qintptr socketDescriptor)
 {
-    qDebug() << "incomingConnection";
-    QString str = "MESSAGE";
-    m_thread = new HTTPThread(socketDescriptor, str, this);
-    //connect(m_thread, SIGNAL(finished()), m_thread, SLOT(deleteLater()));
+    qDebug() << "IncomingConnection" << socketDescriptor;
+    QString content;
+    content = "<p><a href='on'><button>ON</button>";
+    content += "\n";
+
+    QString header;
+    header += "HTTP/1.1 200 OK \r\n";
+    header += "Content-Type: text/html \r\n";
+    header += "\r\n";
+
+    m_thread = new HTTPThread(socketDescriptor, header + content, this);
+    connect(m_thread, SIGNAL(finished()), m_thread, SLOT(deleteLater()));
     m_thread->start();
 }
 
@@ -185,9 +184,27 @@ void HTTPThread::run()
         return;
     }
 
+    while (tcpSocket.canReadLine()) {
+        QStringList tokens = QString(tcpSocket.readLine()).split(QRegExp("[ \r\n][ \r\n]*"));
+
+        qDebug() << "QStringList ---------";
+        for (QList<QString>::iterator i = tokens.begin(); i != tokens.end(); ++i)
+            qDebug() << (*i);
+    }
+
+
+//    QStringList tokens = QString(tcpSocket.readLine()).split(QRegExp("[ \r\n][ \r\n]*"));
+//    qDebug() << tokens[0];
+//    if (tokens[0] == "GET")
+//    {
+//        ;
+//    }
+
+    qDebug() << "-----------------------------------";
     qDebug() << text;
     tcpSocket.write(text.toLatin1(), text.length());
+    tcpSocket.waitForBytesWritten();
     tcpSocket.disconnectFromHost();
-    tcpSocket.waitForDisconnected();
+    //tcpSocket.waitForDisconnected();
 }
 
