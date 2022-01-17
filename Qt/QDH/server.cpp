@@ -297,7 +297,7 @@ void ServerDH::manage_BoilerACS(int sec)
         }
 
         //decido se accendere il boiler versomezzogiorno
-        if ( hour() >= 13 && hour() <= 16 )
+        if ( hour() >= 12 && hour() < 16 )
         {
             boilerACS = true;
             dr.LogMessage("Condizione ON hour:" + QString::number( hour() ) + " >=13&<=16");
@@ -519,8 +519,8 @@ void  ServerDH::manage_PDC( int sec )
         {
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accendere PDC
-            if ((dr.rPdc && dr.wSurplus > 100) ||
-                    (!dr.rPdc && dr.wSurplus > 600))
+            if ((dr.rPdc && dr.wSurplus > 200) ||
+                    (!dr.rPdc && dr.wSurplus > 700))
             {
                 dr.LogMessage("PDC ON progWinterPDC_eco SurplusW" + dr.wSurplus.svalue() );
                 needPdc = true;
@@ -644,7 +644,7 @@ void  ServerDH::manage_Pumps( int sec )
     {
         //////////////////////////////////////////////////////////////////////////////////
         // decido se accendere pompa camino
-        if (dr.tReturnFireplace > 35 && dr.tReturnFireplace > dr.tPufferLow + 5 )
+        if (dr.tReturnFireplace > 33 && dr.tReturnFireplace > dr.tPufferLow + 5 )
         {
             dr.LogMessage("Condizione Pompa Camino: tReturnFireplace" + dr.tReturnFireplace.svalue() + " > 35 && tReturnFireplace" + dr.tReturnFireplace.svalue() + " > " + "tPufferLow" + dr.tPufferLow.svalue() + " + 5");
             needPCamino = true;
@@ -657,11 +657,18 @@ void  ServerDH::manage_Pumps( int sec )
             dr.LogMessage("Condizione Pompa PP ON: " + QString::number( tempIn ) + "> 25  && >tRet: " + dr.tReturnFloor.svalue() );
             needPump_pp = true;
         }
-        if (dr.rPdc)    // se va la pdc deve andare la pompa necessariamente
+        if (dr.rPdc && !dr.rPdcNightMode)    // se va la pdc deve andare la pompa necessariamente
         {
             dr.LogMessage("Condizione Pompa PP ON: Pdc On");
             needPump_pp = true;
+            needPump_pt = true;
         }
+        if (dr.tPufferHi > 35 && hour()>=16 &&  hour()<19 )  // acqua calda in puffer
+        {
+            dr.LogMessage("Condizione Pompa PT ON: tPufferHi: " + dr.tPufferHi.svalue() );
+            needPump_pt = true;  //accendo la pompa piano terra
+        }
+        /////////////////////////////////////////////////////////////////////////////////////
         if ( hour() < 6 || hour() >= 23  ) // fuori oario spengo pompa
         {
             dr.LogMessage("Stop Pompa: orario " + QString::number( hour() ) );
@@ -676,12 +683,6 @@ void  ServerDH::manage_Pumps( int sec )
         {
             dr.LogMessage("Stop Pompa: Sicurezza temp ingreso impianto: tInletFloor: " + dr.tInletFloor.svalue() + " > 35" );
             needPump_pp = false;
-        }
-        /////////////////////////////////////////////////////////////////////////////////////
-        if (dr.tPufferHi > 39 && hour()>=16 &&  hour()<19 )  // acqua calda in puffer
-        {
-            dr.LogMessage("Condizione Pompa PT ON: tPufferHi: " + dr.tPufferHi.svalue() );
-            needPump_pt = true;  //accendo la pompa piano terra
         }
     }
 
