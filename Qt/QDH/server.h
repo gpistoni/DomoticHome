@@ -31,7 +31,7 @@ private:
     }
     int summer()
     {
-        return (month()>=6 && month()<=8);
+        return (month()>=5 && month()<=8);
     }
     int month()
     {

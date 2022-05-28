@@ -297,10 +297,10 @@ void ServerDH::manage_BoilerACS(int sec)
         }
 
         //decido se accendere il boiler versomezzogiorno
-        if ( hour() >= 12 && hour() < 16 )
+        if ( hour() >= 14 && hour() < 17 )
         {
             boilerACS = true;
-            dr.LogMessage("Condizione ON hour:" + QString::number( hour() ) + " >=13&<=16");
+            dr.LogMessage("Condizione ON hour:" + QString::number( hour() ) + " >=14&<17");
         }
     }
     /**************************************************************************************************/
@@ -515,29 +515,33 @@ void  ServerDH::manage_PDC( int sec )
             needPdc = true;
             needPdc_FullPower = false;
         }
-        if (dr.progWinterPDC_eco)
+        else if (dr.progWinterPDC_eco)
         {
-            //////////////////////////////////////////////////////////////////////////////////
-            //decido se accendere PDC
-            if ((dr.rPdc && dr.wSurplus > 200) ||
-                    (!dr.rPdc && dr.wSurplus > 700))
+            // solo se BoilerACS e' gia attiva
+            if( dr.rBoilerACS )
             {
-                dr.LogMessage("PDC ON progWinterPDC_eco SurplusW" + dr.wSurplus.svalue() );
-                needPdc = true;
-            }
-            //////////////////////////////////////////////////////////////////////////////////
-            //decido se accender FULL POWER
-            //pdc Gia Accesa
-            if (dr.rPdc)
-            {
-                if( (!dr.rPdcNightMode && dr.wSurplus > 200) ||
-                        (dr.rPdcNightMode && dr.wSurplus > 500) )
-                {    // molto surplus
-                    dr.LogMessage("PDC FULL POWER progWinterPDC_eco SurplusW" + dr.wSurplus.svalue() );
-                    needPdc_FullPower = true;
+                //////////////////////////////////////////////////////////////////////////////////
+                //decido se accendere PDC
+                if ((dr.rPdc && dr.wSurplus > 100) ||
+                        (!dr.rPdc && dr.wSurplus > 900))
+                {
+                    dr.LogMessage("PDC ON progWinterPDC_eco SurplusW" + dr.wSurplus.svalue() );
+                    needPdc = true;
                 }
+                //////////////////////////////////////////////////////////////////////////////////
+                //decido se accender FULL POWER
+                //pdc Gia Accesa
+                if (dr.rPdc)
+                {
+                    if( (!dr.rPdcNightMode && dr.wSurplus > 100) ||
+                            (dr.rPdcNightMode && dr.wSurplus > 900) )
+                    {    // molto surplus
+                        dr.LogMessage("PDC FULL POWER progWinterPDC_eco SurplusW" + dr.wSurplus.svalue() );
+                        needPdc_FullPower = true;
+                    }
+                }
+                //////////////////////////////////////////////////////////////////////////////////
             }
-            //////////////////////////////////////////////////////////////////////////////////
         }
 
         /**************************************************************************************************/
@@ -573,7 +577,7 @@ void  ServerDH::manage_PDC( int sec )
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accendere PDC
             if ((dr.rPdc &&  dr.wSurplus  > 300) ||
-                    (!dr.rPdc &&  dr.wSurplus  > 800))
+                    (!dr.rPdc &&  dr.wSurplus  > 900))
             {
                 dr.LogMessage("PDC ON progSummerPDC_eco SurplusW" + dr.wSurplus.svalue() );
                 needPdc = true;
@@ -584,7 +588,7 @@ void  ServerDH::manage_PDC( int sec )
             if (dr.rPdc && dr.rBoilerACS)
             {
                 if( (!dr.rPdcNightMode && dr.wSurplus > 300) ||
-                        (dr.rPdcNightMode && dr.wSurplus > 800) )
+                        (dr.rPdcNightMode && dr.wSurplus > 900) )
                 {    // molto surplus
                     dr.LogMessage("PDC FULL POWER progSummerPDC_eco SurplusW" + dr.wSurplus.svalue() );
                     needPdc_FullPower = true;
@@ -657,11 +661,10 @@ void  ServerDH::manage_Pumps( int sec )
             dr.LogMessage("Condizione Pompa PP ON: " + QString::number( tempIn ) + "> 25  && >tRet: " + dr.tReturnFloor.svalue() );
             needPump_pp = true;
         }
-        if (dr.rPdc && !dr.rPdcNightMode)    // se va la pdc deve andare la pompa necessariamente
+        if (dr.rPdc)    // se va la pdc deve andare la pompa necessariamente
         {
             dr.LogMessage("Condizione Pompa PP ON: Pdc On");
             needPump_pp = true;
-            needPump_pt = true;
         }
         if (dr.tPufferHi > 35 && hour()>=16 &&  hour()<19 )  // acqua calda in puffer
         {
