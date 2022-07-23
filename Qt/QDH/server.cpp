@@ -183,7 +183,11 @@ void ServerDH::manage_Remote212_Freezer(int sec)
 
     dr.LogMessage("--- Remote212_Freezer ---"  );
 
-    if (dr.wSurplus > 300 || Is9_22Day())                   // questa si avvia con suplus oppure dalle 9 alle 22
+    bool setOn = dr.wSurplus > 300;
+    setOn |= summer() && Is8_24Day();
+    setOn |= !summer() && Is9_22Day();
+
+    if (setOn)                               // questa si avvia con suplus oppure dalle 9 alle 22
     {
         CQHttpClient client2("192.168.1.212", 80, 10000 );
         dr.LogMessage("manage_Remote212 [1]");
@@ -599,15 +603,22 @@ void  ServerDH::manage_PDC( int sec )
             needPdc_Heat = false;
 
             /**************************************************************************************************/
-            if (dr.tInletFloor < 19.f )  // minima t Acqua raffreddata
+            if (dr.tInletFloor < 18.f )  // minima t Acqua raffreddata
             {
-                dr.LogMessage("PDC OFF tInletFloor" + dr.tInletFloor.svalue() + "< 19" );
+                dr.LogMessage("PDC OFF tInletFloor" + dr.tInletFloor.svalue() + "< 18" );
                 needPdc = false;
             }
 
             if ( dr.tPufferHi < 18.f)   // minima t Acqua raffreddata
             {
                 dr.LogMessage("PDC OFF tPufferHi" + dr.tPufferHi.svalue() + "< 18" );
+                needPdc = false;
+            }
+
+            /**************************************************************************************************/
+            if (dr.tExternal < 23 )  // minima t esterna
+            {
+                dr.LogMessage("PDC OFF tEsterna" + dr.tExternal.svalue() + " <23" );
                 needPdc = false;
             }
         }
