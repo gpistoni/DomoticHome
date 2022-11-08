@@ -301,10 +301,10 @@ void ServerDH::manage_BoilerACS(int sec)
         }
 
         //decido se accendere il boiler versomezzogiorno
-        if ( hour() >= 14 && hour() < 17 )
+        if ( hour() >= 13 && hour() <= 14 )
         {
             boilerACS = true;
-            dr.LogMessage("Condizione ON hour:" + QString::number( hour() ) + " >=14&<17");
+            dr.LogMessage("Condizione ON hour:" + QString::number( hour() ) + " >=13&<14");
         }
     }
     /**************************************************************************************************/
@@ -526,7 +526,7 @@ void  ServerDH::manage_PDC( int sec )
             {
                 //////////////////////////////////////////////////////////////////////////////////
                 //decido se accendere PDC
-                if ((dr.rPdc && dr.wSurplus > 100) ||
+                if ((dr.rPdc && dr.wSurplus > 200) ||
                         (!dr.rPdc && dr.wSurplus > 900))
                 {
                     dr.LogMessage("PDC ON progWinterPDC_eco SurplusW" + dr.wSurplus.svalue() );
@@ -537,7 +537,7 @@ void  ServerDH::manage_PDC( int sec )
                 //pdc Gia Accesa
                 if (dr.rPdc)
                 {
-                    if( (!dr.rPdcNightMode && dr.wSurplus > 100) ||
+                    if( (!dr.rPdcNightMode && dr.wSurplus > 200) ||
                             (dr.rPdcNightMode && dr.wSurplus > 900) )
                     {    // molto surplus
                         dr.LogMessage("PDC FULL POWER progWinterPDC_eco SurplusW" + dr.wSurplus.svalue() );
@@ -555,19 +555,18 @@ void  ServerDH::manage_PDC( int sec )
             needPdc = false;
         }
 
-        needPdc_Pump = needPdc;
+        if (dr.tInputMixer < 25) needPdc_Pump = needPdc;
         needPdc_Heat = true;
 
         /**************************************************************************************************/
-        if ( dr.tInletFloor > 38 )  // 35 è la sicurezza dopo la quale spengo la pompa
+        if ( dr.tInletFloor > 37 )  // 35 è la sicurezza dopo la quale spengo la pompa
         {
-            dr.LogMessage("PDC OFF tInlet" + dr.tInletFloor.svalue() + "> 38" );
+            dr.LogMessage("PDC OFF tInlet" + dr.tInletFloor.svalue() + "> 37" );
             needPdc = false;
         }
     }
     else if (dr.progSummerPDC || dr.progSummerPDC_eco)
     {
-        // in estate uso sempre la curva di regolazione termica
         needPdc_FullPower = false;
 
         if (dr.progSummerPDC)
