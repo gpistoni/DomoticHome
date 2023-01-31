@@ -86,7 +86,7 @@ QString HttpRequest::executeBlockingGet(const QUrl &url)
 
     QString str(reply->readAll());
     reply->deleteLater();
-    return str;
+    return str.left(4);
 }
 
 //void HttpRequest::replyFinished(QNetworkReply* reply)

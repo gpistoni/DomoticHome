@@ -183,11 +183,13 @@ void ServerDH::manage_Remote212_Freezer(int sec)
 
     dr.LogMessage("--- Remote212_Freezer ---"  );
 
-    bool setOn = dr.wSurplus > 300;
-    setOn |= summer() && Is8_24Day();
-    setOn |= !summer() && Is9_22Day();
+    //bool setOn = dr.wSurplus > 300;   // questa si avvia con suplus oppure dalle 8 alle 24
+    //setOn |= Is8_24Day();
 
-    if (setOn)                               // questa si avvia con suplus oppure dalle 9 alle 22
+    bool setOn = (IsNight() && hour()>17 && hour()<23);              // Freezer->Natale
+    setOn |= (IsNight() && day()==25 && month()==12);
+
+    if (setOn)
     {
         CQHttpClient client2("192.168.1.212", 80, 10000 );
         dr.LogMessage("manage_Remote212 [1]");
@@ -521,24 +523,31 @@ void  ServerDH::manage_PDC( int sec )
         }
         else if (dr.progWinterPDC_eco)
         {
-            // solo se BoilerACS e' gia attiva
-            if( dr.rBoilerACS )
+            // se BoilerACS non e' gia attivo
+            if (!dr.rBoilerACS )
+            {
+                manage_BoilerACS(3);
+            }
+            else
             {
                 //////////////////////////////////////////////////////////////////////////////////
                 //decido se accendere PDC
-                if ((dr.rPdc && dr.wSurplus > 200) ||
-                        (!dr.rPdc && dr.wSurplus > 900))
+                if (!dr.rPdcNightMode)
                 {
-                    dr.LogMessage("PDC ON progWinterPDC_eco SurplusW" + dr.wSurplus.svalue() );
-                    needPdc = true;
+                    if ( (dr.rPdc && dr.wSurplus > 300) ||
+                            (!dr.rPdc && dr.wSurplus > 1000))
+                    {
+                        dr.LogMessage("PDC ON progWinterPDC_eco SurplusW" + dr.wSurplus.svalue() );
+                        needPdc = true;
+                    }
                 }
                 //////////////////////////////////////////////////////////////////////////////////
                 //decido se accender FULL POWER
                 //pdc Gia Accesa
                 if (dr.rPdc)
                 {
-                    if( (!dr.rPdcNightMode && dr.wSurplus > 200) ||
-                            (dr.rPdcNightMode && dr.wSurplus > 900) )
+                    if( (!dr.rPdcNightMode && dr.wSurplus > 300) ||
+                            (dr.rPdcNightMode && dr.wSurplus > 1000) )
                     {    // molto surplus
                         dr.LogMessage("PDC FULL POWER progWinterPDC_eco SurplusW" + dr.wSurplus.svalue() );
                         needPdc_FullPower = true;
@@ -555,7 +564,7 @@ void  ServerDH::manage_PDC( int sec )
             needPdc = false;
         }
 
-        if (dr.tInputMixer < 25) needPdc_Pump = needPdc;
+        needPdc_Pump = needPdc;
         needPdc_Heat = true;
 
         /**************************************************************************************************/
@@ -579,8 +588,9 @@ void  ServerDH::manage_PDC( int sec )
         {
             //////////////////////////////////////////////////////////////////////////////////
             //decido se accendere PDC
-            if ((dr.rPdc &&  dr.wSurplus  > 300) ||
-                    (!dr.rPdc &&  dr.wSurplus  > 900))
+            if ((!dr.rPdcNightMode) ||
+                    (dr.rPdc &&  dr.wSurplus  > 300) ||
+                    (!dr.rPdc &&  dr.wSurplus  > 1000))
             {
                 dr.LogMessage("PDC ON progSummerPDC_eco SurplusW" + dr.wSurplus.svalue() );
                 needPdc = true;
@@ -591,7 +601,7 @@ void  ServerDH::manage_PDC( int sec )
             if (dr.rPdc && dr.rBoilerACS)
             {
                 if( (!dr.rPdcNightMode && dr.wSurplus > 300) ||
-                        (dr.rPdcNightMode && dr.wSurplus > 900) )
+                        (dr.rPdcNightMode && dr.wSurplus > 1000) )
                 {    // molto surplus
                     dr.LogMessage("PDC FULL POWER progSummerPDC_eco SurplusW" + dr.wSurplus.svalue() );
                     needPdc_FullPower = true;
@@ -658,15 +668,15 @@ void  ServerDH::manage_Pumps( int sec )
     {
         //////////////////////////////////////////////////////////////////////////////////
         // decido se accendere pompa camino
-        if (dr.tReturnFireplace > 33 && dr.tReturnFireplace > dr.tPufferLow + 5 )
-        {
-            dr.LogMessage("Condizione Pompa Camino: tReturnFireplace" + dr.tReturnFireplace.svalue() + " > 35 && tReturnFireplace" + dr.tReturnFireplace.svalue() + " > " + "tPufferLow" + dr.tPufferLow.svalue() + " + 5");
-            needPCamino = true;
-        }
+//        if (dr.tReturnFireplace > 35 && dr.tReturnFireplace > dr.tPufferLow + 5 )
+//       {
+//            dr.LogMessage("Condizione Pompa Camino: tReturnFireplace" + dr.tReturnFireplace.svalue() + " > 35 && tReturnFireplace" + dr.tReturnFireplace.svalue() + " > " + "tPufferLow" + dr.tPufferLow.svalue() + " + 5");
+//           needPCamino = true;
+//        }
         /////////////////////////////////////////////////////////////////////////////////////
         float tempIn = std::max( dr.tInputMixer.m_value, std::max(dr.tPufferHi.m_value, dr.tReturnFireplace.m_value) );
         // decido se accendere/spegnere pompa piano primo
-        if ( tempIn > 25 && tempIn > dr.tReturnFloor + 4) // ho temperatura
+        if ( tempIn > 27 && tempIn > dr.tReturnFloor + 4) // ho temperatura
         {
             dr.LogMessage("Condizione Pompa PP ON: " + QString::number( tempIn ) + "> 25  && >tRet: " + dr.tReturnFloor.svalue() );
             needPump_pp = true;
@@ -676,7 +686,7 @@ void  ServerDH::manage_Pumps( int sec )
             dr.LogMessage("Condizione Pompa PP ON: Pdc On");
             needPump_pp = true;
         }
-        if (dr.tPufferHi > 35 && hour()>=16 &&  hour()<19 )  // acqua calda in puffer
+        if (dr.tPufferHi > 40 && hour()>=16 &&  hour()<19 )  // acqua calda in puffer
         {
             dr.LogMessage("Condizione Pompa PT ON: tPufferHi: " + dr.tPufferHi.svalue() );
             needPump_pt = true;  //accendo la pompa piano terra
